@@ -6,6 +6,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.Want
@@ -58,6 +59,14 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                     }
                 }
             }
+            case(4) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Not Registered Screen]", "Network & internet")
+                    }.isInstanceOf(TestConfigException::class.java)
+                        .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[Not Registered Screen])")
+                }
+            }
         }
     }
 
@@ -93,6 +102,16 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                         }
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessage("You cannot specify verifyText and verifyFunction at the same time.")
+                }
+            }
+            case(4) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Not Registered Screen]") {
+                            exist("Network & internet")
+                        }
+                    }.isInstanceOf(TestConfigException::class.java)
+                        .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[Not Registered Screen])")
                 }
             }
         }

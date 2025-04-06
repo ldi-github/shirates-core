@@ -609,12 +609,23 @@ object TestDriver {
             }
 
             if (testContext.visionDriveScreenHandlers.containsKey(screenName)) {
-                val handler = testContext.visionDriveScreenHandlers[screenName]!!
+                val entry = testContext.visionDriveScreenHandlers[screenName]!!
                 context.fired = true
+                TestLog.info("$screenName {")
                 screenshot(force = true, onChangedOnly = true)
-                handler(context)
-                if (context.keep.not()) {
-                    vision.removeScreenHandler(screenName)
+
+                entry.handler.invoke(context)
+
+                TestLog.info("} $screenName")
+
+                if (entry.permanent) {
+                    if (context.keep == false) {
+                        TestLog.warn("Screen handler could not be removed. (screenName: $screenName, context.keep: false but entry.permanent: true)")
+                    }
+                } else {
+                    if (context.keep != true) {
+                        vision.removeScreenHandler(screenName)
+                    }
                 }
             }
         } finally {

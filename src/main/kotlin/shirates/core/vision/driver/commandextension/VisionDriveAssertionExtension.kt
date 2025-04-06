@@ -201,7 +201,7 @@ fun VisionDrive.screenIs(
     }
 
     if (TestMode.isNoLoadRun.not() && VisionScreenRepository.isRegistered(screenName).not()) {
-        throw TestConfigException("screenName $screenName is not registered in ScreenClassifier.")
+        throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
     }
 
     val command = "screenIs"
@@ -216,6 +216,7 @@ fun VisionDrive.screenIs(
             }
 
             vision.verify(message = assertMessage, func = verifyFunc)
+            TestDriver.currentScreen = screenName
             return@execCheckCommand
         }
 

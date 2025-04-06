@@ -31,7 +31,8 @@ val VisionDrive.screenName: String
 fun VisionDrive.isScreen(
     screenName: String,
     vararg verifyTexts: String,
-    invalidateScreen: Boolean = false
+    invalidateScreen: Boolean = false,
+    predicate: (() -> Boolean)? = null
 ): Boolean {
 
     if (TestMode.isNoLoadRun) {
@@ -39,11 +40,18 @@ fun VisionDrive.isScreen(
         return true
     }
 
-    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
+    if (verifyTexts.isEmpty() && predicate == null
+        && VisionScreenRepository.isRegistered(screenName = screenName).not()
+    ) {
+        TestLog.warn("screenName is not registered. (screenName=$screenName)")
         return false
     }
 
     syncScreen(invalidateScreen = invalidateScreen)
+
+    if (predicate != null) {
+        return predicate()
+    }
 
     if (verifyTexts.any()) {
         return isScreenCore(verifyTexts = verifyTexts.toList())

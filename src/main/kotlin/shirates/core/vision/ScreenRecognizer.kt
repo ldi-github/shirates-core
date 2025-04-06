@@ -33,7 +33,10 @@ object ScreenRecognizer {
             return "?"
         }
         if (screenCandidates.size == 1) {
-            return LabelUtility.getShortLabel(screenCandidates.first().identifier)
+            val candidate = screenCandidates.first()
+            if (candidate.confidence == 1.0f) {
+                return LabelUtility.getShortLabel(screenCandidates.first().identifier)
+            }
         }
         /**
          * Get texts from current screen image
@@ -42,32 +45,69 @@ object ScreenRecognizer {
         rootElement.visionContext.recognizeText()
         /**
          * Get texts of candidate screens
-         * and get text matching rate between current screen image and candidate screen images
+         * and get text matching score between current screen image and candidate screen images.
+         * The result list is sorted by descending with matchScore.
          */
         val list = getScreenRecognizedTextMatchingInfoList(
-            screenNames = screenCandidates.map { it.identifier },
+            screenLabels = screenCandidates.map { it.identifier },
             recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
         )
+        if (list.isEmpty()) {
+            return "?"
+        }
 
-        val screenName = list.firstOrNull()?.screenName ?: "?"
-        return LabelUtility.getShortLabel(screenName)
+        /**
+         * Get the highest matchScore entry.
+         * If matchKeywords is true, return it.
+         */
+        val screenName = list.first().shortScreenLabel
+        val screenEntry = VisionScreenRepository.getScreenEntry(screenName)
+        if (screenEntry.matchKeywords()) {
+            return LabelUtility.getShortLabel(screenEntry.screenName)
+        }
+
+        /**
+         * Filter the list by the criteria
+         * and take one that has highest matchTextRate.
+         */
+        val highMatchedList =
+            list.filter { it.matchedTextMap.count() > 5 && it.matchTextCountRate > 0.3 && it.matchTextScoreRate > 0.3 }
+                .sortedByDescending { it.matchTextScoreRate }
+        if (highMatchedList.any()) {
+            val s = highMatchedList.first()
+            return s.shortScreenLabel
+        }
+
+        /**
+         * Filter screenCandidates
+         * and take the highest confidence one.
+         */
+        val screenCandidate = screenCandidates.first()
+        if (screenCandidate.confidence > 0.9) {
+            return LabelUtility.getShortLabel(screenCandidate.identifier)
+        }
+
+        /**
+         * Unidentified
+         */
+        return "?"
     }
 
     private fun getScreenRecognizedTextMatchingInfoList(
-        screenNames: List<String>,
+        screenLabels: List<String>,
         recognizeTextObservations: List<RecognizeTextObservation>
     ): List<ScreenRecognizedTextMatchingInfo> {
 
         val list = mutableListOf<ScreenRecognizedTextMatchingInfo>()
-        for (screenName in screenNames) {
-            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenName)
+        for (screenLabel in screenLabels) {
+            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenLabel)
             var r = screenEntry.recognizeTextResult
             if (r == null) {
                 screenEntry.recognizeTextResult =
                     VisionServerProxy.recognizeText(inputFile = screenEntry.labelFileInfo.primaryFile)
                 r = screenEntry.recognizeTextResult
             }
-            val entry = ScreenRecognizedTextMatchingInfo(screenName = screenName, textCandidates = r!!.candidates)
+            val entry = ScreenRecognizedTextMatchingInfo(screenLabel = screenLabel, textCandidates = r!!.candidates)
             list.add(entry)
             entry.matchWith(recognizeTextObservations = recognizeTextObservations)
         }
@@ -75,7 +115,7 @@ object ScreenRecognizer {
     }
 
     class ScreenRecognizedTextMatchingInfo(
-        val screenName: String,
+        val screenLabel: String,
         val textCandidates: List<RecognizeTextResult.Candidate>,
     ) {
         val matchedTextMap = mutableMapOf<String, Float>()
@@ -92,6 +132,28 @@ object ScreenRecognizer {
                     return 0.0f
                 }
                 return matchedTextMap.values.sum()
+            }
+
+        val matchTextCountRate: Double
+            get() {
+                if (totalTextCount == 0) {
+                    return 0.0
+                }
+                return matchedTextMap.count().toDouble() / totalTextCount
+            }
+
+        val matchTextScoreRate: Double
+            get() {
+                val count = matchedTextMap.count()
+                if (count == 0) {
+                    return 0.0
+                }
+                return matchScore.toDouble() / count
+            }
+
+        val shortScreenLabel: String
+            get() {
+                return LabelUtility.getShortLabel(screenLabel)
             }
 
         /**
