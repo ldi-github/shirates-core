@@ -57,8 +57,51 @@ class VisionDriveOnScreenExtensionTest : VisionTest() {
     }
 
     @Test
-    @Order(20)
-    fun onScreen2() {
+    @Order(10)
+    fun onScreen_permanent() {
+
+        onScreen("[Network & internet Screen]", permanent = true) { c ->
+            printWarn("${c.screenName} is displayed.")
+        }
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
+
+        onScreen("[System Screen]") { c ->
+            printWarn("${c.screenName} is displayed.")
+        }
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
+                    it.tap("[Network & internet]")
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
+                }
+            }
+            case(2) {
+                condition {
+                    it.pressBack()
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
+                    it.tapWithScrollDown("[System]")
+                }.expectation {
+                    it.screenIs("[System Screen]")
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
+                }
+            }
+        }
+
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
+    }
+
+    @Test
+    @Order(30)
+    fun onScreen_disable_enable() {
 
         onScreen("[Network & internet Screen]") { c ->
             printWarn("${c.screenName} is displayed.")

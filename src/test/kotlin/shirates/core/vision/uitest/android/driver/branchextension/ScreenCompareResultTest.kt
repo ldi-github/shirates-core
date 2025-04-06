@@ -177,7 +177,7 @@ class ScreenCompareResultTest : VisionTest() {
                         }
                     assertThat(result.anyMatched).isTrue()
                     assertThat(result.history.count()).isEqualTo(1)
-                    assertThat(result.history[0].condition).isEqualTo("if screen is not any of ([Network & internet Screen] or [Connected devices Screen])")
+                    assertThat(result.history[0].condition).isEqualTo("if screen is not of ([Network & internet Screen] or [Connected devices Screen])")
                     assertThat(result.history[0].matched).isTrue()
                 }
             }
