@@ -27,6 +27,8 @@
 
 (`kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
 
+画像による画面判定を行います。
+
 ```kotlin
     @Test
     @Order(10)
@@ -95,9 +97,95 @@
     }
 ```
 
+### ScreenIsAndIsScreen2.kt
+
+(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen2.kt`)
+
+画面に表示されるテキストを使用して画面判定を行います。指定したテキストがすべて表示された場合にOKになります。<br>
+画像による判定がうまくいかない場合の代替手段として利用できます。
+
+```kotlin
+    @Test
+    @Order(10)
+    fun screenIs_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android設定トップ画面]")
+                }.expectation {
+                    it.screenIs("[Android設定トップ画面]", "設定", "設定を検索")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun screenIs_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android設定トップ画面]")
+                }.expectation {
+                    it.screenIs("[システム画面]", "システム", "言語")
+                }
+            }
+        }
+    }
+```
+
+### ScreenIsAndIsScreen3.kt
+
+(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen3.kt`)
+
+検証ロジックを記述して画面判定を行います。<br>
+画像による判定がうまくいかない場合の代替手段として利用できます。
+
+```kotlin
+    @Test
+    @Order(10)
+    fun screenIs_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android設定トップ画面]")
+                }.expectation {
+                    it.screenIs("[Android設定トップ画面]") {
+                        exist("設定")
+                        exist("設定を検索")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun screenIs_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android設定トップ画面]")
+                }.expectation {
+                    it.screenIs("[システム画面]") {
+                        exist("システム")
+                        exist("言語")
+                    }
+                }
+            }
+        }
+    }
+```
+
 ### ScreenIsOfAndIsScreenOf1.kt
 
 (`kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)
+
+画像による画面判定を行います。複数の画面名の候補を指定することができます。
 
 ```kotlin
     @Test

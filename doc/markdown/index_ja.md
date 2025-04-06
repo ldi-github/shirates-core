@@ -100,22 +100,22 @@
     - [相対テキスト (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text_ja.md)
     - [相対イメージ (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image_ja.md)
 - テキストを検証する
-    - [テキストの検証](vision/basic/function_property/asserting_text/text_assertion_ja.md)
+    - [テキストの検証 (textIs)](vision/basic/function_property/asserting_text/text_assertion_ja.md)
 - 画像を検証する
-    - [画像の検証](vision/basic/function_property/asserting_image/image_assertion_ja.md)
+    - [画像の検証 (imageIs)](vision/basic/function_property/asserting_image/image_assertion_ja.md)
 - 任意の値を検証する
-    - [任意の値の検証](vision/basic/function_property/asserting_any_value/any_value_assertion_ja.md)
+    - [任意の値の検証 (thisIs, thisIsNot)](vision/basic/function_property/asserting_any_value/any_value_assertion_ja.md)
     - [文字列の検証](vision/basic/function_property/asserting_any_value/string_assertion_ja.md)
     - [真偽値の検証](vision/basic/function_property/asserting_any_value/boolean_assertion_ja.md)
 
 - 存在することを検証する
-    - [テキストが存在することの検証](vision/basic/function_property/asserting_existence/text_existance_assertion_ja.md)
-    - [画像が存在することの検証](vision/basic/function_property/asserting_existence/image_existance_assertion_ja.md)
-    - [画面が表示されていることの検証](vision/basic/function_property/asserting_existence/screen_assertion_ja.md)
+    - [テキストが存在することの検証 (exist, dontExist)](vision/basic/function_property/asserting_existence/text_existance_assertion_ja.md)
+    - [画像が存在することの検証 (existImage, dontExistImage)](vision/basic/function_property/asserting_existence/image_existance_assertion_ja.md)
+    - [画面が表示されていることの検証 (screenIs, isScreen)](vision/basic/function_property/asserting_existence/screen_assertion_ja.md)
 - その他を検証する
-    - [アプリが表示されていることの検証](vision/basic/function_property/asserting_others/app_assertion_ja.md)
-    - [キーボードが表示されていることの検証](vision/basic/function_property/asserting_others/keyboard_assertion_ja.md)
-    - [表示中のアプリのパッケージの検証](vision/basic/function_property/asserting_others/package_assertion_ja.md)
+    - [アプリが表示されていることの検証 (appIs, isApp)](vision/basic/function_property/asserting_others/app_assertion_ja.md)
+    - [キーボードが表示されていることの検証 (keyboardIsShown)](vision/basic/function_property/asserting_others/keyboard_assertion_ja.md)
+    - [表示中のアプリのパッケージの検証 (packageIs)](vision/basic/function_property/asserting_others/package_assertion_ja.md)
 - 任意の内容を検証する
     - [任意の内容の検証 (verify)](vision/basic/function_property/asserting_anything/anything_assertion_ja.md)
 - 分岐する
@@ -128,7 +128,7 @@
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)
 - イベントハンドラー
-    - [スクリーンハンドラー(onScreen)](vision/basic/function_property/event_handler/on_screen_ja.md)
+    - [スクリーンハンドラー (onScreen)](vision/basic/function_property/event_handler/on_screen_ja.md)
 - 編集とキーボード操作を行う
     - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
     - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
