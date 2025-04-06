@@ -53,7 +53,7 @@ class TestDriveScrollExtensionTest1 : VisionTest() {
                             e.printInfo()
                             e.isScrollableElement.thisIsTrue()
                         }
-                        scrollableElements.count().thisIs(3)
+                        scrollableElements.count().thisIs(4)
                         fun TestElement.thisIsScrollable() {
                             val r =
                                 this.type == "XCUIElementTypeMap" || this.type == "XCUIElementTypeTable" || this.type == "XCUIElementTypeCollectionView"
