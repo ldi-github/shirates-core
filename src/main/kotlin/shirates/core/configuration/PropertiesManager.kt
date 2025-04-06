@@ -1106,7 +1106,10 @@ object PropertiesManager {
      */
     val visionSyncImageMatchRate: Double
         get() {
-            return getPropertyValue(propertyName = "visionSyncImageMatchRate")?.toDoubleOrNull()
+            return getPropertyValue(
+                propertyName = "" +
+                        "visionSyncImageMatchRate"
+            )?.toDoubleOrNull()
                 ?: Const.VISION_SYNC_IMAGE_MATCH_RATE
         }
 

@@ -7,12 +7,12 @@ import shirates.core.driver.branchextension.result.ScreenCompareResult
  * ifScreenIs
  */
 fun TestDrive.ifScreenIs(
-    vararg screenNames: String,
+    screenName: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
 
     val result = ScreenCompareResult()
-    result.ifScreenIs(screenNames = screenNames, onTrue = onTrue)
+    result.ifScreenIs(screenName = screenName, onTrue = onTrue)
 
     return result
 }
@@ -21,12 +21,12 @@ fun TestDrive.ifScreenIs(
  * ifScreenIsNot
  */
 fun TestDrive.ifScreenIsNot(
-    vararg screenNames: String,
+    screenName: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
 
     val result = ScreenCompareResult()
-    result.ifScreenIsNot(screenNames = screenNames, onTrue = onTrue)
+    result.ifScreenIsNot(screenName = screenName, onTrue = onTrue)
 
     return result
 }

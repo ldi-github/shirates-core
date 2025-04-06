@@ -102,21 +102,21 @@
     - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
     - [Relative image (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image.md)
 - Asserting text
-    - [Text assertion](vision/basic/function_property/asserting_text/text_assertion.md)
+    - [Text assertion (textIs)](vision/basic/function_property/asserting_text/text_assertion.md)
 - Asserting image
-    - [Image assertion](vision/basic/function_property/asserting_image/image_assertion.md)
+    - [Image assertion (imageIs)](vision/basic/function_property/asserting_image/image_assertion.md)
 - Asserting any value
-    - [Any value assertion](vision/basic/function_property/asserting_any_value/any_value_assertion.md)
+    - [Any value assertion (thisIs, thisIsNot)](vision/basic/function_property/asserting_any_value/any_value_assertion.md)
     - [String value assertion](vision/basic/function_property/asserting_any_value/string_assertion.md)
     - [Boolean value assertion](vision/basic/function_property/asserting_any_value/boolean_assertion.md)
 - Asserting existence
-    - [Text existence assertion](vision/basic/function_property/asserting_existence/text_existance_assertion.md)
-    - [Image existence assertion](vision/basic/function_property/asserting_existence/image_existance_assertion.md)
-    - [Screen assertion](vision/basic/function_property/asserting_existence/screen_assertion.md)
+    - [Text existence assertion (exist, dontExist)](vision/basic/function_property/asserting_existence/text_existance_assertion.md)
+    - [Image existence assertion (existImage, dontExistImage)](vision/basic/function_property/asserting_existence/image_existance_assertion.md)
+    - [Screen assertion (screenIs, isScreen)](vision/basic/function_property/asserting_existence/screen_assertion.md)
 - Asserting others
-    - [App assertion](vision/basic/function_property/asserting_others/app_assertion.md)
-    - [Keyboard assertion](vision/basic/function_property/asserting_others/keyboard_assertion.md)
-    - [Package assertion](vision/basic/function_property/asserting_others/package_assertion.md)
+    - [App assertion (appIs, isApp)](vision/basic/function_property/asserting_others/app_assertion.md)
+    - [Keyboard assertion (keyboardIsShown)](vision/basic/function_property/asserting_others/keyboard_assertion.md)
+    - [Package assertion (packageIs)](vision/basic/function_property/asserting_others/package_assertion.md)
 - Asserting anything
     - [Anything assertion (verify)](vision/basic/function_property/asserting_anything/anything_assertion.md)
 - Branch

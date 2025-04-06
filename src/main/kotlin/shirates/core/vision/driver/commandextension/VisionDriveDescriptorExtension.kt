@@ -251,6 +251,9 @@ private fun VisionElement.cellOfCore(
     if (func == null) {
         return this
     }
+    if (TestMode.isNoLoadRun) {
+        return this
+    }
     if (text.isBlank()) {
         throw TestDriverException(message(id = "cellIsEmpty", subject = subject))
     }

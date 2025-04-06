@@ -7,12 +7,26 @@ import shirates.core.vision.VisionDrive
  * ifScreenIs
  */
 fun VisionDrive.ifScreenIs(
+    screenName: String,
+    onTrue: () -> Unit
+): ScreenCompareResult {
+
+    val result = ScreenCompareResult()
+    result.ifScreenIs(screenName = screenName, onTrue = onTrue)
+
+    return result
+}
+
+/**
+ * ifScreenIsOf
+ */
+fun VisionDrive.ifScreenIsOf(
     vararg screenNames: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
 
     val result = ScreenCompareResult()
-    result.ifScreenIs(screenNames = screenNames, onTrue = onTrue)
+    result.ifScreenIsOf(screenNames = screenNames, onTrue = onTrue)
 
     return result
 }
@@ -21,12 +35,12 @@ fun VisionDrive.ifScreenIs(
  * ifScreenIsNot
  */
 fun VisionDrive.ifScreenIsNot(
-    vararg screenNames: String,
+    screenName: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
 
     val result = ScreenCompareResult()
-    result.ifScreenIsNot(screenNames = screenNames, onTrue = onTrue)
+    result.ifScreenIsNot(screenName = screenName, onTrue = onTrue)
 
     return result
 }

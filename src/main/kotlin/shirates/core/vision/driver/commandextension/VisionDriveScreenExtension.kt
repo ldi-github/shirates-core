@@ -4,6 +4,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -12,6 +13,7 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.syncScreen
 
@@ -28,7 +30,9 @@ val VisionDrive.screenName: String
  */
 fun VisionDrive.isScreen(
     screenName: String,
-    invalidateScreen: Boolean = false
+    vararg verifyTexts: String,
+    invalidateScreen: Boolean = false,
+    predicate: (() -> Boolean)? = null
 ): Boolean {
 
     if (TestMode.isNoLoadRun) {
@@ -36,14 +40,42 @@ fun VisionDrive.isScreen(
         return true
     }
 
-    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
+    if (verifyTexts.isEmpty() && predicate == null
+        && VisionScreenRepository.isRegistered(screenName = screenName).not()
+    ) {
+        TestLog.warn("screenName is not registered. (screenName=$screenName)")
         return false
     }
 
     syncScreen(invalidateScreen = invalidateScreen)
 
-    val r = (TestDriver.currentScreen == screenName)
-    return r
+    if (predicate != null) {
+        return predicate()
+    }
+
+    if (verifyTexts.any()) {
+        return isScreenCore(verifyTexts = verifyTexts.toList())
+    }
+
+    val match = TestDriver.currentScreen == screenName
+
+    return match
+}
+
+internal fun isScreenCore(
+    verifyTexts: List<String>
+): Boolean {
+
+    if (verifyTexts.isEmpty()) {
+        return false
+    }
+    for (text in verifyTexts) {
+        val found = vision.canDetect(expression = text)
+        if (found.not()) {
+            return false
+        }
+    }
+    return true
 }
 
 /**
@@ -143,6 +175,7 @@ internal fun VisionDrive.waitScreenOfCore(
  */
 fun VisionDrive.waitScreen(
     screenName: String,
+    vararg texts: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwOnError: Boolean = true,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
@@ -163,13 +196,46 @@ fun VisionDrive.waitScreen(
         return lastElement
     }
 
-    waitScreenOfCore(
-        screenName,
+    fun hasAnyTexts(): Boolean {
+        for (text in texts) {
+            if (canDetect(text).not()) {
+                return false
+            }
+        }
+        return true
+    }
+
+    var found = false
+    doUntilTrue(
         waitSeconds = waitSeconds,
-        throwOnError = throwOnError,
-        irregularHandler = irregularHandler,
-        onTrue = onTrue
-    )
+        throwOnFinally = false,
+    ) {
+        waitScreenOfCore(
+            screenName,
+            waitSeconds = waitSeconds,
+            throwOnError = throwOnError,
+            irregularHandler = irregularHandler,
+            onTrue = onTrue
+        )
+        found = if (texts.any()) {
+            hasAnyTexts()
+        } else {
+            true
+        }
+        found
+    }
+    if (found.not() && throwOnError) {
+        val msgForTexts = if (texts.isEmpty()) "" else "(texts=${texts.joinToString(", ")})"
+        val subject = "$screenName$msgForTexts"
+        throw TestDriverException(
+            message(
+                id = "waitScreenOfFailed",
+                subject = subject,
+                arg1 = TestDriver.currentScreen,
+                arg2 = "$waitSeconds"
+            )
+        )
+    }
 
     return rootElement
 }

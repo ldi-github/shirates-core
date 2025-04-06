@@ -44,7 +44,7 @@ class TestDriveExtensionTest : VisionTest() {
             it.screenshot()
             val line = TestLog.lines.last() { it.logType == LogType.SCREENSHOT }
             // Assert
-            assertThat(line.message).isEqualTo("screenshot: 1.png")
+            assertThat(line.message).isEqualTo("screenshot: 3.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)

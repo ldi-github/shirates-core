@@ -200,7 +200,7 @@ class TestContext(
         profile.syncMaxLoopCount?.toDoubleOrNull() ?: Const.SYNC_INTERVAL_SECONDS
 
     @SaveTarget
-    var syncImageMatchRate = Const.VISION_SYNC_IMAGE_MATCH_RATE
+    var syncImageMatchRate = PropertiesManager.visionSyncImageMatchRate
 
     // misc --------------------------------------------------
 
@@ -252,9 +252,14 @@ class TestContext(
     @SaveTarget
     var onRefreshCurrentScreenHandler: (() -> Unit)? = null
 
-    val testDriveScreenHandlers = mutableMapOf<String, ((TestDriveOnScreenContext) -> Unit)?>()
+    internal val testDriveScreenHandlers = mutableMapOf<String, ((TestDriveOnScreenContext) -> Unit)?>()
 
-    val visionDriveScreenHandlers = mutableMapOf<String, ((VisionDriveOnScreenContext) -> Unit)?>()
+    internal val visionDriveScreenHandlers = mutableMapOf<String, VisionScreenHandlerEntry>()
+
+    class VisionScreenHandlerEntry(
+        val handler: ((VisionDriveOnScreenContext) -> Unit),
+        val permanent: Boolean = false
+    )
 
     @SaveTarget
     var enableIrregularHandler = true

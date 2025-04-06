@@ -10,7 +10,7 @@ class VisionDriveOnScreenContext(
             field = value
         }
 
-    var keep = false
+    var keep: Boolean? = null
 
     fun keepHandler() {
         keep = true

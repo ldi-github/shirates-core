@@ -1,6 +1,8 @@
 package shirates.core.vision.driver.eventextension
 
+import shirates.core.driver.TestContext
 import shirates.core.driver.testContext
+import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -10,12 +12,14 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.onScreen(
     vararg screenNames: String,
+    permanent: Boolean = false,
     onTrue: (VisionDriveOnScreenContext) -> Unit
 ): VisionElement {
 
     for (screenName in screenNames) {
         if (testContext.visionDriveScreenHandlers.containsKey(screenName).not()) {
-            testContext.visionDriveScreenHandlers[screenName] = onTrue
+            val entry = TestContext.VisionScreenHandlerEntry(handler = onTrue, permanent = permanent)
+            testContext.visionDriveScreenHandlers[screenName] = entry
         }
     }
 
@@ -26,16 +30,22 @@ fun VisionDrive.onScreen(
  * removeScreenHandler
  */
 fun VisionDrive.removeScreenHandler(
-    screenName: String,
-    vararg screenNames: String
+    vararg screenNames: String,
+    force: Boolean = false,
 ): VisionElement {
 
     val list = screenNames.toMutableList()
-    list.add(0, screenName)
 
-    for (name in list) {
-        if (testContext.visionDriveScreenHandlers.containsKey(name)) {
-            testContext.visionDriveScreenHandlers.remove(name)
+    for (screenName in list) {
+        if (testContext.visionDriveScreenHandlers.containsKey(screenName)) {
+            val entry = testContext.visionDriveScreenHandlers[screenName]!!
+            if (entry.permanent && force.not()) {
+                TestLog.warn("Screen handler could not be removed because it is registered as permanent. Use force = true. (screenName=$screenName)")
+            } else {
+                testContext.visionDriveScreenHandlers.remove(screenName)
+            }
+        } else {
+            TestLog.warn("Screen handler could not be removed because it is not registered or already removed. (screenName=$screenName)")
         }
     }
 
@@ -45,9 +55,16 @@ fun VisionDrive.removeScreenHandler(
 /**
  * clearScreenHandlers
  */
-fun VisionDrive.clearScreenHandlers(): VisionElement {
+fun VisionDrive.clearScreenHandlers(
+    removePermanent: Boolean = false
+): VisionElement {
 
-    testContext.visionDriveScreenHandlers.clear()
+    for (name in testContext.visionDriveScreenHandlers.keys) {
+        val entry = testContext.visionDriveScreenHandlers[name]!!
+        if (removePermanent || entry.permanent.not()) {
+            testContext.visionDriveScreenHandlers.remove(name)
+        }
+    }
 
     return lastElement
 }

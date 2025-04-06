@@ -29,6 +29,8 @@ See [Setting up screen image templates](../../text_and_image_recognition/setting
 
 (`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
 
+Screen verification by image.
+
 ```kotlin
     @Test
     @Order(10)
@@ -91,6 +93,127 @@ See [Setting up screen image templates](../../text_and_image_recognition/setting
                         .ifFalse("If screen is not [System Screen]") {
                             OK("This is not [System Screen]")
                         }
+                }
+            }
+        }
+    }
+```
+
+### ScreenIsAndIsScreen2.kt
+
+(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen2.kt`)
+
+Screen verification using the text displayed on the screen. OK is given when all of the specified text is
+displayed. <br>
+This can be used as an alternative when verification by images does not work.
+
+```kotlin
+    @Test
+    @Order(10)
+    fun screenIs_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]", "Settings", "Search settings")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun screenIs_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.screenIs("[System Screen]", "System", "Languages")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(30)
+    fun isScreen_ifTrue() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.isScreen("[Android Settings Top Screen]", "Settings", "Search settings")
+                        .ifTrue("If screen is [Android Settings Top Screen]") {
+                            OK("This is [Android Settings Top Screen]")
+                        }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun isScreen_ifFalse() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.isScreen("[System Screen]", "System", "Languages")
+                        .ifFalse("If screen is not [System Screen]") {
+                            OK("This is not [System Screen]")
+                        }
+                }
+            }
+        }
+    }
+```
+
+### ScreenIsAndIsScreen3.kt
+
+(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen3.kt`)
+
+Screen verification using specified procedure. <br>
+This can be used as an alternative when verification by images does not work.
+
+```kotlin
+    @Test
+    @Order(10)
+    fun screenIs_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]") {
+                        exist("Settings")
+                        exist("Search settings")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun screenIs_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.screenIs("[System Screen]") {
+                        exist("System")
+                        exist("Languages")
+                    }
                 }
             }
         }

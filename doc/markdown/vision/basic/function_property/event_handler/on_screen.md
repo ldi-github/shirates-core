@@ -16,6 +16,11 @@ You can register callback that is called on screen changed.
 
 (`src/test/kotlin/tutorial/basic/ScreenHandler1.kt`)
 
+<br>
+
+You can register screen handler using `onScreen` function. The handler is going to be removed automatically after it has
+been performed.
+
 ```kotlin
     @Test
     @Order(10)
@@ -39,6 +44,59 @@ You can register callback that is called on screen changed.
                      */
                 }.expectation {
                     it.exist("Network details")
+                }
+            }
+        }
+    }
+```
+
+<br>
+
+You can prevent from removing the registered handler by specifying `keep = true`.
+
+```kotlin
+    @Test
+    @Order(20)
+    fun screenHandler_keep() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    onScreen("[Network & internet Screen]") { c ->
+                        it.tap("Internet")
+                        c.keep = true   // The screen handler keeps registered. Not released.
+                    }
+                    it.tap("Network & internet")
+                }.expectation {
+                    it.exist("Network preferences")
+                }
+            }
+        }
+    }
+```
+
+<br>
+
+You can register the handler permanently to prevent removint it by specifying `permanent = true`.
+
+```kotlin
+    @Test
+    @Order(30)
+    fun screenHandler_permanent() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    onScreen("[Network & internet Screen]", permanent = true) {
+                        it.tap("Internet")
+                    }
+                    it.tap("Network & internet")
+                }.expectation {
+                    it.exist("Network preferences")
                 }
             }
         }
