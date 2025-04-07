@@ -59,9 +59,15 @@ fun VisionDrive.clearScreenHandlers(
     removePermanent: Boolean = false
 ): VisionElement {
 
-    for (name in testContext.visionDriveScreenHandlers.keys) {
+    if (removePermanent) {
+        testContext.visionDriveScreenHandlers.clear()
+        return lastElement
+    }
+
+    val keys = testContext.visionDriveScreenHandlers.keys.toList()
+    for (name in keys) {
         val entry = testContext.visionDriveScreenHandlers[name]!!
-        if (removePermanent || entry.permanent.not()) {
+        if (entry.permanent.not()) {
             testContext.visionDriveScreenHandlers.remove(name)
         }
     }

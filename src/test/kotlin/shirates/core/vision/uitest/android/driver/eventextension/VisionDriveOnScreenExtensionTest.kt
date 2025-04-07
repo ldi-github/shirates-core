@@ -57,7 +57,7 @@ class VisionDriveOnScreenExtensionTest : VisionTest() {
     }
 
     @Test
-    @Order(10)
+    @Order(20)
     fun onScreen_permanent() {
 
         onScreen("[Network & internet Screen]", permanent = true) { c ->

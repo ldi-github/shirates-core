@@ -63,6 +63,42 @@ fun VisionDrive.disableHandler(): VisionElement {
 }
 
 /**
+ * useScreenHandler
+ */
+fun VisionDrive.useScreenHandler(func: () -> Unit): VisionElement {
+
+    val original = testContext.enableScreenHandler
+
+    try {
+        TestLog.info("useScreenHandler(${TestLog.nextLineNo}) {")
+        testContext.enableScreenHandler = true
+        func()
+    } finally {
+        testContext.enableScreenHandler = original
+        TestLog.info("} useScreenHandler(${TestLog.nextLineNo}) {")
+    }
+
+    return lastElement
+}
+
+/**
+ * suppressScreenHandler
+ */
+fun VisionDrive.suppressScreenHandler(func: () -> Unit): VisionElement {
+
+    val original = testContext.enableScreenHandler
+
+    try {
+        testContext.enableScreenHandler = false
+        func()
+    } finally {
+        testContext.enableScreenHandler = original
+    }
+
+    return lastElement
+}
+
+/**
  * enableScreenHandler
  */
 fun VisionDrive.enableScreenHandler(): VisionElement {

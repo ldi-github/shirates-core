@@ -54,7 +54,7 @@ class ScreenCompareResult() : CompareResult() {
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
         }
-        if (TestMode.isVisionTest) {
+        if (TestMode.isVisionTest && TestMode.isNoLoadRun.not()) {
             for (screenName in screenNames) {
                 if (VisionScreenRepository.isRegistered(screenName).not()) {
                     printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
