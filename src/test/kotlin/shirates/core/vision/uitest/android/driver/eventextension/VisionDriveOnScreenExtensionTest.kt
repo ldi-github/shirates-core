@@ -65,7 +65,7 @@ class VisionDriveOnScreenExtensionTest : VisionTest() {
         }
         assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
 
-        onScreen("[System Screen]") { c ->
+        onScreen("[Location Screen]") { c ->
             printWarn("${c.screenName} is displayed.")
         }
         assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
@@ -76,7 +76,7 @@ class VisionDriveOnScreenExtensionTest : VisionTest() {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
                     assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                     assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
@@ -88,9 +88,9 @@ class VisionDriveOnScreenExtensionTest : VisionTest() {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
                     assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
-                    it.tapWithScrollDown("[System]")
+                    it.tapWithScrollDown("Location")
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[Location Screen]")
                     assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
                 }
             }

@@ -1,7 +1,6 @@
 package shirates.core.uitest.android.driver.branchextension
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -10,7 +9,7 @@ import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
-import shirates.core.exception.TestConfigException
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -130,13 +129,11 @@ class ScreenCompareResultTest : UITest() {
             case(5) {
                 expectation {
                     val result = ScreenCompareResult()
-                    assertThatThrownBy {
-                        result
-                            .ifScreenIs("[not exist screen]") {
-                                NG("never called")
-                            }
-                    }.isInstanceOf(TestConfigException::class.java)
-                        .hasMessage("screenName '[not exist screen]' is not registered in ${ScreenRepository.screensDirectory}.")
+                    val r = result.ifScreenIs("[not exist screen]") {
+                        NG("never called")
+                    }
+                    assertThat(r.anyMatched).isFalse()
+                    assertThat(TestLog.lastTestLog?.message).isEqualTo("screenName '[not exist screen]' is not registered in ${ScreenRepository.screensDirectory}.")
                 }
             }
         }

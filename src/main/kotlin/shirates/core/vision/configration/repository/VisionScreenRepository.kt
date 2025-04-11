@@ -3,7 +3,9 @@ package shirates.core.vision.configration.repository
 import shirates.core.driver.TestMode
 import shirates.core.driver.vision
 import shirates.core.exception.TestConfigException
+import shirates.core.logging.printInfo
 import shirates.core.utility.file.toFile
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.configration.repository.VisionMLModelRepository.mlmodelClassifiers
 import shirates.core.vision.driver.commandextension.canDetect
 import shirates.core.vision.result.RecognizeTextResult
@@ -113,26 +115,34 @@ object VisionScreenRepository {
 
         fun matchKeywords(): Boolean {
 
-            val map = imageFileKeywords.imageFileKeywordsMap
-            if (map.isEmpty()) {
-                return false
-            }
-            for (key in map.keys) {
-                val keywords = map[key]!!
-                fun allKeywordsMatched(): Boolean {
-                    for (keyword in keywords) {
-                        val found = vision.canDetect(expression = keyword, allowScroll = false)
-                        if (found.not()) {
+            val sw = StopWatch("matchKeywords")
+            try {
+                val map = imageFileKeywords.imageFileKeywordsMap
+                if (map.isEmpty()) {
+                    return false
+                }
+                for (key in map.keys) {
+                    val keywords = map[key]!!
+                    fun allKeywordsMatched(): Boolean {
+                        if (keywords.isEmpty()) {
                             return false
                         }
+                        for (keyword in keywords) {
+                            val found = vision.canDetect(expression = keyword, allowScroll = false)
+                            if (found.not()) {
+                                return false
+                            }
+                        }
+                        return true
                     }
-                    return true
+                    if (allKeywordsMatched()) {
+                        return true
+                    }
                 }
-                if (allKeywordsMatched()) {
-                    return true
-                }
+                return false
+            } finally {
+                sw.printInfo()
             }
-            return false
         }
     }
 

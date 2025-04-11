@@ -30,7 +30,7 @@ class DirectAccessModeTestAndroid2 : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Android Settings Top Screen]")
                     }.isInstanceOf(TestConfigException::class.java)
-                        .hasMessage("screens directory is not configured. (useCache=${testContext.useCache})")
+                        .hasMessage("Screen not registered (screenName=[Android Settings Top Screen]). Use registered nickname or setup screen nickname file.")
                 }
             }
         }

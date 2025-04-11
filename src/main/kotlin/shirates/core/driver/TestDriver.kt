@@ -2059,7 +2059,7 @@ object TestDriver {
             return this
         }
 
-        if (testContext.useCache) {
+        if (TestMode.isClassicTest) {
             /**
              * Classic cache mode (not for Vision)
              */
@@ -2075,8 +2075,17 @@ object TestDriver {
         /**
          * Vision mode
          */
+        return screenshotCoreVision(
+            onChangedOnly = onChangedOnly,
+            filename = filename
+        )
+    }
 
-        if (TestDriver.isScreenshotSyncing) {
+    private fun screenshotCoreVision(
+        onChangedOnly: Boolean,
+        filename: String?
+    ): TestDriver {
+        if (isScreenshotSyncing) {
             return this
         }
         if (PropertiesManager.screenshotScale != 1.0) {
@@ -2111,21 +2120,22 @@ object TestDriver {
             val tempFile = syncScreenshotResult.screenshotFile!!.toFile()
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
             tempFile.renameTo(screenshotFile.toFile())
+            tempFile.setLastModified(System.currentTimeMillis())
             CodeExecutionContext.lastScreenshotTime = syncScreenshotResult.screenshotTime
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = ""
             CodeExecutionContext.lastScreenshotImage = screenshotImage
             val vc = VisionContext(capture = true)
-            TestDriver.visionRootElement = VisionElement(visionContext = vc)
+            visionRootElement = VisionElement(visionContext = vc)
             CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
             screenshotLine.screenshot = screenshotFileName
             screenshotLine.lastScreenshot = screenshotFileName
             screenshotLine.subject = screenshotFileName
 
-            TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
-            TestDriver.currentScreenSynced = true
-            TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
+            currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
+            currentScreenSynced = true
+            TestLog.printInfo("currentScreen=$currentScreen")
         } catch (t: Throwable) {
             TestLog.warn("screenshot ${t.message}")
             throw t
@@ -2161,10 +2171,10 @@ object TestDriver {
      *  false on image not changed
      */
     internal fun syncScreenshotImage(
-        waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+        waitSeconds: Double = testContext.syncWaitSeconds,
         intervalSeconds: Double = testContext.syncIntervalSeconds,
         syncImageMatchRate: Double = testContext.syncImageMatchRate,
-        maxLoopCount: Int = 100,
+        maxLoopCount: Int = testContext.syncMaxLoopCount,
     ): SyncScreenshotImageResult {
         val sw = StopWatch("syncScreenshotImage")
         TestDriver.isScreenshotSyncing = true
@@ -2190,8 +2200,7 @@ object TestDriver {
         var count = 0
         var distance = 1.0
         var matchRate = 0.0
-//        var tempFileName = CodeExecutionContext.lastScreenshotName
-        try {
+        val context = try {
             vision.doUntilTrue(
                 waitSeconds = waitSeconds,
                 intervalSeconds = intervalSeconds,
@@ -2237,11 +2246,12 @@ object TestDriver {
             TestDriver.isScreenshotSyncing = false
             sw.stop()
         }
-        if (match) {
-//            if (PropertiesManager.enableSyncLog) {
-//            TestLog.printInfo("Screen image synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
-//            }
-        } else {
+        if (context.hasError) {
+            if (context.error?.message?.contains("timeout") == false) {
+                throw context.error!!
+            }
+        }
+        if (match.not()) {
             TestLog.printInfo("Screen image did not synced. (isSame: $match, changed: $changed, matchRate: $matchRate)")
         }
         return result
@@ -2382,7 +2392,7 @@ object TestDriver {
                 continue
             }
 
-            val match = isScreen(screenName = screenName)
+            val match = isScreenForClassic(screenName = screenName)
             if (match) {
                 newScreen = screenName
                 break
@@ -2440,7 +2450,7 @@ object TestDriver {
     /**
      * isScreen(for Classic mode)
      */
-    fun isScreen(
+    internal fun isScreenForClassic(
         screenName: String,
         safeElementOnly: Boolean = false,
         log: Boolean = PropertiesManager.enableIsScreenLog
@@ -2452,7 +2462,8 @@ object TestDriver {
 
         val ms = Measure("■■■ Trying isScreen($screenName)")
         if (ScreenRepository.screensDirectory.isBlank()) {
-            throw TestConfigException("screens directory is not configured. (useCache=${testContext.useCache})")
+            TestLog.warn("screens directory is not configured. (useCache=${testContext.useCache})")
+            return false
         }
 
         val originalLastElement = lastElement

@@ -96,8 +96,9 @@ object VisionServerProxy {
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
+        val name = inputFile.toFile().name
         val file =
-            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ScreenClassifier_classifyScreen.json")
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$name]_ScreenClassifier_classifyScreen.json")
         file.parent.toFile().mkdirs()
         file.toFile().writeText(jsonString)
 
@@ -205,7 +206,8 @@ object VisionServerProxy {
                 sb.append("${c.rect.x1}\t${c.rect.y1}\t${c.rect.width}\t${c.rect.height}\t${c.confidence}\t${c.text}\n")
             }
             val tsvString = sb.toString()
-            val tsvFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognizeText.txt").toString()
+            val tsvFile =
+                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$baseFile]_recognizeText.txt").toString()
             tsvFile.toFile().writeText(tsvString)
         }
         sw.stop()

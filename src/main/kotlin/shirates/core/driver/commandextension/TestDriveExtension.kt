@@ -143,6 +143,9 @@ fun TestDrive.getCurrentAppIconName(): String {
     if (isAndroid) {
         throw NotImplementedError("getCurrentAppIconName function is for iOS. Not supported in Android.")
     } else {
+        if (rootElement.isEmpty) {
+            it.syncCache(force = true)
+        }
         return rootElement.label
     }
 }

@@ -1,8 +1,9 @@
 package shirates.core.driver.branchextension.result
 
-import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.classic
+import shirates.core.driver.commandextension.isScreen
 import shirates.core.logging.Message.message
 import shirates.core.logging.printWarn
 import shirates.core.vision.configration.repository.VisionScreenRepository
@@ -24,7 +25,7 @@ class ScreenCompareResult() : CompareResult() {
 
         if (TestMode.isClassicTest) {
             for (screenName in screenNames) {
-                if (TestDriver.isScreen(screenName)) {
+                if (classic.isScreen(screenName)) {
                     return true
                 }
             }

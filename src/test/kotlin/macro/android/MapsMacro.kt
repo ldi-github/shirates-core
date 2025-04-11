@@ -63,17 +63,16 @@ object MapsMacro : TestDrive {
                     }
                     .waitForDisplay("Restaurants")
 
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
 
                 it.tapCenterOfScreen()
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
-
                 it.tapCenterOfScreen()
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
 

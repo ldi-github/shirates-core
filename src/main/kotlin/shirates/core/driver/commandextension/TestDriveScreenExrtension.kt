@@ -28,7 +28,7 @@ fun TestDrive.isScreen(
         return true
     }
 
-    val r = TestDriver.isScreen(screenName = screenName)
+    val r = TestDriver.isScreenForClassic(screenName = screenName)
     if (r) {
         TestDriver.currentScreen = screenName
     }
@@ -93,7 +93,7 @@ internal fun TestDrive.waitScreenOfCore(
 
     fun ofScreen(): String {
         for (screenName in screenNames) {
-            if (TestDriver.isScreen(screenName)) {
+            if (TestDriver.isScreenForClassic(screenName)) {
                 return screenName
             }
         }

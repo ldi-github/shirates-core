@@ -136,6 +136,8 @@ internal fun VisionDrive.detectCore(
     throwsException: Boolean,
 ): VisionElement {
 
+    val sw = StopWatch("detectCore")
+
     var v = VisionElement.emptyElement
     if (TestMode.isNoLoadRun.not()) {
         fun action() {
@@ -163,6 +165,7 @@ internal fun VisionDrive.detectCore(
         v.selector = selector
     }
     lastElement = v
+    sw.stop()
     return v
 }
 
@@ -181,7 +184,9 @@ private fun VisionDrive.detectCoreCore(
     if (lastElement.isEmpty) {
         invalidateScreen()
     }
-    screenshot()
+    if (CodeExecutionContext.isScreenDirty) {
+        screenshot()
+    }
 
     if (selector.isTextSelector.not()) {
         val v = VisionElement.emptyElement
@@ -737,12 +742,14 @@ internal fun VisionDrive.canDetectAllCore(
     language: String,
     last: Boolean,
     allowScroll: Boolean?,
+    removeRedundantText: Boolean,
     mergeBoundingBox: Boolean,
 ): Boolean {
 
     val subject = selectors.joinToString()
     var foundAll = false
     val context = TestDriverCommandContext(null)
+    val sw = StopWatch("canDetectAll($selectors)")
     val logLine = context.execBooleanCommand(subject = subject) {
         for (selector in selectors) {
             foundAll = canDetectCore(
@@ -751,8 +758,8 @@ internal fun VisionDrive.canDetectAllCore(
                 last = last,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
+                removeRedundantText = removeRedundantText,
                 mergeBoundingBox = mergeBoundingBox,
-                removeRedundantText = false,
             )
             if (foundAll.not()) {
                 break
@@ -762,6 +769,7 @@ internal fun VisionDrive.canDetectAllCore(
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"
     }
+    sw.stop()
     return foundAll
 }
 
@@ -785,6 +793,7 @@ fun VisionDrive.canDetectAll(
             language = language,
             last = false,
             allowScroll = allowScroll,
+            removeRedundantText = false,
             mergeBoundingBox = mergeBoundingBox,
         )
     }

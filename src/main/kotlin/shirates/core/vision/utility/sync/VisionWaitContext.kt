@@ -23,5 +23,7 @@ open class VisionWaitContext(
 ) : WaitContextBase<VisionWaitContext>, VisionElement() {
 
     override val hasError: Boolean
-        get() = false
+        get() {
+            return this.error != null
+        }
 }

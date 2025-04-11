@@ -3,6 +3,7 @@ package shirates.core.utility.file
 import org.apache.commons.io.FileUtils
 import shirates.core.utility.toPath
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -83,6 +84,9 @@ fun String.toFile(): File {
  */
 fun String.exists(): Boolean {
 
+    if (this.isBlank()) {
+        throw FileNotFoundException()
+    }
     return Files.exists(this.toPath())
 }
 

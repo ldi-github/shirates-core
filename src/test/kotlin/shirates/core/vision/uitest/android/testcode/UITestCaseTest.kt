@@ -4,22 +4,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.testContext
-import shirates.core.logging.TestLog
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class UITestCaseTest : VisionTest() {
-
-    var irregularHandlerCallCount = 0
-    override fun setEventHandlers(context: TestDriverEventContext) {
-
-        context.irregularHandler = {
-            irregularHandlerCallCount++
-            TestLog.info("irregularHandlerCallCount=$irregularHandlerCallCount")
-        }
-    }
 
     @Test
     @Order(10)

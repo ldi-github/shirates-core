@@ -255,9 +255,35 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             testContext.onSelectErrorHandler = eventContext.onSelectErrorHandler
             testContext.onExistErrorHandler = eventContext.onExistErrorHandler
             testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
-            testContext.isRerunRequested = eventContext.onRequestingRerunHandler
+            testContext.onRequestingRerunHandler = eventContext.onRequestingRerunHandler
             testContext.onRerunScenarioHandler = eventContext.onRerunScenarioHandler
             testContext.onRefreshCurrentScreenHandler = eventContext.onRefreshCurrentScreenHandler
+            if (TestMode.isVisionTest) {
+                if (testContext.irregularHandler != null) {
+                    throw NotImplementedError("irregularHandler is not supported on VisionTest")
+                }
+                if (testContext.onLaunchHandler != null) {
+                    throw NotImplementedError("onLaunchHandler is not supported on VisionTest")
+                }
+                if (testContext.onSelectErrorHandler != null) {
+                    throw NotImplementedError("onSelectErrorHandler is not supported on VisionTest")
+                }
+                if (testContext.onExistErrorHandler != null) {
+                    throw NotImplementedError("onExistErrorHandler is not supported on VisionTest")
+                }
+                if (testContext.onScreenErrorHandler != null) {
+                    throw NotImplementedError("onScreenErrorHandler is not supported on VisionTest")
+                }
+                if (testContext.onRequestingRerunHandler != null) {
+                    throw NotImplementedError("onRequestingRerunHandler is not supported on VisionTest")
+                }
+                if (testContext.onRerunScenarioHandler != null) {
+                    throw NotImplementedError("onRerunScenarioHandler is not supported on VisionTest")
+                }
+                if (testContext.onRefreshCurrentScreenHandler != null) {
+                    throw NotImplementedError("onRefreshCurrentScreenHandler is not supported on VisionTest")
+                }
+            }
 
             // printCapabilities
             if (TestLog.capabilityPrinted.not()) {

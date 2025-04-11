@@ -132,7 +132,7 @@ class RerunScenarioTest : UITest() {
             scenario {
                 case(1) {
                     condition {
-                        testContext.isRerunRequested = {
+                        testContext.onRequestingRerunHandler = {
                             true
                         }
                     }
@@ -158,7 +158,7 @@ class RerunScenarioTest : UITest() {
             scenario {
                 case(1) {
                     condition {
-                        testContext.isRerunRequested = {
+                        testContext.onRequestingRerunHandler = {
                             false
                         }
                     }
