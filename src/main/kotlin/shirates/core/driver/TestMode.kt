@@ -346,9 +346,13 @@ object TestMode {
     /**
      * isVisionTest
      */
-    val isVisionTest: Boolean
+    private var _isVisionTest: Boolean? = null
+    var isVisionTest: Boolean
         get() {
-            return UITestCallbackExtension.isVisionTest
+            return _isVisionTest ?: UITestCallbackExtension.isVisionTest
+        }
+        set(value) {
+            _isVisionTest = value
         }
 
     /**

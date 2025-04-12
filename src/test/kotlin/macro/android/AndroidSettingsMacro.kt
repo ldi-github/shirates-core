@@ -1,6 +1,7 @@
 package macro.android
 
 import shirates.core.driver.TestDrive
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.macro.Macro
@@ -97,16 +98,31 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Internet Screen]")
     fun internetScreen() {
 
-        if (it.isScreen("[Internet Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (TestMode.isClassicTest) {
+            if (it.isScreen("[Internet Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tap("Network & internet")
-            .screenIs("[Network & internet Screen]")
-        it.tap("Internet")
-            .screenIs("[Internet Screen]")
+            androidSettingsTopScreen()
+            it.tap("Network & internet")
+                .screenIs("[Network & internet Screen]")
+            it.tap("Internet")
+                .screenIs("[Internet Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Internet Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tap("Network & internet")
+                    .screenIs("[Network & internet Screen]")
+                it.tap("Internet")
+                    .screenIs("[Internet Screen]")
+            }
+        }
     }
 
     @Macro("[Connected devices Screen]")
@@ -138,60 +154,119 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Battery Screen]")
     fun batteryScreen() {
 
-        if (it.isScreen("[Battery Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (TestMode.isClassicTest) {
+            if (it.isScreen("[Battery Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tapWithScrollDown("Battery")
-            .screenIs("[Battery Screen]")
+            androidSettingsTopScreen()
+            it.tapWithScrollDown("Battery")
+                .screenIs("[Battery Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Battery Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tapWithScrollDown("Battery")
+                    .screenIs("[Battery Screen]")
+            }
+        }
     }
 
     @Macro("[Wallpaper & style Screen]")
     fun wallpaperAndStyleScreen() {
 
-        if (it.isScreen("[Wallpaper & style Screen]")) {
-            return
-        }
+        if (TestMode.isClassicTest) {
+            if (it.isScreen("[Wallpaper & style Screen]")) {
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tapWithScrollDown("[Wallpaper & style]")
-            .screenIs("[Wallpaper & style Screen]")
+            androidSettingsTopScreen()
+            it.tapWithScrollDown("[Wallpaper & style]")
+                .screenIs("[Wallpaper & style Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Wallpaper & style Screen]")) {
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tapWithScrollDown("[Wallpaper & style]")
+                    .screenIs("[Wallpaper & style Screen]")
+            }
+        }
     }
 
     @Macro("[Accessibility Screen]")
     fun accessibilityScreen() {
 
-        if (it.isScreen("[Accessibility Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (TestMode.isClassicTest) {
+            if (it.isScreen("[Accessibility Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tapWithScrollDown("[Accessibility]")
-            .screenIs("[Accessibility Screen]")
+            androidSettingsTopScreen()
+            it.tapWithScrollDown("[Accessibility]")
+                .screenIs("[Accessibility Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Accessibility Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tapWithScrollDown("[Accessibility]")
+                    .screenIs("[Accessibility Screen]")
+            }
+        }
     }
 
     @Macro("[System Screen]")
     fun systemScreen() {
 
-        if (it.isScreen("[System Screen]")) {
-            it.flickAndGoUpTurbo()
-        }
+        if (TestMode.isClassicTest) {
+            if (it.isScreen("[System Screen]")) {
+                it.flickAndGoUpTurbo()
+            }
 
-        androidSettingsTopScreen()
-        it.flickAndGoDownTurbo()
-            .tapWithScrollDown("[System]")
-            .screenIs("[System Screen]")
+            androidSettingsTopScreen()
+            it.flickAndGoDownTurbo()
+                .tapWithScrollDown("[System]")
+                .screenIs("[System Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[System Screen]")) {
+                    it.flickAndGoUpTurbo()
+                }
+
+                androidSettingsTopScreen()
+                it.flickAndGoDownTurbo()
+                    .tapWithScrollDown("[System]")
+                    .screenIs("[System Screen]")
+            }
+        }
     }
 
     @Macro("[Developer options Screen]")
     fun developerOptionsScreen() {
 
-        systemScreen()
-        it.tapWithScrollDown("Developer options")
-            .screenIs("[Developer options Screen]")
+        if (TestMode.isClassicTest) {
+            systemScreen()
+            it.tapWithScrollDown("Developer options")
+                .screenIs("[Developer options Screen]")
+        } else {
+            visionScope {
+                systemScreen()
+                it.tapWithScrollDown("Developer options")
+                    .screenIs("[Developer options Screen]")
+            }
+        }
     }
 
 }

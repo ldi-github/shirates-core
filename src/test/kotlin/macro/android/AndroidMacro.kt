@@ -2,6 +2,7 @@ package macro.android
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ifCanSelectNot
@@ -11,6 +12,7 @@ import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.vision.visionScope
 
 @MacroObject
 object AndroidMacro : TestDrive {
@@ -18,8 +20,15 @@ object AndroidMacro : TestDrive {
     @Macro("[Android Home Screen]")
     fun androidHomeScreen() {
 
-        it.pressHome()
-            .pressHome()
+        if (TestMode.isClassicTest) {
+            it.pressHome()
+                .pressHome()
+        } else {
+            visionScope {
+                AndroidMacro.it.pressHome()
+                    .pressHome()
+            }
+        }
     }
 
     @Macro("[Airplane mode On]")
