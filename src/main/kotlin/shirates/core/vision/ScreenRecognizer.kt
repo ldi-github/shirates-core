@@ -1,16 +1,17 @@
 package shirates.core.vision
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.getNicknameWithoutSuffix
 import shirates.core.driver.testContext
 import shirates.core.driver.vision
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.utility.file.resolve
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.time.StopWatch
-import shirates.core.vision.configration.repository.VisionScreenIndexRepository
 import shirates.core.vision.configration.repository.VisionScreenPredicateRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
-import shirates.core.vision.driver.commandextension.canDetectAll
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
 import shirates.core.vision.utility.label.LabelUtility
@@ -35,12 +36,33 @@ object ScreenRecognizer {
 
     private fun recognizeScreenCore(classifierName: String, screenImageFile: String): String {
 
-        val mlmodelFile: String =
-            PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
+        /**
+         * Determine the screen name with textIndex
+         */
+        val joinedText = vision.rootElement.joinedText.forVisionComparison()
+        for (entry in VisionTextIndexRepository.imageIndexFiles) {
+            if (entry.index.isNotEmpty()) {
+                val screenName = entry.screenName.getNicknameWithoutSuffix()
+                var allFound = false
+                for (item in entry.index) {
+                    val t = item.forVisionComparison()
+                    allFound = joinedText.contains(t)
+                    if (allFound.not()) {
+                        break
+                    }
+                }
+                if (allFound) {
+                    TestLog.info("$screenName found by textIndex: ${entry.index}")
+                    return screenName
+                }
+            }
+        }
 
         /**
          * Get screen candidates from current screen image
          */
+        val mlmodelFile: String =
+            PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
         val classifyScreenResult = VisionServerProxy.classifyScreen(
             inputFile = screenImageFile,
             mlmodelFile = mlmodelFile,
@@ -53,7 +75,7 @@ object ScreenRecognizer {
          * Determine the screen name if confidence == 1.0
          */
         for (candidate in screenCandidates) {
-            val screenName = LabelUtility.getShortLabel(candidate.identifier)
+            val screenName = LabelUtility.getShortLabel(candidate.identifier).getNicknameWithoutSuffix()
             if (candidate.confidence == 1.0f) {
                 return screenName
             }
@@ -64,7 +86,7 @@ object ScreenRecognizer {
         if (testContext.enableScreenPredicate) {
             val screenPredicates = VisionScreenPredicateRepository.getList()
             for (candidate in screenCandidates) {
-                val screenName = LabelUtility.getShortLabel(candidate.identifier)
+                val screenName = LabelUtility.getShortLabel(candidate.identifier).getNicknameWithoutSuffix()
                 val screenPredicate = screenPredicates.firstOrNull() { it.screenName == screenName }
                 if (screenPredicate != null) {
                     val sw = StopWatch("screenPredicate ${screenPredicate.screenName}")
@@ -89,23 +111,6 @@ object ScreenRecognizer {
             }
         }
         /**
-         * Determine the screen name with screenIndex
-         */
-        for (candidate in screenCandidates) {
-            val screenName = LabelUtility.getShortLabel(candidate.identifier)
-            val screenIndex = VisionScreenIndexRepository.getIndex(screenName)
-            if (screenIndex.isNotEmpty()) {
-                val allFound = vision.canDetectAll(
-                    expressions = screenIndex.toTypedArray(),
-                    mergeBoundingBox = false
-                )
-                if (allFound) {
-                    TestLog.info("$screenName found by screenIndex: $screenIndex")
-                    return screenName
-                }
-            }
-        }
-        /**
          * Get texts from current screen image
          */
         val rootElement = vision.rootElement
@@ -115,24 +120,12 @@ object ScreenRecognizer {
          * and get text matching score between current screen image and candidate screen images.
          * The result list is sorted by descending with matchScore.
          */
-        val list = getScreenRecognizedTextMatchingInfoList(
+        val textMatchingInfoList = getScreenRecognizedTextMatchingInfoList(
             screenLabels = screenCandidates.map { it.identifier },
             recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
         )
-        if (list.isEmpty()) {
+        if (textMatchingInfoList.isEmpty()) {
             return "?"
-        }
-
-        /**
-         * Get the highest matchScore entry.
-         * If matchKeywords is true, return it.
-         */
-        val screenName = list.first().shortScreenLabel
-        val screenEntry = VisionScreenRepository.getScreenEntry(screenName)
-        val matchKeywords = screenEntry.matchKeywords()
-        if (matchKeywords) {
-            TestLog.info("${screenEntry.screenName} found by matchKeywords")
-            return LabelUtility.getShortLabel(screenEntry.screenName)
         }
 
         /**
@@ -140,12 +133,12 @@ object ScreenRecognizer {
          * and take one that has highest matchTextScoreRate.
          */
         val highMatchedList =
-            list.filter { it.matchedTextMap.count() > 5 && it.matchTextCountRate > 0.3 && it.matchTextScoreRate > 0.3 }
+            textMatchingInfoList.filter { it.matchedTextMap.count() > 5 && it.matchTextCountRate > 0.3 && it.matchTextScoreRate > 0.3 }
                 .sortedByDescending { it.matchTextScoreRate }
         if (highMatchedList.any()) {
             val s = highMatchedList.first()
             TestLog.info("${s.shortScreenLabel} found by matchTextScoreRate")
-            return s.shortScreenLabel
+            return s.shortScreenLabel.getNicknameWithoutSuffix()
         }
 
         /**
@@ -157,7 +150,7 @@ object ScreenRecognizer {
         if (screenCandidate.confidence > confidenceThread) {
             val name = LabelUtility.getShortLabel(screenCandidate.identifier)
             TestLog.info("$name found by confidence > $confidenceThread")
-            return name
+            return name.getNicknameWithoutSuffix()
         }
 
         /**

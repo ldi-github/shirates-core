@@ -4,7 +4,6 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.*
 import shirates.core.logging.Message.message
@@ -210,16 +209,6 @@ fun VisionDrive.screenIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
-        if (verifyFunc != null) {
-            if (verifyTexts.any()) {
-                throw TestDriverException("You cannot specify verifyText and verifyFunction at the same time.")
-            }
-
-            vision.verify(message = assertMessage, func = verifyFunc)
-            TestDriver.currentScreen = screenName
-            return@execCheckCommand
-        }
-
         var match = isScreen(screenName = screenName, verifyTexts = verifyTexts)
         if (match.not()) {
             doUntilTrue(
@@ -234,10 +223,7 @@ fun VisionDrive.screenIs(
             }
         }
 
-        if (match) {
-            TestDriver.currentScreen = screenName
-            TestLog.ok(message = assertMessage, arg1 = screenName)
-        } else {
+        if (match.not()) {
             match = isScreen(screenName = screenName, verifyTexts = verifyTexts)   // Retry for timeout
             if (match.not()) {
                 TestDriver.currentScreen = "?"
@@ -248,6 +234,13 @@ fun VisionDrive.screenIs(
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }
+        }
+
+        TestDriver.currentScreen = screenName
+        if (verifyFunc != null) {
+            vision.verify(message = assertMessage, func = verifyFunc)
+        } else {
+            TestLog.ok(message = assertMessage, arg1 = screenName)
         }
     }
 

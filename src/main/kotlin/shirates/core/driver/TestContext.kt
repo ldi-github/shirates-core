@@ -266,6 +266,9 @@ class TestContext(
 
     @SaveTarget
     var enableScreenHandler = true
+        set(value) {
+            field = value
+        }
 
     @SaveTarget
     var enableScreenPredicate = true

@@ -32,8 +32,8 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.batch.CreateMLUtility
 import shirates.core.vision.configration.repository.VisionMLModelRepository
-import shirates.core.vision.configration.repository.VisionScreenIndexRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
 import shirates.core.vision.driver.commandextension.launchApp
 import shirates.core.vision.driver.commandextension.rootElement
@@ -382,8 +382,8 @@ abstract class UITestBase : Drive {
                     // setup screen repository
                     VisionScreenRepository.setup()
 
-                    // setup screen index repository
-                    VisionScreenIndexRepository.setup()
+                    // setup text index repository
+                    VisionTextIndexRepository.setup()
                 }
             }
 

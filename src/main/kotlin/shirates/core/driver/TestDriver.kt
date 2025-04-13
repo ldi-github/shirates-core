@@ -2133,6 +2133,7 @@ object TestDriver {
             screenshotLine.lastScreenshot = screenshotFileName
             screenshotLine.subject = screenshotFileName
 
+            currentScreen = "?"
             currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
             currentScreenSynced = true
             TestLog.printInfo("currentScreen=$currentScreen")

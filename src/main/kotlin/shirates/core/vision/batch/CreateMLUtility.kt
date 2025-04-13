@@ -141,6 +141,16 @@ object CreateMLUtility {
         createWorkDirectoriesAndFiles(createBinary = createBinary)
         copyScriptFilesIntoWork()
         setupScripts()
+        setupClassifiers()
+
+        val dir = fileListFile.toPath().parent
+        if (Files.exists(dir).not()) {
+            dir.toFile().mkdirs()
+        }
+        fileListFile.toFile().writeText(currentListString)   // fileListFile is saved on success
+    }
+
+    private fun setupClassifiers() {
 
         for (classifierName in classifierNames) {
             val sw = StopWatch("learning [$classifierName]")
@@ -162,12 +172,6 @@ object CreateMLUtility {
             checkAccuracy(content = r.resultString)
             sw.stop()
         }
-
-        val dir = fileListFile.toPath().parent
-        if (Files.exists(dir).not()) {
-            dir.toFile().mkdirs()
-        }
-        fileListFile.toFile().writeText(currentListString)   // fileListFile is saved on success
     }
 
     private fun printLastLearningResultOnWarning() {
@@ -188,7 +192,7 @@ object CreateMLUtility {
     internal fun getFileListInClassifiersDirectoryInVision(): String {
 
         val files = classifiersDirectoryInVision.toFile().walkTopDown()
-            .filter { it.isFile && it.name != ".DS_Store" }
+            .filter { it.isFile && it.name != ".DS_Store" && it.name.endsWith(".txt").not() }
             .map { "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${it}" }
         val result = files.joinToString("\n")
         return result

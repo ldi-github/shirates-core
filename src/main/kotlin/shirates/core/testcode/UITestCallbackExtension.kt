@@ -79,6 +79,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             }
         val isVisionTest: Boolean
             get() {
+                if (uiTestBase == null) {
+                    return false
+                }
                 return uiTestBase is VisionTest
             }
     }
