@@ -47,13 +47,14 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[マップトップ画面]")
+                    it.pressHome()
+                        .screenIs("[Androidホーム画面]")
                 }.action {
-                    it.detect("レストラン")
+                    it.detect("Play ストア")
                 }.expectation {
-                    it.textIs("レストラン")
-                        .rightTextIs("ホテル")
-                        .leftTextIs("レストラン")
+                    it.textIs("Play ストア")
+                        .rightTextIs("Gmail")
+                        .leftTextIs("Play ストア")
                 }
             }
         }

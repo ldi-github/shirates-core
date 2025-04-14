@@ -203,6 +203,5 @@ You can see recognized texts by AI-OCR in **recognizeText.json**.
 
 ### Link
 
-- [index(Vision)](../../../index.md)
-- [index(Classic)](../../../classic/index.md)
+- [index](../../../index.md)
 

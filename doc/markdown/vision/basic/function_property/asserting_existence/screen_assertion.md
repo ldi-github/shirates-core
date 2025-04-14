@@ -19,7 +19,7 @@ Before using these functions, you have to prepare screen image templates.<br>
 
 ![](_images/screen_image_templates.png)
 
-See [Setting up screen image templates](../../text_and_image_recognition/setting_up_screen_image_templates.md)
+See [Using ScreenClassifier (Vision)](../../text_and_image_recognition/using_screen_classifier.md)
 
 ## Sample code
 

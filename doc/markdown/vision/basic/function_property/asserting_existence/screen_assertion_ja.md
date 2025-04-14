@@ -17,7 +17,7 @@
 
 ![](_images/screen_image_templates_ja.png)
 
-参照: [画面イメージテンプレートのセットアップ](../../text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+参照: [ScreenClassifierを使用する (Vision)](../../text_and_image_recognition/using_screen_classifier_ja.md)
 
 ## サンプルコード
 

@@ -11,6 +11,5 @@ You can see image of `VisionElement` in debugger.
 
 ### Link
 
-- [index(Vision)](../../../index.md)
-- [index(Classic)](../../../classic/index.md)
+- [index](../../../index.md)
 

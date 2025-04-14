@@ -183,8 +183,8 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 6. Click `Additional settings`. <br>Set **Device skin** `[None]`. <br>Click `Finish`.<br>
    ![](classic/_images/create_avd_4.png)
 7. Now you can use the emulator.<br>
-   Click the play button to launch the emulator.
-   ![](classic/_images/create_avd_5.png)
+   Click the play button to launch the emulator.<br>
+   ![](classic/_images/create_avd_5.png)<br>
    ![](classic/_images/create_avd_6.png)
 
 ## Setting up shirates-vision-server

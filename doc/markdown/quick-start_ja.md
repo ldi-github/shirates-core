@@ -177,7 +177,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    ![](classic/_images/create_avd_4.png)
 7. これでエミュレーターが使用できるようになりました。<br>
    `Start`ボタンをクリックしてエミュレーターを起動してください。
-   ![](classic/_images/create_avd_5.png)
+   ![](classic/_images/create_avd_5.png)<br>
    ![](classic/_images/create_avd_6.png)
 
 ## shirates-vision-server のセットアップ

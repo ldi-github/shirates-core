@@ -186,6 +186,8 @@
 - デバッグ
     - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
     - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)
+- テキストインデックス
+    - [テキストインデックスによる画面認識精度の向上](vision/in_action/text_indexing/text_index_for_screen_recognition_ja.md)
 - classicモードとvisionモードの相互運用
     - [classic APIをVisionTestで使用する (Vision) (classicScope, visionScrope)](vision/in_action/hybrid_scripting/using_classic_apis_in_vision_test_ja.md)
 - テストフィクスチャ

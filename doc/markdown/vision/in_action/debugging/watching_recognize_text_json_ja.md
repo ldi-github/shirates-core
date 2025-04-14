@@ -203,6 +203,5 @@ AI-OCRが認識したテキスト情報を **recognizeText.json** で確認す�
 
 ### Link
 
-- [index(Vision)](../../../index_ja.md)
-- [index(Classic)](../../../classic/index_ja.md)
+- [index](../../../index_ja.md)
 
