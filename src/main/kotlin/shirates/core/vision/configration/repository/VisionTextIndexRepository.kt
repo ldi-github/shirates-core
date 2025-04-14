@@ -50,13 +50,14 @@ object VisionTextIndexRepository {
         imageIndexFiles = visionDirectory.toFile().walkTopDown().filter { it.isImageIndexFile() }
             .map { VisionTextIndexEntry(imageIndexFile = it.path) }.toMutableList()
 
+        val trimChars = PropertiesManager.visionTextIndexTrimChars.toCharArray()
         for (entry in imageIndexFiles) {
             fun createTextIndexFile() {
                 val r = VisionServerProxy.recognizeText(
                     inputFile = entry.imageIndexFile,
                 )
-                val list = r.candidates.map { it.text }
-                entry.index = list.toMutableList()
+                val list = r.candidates.map { it.text.trim(*trimChars) }
+                entry.indexItems = list.toMutableList()
 
                 val s = list.joinToString("\n")
                 entry.textIndexFile.toFile().writeText(s)
@@ -69,15 +70,31 @@ object VisionTextIndexRepository {
                 if (textIndexFile.lastModified() < imageIndexFile.lastModified()) {
                     createTextIndexFile()
                 } else {
-                    println("TextIndexFile already exists. ${entry.textIndexFile}")
-                    entry.index = textIndexFile.readLines().toMutableList()
+//                    println("TextIndexFile already exists. ${entry.textIndexFile}")
+                    entry.indexItems = textIndexFile.readLines().toMutableList()
                 }
             } else {
                 createTextIndexFile()
             }
         }
 
-        imageIndexFiles.sortByDescending { it.index.count() }
+        imageIndexFiles = imageIndexFiles.sortedWith(compareByDescending<VisionTextIndexEntry> { it.priority }
+            .thenByDescending { it.indexItems.count() })
+            .toMutableList()
+        for (entry in imageIndexFiles) {
+            println("TextIndex: $entry")
+        }
+
+    }
+
+    /**
+     * getList
+     */
+    fun getList(
+        screenName: String
+    ): List<VisionTextIndexEntry> {
+
+        return imageIndexFiles.filter { it.screenName == screenName }
     }
 
     /**
@@ -86,28 +103,17 @@ object VisionTextIndexRepository {
     class VisionTextIndexEntry(
         val imageIndexFile: String
     ) {
-        private var _fileName: String? = null
+        var indexItems = mutableListOf<String>()
 
-        var index = mutableListOf<String>()
-
-        val fileName: String
+        val priority: Int
             get() {
-                if (_fileName == null) {
-                    _fileName = imageIndexFile.toPath().name
-                }
-                return _fileName!!
-            }
-
-        val isIndexFile: Boolean
-            get() {
-                return fileName.startsWith("#")
+                val name = textIndexFile.toPath().name
+                val match = Regex("^#+").find(name)
+                return match?.value?.length ?: 0
             }
 
         val textIndexFile: String
             get() {
-                if (isIndexFile.not()) {
-                    return ""
-                }
                 val p = imageIndexFile.toPath()
                 val f = p.parent.resolve("${p.nameWithoutExtension}.txt").toString()
                 return f
@@ -119,7 +125,7 @@ object VisionTextIndexRepository {
             }
 
         override fun toString(): String {
-            return "$screenName $index"
+            return "$screenName priority=${priority}, length=${indexItems.count()}, $indexItems, imageIndexFile=$imageIndexFile"
         }
     }
 }

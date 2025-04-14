@@ -1102,6 +1102,15 @@ object PropertiesManager {
         }
 
     /**
+     * visionTextIndexTrimChars
+     */
+    val visionTextIndexTrimChars: String
+        get() {
+            return getPropertyValue(propertyName = "visionTextIndexTrimChars")
+                ?: Const.VISION_TEXT_INDEX_TRIM_CHARS_FOR_JA
+        }
+
+    /**
      * visionSyncImageMatchRate
      */
     val visionSyncImageMatchRate: Double

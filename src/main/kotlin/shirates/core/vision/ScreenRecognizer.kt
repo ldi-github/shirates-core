@@ -41,10 +41,10 @@ object ScreenRecognizer {
          */
         val joinedText = vision.rootElement.joinedText.forVisionComparison()
         for (entry in VisionTextIndexRepository.imageIndexFiles) {
-            if (entry.index.isNotEmpty()) {
+            if (entry.indexItems.isNotEmpty()) {
                 val screenName = entry.screenName.getNicknameWithoutSuffix()
                 var allFound = false
-                for (item in entry.index) {
+                for (item in entry.indexItems) {
                     val t = item.forVisionComparison()
                     allFound = joinedText.contains(t)
                     if (allFound.not()) {
@@ -52,7 +52,7 @@ object ScreenRecognizer {
                     }
                 }
                 if (allFound) {
-                    TestLog.info("$screenName found by textIndex: ${entry.index}")
+                    TestLog.info("$screenName found by textIndex: ${entry.indexItems}")
                     return screenName
                 }
             }

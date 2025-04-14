@@ -2231,7 +2231,7 @@ object TestDriver {
                     result.matchWithLastScreenshot = match
                 }
 
-                TestLog.printInfo("(isSame: $match, changed: $changed, matchRate: $matchRate, distance=$distance)")
+                TestLog.printInfo("Syncing screen.(isSame: $match, changed: $changed, matchRate: $matchRate, distance=$distance)")
 
                 if (count == 1) {
                     changed = match.not()

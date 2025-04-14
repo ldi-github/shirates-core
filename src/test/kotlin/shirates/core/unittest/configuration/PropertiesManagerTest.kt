@@ -1970,6 +1970,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionTextIndexTrimChars() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextIndexTrimChars).isEqualTo(Const.VISION_TEXT_INDEX_TRIM_CHARS_FOR_JA)
+        }
+        run {
+            // Arrange
+            val value = "-,."
+            PropertiesManager.setPropertyValue("visionTextIndexTrimChars", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextIndexTrimChars).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionSyncImageMatchRate() {
 
         run {

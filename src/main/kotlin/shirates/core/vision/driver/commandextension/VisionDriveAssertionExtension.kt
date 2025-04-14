@@ -13,6 +13,7 @@ import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.classicScope
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.*
 
 internal fun VisionDrive.checkImageLabelContains(
@@ -209,6 +210,7 @@ fun VisionDrive.screenIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
+        TestDriver.currentScreen = "?"
         var match = isScreen(screenName = screenName, verifyTexts = verifyTexts)
         if (match.not()) {
             doUntilTrue(
@@ -229,8 +231,20 @@ fun VisionDrive.screenIs(
                 TestDriver.currentScreen = "?"
                 lastElement.lastResult = LogType.NG
 
+                val textIndexList = VisionTextIndexRepository.getList(screenName = screenName)
+                if (textIndexList.any()) {
+                    for (textIndex in textIndexList) {
+                        TestLog.warn("Expecting textIdex: $textIndex")
+                    }
+                    if (rootElement.visionContext.recognizeTextObservations.isEmpty()) {
+                        rootElement.visionContext.recognizeText()
+                    }
+                    TestLog.info("recognizeTexts: ${rootElement.visionContext.recognizeTextObservations.map { "\"${it.text}\"" }}")
+                }
+
                 val msgForTexts = if (verifyTexts.isEmpty()) "" else ", texts=${verifyTexts.joinToString(", ")}"
-                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName$msgForTexts)"
+                val msg =
+                    "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName$msgForTexts)"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }

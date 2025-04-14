@@ -270,6 +270,9 @@ class VisionContext(
         }
 
         val rootVisionContext = rootElement!!.visionContext
+        if (rootVisionContext.screenshotFile == null) {
+            return this
+        }
         val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
         if (recognizedFile.exists() && recognizedFile.isFile.not()) {
             /**
