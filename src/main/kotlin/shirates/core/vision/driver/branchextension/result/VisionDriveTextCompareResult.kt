@@ -1,16 +1,17 @@
-package shirates.core.driver.branchextension.result
+package shirates.core.vision.driver.branchextension.result
 
-import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.branchextension.result.CompareResult
 import shirates.core.exception.BranchException
 import shirates.core.logging.Message.message
 import shirates.core.utility.string.forClassicComparison
+import shirates.core.vision.VisionDrive
 
 /**
  * TextCompareResult
  */
-class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
+class VisionDriveTextCompareResult(val text: String?) : CompareResult(), VisionDrive {
 
     private fun ifStringCore(
         matched: Boolean,
@@ -35,7 +36,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifStringIs"
         val v = value.forClassicComparison()
@@ -55,7 +56,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifStartsWith"
         val v = value.forClassicComparison()
@@ -77,7 +78,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifContains"
         val v = value.forClassicComparison()
@@ -99,7 +100,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifEndsWith"
         val v = value.forClassicComparison()
@@ -121,7 +122,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         regex: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifMatches"
         val t = text.forClassicComparison()
@@ -141,7 +142,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
     fun ifElse(
         message: String = message(id = "ifElse"),
         onElse: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "ifElse"
 
@@ -179,7 +180,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "elseIfStringIs"
         val v = value.forClassicComparison()
@@ -199,7 +200,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "elseIfStartsWith"
         val v = value.forClassicComparison()
@@ -221,7 +222,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "elseIfContains"
         val v = value.forClassicComparison()
@@ -243,7 +244,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         value: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "elseIfEndsWith"
         val v = value.forClassicComparison()
@@ -265,7 +266,7 @@ class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
         regex: String?,
         message: String? = null,
         onTrue: () -> Unit
-    ): TextCompareResult {
+    ): VisionDriveTextCompareResult {
 
         val command = "elseIfMatches"
         val t = text.forClassicComparison()

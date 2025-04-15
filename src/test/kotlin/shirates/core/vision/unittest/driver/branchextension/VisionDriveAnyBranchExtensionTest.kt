@@ -8,7 +8,8 @@ import shirates.core.testcode.UnitTest
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.*
 
-class AnyBranchExtensionTest : UnitTest() {
+
+class VisionDriveAnyBranchExtensionTest : UnitTest() {
 
     @Test
     fun android() {

@@ -8,7 +8,7 @@ import shirates.core.logging.Message.message
 import shirates.core.vision.driver.branchextension.ifFalse
 import shirates.core.vision.driver.branchextension.ifTrue
 
-class BooleanBranchExtensionTest {
+class VisionDriveBooleanBranchExtensionTest {
 
     @Test
     fun true_ifTrue() {

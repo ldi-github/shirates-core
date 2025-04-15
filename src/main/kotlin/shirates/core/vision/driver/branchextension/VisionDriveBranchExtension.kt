@@ -1,14 +1,13 @@
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
-import shirates.core.driver.branchextension.ifFalse
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.branchextension.ifFalse
+import shirates.core.vision.driver.branchextension.ifTrue
+import shirates.core.vision.driver.branchextension.result.VisionDriveBooleanCompareResult
 import shirates.core.vision.driver.commandextension.detect
 import shirates.core.vision.driver.commandextension.findImage
 
@@ -26,7 +25,7 @@ fun VisionDrive.ifImageExist(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     onTrue: (() -> Unit)
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifImageExist"
 
@@ -43,7 +42,7 @@ fun VisionDrive.ifImageExist(
         throwsException = false
     )
     val matched = v.isFound
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val message = message(id = command, subject = label)
 
     if (matched || TestMode.isNoLoadRun) {
@@ -70,7 +69,7 @@ fun VisionDrive.ifImageExistNot(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     onTrue: () -> Unit
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifImageExistNot"
 
@@ -87,7 +86,7 @@ fun VisionDrive.ifImageExistNot(
         throwsException = false
     )
     val matched = v.isFound.not()
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val message = message(id = command, subject = label)
 
     if (matched || TestMode.isNoLoadRun) {
@@ -106,8 +105,8 @@ fun VisionDrive.ifImageExistNot(
 fun VisionDrive.ifTrue(
     value: Boolean,
     message: String = message(id = "ifTrue"),
-    onTrue: (TestElement) -> Unit
-): BooleanCompareResult {
+    onTrue: (VisionElement) -> Unit
+): VisionDriveBooleanCompareResult {
 
     return value.ifTrue(
         message = message,
@@ -121,8 +120,8 @@ fun VisionDrive.ifTrue(
 fun VisionDrive.ifFalse(
     value: Boolean,
     message: String = message(id = "ifFalse"),
-    onFalse: (TestElement) -> Unit
-): BooleanCompareResult {
+    onFalse: (VisionElement) -> Unit
+): VisionDriveBooleanCompareResult {
 
     return value.ifFalse(
         message = message,
@@ -137,7 +136,7 @@ fun VisionDrive.ifCanDetect(
     expression: String,
     waitSeconds: Double = 0.0,
     onTrue: (VisionElement) -> Unit = {}
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifCanDetect"
 
@@ -148,7 +147,7 @@ fun VisionDrive.ifCanDetect(
     )
     val matched = v.isFound
 
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val sel = getSelector(expression = expression)
     val message = message(id = command, subject = sel.toString())
 
@@ -170,7 +169,7 @@ fun VisionDrive.ifCanDetect(
 fun VisionDrive.ifCanDetectNot(
     expression: String,
     onTrue: (VisionElement) -> Unit
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifCanDetectNot"
 
@@ -180,7 +179,7 @@ fun VisionDrive.ifCanDetectNot(
     )
     val matched = v.isEmpty
 
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val sel = getSelector(expression = expression)
     val message = message(id = command, subject = sel.toString())
 

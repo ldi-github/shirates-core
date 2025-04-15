@@ -5,10 +5,10 @@ import shirates.core.driver.TestDrive
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
-import shirates.core.driver.waitForDisplay
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.visionScope
 
 @MacroObject
@@ -58,7 +58,7 @@ object MapsMacro : TestDrive {
                     .ifCanDetect("*to send you notifications?") {
                         it.tap("Allow")
                     }
-                    .ifCanSelect("Make it your map") {
+                    .ifCanDetect("Make it your map") {
                         it.tap("SKIP")
                     }
                     .waitForDisplay("Restaurants")
