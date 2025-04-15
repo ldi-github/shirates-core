@@ -90,23 +90,32 @@ val packageName: String
  */
 val rootBounds: Bounds
     get() {
+        if (_rootBounds != null) {
+            return _rootBounds!!
+        }
         if (TestMode.isClassicTest) {
             if (isAndroid) {
-                return TestElementCache.hierarchyBounds
+                _rootBounds = TestElementCache.hierarchyBounds
             } else {
-                return classic.rootElement.bounds
+                _rootBounds = classic.rootElement.bounds
             }
         } else {
-            return vision.rootElement.bounds
+            _rootBounds = vision.rootElement.bounds
         }
+        return _rootBounds!!
     }
+private var _rootBounds: Bounds? = null
 
 /**
  * viewBounds
  */
 val viewBounds: Bounds
     get() {
+        if (_viewBounds != null) {
+            return _viewBounds!!
+        }
         val b = rootBounds
-        return Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
+        _viewBounds = Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
+        return _viewBounds!!
     }
-
+private var _viewBounds: Bounds? = null

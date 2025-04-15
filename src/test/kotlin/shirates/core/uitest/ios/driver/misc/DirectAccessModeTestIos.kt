@@ -86,6 +86,8 @@ class DirectAccessModeTestIos : UITest() {
     @Order(30)
     fun disableCacheTest2() {
 
+        disableCache()
+
         scenario {
             case(1) {
                 condition {
@@ -106,6 +108,8 @@ class DirectAccessModeTestIos : UITest() {
     @Order(50)
     fun useCacheArgument() {
 
+        disableCache()
+        
         // useCache argument can be specified with these functions
 
         printUseCache("testMethod")
