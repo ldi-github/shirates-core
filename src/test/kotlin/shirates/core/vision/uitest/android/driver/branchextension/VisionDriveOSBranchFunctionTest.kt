@@ -9,7 +9,7 @@ import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
-class OSBranchFunctionTest : VisionTest() {
+class VisionDriveOSBranchFunctionTest : VisionTest() {
 
     @Test
     fun androidTest() {
