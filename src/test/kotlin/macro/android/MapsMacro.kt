@@ -5,6 +5,7 @@ import shirates.core.driver.TestDrive
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
+import shirates.core.driver.waitForDisplay
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.vision.driver.commandextension.*
