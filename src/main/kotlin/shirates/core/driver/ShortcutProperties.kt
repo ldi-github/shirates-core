@@ -1,9 +1,7 @@
 package shirates.core.driver
 
 import io.appium.java_client.AppiumDriver
-import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.TestProfile
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.driver.VisionDriveObject
@@ -90,32 +88,14 @@ val packageName: String
  */
 val rootBounds: Bounds
     get() {
-        if (_rootBounds != null) {
-            return _rootBounds!!
-        }
-        if (TestMode.isClassicTest) {
-            if (isAndroid) {
-                _rootBounds = TestElementCache.hierarchyBounds
-            } else {
-                _rootBounds = classic.rootElement.bounds
-            }
-        } else {
-            _rootBounds = vision.rootElement.bounds
-        }
-        return _rootBounds!!
+        return TestElementCache.rootBounds
     }
-private var _rootBounds: Bounds? = null
 
 /**
  * viewBounds
  */
 val viewBounds: Bounds
     get() {
-        if (_viewBounds != null) {
-            return _viewBounds!!
-        }
-        val b = rootBounds
-        _viewBounds = Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
-        return _viewBounds!!
+        return TestElementCache.viewBounds
     }
-private var _viewBounds: Bounds? = null
+
