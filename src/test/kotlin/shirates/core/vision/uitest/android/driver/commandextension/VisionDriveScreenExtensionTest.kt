@@ -33,44 +33,6 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
-    fun screenIs_texts() {
-
-        scenario {
-            case(1) {
-                expectation {
-                    it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices")
-                }
-            }
-            case(2) {
-                expectation {
-                    assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet2", "Connected devices")
-                    }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Android Settings Top Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Android Settings Top Screen], texts=Network & internet2, Connected devices)")
-                }
-            }
-            case(3) {
-                expectation {
-                    assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
-                            exist("Network & internet")
-                            exist("Connected devices")
-                        }
-                    }
-                }
-            }
-            case(4) {
-                expectation {
-                    assertThatThrownBy {
-                        it.screenIs("[Not Registered Screen]", "Network & internet")
-                    }.isInstanceOf(TestConfigException::class.java)
-                        .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[Not Registered Screen])")
-                }
-            }
-        }
-    }
-
-    @Test
     fun screenIs_verifyFunc() {
 
         scenario {
@@ -94,17 +56,6 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                 }
             }
             case(3) {
-                expectation {
-                    assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
-                            exist("Network & internet")
-                            exist("Connected devices")
-                        }
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("You cannot specify verifyText and verifyFunction at the same time.")
-                }
-            }
-            case(4) {
                 expectation {
                     assertThatThrownBy {
                         it.screenIs("[Not Registered Screen]") {

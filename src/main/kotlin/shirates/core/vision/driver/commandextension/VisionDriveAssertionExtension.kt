@@ -183,7 +183,6 @@ fun VisionDrive.appIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
-    vararg verifyTexts: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     message: String? = null,
@@ -211,7 +210,7 @@ fun VisionDrive.screenIs(
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
         TestDriver.currentScreen = "?"
-        var match = isScreen(screenName = screenName, verifyTexts = verifyTexts)
+        var match = isScreen(screenName = screenName)
         if (match.not()) {
             doUntilTrue(
                 waitSeconds = waitSeconds,
@@ -220,13 +219,13 @@ fun VisionDrive.screenIs(
                     onIrregular?.invoke()
                 },
             ) {
-                match = isScreen(screenName = screenName, verifyTexts = verifyTexts, invalidateScreen = true)
+                match = isScreen(screenName = screenName, invalidateScreen = true)
                 match
             }
         }
 
         if (match.not()) {
-            match = isScreen(screenName = screenName, verifyTexts = verifyTexts)   // Retry for timeout
+            match = isScreen(screenName = screenName)   // Retry for timeout
             if (match.not()) {
                 TestDriver.currentScreen = "?"
                 lastElement.lastResult = LogType.NG
@@ -242,9 +241,7 @@ fun VisionDrive.screenIs(
                     TestLog.info("recognizeTexts: ${rootElement.visionContext.recognizeTextObservations.map { "\"${it.text}\"" }}")
                 }
 
-                val msgForTexts = if (verifyTexts.isEmpty()) "" else ", texts=${verifyTexts.joinToString(", ")}"
-                val msg =
-                    "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName$msgForTexts)"
+                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }
@@ -266,7 +263,6 @@ fun VisionDrive.screenIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
-    vararg verifyTexts: String,
     waitSeconds: Int,
     message: String? = null,
     func: (() -> Unit)? = null
@@ -274,7 +270,6 @@ fun VisionDrive.screenIs(
 
     return screenIs(
         screenName = screenName,
-        verifyTexts = verifyTexts,
         waitSeconds = waitSeconds.toDouble(),
         message = message,
         verifyFunc = func
