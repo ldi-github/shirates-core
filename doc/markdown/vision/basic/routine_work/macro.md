@@ -38,7 +38,7 @@ object MacroObject1 : VisionTest() {
 }
 ```
 
-4. Build the project. The class file of the macro is output in `out` directory.
+4. Build the project. The class file of the macro is output in `build` directory.
    <br>![](_images/macro_object_class_file.png)
 
 ## Calling macro function

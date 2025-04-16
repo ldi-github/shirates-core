@@ -38,7 +38,7 @@ object MacroObject1 : VisionTest() {
 }
 ```
 
-4. プロジェクトをビルドします。`out` ディレクトリ内にマクロのクラスファイルが作成されます。
+4. プロジェクトをビルドします。`build` ディレクトリ内にマクロのクラスファイルが作成されます。
    <br>![](_images/macro_object_class_file.png)
 
 ## マクロ関数の使用
