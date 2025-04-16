@@ -71,10 +71,21 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                             exist("Connected devices")
                         }
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("")
+                        .hasMessage("<Network & internet2> exists")
                 }
             }
             case(3) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[System Screen]", waitSeconds = 1.0) {
+                            exist("Network & internet2")
+                            exist("Connected devices")
+                        }
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("[System Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[System Screen])")
+                }
+            }
+            case(4) {
                 expectation {
                     assertThatThrownBy {
                         it.screenIs("[Not Registered Screen]") {
