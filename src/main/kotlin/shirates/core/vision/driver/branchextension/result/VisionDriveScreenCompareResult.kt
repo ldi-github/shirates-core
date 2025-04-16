@@ -71,16 +71,11 @@ class VisionDriveScreenCompareResult() : CompareResult(), VisionDrive {
      */
     fun ifScreenIs(
         screenName: String,
-        vararg verifyTexts: String,
         onTrue: () -> Unit
     ): VisionDriveScreenCompareResult {
 
         val screenNames = listOf(screenName).toTypedArray()
-        val matched = if (verifyTexts.any()) {
-            isScreen(screenName = screenName, verifyTexts = verifyTexts)
-        } else {
-            anyScreenMatched(screenNames = screenNames)
-        }
+        val matched = isScreen(screenName = screenName)
 
         val command = "ifScreenIs"
         ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
@@ -109,16 +104,11 @@ class VisionDriveScreenCompareResult() : CompareResult(), VisionDrive {
      */
     fun ifScreenIsNot(
         screenName: String,
-        vararg verifyTexts: String,
         onTrue: () -> Unit
     ): VisionDriveScreenCompareResult {
 
         val screenNames = listOf(screenName).toTypedArray()
-        val matched = if (verifyTexts.any()) {
-            vision.isScreen(screenName = screenName, verifyTexts = verifyTexts).not()
-        } else {
-            anyScreenMatched(screenNames = screenNames).not()
-        }
+        val matched = vision.isScreen(screenName = screenName).not()
 
         val command = "ifScreenIsNot"
         ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)

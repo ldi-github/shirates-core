@@ -66,7 +66,6 @@ fun VisionDrive.clearScreenPredicates() {
  */
 fun VisionDrive.isScreen(
     screenName: String,
-    vararg verifyTexts: String,
     invalidateScreen: Boolean = false,
 ): Boolean {
 
@@ -75,9 +74,7 @@ fun VisionDrive.isScreen(
         return true
     }
 
-    if (verifyTexts.isEmpty()
-        && VisionScreenRepository.isRegistered(screenName = screenName).not()
-    ) {
+    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
         TestLog.warn("screenName is not registered. (screenName=$screenName)")
         return false
     }
@@ -87,10 +84,6 @@ fun VisionDrive.isScreen(
     val predicate = VisionScreenPredicateRepository.getPredicate(screenName)
     if (predicate != null) {
         return predicate()
-    }
-
-    if (verifyTexts.any()) {
-        return isScreenCore(verifyTexts = verifyTexts.toList())
     }
 
     val match = TestDriver.currentScreen == screenName
