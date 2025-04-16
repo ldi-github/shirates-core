@@ -206,6 +206,7 @@ fun VisionDrive.screenIs(
     val command = "screenIs"
     val assertMessage = message ?: message(id = command, subject = screenName)
 
+    var verifyFuncException: Throwable? = null
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
@@ -248,10 +249,11 @@ fun VisionDrive.screenIs(
         }
 
         TestDriver.currentScreen = screenName
-        if (verifyFunc != null) {
-            vision.verify(message = assertMessage, func = verifyFunc)
-        } else {
-            TestLog.ok(message = assertMessage, arg1 = screenName)
+        TestLog.ok(message = assertMessage, arg1 = screenName)
+    }
+    if (verifyFunc != null) {
+        silent {
+            verifyFunc()
         }
     }
 

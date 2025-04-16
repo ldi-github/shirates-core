@@ -1,6 +1,7 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIs
@@ -18,7 +19,8 @@ import shirates.core.vision.testcode.VisionTest
 class VisionDriveScreenExtensionTest : VisionTest() {
 
     @Test
-    fun screenName() {
+    @Order(10)
+    fun screenIs() {
 
         scenario {
             case(1) {
@@ -29,11 +31,28 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                         .thisIs("[Android Settings Top Screen]")
                 }
             }
+            case(2) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Network & internet Screen]")
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("[Network & internet Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Network & internet Screen])")
+                }
+            }
+            case(3) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Not Registered Screen]")
+                    }.isInstanceOf(TestConfigException::class.java)
+                        .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[Not Registered Screen])")
+                }
+            }
         }
     }
 
     @Test
-    fun screenIs_verifyFunc() {
+    @Order(20)
+    fun screenIs_with_verifyFunc() {
 
         scenario {
             case(1) {
@@ -52,7 +71,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                             exist("Connected devices")
                         }
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Android Settings Top Screen] is displayed")
+                        .hasMessage("")
                 }
             }
             case(3) {
@@ -69,6 +88,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(30)
     fun isScreen() {
 
         scenario {
@@ -86,6 +106,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(40)
     fun isScreenOf() {
 
         scenario {
@@ -103,6 +124,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(50)
     fun waitScreen() {
 
         scenario {
