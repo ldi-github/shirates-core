@@ -9,6 +9,7 @@ import shirates.core.driver.waitForDisplay
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.visionScope
 
 @MacroObject
@@ -58,22 +59,21 @@ object MapsMacro : TestDrive {
                     .ifCanDetect("*to send you notifications?") {
                         it.tap("Allow")
                     }
-                    .ifCanSelect("Make it your map") {
+                    .ifCanDetect("Make it your map") {
                         it.tap("SKIP")
                     }
                     .waitForDisplay("Restaurants")
 
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
 
                 it.tapCenterOfScreen()
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
-
                 it.tapCenterOfScreen()
-                if (it.isScreen("[Maps Top Screen]")) {
+                if (it.canDetect("Restaurants")) {
                     return@visionScope
                 }
 

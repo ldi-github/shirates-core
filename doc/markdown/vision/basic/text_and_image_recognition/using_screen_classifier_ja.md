@@ -16,7 +16,7 @@ Shirates/Visionは2つのテクニックを使用して画面を識別します�
 
 1. 画面イメージをキャプチャします。 <br><br>![](_images/capture_screen_ja.png)
 2. 画面名に対応するディレクトリを`ScreenClassifier`ディレクトリ配下に作成します。ディレクトリ名は`[〇〇画面]`
-   のようにブラケットで囲みます。<br><br>
+   のように角括弧で囲みます。<br><br>
    ![](_images/adding_screen_image_template_ja.png)<br><br>
 3. 画面名のディレクトリに画面イメージをペーストします。ファイル名は任意です。`img.png`のままでもかまいません。<br><br>
 
@@ -27,7 +27,7 @@ img@a.png
 img@i.png
 ```
 
-のようにアノテーションを付与します。Androidの場合は`@a`、iOSの場合は`@i`を付与したファイルがテスト実行時に優先的に使用されます。
+のようにアノテーションを付与します。（Androidの場合は`@a`、iOSの場合は`@i`）<br>
 
 <br>
 

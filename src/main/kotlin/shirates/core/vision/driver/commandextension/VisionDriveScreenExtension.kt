@@ -12,6 +12,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionScreenPredicateRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
@@ -25,14 +26,47 @@ val VisionDrive.screenName: String
         return TestDriver.currentScreen
     }
 
+
+/**
+ * screenPredicate
+ */
+fun VisionDrive.screenPredicate(
+    screenName: String,
+    identifyFunc: () -> Boolean
+): VisionElement {
+
+    VisionScreenPredicateRepository.register(screenName = screenName, predicate = identifyFunc)
+
+    return lastElement
+}
+
+/**
+ * removeScreenPredicate
+ */
+fun VisionDrive.removeScreenPredicate(
+    screenName: String,
+): VisionElement {
+
+    VisionScreenPredicateRepository.remove(screenName = screenName)
+
+    return lastElement
+}
+
+/**
+ * clearScreenPredicates
+ */
+fun VisionDrive.clearScreenPredicates() {
+
+    VisionScreenPredicateRepository.clear()
+}
+
+
 /**
  * isScreen
  */
 fun VisionDrive.isScreen(
     screenName: String,
-    vararg verifyTexts: String,
     invalidateScreen: Boolean = false,
-    predicate: (() -> Boolean)? = null
 ): Boolean {
 
     if (TestMode.isNoLoadRun) {
@@ -40,21 +74,16 @@ fun VisionDrive.isScreen(
         return true
     }
 
-    if (verifyTexts.isEmpty() && predicate == null
-        && VisionScreenRepository.isRegistered(screenName = screenName).not()
-    ) {
+    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
         TestLog.warn("screenName is not registered. (screenName=$screenName)")
         return false
     }
 
     syncScreen(invalidateScreen = invalidateScreen)
 
+    val predicate = VisionScreenPredicateRepository.getPredicate(screenName)
     if (predicate != null) {
         return predicate()
-    }
-
-    if (verifyTexts.any()) {
-        return isScreenCore(verifyTexts = verifyTexts.toList())
     }
 
     val match = TestDriver.currentScreen == screenName

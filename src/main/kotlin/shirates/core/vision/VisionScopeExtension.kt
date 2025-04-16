@@ -12,11 +12,14 @@ fun TestDrive.visionScope(
     func: (VisionDrive) -> Unit
 ): TestElement {
     val originalEnableCache = testContext.enableCache
+    val originalIsVisionTest = TestMode.isVisionTest
     try {
         testContext.enableCache = false
+        TestMode.isVisionTest = true
         func(VisionDriveObject)
     } finally {
         testContext.enableCache = originalEnableCache
+        TestMode.isVisionTest = originalIsVisionTest
     }
 
     return lastElement
@@ -29,11 +32,14 @@ fun VisionDrive.visionScope(
     func: (VisionDrive) -> Unit
 ): VisionElement {
     val originalEnableCache = testContext.enableCache
+    val originalIsVisionTest = TestMode.isVisionTest
     try {
         testContext.enableCache = false
+        TestMode.isVisionTest = true
         func(VisionDriveObject)
     } finally {
         testContext.enableCache = originalEnableCache
+        TestMode.isVisionTest = originalIsVisionTest
     }
 
     return lastElement
@@ -48,11 +54,14 @@ fun VisionDrive.classicScope(
 ): VisionElement {
     classic.syncCache(force = true)
     val originalEnableCache = testContext.enableCache
+    val originalIsVisionTest = TestMode.isVisionTest
     try {
         testContext.enableCache = useCache
+        TestMode.isVisionTest = false
         func(TestDriveObject)
     } finally {
         testContext.enableCache = originalEnableCache
+        TestMode.isVisionTest = originalIsVisionTest
     }
 
     return lastElement

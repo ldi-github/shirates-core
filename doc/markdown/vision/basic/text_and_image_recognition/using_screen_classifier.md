@@ -16,7 +16,7 @@ You can register one or more screen image templates in one screen name directory
 
 1. Capture the screen image. <br><br>![](_images/capture_screen.png)
 2. Create the directory corresponding to the screen name under the directory `ScreenClassifier`. Name the directory
-   enclosed in brackets like `[Some Screen]`.<br><br>
+   enclosed in square brackets like `[Some Screen]`.<br><br>
    ![](_images/adding_screen_image_template.png)<br><br>
 3. Paste the screen image on the screen directory. File name is arbitrary. You may leave it as `img.png`.<br><br>
 
@@ -27,7 +27,7 @@ img@a.png
 img@i.png
 ```
 
-Files with `@a` for Android and `@i` for iOS will be given higher priority in test execution.
+Files with `@a` for Android and `@i` for iOS.
 
 <br>
 

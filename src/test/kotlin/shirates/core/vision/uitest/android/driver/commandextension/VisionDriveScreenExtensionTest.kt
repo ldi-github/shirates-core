@@ -1,6 +1,7 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIs
@@ -18,7 +19,8 @@ import shirates.core.vision.testcode.VisionTest
 class VisionDriveScreenExtensionTest : VisionTest() {
 
     @Test
-    fun screenName() {
+    @Order(10)
+    fun screenIs() {
 
         scenario {
             case(1) {
@@ -29,40 +31,18 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                         .thisIs("[Android Settings Top Screen]")
                 }
             }
-        }
-    }
-
-    @Test
-    fun screenIs_texts() {
-
-        scenario {
-            case(1) {
-                expectation {
-                    it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices")
-                }
-            }
             case(2) {
                 expectation {
                     assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet2", "Connected devices")
+                        it.screenIs("[Network & internet Screen]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Android Settings Top Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Android Settings Top Screen], texts=Network & internet2, Connected devices)")
+                        .hasMessage("[Network & internet Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Network & internet Screen])")
                 }
             }
             case(3) {
                 expectation {
                     assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
-                            exist("Network & internet")
-                            exist("Connected devices")
-                        }
-                    }
-                }
-            }
-            case(4) {
-                expectation {
-                    assertThatThrownBy {
-                        it.screenIs("[Not Registered Screen]", "Network & internet")
+                        it.screenIs("[Not Registered Screen]")
                     }.isInstanceOf(TestConfigException::class.java)
                         .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[Not Registered Screen])")
                 }
@@ -71,7 +51,8 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
-    fun screenIs_verifyFunc() {
+    @Order(20)
+    fun screenIs_with_verifyFunc() {
 
         scenario {
             case(1) {
@@ -90,18 +71,18 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                             exist("Connected devices")
                         }
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Android Settings Top Screen] is displayed")
+                        .hasMessage("<Network & internet2> exists")
                 }
             }
             case(3) {
                 expectation {
                     assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
-                            exist("Network & internet")
+                        it.screenIs("[System Screen]", waitSeconds = 1.0) {
+                            exist("Network & internet2")
                             exist("Connected devices")
                         }
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("You cannot specify verifyText and verifyFunction at the same time.")
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("[System Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[System Screen])")
                 }
             }
             case(4) {
@@ -118,6 +99,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(30)
     fun isScreen() {
 
         scenario {
@@ -135,6 +117,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(40)
     fun isScreenOf() {
 
         scenario {
@@ -152,6 +135,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
     }
 
     @Test
+    @Order(50)
     fun waitScreen() {
 
         scenario {

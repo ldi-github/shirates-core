@@ -1,18 +1,15 @@
 package shirates.core.driver.branchextension.result
 
-import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.commandextension.isScreen
 import shirates.core.logging.Message.message
-import shirates.core.logging.printWarn
-import shirates.core.vision.configration.repository.VisionScreenRepository
-import shirates.core.vision.driver.commandextension.isScreen
-import shirates.core.vision.driver.commandextension.isScreenOf
 
 /**
  * ScreenCompareResult
  */
-class ScreenCompareResult() : CompareResult() {
+class ScreenCompareResult() : CompareResult(), TestDrive {
 
     private fun anyScreenMatched(
         vararg screenNames: String
@@ -22,15 +19,10 @@ class ScreenCompareResult() : CompareResult() {
             return true
         }
 
-        if (TestMode.isClassicTest) {
-            for (screenName in screenNames) {
-                if (TestDriver.isScreen(screenName)) {
-                    return true
-                }
+        for (screenName in screenNames) {
+            if (isScreen(screenName)) {
+                return true
             }
-        } else {
-            val r = vision.isScreenOf(screenNames = screenNames)
-            return r
         }
         return false
     }
@@ -54,13 +46,6 @@ class ScreenCompareResult() : CompareResult() {
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
         }
-        if (TestMode.isVisionTest) {
-            for (screenName in screenNames) {
-                if (VisionScreenRepository.isRegistered(screenName).not()) {
-                    printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
-                }
-            }
-        }
 
         val subject = getSubject(screenNames = screenNames)
         val message = message(id = command, subject = subject)
@@ -79,16 +64,11 @@ class ScreenCompareResult() : CompareResult() {
      */
     fun ifScreenIs(
         screenName: String,
-        vararg verifyTexts: String,
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
         val screenNames = listOf(screenName).toTypedArray()
-        val matched = if (verifyTexts.any()) {
-            vision.isScreen(screenName = screenName, verifyTexts = verifyTexts)
-        } else {
-            anyScreenMatched(screenNames = screenNames)
-        }
+        val matched = anyScreenMatched(screenNames = screenNames)
 
         val command = "ifScreenIs"
         ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
@@ -117,16 +97,11 @@ class ScreenCompareResult() : CompareResult() {
      */
     fun ifScreenIsNot(
         screenName: String,
-        vararg verifyTexts: String,
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
         val screenNames = listOf(screenName).toTypedArray()
-        val matched = if (verifyTexts.any()) {
-            vision.isScreen(screenName = screenName, verifyTexts = verifyTexts).not()
-        } else {
-            anyScreenMatched(screenNames = screenNames).not()
-        }
+        val matched = anyScreenMatched(screenNames = screenNames).not()
 
         val command = "ifScreenIsNot"
         ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)

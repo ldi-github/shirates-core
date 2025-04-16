@@ -2,9 +2,9 @@ package shirates.core.vision.driver.branchextension
 
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
-import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.branchextension.result.VisionDriveBooleanCompareResult
 import shirates.core.vision.driver.classify
 
 /**
@@ -56,19 +56,19 @@ fun VisionElement.ifImageIs(
     label: String,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifImageIs"
 
     if (TestMode.isNoLoadRun) {
         onTrue.invoke()
-        return BooleanCompareResult(value = true, command = command)
+        return VisionDriveBooleanCompareResult(value = true, command = command)
     }
 
     val classifyResult = this.classify(classifierName = classifierName)
 
     val matched = classifyResult == label
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val message = message(id = command, subject = label)
 
     if (matched || TestMode.isNoLoadRun) {
@@ -88,19 +88,19 @@ fun VisionElement.ifImageIsNot(
     label: String,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "ifImageIsNot"
 
     if (TestMode.isNoLoadRun) {
         onTrue.invoke()
-        return BooleanCompareResult(value = true, command = command)
+        return VisionDriveBooleanCompareResult(value = true, command = command)
     }
 
     val classifyResult = this.classify(classifierName = classifierName)
 
     val matched = classifyResult != label
-    val result = BooleanCompareResult(value = matched, command = command)
+    val result = VisionDriveBooleanCompareResult(value = matched, command = command)
     val message = message(id = command, subject = label)
 
     if (matched || TestMode.isNoLoadRun) {

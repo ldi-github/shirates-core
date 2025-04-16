@@ -17,7 +17,7 @@
 
 ![](_images/screen_image_templates_ja.png)
 
-参照: [画面イメージテンプレートのセットアップ](../../text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+参照: [ScreenClassifierを使用する (Vision)](../../text_and_image_recognition/using_screen_classifier_ja.md)
 
 ## サンプルコード
 
@@ -101,61 +101,21 @@
 
 (`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen2.kt`)
 
-画面に表示されるテキストを使用して画面判定を行います。指定したテキストがすべて表示された場合にOKになります。<br>
-画像による判定がうまくいかない場合の代替手段として利用できます。
+screenIs関数で画面判定後に呼び出される検証ロジック（verifyFunc）を指定できます。<br>
 
 ```kotlin
     @Test
     @Order(10)
-    fun screenIs_OK() {
+    fun screenIs_with_verifyFunc_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIs("[Android設定トップ画面]", "設定", "設定を検索")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(20)
-    fun screenIs_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android設定トップ画面]")
-                }.expectation {
-                    it.screenIs("[システム画面]", "システム", "言語")
-                }
-            }
-        }
-    }
-```
-
-### ScreenIsAndIsScreen3.kt
-
-(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen3.kt`)
-
-検証ロジックを記述して画面判定を行います。<br>
-画像による判定がうまくいかない場合の代替手段として利用できます。
-
-```kotlin
-    @Test
-    @Order(10)
-    fun screenIs_OK() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android設定トップ画面]")
-                }.expectation {
-                    it.screenIs("[Android設定トップ画面]") {
-                        exist("設定")
-                        exist("設定を検索")
+                    it.screenIs("[Android設定トップ画面]") {   // OK
+                        exist("設定")         // OK（ログは出力されない）
+                        exist("設定を検索")    // OK（ログは出力されない）
                     }
                 }
             }
@@ -164,22 +124,26 @@
 
     @Test
     @Order(20)
-    fun screenIs_NG() {
+    fun screenIs_with_verifyFunc_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIs("[システム画面]") {
-                        exist("システム")
-                        exist("言語")
+                    it.screenIs("[Android設定トップ画面]") {   // OK
+                        exist("システム")   // NG（ログは出力される）
                     }
                 }
             }
         }
     }
 ```
+
+verifyFuncによる検証結果のOKのログは出力されません。<br>
+verifyFuncによる検証結果のNGのログは出力されます。
+
+![](_images/screen_verification_with_verify_func_ja.png)
 
 ### ScreenIsOfAndIsScreenOf1.kt
 

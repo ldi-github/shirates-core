@@ -9,7 +9,7 @@ import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
-class SelectBranchFunctionTest : VisionTest() {
+class VisionDriveDetectBranchFunctionTest : VisionTest() {
 
     @Test
     fun ifCanSelectTest() {

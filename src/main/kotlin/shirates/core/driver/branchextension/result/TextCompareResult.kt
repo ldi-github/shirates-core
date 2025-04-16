@@ -1,5 +1,6 @@
 package shirates.core.driver.branchextension.result
 
+import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.exception.BranchException
@@ -9,7 +10,7 @@ import shirates.core.utility.string.forClassicComparison
 /**
  * TextCompareResult
  */
-class TextCompareResult(val text: String?) : CompareResult() {
+class TextCompareResult(val text: String?) : CompareResult(), TestDrive {
 
     private fun ifStringCore(
         matched: Boolean,

@@ -20,7 +20,7 @@ You can use special branch functions for element.
 ```kotlin
     @Test
     @Order(10)
-    fun ifCanSelectTest() {
+    fun ifCanDetectTest() {
 
         scenario {
             case(1) {
@@ -28,13 +28,13 @@ You can use special branch functions for element.
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     ifCanDetect("Network & internet") {
-                        OK("ifCanSelect called")
+                        OK("ifCanDetect called")
                     }.ifElse {
                         NG()
                     }
 
                     ifCanDetectNot("System") {
-                        OK("ifCanSelectNot called")
+                        OK("ifCanDetectNot called")
                     }.ifElse {
                         NG()
                     }

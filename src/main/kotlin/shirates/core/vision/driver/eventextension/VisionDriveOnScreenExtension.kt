@@ -11,17 +11,16 @@ import shirates.core.vision.driver.lastElement
  * onScreen
  */
 fun VisionDrive.onScreen(
-    vararg screenNames: String,
+    screenName: String,
     permanent: Boolean = false,
     onTrue: (VisionDriveOnScreenContext) -> Unit
 ): VisionElement {
 
-    for (screenName in screenNames) {
-        if (testContext.visionDriveScreenHandlers.containsKey(screenName).not()) {
-            val entry = TestContext.VisionScreenHandlerEntry(handler = onTrue, permanent = permanent)
-            testContext.visionDriveScreenHandlers[screenName] = entry
-        }
-    }
+    val entry = TestContext.VisionScreenHandlerEntry(
+        handler = onTrue,
+        permanent = permanent,
+    )
+    testContext.visionDriveScreenHandlers[screenName] = entry
 
     return lastElement
 }
@@ -59,9 +58,15 @@ fun VisionDrive.clearScreenHandlers(
     removePermanent: Boolean = false
 ): VisionElement {
 
-    for (name in testContext.visionDriveScreenHandlers.keys) {
+    if (removePermanent) {
+        testContext.visionDriveScreenHandlers.clear()
+        return lastElement
+    }
+
+    val keys = testContext.visionDriveScreenHandlers.keys.toList()
+    for (name in keys) {
         val entry = testContext.visionDriveScreenHandlers[name]!!
-        if (removePermanent || entry.permanent.not()) {
+        if (entry.permanent.not()) {
             testContext.visionDriveScreenHandlers.remove(name)
         }
     }

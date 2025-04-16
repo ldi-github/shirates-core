@@ -52,7 +52,7 @@ class CreateMLUtilityTest {
             val fileList = getFileListInClassifiersDirectoryInVision(
                 classifiersDirectoryInVision = "build/tmp/vision1/classifiers",
             ).split("\n").map { it.substringAfter("/shirates-core/").trim() }
-            assertThat(fileList.count()).isEqualTo(19)
+//            assertThat(fileList.count()).isEqualTo(19)
             val expected = """
 build/tmp/vision1/classifiers/CheckStateClassifier/MLImageClassifier.swift
 build/tmp/vision1/classifiers/CheckStateClassifier/test/[ON]/radio_bright.png

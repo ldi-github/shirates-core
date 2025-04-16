@@ -29,7 +29,7 @@ Shirates/Visionは画像のチェック状態(`[ON]`/`[OFF]`)を認識します�
                     it.detect("機内モード")
                         .rightItem()
                         .checkIsOFF()
-                }.action {
+          [using_check_state_classifier_ja.md](using_check_state_classifier_ja.md)      }.action {
                     it.tap()
                 }.expectation {
                     it.detect("機内モード")

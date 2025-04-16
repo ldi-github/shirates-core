@@ -47,13 +47,14 @@ You can assert the value of text using these functions.
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.pressHome()
+                    it.screenIs("[Android Home Screen]")
                 }.action {
-                    it.detect("Restaurants")
+                    it.detect("Play Store")
                 }.expectation {
-                    it.textIs("Restaurants")
-                        .rightTextIs("Hotels")
-                        .leftTextIs("Restaurants")
+                    it.textIs("Play Store")
+                        .rightTextIs("Gmail")
+                        .leftTextIs("Play Store")
                 }
             }
         }

@@ -1,16 +1,15 @@
 # 画像をデバッガで確認する (Vision)
 
-You can see image of `VisionElement` in debugg.
+デバッグ中に `VisionElement` の画像を確認することができます。
 
-1. Set break points. <br>![](_images/debugger_set_break_point.png)
-2. Add watch expression `it.image`. <br>![](_images/debugger_add_watch.png)
-3. Click `Show image`. <br>![](_images/debugger_show_image.png)
-4. You can see the image window.
+1. ブレークポイントを設定します。 <br>![](_images/debugger_set_break_point.png)
+2. ウォッチ式に `it.image` を追加します。 <br>![](_images/debugger_add_watch.png)
+3. `Show image` をクリックします。 <br>![](_images/debugger_show_image.png)
+4. ウィンドウが表示され画像を確認できます。
 
 ![](_images/debugger_image_window.png)
 
 ### Link
 
-- [index(Vision)](../../../index_ja.md)
-- [index(Classic)](../../../classic/index_ja.md)
+- [index](../../../index_ja.md)
 

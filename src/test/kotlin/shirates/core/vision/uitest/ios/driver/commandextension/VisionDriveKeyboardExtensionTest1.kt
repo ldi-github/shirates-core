@@ -3,24 +3,13 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestDriverEventContext
 import shirates.core.testcode.Want
-import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
-import utility.handleIrregulars
 
 @Want
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class VisionDriveKeyboardExtensionTest1 : VisionTest() {
-
-    override fun setEventHandlers(context: TestDriverEventContext) {
-        context.irregularHandler = {
-            classicScope {
-                it.handleIrregulars()
-            }
-        }
-    }
 
     @Test
     @Order(10)

@@ -1,7 +1,9 @@
 package shirates.core.driver
 
+import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getKeyboardInIos
 import shirates.core.driver.commandextension.getSelector
@@ -13,6 +15,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.element.XPathUtility
+import shirates.core.vision.driver.commandextension.rootElement
 
 object TestElementCache {
 
@@ -31,6 +34,10 @@ object TestElementCache {
      */
     var hierarchyBounds: Bounds = Bounds()
 
+    internal var _rootBounds: Bounds? = null
+
+    internal var _viewBounds: Bounds? = null
+
     /**
      * rootElement
      */
@@ -38,7 +45,53 @@ object TestElementCache {
         set(value) {
             field = value
             allElements = listOf()
+            _rootBounds = null
+            _viewBounds = null
             synced = false
+        }
+
+    /**
+     * rootBounds
+     */
+    val rootBounds: Bounds
+        get() {
+            if (_rootBounds != null) {
+                return _rootBounds!!
+            }
+            if (TestMode.isClassicTest) {
+                if (isAndroid) {
+                    val h = TestElementCache.hierarchyBounds
+                    if (h.isEmpty) {
+                        return h
+                    }
+                    _rootBounds = h
+                } else {
+                    val b = classic.rootElement.bounds
+                    if (b.isEmpty) {
+                        return b
+                    }
+                    _rootBounds = b
+                }
+            } else {
+                _rootBounds = vision.rootElement.bounds
+            }
+            return _rootBounds!!
+        }
+
+    /**
+     * viewBounds
+     */
+    val viewBounds: Bounds
+        get() {
+            if (_viewBounds != null) {
+                return _viewBounds!!
+            }
+            val b = rootBounds
+            if (b.isEmpty) {
+                return Bounds()
+            }
+            _viewBounds = Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
+            return _viewBounds!!
         }
 
     /**

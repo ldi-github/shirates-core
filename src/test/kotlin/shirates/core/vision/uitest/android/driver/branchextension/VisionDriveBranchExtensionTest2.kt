@@ -5,12 +5,12 @@ import ifImageExistNot
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.Manual
 import shirates.core.vision.driver.branchextension.ifImageIs
 import shirates.core.vision.driver.branchextension.ifImageIsNot
+import shirates.core.vision.driver.branchextension.ifTrue
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 

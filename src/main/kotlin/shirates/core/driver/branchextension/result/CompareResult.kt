@@ -1,11 +1,9 @@
 package shirates.core.driver.branchextension.result
 
-import shirates.core.driver.TestDrive
-
 /**
  * CompareResult
  */
-open class CompareResult() : TestDrive {
+open class CompareResult() {
 
     internal val mHistory = mutableListOf<BranchExecutionState>()
 

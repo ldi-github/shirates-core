@@ -75,6 +75,5 @@ Nesting is allowed.
 
 ### Link
 
-- [index(Vision)](../../../index.md)
-- [index(Classic)](../../../classic/index.md)
+- [index](../../../index.md)
 

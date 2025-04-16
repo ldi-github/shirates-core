@@ -407,7 +407,7 @@ class ScreenRepositoryTest : UnitTest() {
         assertThatThrownBy {
             ScreenRepository.get("screenName1")
         }.isInstanceOf(TestConfigException::class.java)
-            .hasMessage("key is not registered.(key='screenName1')")
+            .hasMessage("Screen not registered (screenName=screenName1). Use registered nickname or setup screen nickname file.")
 
         // Arrange
         ScreenRepository.set(

@@ -270,6 +270,9 @@ class VisionContext(
         }
 
         val rootVisionContext = rootElement!!.visionContext
+        if (rootVisionContext.screenshotFile == null) {
+            return this
+        }
         val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
         if (recognizedFile.exists() && recognizedFile.isFile.not()) {
             /**
@@ -348,12 +351,12 @@ class VisionContext(
             recognizeTextResult = recognizeTextResult
         )
         visionContext.language = language
-        if (inputFile != CodeExecutionContext.lastRecognizedFileName) {
+        val name = inputFile.toFile().name
+        if (name != CodeExecutionContext.lastRecognizedFileName) {
             /**
              * Save screenshotImageWithTextRegion
              */
-            val nameWithoutExtension = inputFile.toFile().name
-            val fileName = "${TestLog.currentLineNo}_[$nameWithoutExtension]_recognized_text_rectangles.png"
+            val fileName = "${TestLog.currentLineNo}_[$name]_recognizeText_rectangles.png"
             visionContext.screenshotWithTextRectangle?.saveImage(
                 TestLog.directoryForLog.resolve(fileName).toString()
             )
@@ -403,6 +406,8 @@ class VisionContext(
             flowContainer.getElements().map { it as RecognizeTextObservation }.toMutableList()
     }
 
+    val detectCacheMap = mutableMapOf<String, VisionContext>()
+
     /**
      * detect
      */
@@ -418,6 +423,14 @@ class VisionContext(
 
         if (selector.isTextSelector.not()) {
             return VisionElement.emptyElement
+        }
+
+        val cachedVisionContext = if (detectCacheMap.contains(selector.expression)) {
+            detectCacheMap[selector.expression]
+        } else null
+        if (cachedVisionContext != null) {
+            val v = cachedVisionContext.toVisionElement()
+            return v
         }
 
         val selectors = mutableListOf(selector)
@@ -446,6 +459,7 @@ class VisionContext(
             )
             v = v2
         }
+        detectCacheMap[selector.expression!!] = v.visionContext
         return v
     }
 

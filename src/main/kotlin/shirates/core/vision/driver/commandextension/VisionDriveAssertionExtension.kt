@@ -4,7 +4,6 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.*
 import shirates.core.logging.Message.message
@@ -14,6 +13,7 @@ import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.classicScope
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.*
 
 internal fun VisionDrive.checkImageLabelContains(
@@ -183,7 +183,6 @@ fun VisionDrive.appIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
-    vararg verifyTexts: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     message: String? = null,
@@ -207,20 +206,12 @@ fun VisionDrive.screenIs(
     val command = "screenIs"
     val assertMessage = message ?: message(id = command, subject = screenName)
 
+    var verifyFuncException: Throwable? = null
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
-        if (verifyFunc != null) {
-            if (verifyTexts.any()) {
-                throw TestDriverException("You cannot specify verifyText and verifyFunction at the same time.")
-            }
-
-            vision.verify(message = assertMessage, func = verifyFunc)
-            TestDriver.currentScreen = screenName
-            return@execCheckCommand
-        }
-
-        var match = isScreen(screenName = screenName, verifyTexts = verifyTexts)
+        TestDriver.currentScreen = "?"
+        var match = isScreen(screenName = screenName)
         if (match.not()) {
             doUntilTrue(
                 waitSeconds = waitSeconds,
@@ -229,25 +220,40 @@ fun VisionDrive.screenIs(
                     onIrregular?.invoke()
                 },
             ) {
-                match = isScreen(screenName = screenName, verifyTexts = verifyTexts, invalidateScreen = true)
+                match = isScreen(screenName = screenName, invalidateScreen = true)
                 match
             }
         }
 
-        if (match) {
-            TestDriver.currentScreen = screenName
-            TestLog.ok(message = assertMessage, arg1 = screenName)
-        } else {
-            match = isScreen(screenName = screenName, verifyTexts = verifyTexts)   // Retry for timeout
+        if (match.not()) {
+            match = isScreen(screenName = screenName)   // Retry for timeout
             if (match.not()) {
                 TestDriver.currentScreen = "?"
                 lastElement.lastResult = LogType.NG
 
-                val msgForTexts = if (verifyTexts.isEmpty()) "" else ", texts=${verifyTexts.joinToString(", ")}"
-                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName$msgForTexts)"
+                val textIndexList = VisionTextIndexRepository.getList(screenName = screenName)
+                if (textIndexList.any()) {
+                    for (textIndex in textIndexList) {
+                        TestLog.warn("Expecting textIdex: $textIndex")
+                    }
+                    if (rootElement.visionContext.recognizeTextObservations.isEmpty()) {
+                        rootElement.visionContext.recognizeText()
+                    }
+                    TestLog.info("recognizeTexts: ${rootElement.visionContext.recognizeTextObservations.map { "\"${it.text}\"" }}")
+                }
+
+                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }
+        }
+
+        TestDriver.currentScreen = screenName
+        TestLog.ok(message = assertMessage, arg1 = screenName)
+    }
+    if (verifyFunc != null) {
+        silent {
+            verifyFunc()
         }
     }
 
@@ -259,7 +265,6 @@ fun VisionDrive.screenIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
-    vararg verifyTexts: String,
     waitSeconds: Int,
     message: String? = null,
     func: (() -> Unit)? = null
@@ -267,7 +272,6 @@ fun VisionDrive.screenIs(
 
     return screenIs(
         screenName = screenName,
-        verifyTexts = verifyTexts,
         waitSeconds = waitSeconds.toDouble(),
         message = message,
         verifyFunc = func

@@ -33,6 +33,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.batch.CreateMLUtility
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
 import shirates.core.vision.driver.commandextension.launchApp
 import shirates.core.vision.driver.commandextension.rootElement
@@ -380,6 +381,9 @@ abstract class UITestBase : Drive {
 
                     // setup screen repository
                     VisionScreenRepository.setup()
+
+                    // setup text index repository
+                    VisionTextIndexRepository.setup()
                 }
             }
 
@@ -629,9 +633,9 @@ abstract class UITestBase : Drive {
             if (t is RerunScenarioException) {
                 return true
             }
-            if (testContext.isRerunRequested != null) {
-                val r = testContext.isRerunRequested!!.invoke(t)
-                TestLog.info("testContext.isRerunRequested=${testContext.isRerunRequested}")
+            if (testContext.onRequestingRerunHandler != null) {
+                val r = testContext.onRequestingRerunHandler!!.invoke(t)
+                TestLog.info("testContext.isRerunRequested=${testContext.onRequestingRerunHandler}")
                 return r
             }
 
@@ -838,7 +842,9 @@ abstract class UITestBase : Drive {
             throw t
         } catch (t: Throwable) {
             TestLog.error(message = t.message ?: t.toString(), exception = t)
-            TestDriver.screenshot()
+            if ((t is TestEnvironmentException).not()) {
+                TestDriver.screenshot()
+            }
             throw t
         } finally {
             scenarioLog.processingTime = TestLog.lastTestLog!!.logDateTime.time - scenarioLog.logDateTime.time

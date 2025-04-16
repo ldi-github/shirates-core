@@ -8,12 +8,12 @@ import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isStub
 import shirates.core.driver.TestMode.isVirtualDevice
-import shirates.core.driver.branchextension.result.BooleanCompareResult
-import shirates.core.driver.branchextension.result.SpecialTagCompareResult
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
+import shirates.core.vision.driver.branchextension.result.VisionDriveBooleanCompareResult
+import shirates.core.vision.driver.branchextension.result.VisionDriveSpecialTagCompareResult
 
 
 /**
@@ -22,9 +22,9 @@ import shirates.core.vision.VisionDrive
 fun VisionDrive.specialTag(
     specialTag: String,
     onTrue: () -> Unit
-): SpecialTagCompareResult {
+): VisionDriveSpecialTagCompareResult {
 
-    val result = SpecialTagCompareResult()
+    val result = VisionDriveSpecialTagCompareResult()
     result.specialTag(specialTag = specialTag, onTrue = onTrue)
 
     return result
@@ -35,14 +35,14 @@ fun VisionDrive.specialTag(
  */
 fun VisionDrive.stub(
     onTrue: () -> Unit
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "stub"
 
     val match = isStub || TestMode.isNoLoadRun
     if (match.not()) {
         TestLog.trace("skip stub")
-        return BooleanCompareResult(value = false, command = command)
+        return VisionDriveBooleanCompareResult(value = false, command = command)
     }
 
     val context = TestDriverCommandContext(null)
@@ -50,7 +50,7 @@ fun VisionDrive.stub(
         onTrue()
     }
 
-    return BooleanCompareResult(value = true, command = command)
+    return VisionDriveBooleanCompareResult(value = true, command = command)
 }
 
 /**
@@ -58,14 +58,14 @@ fun VisionDrive.stub(
  */
 fun VisionDrive.stubNot(
     onTrue: () -> Unit
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "stubNot"
 
     val match = isStub.not() || TestMode.isNoLoadRun
     if (match.not()) {
         TestLog.trace("skip stubNot")
-        return BooleanCompareResult(value = false, command = command)
+        return VisionDriveBooleanCompareResult(value = false, command = command)
     }
 
     val context = TestDriverCommandContext(null)
@@ -73,7 +73,7 @@ fun VisionDrive.stubNot(
         onTrue()
     }
 
-    return BooleanCompareResult(value = true, command = command)
+    return VisionDriveBooleanCompareResult(value = true, command = command)
 }
 
 /**
@@ -81,11 +81,11 @@ fun VisionDrive.stubNot(
  */
 fun VisionDrive.testRuntimeOnly(
     onTrue: () -> Unit
-): BooleanCompareResult {
+): VisionDriveBooleanCompareResult {
 
     val command = "testRuntimeOnly"
     val isRuntime = TestMode.isNoLoadRun.not()
-    val result = BooleanCompareResult(value = isRuntime, command = command)
+    val result = VisionDriveBooleanCompareResult(value = isRuntime, command = command)
     result.setExecuted(condition = "true", matched = result.value, message = "testRuntimeOnly")
     if (result.value) {
         onTrue.invoke()

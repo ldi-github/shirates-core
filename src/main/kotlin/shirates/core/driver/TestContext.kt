@@ -244,7 +244,7 @@ class TestContext(
     var onScreenErrorHandler: (() -> Unit)? = null
 
     @SaveTarget
-    var isRerunRequested: ((t: Throwable) -> Boolean)? = null
+    var onRequestingRerunHandler: ((t: Throwable) -> Boolean)? = null
 
     @SaveTarget
     var onRerunScenarioHandler: ((t: Throwable) -> Unit)? = null
@@ -266,6 +266,12 @@ class TestContext(
 
     @SaveTarget
     var enableScreenHandler = true
+        set(value) {
+            field = value
+        }
+
+    @SaveTarget
+    var enableScreenPredicate = true
 
     // vision --------------------------------------------------
 

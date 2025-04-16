@@ -1,7 +1,7 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.vision.VisionDrive
+import shirates.core.vision.driver.branchextension.result.VisionDriveScreenCompareResult
 
 /**
  * ifScreenIs
@@ -9,9 +9,9 @@ import shirates.core.vision.VisionDrive
 fun VisionDrive.ifScreenIs(
     screenName: String,
     onTrue: () -> Unit
-): ScreenCompareResult {
+): VisionDriveScreenCompareResult {
 
-    val result = ScreenCompareResult()
+    val result = VisionDriveScreenCompareResult()
     result.ifScreenIs(screenName = screenName, onTrue = onTrue)
 
     return result
@@ -23,9 +23,9 @@ fun VisionDrive.ifScreenIs(
 fun VisionDrive.ifScreenIsOf(
     vararg screenNames: String,
     onTrue: () -> Unit
-): ScreenCompareResult {
+): VisionDriveScreenCompareResult {
 
-    val result = ScreenCompareResult()
+    val result = VisionDriveScreenCompareResult()
     result.ifScreenIsOf(screenNames = screenNames, onTrue = onTrue)
 
     return result
@@ -37,9 +37,9 @@ fun VisionDrive.ifScreenIsOf(
 fun VisionDrive.ifScreenIsNot(
     screenName: String,
     onTrue: () -> Unit
-): ScreenCompareResult {
+): VisionDriveScreenCompareResult {
 
-    val result = ScreenCompareResult()
+    val result = VisionDriveScreenCompareResult()
     result.ifScreenIsNot(screenName = screenName, onTrue = onTrue)
 
     return result

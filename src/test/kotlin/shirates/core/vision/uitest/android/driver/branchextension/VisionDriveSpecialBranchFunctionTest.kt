@@ -25,7 +25,7 @@ import java.util.*
 
 @Want
 @Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
-class SpecialBranchFunctionTest : VisionTest() {
+class VisionDriveSpecialBranchFunctionTest : VisionTest() {
 
     lateinit var profile: TestProfile
 
@@ -140,12 +140,12 @@ class SpecialBranchFunctionTest : VisionTest() {
     override fun finally() {
 
         var filePath =
-            TestLog.directoryForLog.resolve("SpecialBranchFunctionTest/SpecialBranchFunctionTest.xlsx")
+            TestLog.directoryForLog.resolve("VisionDriveSpecialBranchFunctionTest/VisionDriveSpecialBranchFunctionTest.xlsx")
         if (Files.exists(filePath).not()) {
             filePath =
-                TestLog.directoryForLog.resolve("SpecialBranchFunctionTest/SpecialBranchFunctionTest@a.xlsx")
+                TestLog.directoryForLog.resolve("VisionDriveSpecialBranchFunctionTest/VisionDriveSpecialBranchFunctionTest@a.xlsx")
         }
-        val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SpecialBranchFunctionTest")
+        val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("VisionDriveSpecialBranchFunctio")
 
         val data = SpecReportData()
         val adapter = SpecReportDataAdapter(data)
@@ -156,8 +156,8 @@ class SpecialBranchFunctionTest : VisionTest() {
          */
         ws.assertHeader(
             testConfigName = "Settings",
-            sheetName = "SpecialBranchFunctionTest",
-            testClassName = "SpecialBranchFunctionTest",
+            sheetName = "VisionDriveSpecialBranchFunctionTest",
+            testClassName = "VisionDriveSpecialBranchFunctionTest",
             profileName = profile.profileName,
             deviceModel = if (TestMode.isNoLoadRun) "" else data.p.getValue("appium:deviceModel").toString(),
             platformVersion = if (TestMode.isNoLoadRun) "" else profile.platformVersion,

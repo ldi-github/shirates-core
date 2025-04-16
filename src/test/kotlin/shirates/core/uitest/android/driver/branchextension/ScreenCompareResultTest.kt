@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.commandextension.describe
@@ -131,12 +130,11 @@ class ScreenCompareResultTest : UITest() {
                 expectation {
                     val result = ScreenCompareResult()
                     assertThatThrownBy {
-                        result
-                            .ifScreenIs("[not exist screen]") {
-                                NG("never called")
-                            }
+                        val r = result.ifScreenIs("[not exist screen]") {
+                            NG("never called")
+                        }
                     }.isInstanceOf(TestConfigException::class.java)
-                        .hasMessage("screenName '[not exist screen]' is not registered in ${ScreenRepository.screensDirectory}.")
+                        .hasMessageStartingWith("screenName '[not exist screen]' is not registered in ")
                 }
             }
         }

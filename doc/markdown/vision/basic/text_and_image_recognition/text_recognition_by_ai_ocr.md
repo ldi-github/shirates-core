@@ -312,7 +312,7 @@ If garbled characters occur, use erratta(correction table).
 
 ![](_images/eratta_table.png)
 
-**CSV Editor** plugin is usuful.
+**CSV Editor** plugin is useful.
 
 ### Rerun test
 

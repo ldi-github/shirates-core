@@ -11,7 +11,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
-class ScreenBranchFunctionTest : VisionTest() {
+class VisionDriveScreenBranchFunctionTest : VisionTest() {
 
     @Test
     fun ifScreenIs_ifScreenIsNot_Test() {

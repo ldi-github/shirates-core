@@ -3,7 +3,6 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.suppressHandler
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
@@ -451,7 +450,7 @@ internal fun VisionDrive.doUntilScrollStopCore(
 ): VisionElement {
     val scroll = scrollFunc ?: {
         val ms = Measure()
-        classic.suppressHandler {
+        suppressHandler {
             if (direction.isDown) {
                 scrollDown(
                     scrollDurationSeconds = scrollDurationSeconds,

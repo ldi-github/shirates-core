@@ -4,17 +4,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.branchextension.android
+import shirates.core.vision.driver.branchextension.result.VisionDriveScreenCompareResult
 import shirates.core.vision.driver.commandextension.describe
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
-class ScreenCompareResultTest : VisionTest() {
+class VisionDriveScreenCompareResultTest : VisionTest() {
 
     @Order(10)
     @Test
@@ -25,7 +25,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Network & internet Screen]") {
                             describe("never called")
@@ -50,7 +50,7 @@ class ScreenCompareResultTest : VisionTest() {
                         OK("called")
                     }
 
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Network & internet Screen]") {
                             NG("never called")
@@ -76,7 +76,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Network & internet Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Network & internet Screen]") {
                             OK("called")
@@ -95,7 +95,7 @@ class ScreenCompareResultTest : VisionTest() {
             }
             case(3) {
                 expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[About phone Screen]") {
                             OK("called")
@@ -108,7 +108,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Connected devices Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Network & internet Screen]") {
                             NG("never called")
@@ -127,7 +127,7 @@ class ScreenCompareResultTest : VisionTest() {
             }
             case(5) {
                 expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result.ifScreenIs("[not exist screen]") {
                         NG("never called")
                     }
@@ -146,7 +146,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Android Settings Top Screen]") {
                             OK("called")
@@ -167,7 +167,7 @@ class ScreenCompareResultTest : VisionTest() {
             }
             case(2) {
                 expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIsNotOf("[Network & internet Screen]", "[Connected devices Screen]") {
                             OK("called")
@@ -194,7 +194,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIs("[Android Settings Top Screen]") {
                             OK("called")
@@ -217,7 +217,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIsNot("[Android Settings Top Screen]") {
                             NG("never called")
@@ -238,7 +238,7 @@ class ScreenCompareResultTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val result = ScreenCompareResult()
+                    val result = VisionDriveScreenCompareResult()
                     result
                         .ifScreenIsNot("[Android Settings Top Screen]") {
                             NG("never called")

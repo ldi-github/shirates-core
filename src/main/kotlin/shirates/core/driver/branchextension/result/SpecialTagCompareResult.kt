@@ -1,5 +1,6 @@
 package shirates.core.driver.branchextension.result
 
+import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
@@ -9,7 +10,7 @@ import shirates.core.logging.Message.message
 /**
  * SpecialTagCompareResult
  */
-class SpecialTagCompareResult() : CompareResult() {
+class SpecialTagCompareResult() : CompareResult(), TestDrive {
 
     /**
      * specialTag

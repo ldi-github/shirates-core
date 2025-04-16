@@ -2,7 +2,6 @@ package shirates.core.utility.time
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.debugLabel
 import java.time.Duration
@@ -110,7 +109,7 @@ class StopWatch(var title: String) {
      * stop
      */
     fun stop(
-        log: Boolean = CodeExecutionContext.shouldOutputLog
+        log: Boolean = true
     ): LapEntry {
 
         endTime = System.currentTimeMillis()
@@ -127,7 +126,7 @@ class StopWatch(var title: String) {
             )
             laps.add(entry)
             if (log && PropertiesManager.enableStopWatchLog) {
-                this.printInfo()
+                TestLog.info(this.toString())
             }
         }
 
@@ -165,7 +164,7 @@ class StopWatch(var title: String) {
 
         val lapEntry = lap(label = label)
 
-        if (CodeExecutionContext.shouldOutputLog && PropertiesManager.enableTimeMeasureLog) {
+        if (CodeExecutionContext.shouldOutputLog && PropertiesManager.enableStopWatchLog) {
             val message = "[$title][$label] in ${lapEntry.duration.debugLabel}"
             TestLog.info(message = message)
         }

@@ -79,7 +79,7 @@ TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)に�
 `fullLabel` ラベルの完全な記述です。
 
 ```
-@a[Android設定アプリ][Android設定トップ画面][ネットワークとインターネットアイコン]
+@a_Android設定_Android設定トップ画面_[ネットワークとインターネットアイコン]
 ```
 
 `label` は短い記述です。
