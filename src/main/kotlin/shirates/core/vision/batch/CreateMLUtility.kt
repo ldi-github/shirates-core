@@ -191,9 +191,14 @@ object CreateMLUtility {
 
     internal fun getFileListInClassifiersDirectoryInVision(): String {
 
+        val projectRoot = "".toPath().toString()
         val files = classifiersDirectoryInVision.toFile().walkTopDown()
             .filter { it.isFile && it.name != ".DS_Store" && it.name.endsWith(".txt").not() }
-            .map { "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${it}" }
+            .map {
+                "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${
+                    it.toString().removePrefix(projectRoot).trimStart('/')
+                }"
+            }
         val result = files.joinToString("\n")
         return result
     }
