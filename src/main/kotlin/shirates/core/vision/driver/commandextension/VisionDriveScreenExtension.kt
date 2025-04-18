@@ -13,7 +13,6 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenPredicateRepository
-import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.syncScreen
@@ -72,11 +71,6 @@ fun VisionDrive.isScreen(
     if (TestMode.isNoLoadRun) {
         TestDriver.currentScreen = screenName
         return true
-    }
-
-    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
-        TestLog.warn("screenName is not registered. (screenName=$screenName)")
-        return false
     }
 
     syncScreen(invalidateScreen = invalidateScreen)

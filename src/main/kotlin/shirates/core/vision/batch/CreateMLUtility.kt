@@ -250,7 +250,8 @@ object CreateMLUtility {
         } catch (t: DirectoryNotEmptyException) {
             FileUtils.deleteDirectory(work.toFile())
         }
-        for (imageEntry in mlModelImageFiles) {
+        val learningFiles = mlModelImageFiles.filter { it.isTextIndex.not() }
+        for (imageEntry in learningFiles) {
             // create label directory in training
             if (imageEntry.combinedLabelDirectoryInTraining.exists().not()) {
                 imageEntry.combinedLabelDirectoryInTraining.toFile().mkdirs()

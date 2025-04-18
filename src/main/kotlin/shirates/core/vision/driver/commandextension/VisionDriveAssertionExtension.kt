@@ -2,17 +2,20 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
-import shirates.core.driver.commandextension.*
-import shirates.core.exception.TestConfigException
+import shirates.core.driver.commandextension.appIs
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.exception.TestNGException
-import shirates.core.logging.*
+import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.classicScope
-import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.*
 
@@ -199,14 +202,9 @@ fun VisionDrive.screenIs(
         return e.toVisionElement()
     }
 
-    if (TestMode.isNoLoadRun.not() && VisionScreenRepository.isRegistered(screenName).not()) {
-        throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
-    }
-
     val command = "screenIs"
     val assertMessage = message ?: message(id = command, subject = screenName)
 
-    var verifyFuncException: Throwable? = null
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 

@@ -14,6 +14,11 @@ class MlModelImageFileEntry(
     val imageFileInVision: String,
     val workDirectory: String,
 ) {
+    val isTextIndex: Boolean
+        get() {
+            return imageFileInVision.toPath().name.startsWith("#")
+        }
+
     /**
      * vision directories/files
      */
