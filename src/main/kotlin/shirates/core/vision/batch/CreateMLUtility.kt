@@ -1,12 +1,5 @@
 package shirates.core.vision.batch
 
-import boofcv.alg.filter.binary.GThresholdImageOps
-import boofcv.alg.filter.binary.ThresholdImageOps
-import boofcv.gui.binary.VisualizeBinaryData
-import boofcv.io.image.ConvertBufferedImage
-import boofcv.io.image.UtilImageIO
-import boofcv.struct.image.GrayF32
-import boofcv.struct.image.GrayU8
 import org.apache.commons.io.FileUtils
 import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
@@ -15,54 +8,39 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.logging.printWarn
-import shirates.core.utility.file.*
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
 import shirates.core.utility.format
-import shirates.core.utility.image.saveImage
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import java.io.File
 import java.nio.file.DirectoryNotEmptyException
 import java.nio.file.Files
 import java.util.*
-import kotlin.io.path.name
 
 object CreateMLUtility {
 
     const val ML_IMAGE_CLASSIFIER_SCRIPT = "MLImageClassifier.swift"
     const val RESOURCE_NAME_ML_IMAGE_CLASSIFIER_SCRIPT = "createml/$ML_IMAGE_CLASSIFIER_SCRIPT"
 
-    val VISION_DIRECTORY_IN_WORK = PropertiesManager.visionBuildDirectory.resolve("vision")
+    val VISION_DIRECTORY_IN_BUILD = PropertiesManager.visionBuildDirectory.resolve("vision")
 
     var visionDirectory: String = ""
-    var visionDirectoryInWork: String = ""
-
-    val mlModelImageFiles = mutableListOf<MlModelImageFileEntry>()
-    var scriptFilesInVision = listOf<String>()
+    var visionDirectoryInBuild: String = ""
 
     val classifiersDirectoryInVision: String
         get() {
             return visionDirectory.resolve("classifiers")
         }
 
-    val classifierDirectoriesInVision: List<String>
+    val classifiersDirectoryInBuild: String
         get() {
-            return scriptFilesInVision.map { it.parent() }
+            return visionDirectoryInBuild.resolve("classifiers")
         }
 
-    val classifiersDirectoryInWork: String
-        get() {
-            return visionDirectoryInWork.resolve("classifiers")
-        }
-    val classifierNames: List<String>
-        get() {
-            return classifierDirectoriesInVision.map { it.toPath().name }
-        }
-
-    val argsMap = mutableMapOf<String, List<String>>()
-
-    val imageFilterMap = mutableMapOf<String, String>()
+    val classifierList = mutableListOf<ClassifierEntry>()
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -72,8 +50,7 @@ object CreateMLUtility {
 
     internal fun clear() {
         visionDirectory = ""
-        mlModelImageFiles.clear()
-        scriptFilesInVision = listOf()
+        classifierList.clear()
     }
 
     private fun checkAccuracy(content: String): Boolean {
@@ -94,14 +71,16 @@ object CreateMLUtility {
      */
     fun runLearning(
         visionDirectory: String = PropertiesManager.visionDirectory,
-        visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
+        visionDirectoryInBuild: String = VISION_DIRECTORY_IN_BUILD,
         force: Boolean = false,
         createBinary: Boolean? = null
     ) {
+        clear()
+
         lockFile(filePath = visionDirectory.toPath()) {
             runLearningCore(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInBuild,
                 force = force,
                 createBinary = createBinary
             )
@@ -110,7 +89,7 @@ object CreateMLUtility {
 
     private fun runLearningCore(
         visionDirectory: String,
-        visionDirectoryInWork: String,
+        visionDirectoryInBuild: String,
         force: Boolean,
         createBinary: Boolean?
     ) {
@@ -121,12 +100,12 @@ object CreateMLUtility {
             throw NotImplementedError("CreateMLUtility is for only MacOS.")
         }
         this.visionDirectory = visionDirectory
-        this.visionDirectoryInWork = visionDirectoryInWork
+        this.visionDirectoryInBuild = visionDirectoryInBuild
 
         /**
          * Check if any file in vision/classifiers is updated
          */
-        val fileListFile = classifiersDirectoryInWork.resolve("fileList.txt")
+        val fileListFile = classifiersDirectoryInBuild.resolve("fileList.txt")
         val lastListString = if (fileListFile.exists()) fileListFile.toFile().readText() else ""
         val currentListString = getFileListInClassifiersDirectoryInVision()
         val doLearning = currentListString != lastListString || force
@@ -136,12 +115,9 @@ object CreateMLUtility {
             return
         }
 
-        getScriptFiles()
-        getImageFiles()
+        getClassifiers()
         createWorkDirectoriesAndFiles(createBinary = createBinary)
-        copyScriptFilesIntoWork()
-        setupScripts()
-        setupClassifiers()
+        executeLearningClassifiers()
 
         val dir = fileListFile.toPath().parent
         if (Files.exists(dir).not()) {
@@ -150,12 +126,13 @@ object CreateMLUtility {
         fileListFile.toFile().writeText(currentListString)   // fileListFile is saved on success
     }
 
-    private fun setupClassifiers() {
+    private fun executeLearningClassifiers() {
 
-        for (classifierName in classifierNames) {
+        for (classifierEntry in classifierList) {
+            val classifierName = classifierEntry.classifierName
             val sw = StopWatch("learning [$classifierName]")
             TestLog.info("Starting leaning. [$classifierName]")
-            val args = argsMap[classifierName]!!
+            val args = classifierEntry.args
             val r = ShellUtility.executeCommand(args = args.toTypedArray())
             TestLog.info("Learning completed. (${r.stopWatch})")
 
@@ -166,7 +143,7 @@ object CreateMLUtility {
             }
             println(r.resultString)
 
-            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createML.log")
+            val logFile = classifiersDirectoryInBuild.resolve(classifierName).resolve("createML.log")
             logFile.toFile().writeText(r.resultString)
 
             checkAccuracy(content = r.resultString)
@@ -176,9 +153,9 @@ object CreateMLUtility {
 
     private fun printLastLearningResultOnWarning() {
 
-        getScriptFiles()
-        for (classifierName in classifierNames) {
-            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createML.log")
+        getClassifiers()
+        for (classifierEntry in classifierList) {
+            val logFile = classifiersDirectoryInBuild.resolve(classifierEntry.classifierName).resolve("createML.log")
             if (logFile.exists()) {
                 val content = logFile.toFile().readText()
                 val accuracy100 = checkAccuracy(content = content)
@@ -203,144 +180,35 @@ object CreateMLUtility {
         return result
     }
 
-    private fun File.isImageFile(): Boolean {
-
-        val ext = this.extension.lowercase()
-        return ext == "png" || ext == "jpg" || ext == "jpeg"
-    }
-
-    internal fun getScriptFiles() {
-        scriptFilesInVision = classifiersDirectoryInVision.toFile().walkTopDown()
+    internal fun getClassifiers() {
+        val scriptFilesInVision = classifiersDirectoryInVision.toFile().walkTopDown()
             .filter { it.name == ML_IMAGE_CLASSIFIER_SCRIPT }.map { it.toString() }.toList()
-        for (scriptFileInVision in scriptFilesInVision) {
-            val classifierName = scriptFileInVision.toPath().parent.name
-            val filterName = scriptFileInVision.toFile().readLines().firstOrNull { it.contains("imageFilter=") }
-                ?.split("=")?.last()
-            if (filterName != null) {
-                imageFilterMap[classifierName] = filterName
-            }
-        }
-    }
-
-    internal fun getImageFiles() {
-        for (scriptFileInVision in scriptFilesInVision) {
-            val classifierDirectoryInVision = scriptFileInVision.parent()
-            val imageFiles = classifierDirectoryInVision.toFile().walkTopDown().filter { it.isImageFile() }
-            for (imageFile in imageFiles) {
-                val entry = MlModelImageFileEntry(
-                    visionDirectory = visionDirectory,
-                    classifiersDirectoryInVision = classifiersDirectoryInVision,
-                    scriptFileInVision = scriptFileInVision,
-                    imageFileInVision = imageFile.toString(),
-                    workDirectory = visionDirectoryInWork,
-                )
-                mlModelImageFiles.add(entry)
-            }
+        for (scriptFile in scriptFilesInVision) {
+            val entry = ClassifierEntry(
+                visionDirectory = visionDirectory,
+                visionDirectoryInBuild = visionDirectoryInBuild,
+                scriptFileInVision = scriptFile,
+            )
+            classifierList.add(entry)
         }
     }
 
     internal fun createWorkDirectoriesAndFiles(createBinary: Boolean?) {
 
-        val work = visionDirectoryInWork.toPath().toString()
+        val work = visionDirectoryInBuild.toPath().toString()
         if (work.startsWith(UserVar.project.toString()).not()) {
-            throw TestConfigException("visionDirectoryInWork must be under the project directory. (visionDirectoryInWork=$visionDirectoryInWork)")
+            throw TestConfigException("visionDirectoryInBuild must be under the project directory. (visionDirectoryInWork=$visionDirectoryInBuild)")
         }
         try {
             FileUtils.deleteDirectory(work.toFile())
         } catch (t: DirectoryNotEmptyException) {
             FileUtils.deleteDirectory(work.toFile())
         }
-        val learningFiles = mlModelImageFiles.filter { it.isTextIndex.not() }
-        for (imageEntry in learningFiles) {
-            // create label directory in training
-            if (imageEntry.combinedLabelDirectoryInTraining.exists().not()) {
-                imageEntry.combinedLabelDirectoryInTraining.toFile().mkdirs()
-            }
-            // create label directory in test
-            if (imageEntry.combinedLabelDirectoryInTest.exists().not()) {
-                imageEntry.combinedLabelDirectoryInTest.toFile().mkdirs()
-            }
-            // copy image file to training
-            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTraining)
-            // copy image file to test
-            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTest)
 
-            val filterName =
-                if (createBinary == true) "binary"
-                else if (imageFilterMap.containsKey(imageEntry.classifierName)) imageFilterMap[imageEntry.classifierName]
-                else null
-            if (filterName == "binary") {
-                // create binary file in test
-                createBinaryFile(imageFile = imageEntry.imageFileInTraining)
-            }
+        for (classifierEntry in classifierList) {
+            classifierEntry.createWorkDirectoriesAndFiles(createBinary = createBinary)
         }
-    }
 
-    internal fun copyScriptFilesIntoWork() {
-        for (scriptFileInVision in scriptFilesInVision) {
-            val classifierName = scriptFileInVision.toPath().parent.name
-            val scriptFileInWork =
-                classifiersDirectoryInWork.resolve(classifierName).resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
-            scriptFileInVision.copyFileTo(scriptFileInWork)
-        }
-    }
-
-    internal fun setupScripts() {
-        for (classifierName in classifierNames) {
-            val classifierDirectory = classifiersDirectoryInWork.resolve(classifierName)
-            val scriptFile = classifierDirectory.resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
-            val dataSourceDirectory = classifierDirectory
-
-            val lines = scriptFile.toFile().readLines()
-            val options =
-                lines.firstOrNull { it.contains("options=") }?.split("=")?.last()?.split(",")?.map { it.trim() }
-                    ?: listOf()
-            val args = mutableListOf(
-                "swift",
-                scriptFile,
-                dataSourceDirectory
-            )
-            args.addAll(options)
-            argsMap[classifierName] = args
-
-            val isDummyFile = lines.count() < 10
-            if (isDummyFile) {
-                ResourceUtility.copyFile(
-                    fileName = RESOURCE_NAME_ML_IMAGE_CLASSIFIER_SCRIPT,
-                    targetFile = scriptFile.toPath(),
-                    logLanguage = ""
-                )
-            }
-        }
-    }
-
-    private fun createBinaryFile(imageFile: String) {
-        val image = UtilImageIO.loadImageNotNull(imageFile)
-        val input = ConvertBufferedImage.convertFromSingle(image, null, GrayF32::class.java)
-        val binary = GrayU8(input.width, input.height)
-
-        val threshold = GThresholdImageOps.computeOtsu(input, 0.0, 255.0)
-        ThresholdImageOps.threshold(input, binary, threshold.toFloat(), true)
-
-        val visualBinary = VisualizeBinaryData.renderBinary(binary, false, null)
-        val p = imageFile.toPath().parent
-
-        val binaryImageFile = p.resolve("${imageFile.toPath().toFile().nameWithoutExtension}_binary.png").toString()
-        visualBinary.saveImage(binaryImageFile, log = false)
-
-        /**
-         * Create reversed
-         */
-        for (y in 0 until binary.height) {
-            for (x in 0 until binary.width) {
-                var v = binary.get(x, y)
-                v = if (v == 0) 255 else 0
-                binary.set(x, y, v)
-            }
-        }
-        val visualBinary2 = VisualizeBinaryData.renderBinary(binary, false, null)
-        val binaryImageFile2 = p.resolve("${imageFile.toPath().toFile().nameWithoutExtension}_binary2.png").toString()
-        visualBinary2.saveImage(binaryImageFile2, log = false)
     }
 
 }

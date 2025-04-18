@@ -46,7 +46,7 @@ class CreateMLUtilityTest {
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
             val fileList = getFileListInClassifiersDirectoryInVision(
@@ -81,7 +81,7 @@ build/tmp/vision1/classifiers/fileList.txt
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
             assertThat(getSkipMessageCount()).isEqualTo(1)  // skipped
@@ -94,7 +94,7 @@ build/tmp/vision1/classifiers/fileList.txt
             // Act
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
             assertThat(getSkipMessageCount()).isEqualTo(1)  // executed
@@ -103,7 +103,7 @@ build/tmp/vision1/classifiers/fileList.txt
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
             assertThat(getSkipMessageCount()).isEqualTo(2)  // skipped
@@ -112,7 +112,7 @@ build/tmp/vision1/classifiers/fileList.txt
             // Act (force = true)
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
                 force = true
             )
             // Assert
@@ -141,7 +141,7 @@ build/tmp/vision1/classifiers/fileList.txt
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInWork = visionDirectoryInWork,
+                visionDirectoryInBuild = visionDirectoryInWork,
                 createBinary = false
             )
             // Assert
