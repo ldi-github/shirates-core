@@ -83,7 +83,7 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
     }
 }
 
-internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.profile.packageOrBundleId) {
+internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testProfile.packageOrBundleId) {
 
     if (packageOrBundleId.isNullOrBlank()) {
         throw IllegalAccessException(message(id = "required", subject = "packageOrBundleId", value = packageOrBundleId))
@@ -118,7 +118,7 @@ internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.pro
     classic.waitForClose(testContext.appIconName)
 }
 
-internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {
+internal fun AppiumDriver.terminateApp(packageOrBundleId: String? = testProfile.packageOrBundleId) {
 
     if (packageOrBundleId.isNullOrBlank()) {
         throw IllegalAccessException(message(id = "required", subject = "packageOrBundleId", value = packageOrBundleId))

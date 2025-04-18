@@ -46,6 +46,10 @@ object AppNameUtility {
             return packageOrBundleId
         }
 
+        if (packageOrBundleId.contains(".").not()) {
+            return testProfile.packageOrBundleId!!
+        }
+
         return appNameOrAppIdOrActivityName
     }
 

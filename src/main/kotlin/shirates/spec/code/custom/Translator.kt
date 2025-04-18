@@ -1,10 +1,12 @@
 package shirates.spec.code.custom
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.isElementExpression
 import shirates.core.logging.Message
 import shirates.core.logging.Message.message
 import shirates.core.logging.MessageRecord
 import shirates.core.logging.TestLog
+import shirates.core.utility.string.forVisionComparison
 import shirates.spec.code.entity.Case
 import shirates.spec.code.entity.Target
 import shirates.spec.utilily.*
@@ -48,13 +50,13 @@ interface Translator {
     ): String {
 
         /**
-         * "[*Screen]"
+         * Contains "[*Screen]" or "[*Screen(something)]"
          */
         for (keyword in Keywords.screenKeywords) {
             val msg = formatArg(message)
-            val screenNickname = msg.getGroupValue(".*(\\[.*$keyword]).*".toRegex())
-            if (screenNickname.isNotBlank()) {
-                return screenNickname
+            val m = msg.forVisionComparison()
+            if (m.contains("${keyword}]") || m.contains("${keyword}(")) {
+                return msg
             }
         }
 
@@ -122,10 +124,11 @@ interface Translator {
          * Match with message master
          */
         val matchedFunction = matchWithMessageMaster(message = message)
-        if (matchedFunction.hasBracket()) {
-            if (matchedFunction.startsWith("screenIs").not()) {
-                return matchedFunction
-            }
+        if (matchedFunction.isBlank()) {
+            return message
+        }
+        if (matchedFunction.isNotBlank()) {
+            return matchedFunction
         }
 
         val msg = escapeForCode(message)
@@ -141,7 +144,8 @@ interface Translator {
         val codeMap = Message.getMessageMap("code")
         val candidates = mutableMapOf<MessageRecord, String>()
 
-        for (key in codeMap.keys) {
+        val keys = codeMap.keys.sortedByDescending { it.length }
+        for (key in keys) {
             val code = codeMap[key]!!
             if (code.message.isBlank() || code.message == "-") {
                 continue
@@ -164,12 +168,16 @@ interface Translator {
                 map["id"] = code.id
                 for (i in 1 until m.groupValues.count()) {
                     val name = groupValues[i - 1].get(1)
-                    val value = escapeForCode(m.groupValues[i])
+                    var value = escapeForCode(m.groupValues[i])
+                    if (value.isElementExpression()) {
+                        value = value.trimStart('<').trimEnd('>')
+                    }
                     map[name] = value
                 }
                 val result = message(map)
                 if (result.contains("InCell").not()) {
                     candidates[code] = result
+                    break
                 }
             }
         }
@@ -253,11 +261,16 @@ interface Translator {
         if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
             return "exist(\"$subject\")"
         }
-        if (message.endsWith("]") || message.endsWith(">")) {
+        if (message.endsWith("]")) {
             return "exist(\"$message\")"
         }
+        if (message.endsWith(">")) {
+            val s = message.trimStart('<').trimEnd('>')
+            return "exist(\"$s\")"
+        }
 
-        return messageToFunction(message = message, defaultFunc = defaultFunc)
+        val msg = messageToFunction(message = message, defaultFunc = defaultFunc)
+        return msg
     }
 
     /**
