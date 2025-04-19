@@ -8,6 +8,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.printWarn
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.commandextension.isScreen
 import shirates.core.vision.driver.commandextension.isScreenOf
 
@@ -48,7 +49,9 @@ class VisionDriveScreenCompareResult() : CompareResult(), VisionDrive {
         }
         if (TestMode.isNoLoadRun.not()) {
             for (screenName in screenNames) {
-                if (VisionScreenRepository.isRegistered(screenName).not()) {
+                if (VisionScreenRepository.isRegistered(screenName).not()
+                    && VisionTextIndexRepository.isRegistered(screenName).not()
+                ) {
                     printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
                 }
             }
@@ -146,7 +149,7 @@ class VisionDriveScreenCompareResult() : CompareResult(), VisionDrive {
         val command = "ifElse"
         var message = message(id = "ifElse")
         if (history.any() && TestMode.isNoLoadRun.not()) {
-            val msg = history.map { it.message }.joinToString("\n") + "\n$message"
+            val msg = history.joinToString("\n") { it.message } + "\n$message"
             message = "$msg\n$message"
         }
 

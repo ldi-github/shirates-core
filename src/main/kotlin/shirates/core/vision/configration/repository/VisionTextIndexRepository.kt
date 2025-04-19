@@ -98,6 +98,14 @@ object VisionTextIndexRepository {
     }
 
     /**
+     * isRegistered
+     */
+    fun isRegistered(screenName: String): Boolean {
+
+        return imageIndexFiles.any() { it.screenName == screenName }
+    }
+
+    /**
      * VisionTextIndexEntry
      */
     class VisionTextIndexEntry(
