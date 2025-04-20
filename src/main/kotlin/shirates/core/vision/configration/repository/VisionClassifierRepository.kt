@@ -146,7 +146,7 @@ object VisionClassifierRepository {
         val currentListString = getFileListInVisionClassifierDirectory(classifierName = classifierName)
         val doLearning = currentListString != lastListString || force
         if (doLearning.not()) {
-            printLastLearningResultOnWarning(classifierName = classifierName)
+//            printLastLearningResultOnWarning(classifierName = classifierName)
             val classifierDirectory = visionClassifiersDirectory.resolve(classifierName)
             TestLog.info("Learning skipped. Updated file not found. (classifierDirectory=${classifierDirectory})")
             loadClassifier(classifierName = classifierName)
