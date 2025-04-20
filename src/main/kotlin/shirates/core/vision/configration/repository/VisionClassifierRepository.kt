@@ -1,127 +1,285 @@
 package shirates.core.vision.configration.repository
 
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestMode
-import shirates.core.driver.TestMode.isAndroid
+import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
+import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
+import shirates.core.utility.format
 import shirates.core.utility.toPath
 import java.nio.file.Files
+import java.util.*
 import kotlin.io.path.name
 
-class VisionClassifierRepository {
-
-    var imageClassifierDirectory = ""
-    val labelMap = mutableMapOf<String, LabelFileInfo>()
+object VisionClassifierRepository {
 
     /**
-     * classifierName
+     * classifierMap
      */
-    val classifierName: String
+    val classifierMap = mutableMapOf<String, VisionClassifier>()
+
+    /**
+     * visionDirectory
+     */
+    var visionDirectory: String
         get() {
-            return imageClassifierDirectory.toPath().name
+            if (_visionDirectory != null) return _visionDirectory!!
+            return PropertiesManager.visionDirectory
+        }
+        set(value) {
+            _visionDirectory = value
+        }
+    private var _visionDirectory: String? = null
+
+    /**
+     * createBinary
+     */
+    var createBinary: Boolean? = null
+
+    /**
+     * buildVisionDirectory
+     */
+    var buildVisionDirectory: String
+        get() {
+            if (_buildVisionDirectory != null) return _buildVisionDirectory!!
+            return PropertiesManager.visionBuildDirectory.resolve("vision")
+        }
+        set(value) {
+            _buildVisionDirectory = value
+        }
+    private var _buildVisionDirectory: String? = null
+
+    /**
+     * buildClassifiersDirectory
+     */
+    val buildClassifiersDirectory: String
+        get() {
+            return "$buildVisionDirectory/classifiers"
         }
 
     /**
-     * setup
+     * visionClassifiersDirectory
      */
-    fun setup(imageClassifierDirectory: String) {
+    val visionClassifiersDirectory: String
+        get() {
+            return visionDirectory.resolve("classifiers")
+        }
 
-        this.imageClassifierDirectory = imageClassifierDirectory.toPath().toString()
-        labelMap.clear()
+    /**
+     * defaultClassifierRepository
+     */
+    val defaultClassifierRepository: VisionClassifier
+        get() {
+            return getClassifier("DefaultClassifier")
+        }
 
-        if (Files.exists(this.imageClassifierDirectory.toPath()).not()) {
+    /**
+     * screenClassifierRepository
+     */
+    val screenClassifierRepository: VisionClassifier
+        get() {
+            return getClassifier("ScreenClassifier")
+        }
+
+    /**
+     * buttonStateClassifierRepository
+     */
+    val buttonStateClassifierRepository: VisionClassifier
+        get() {
+            return getClassifier("ButtonStateClassifier")
+        }
+
+    /**
+     * checkStateClassifierRepository
+     */
+    val checkStateClassifierRepository: VisionClassifier
+        get() {
+            return getClassifier("CheckStateClassifier")
+        }
+
+//    /**
+//     * radioButtonStateClassifierRepository
+//     */
+//    val radioButtonStateClassifierRepository: VisionClassifierRepository
+//        get() {
+//            return getRepository("RadioButtonStateClassifier")
+//        }
+//
+//    /**
+//     * switchStateClassifierRepository
+//     */
+//    val switchStateClassifierRepository: VisionClassifierRepository
+//        get() {
+//            return getRepository("SwitchStateClassifier")
+//        }
+
+    /**
+     * clear
+     */
+    fun clear() {
+
+        classifierMap.clear()
+        visionDirectory = ""
+    }
+
+    /**
+     * runLearning
+     */
+    fun runLearning(
+        visionDirectory: String,
+        classifierName: String,
+        createBinary: Boolean?,
+        force: Boolean = false,
+    ) {
+        this.visionDirectory = visionDirectory
+        this.createBinary = createBinary
+
+        /**
+         * Check if any file in the classifier directory is updated
+         */
+        val buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName)
+        val fileListFile = buildClassifierDirectory.resolve("fileList.txt")
+        val lastListString = if (fileListFile.exists()) fileListFile.toFile().readText() else ""
+        val currentListString = getFileListInVisionClassifierDirectory(classifierName = classifierName)
+        val doLearning = currentListString != lastListString || force
+        if (doLearning.not()) {
+            printLastLearningResultOnWarning(classifierName = classifierName)
+            val classifierDirectory = visionClassifiersDirectory.resolve(classifierName)
+            TestLog.info("Learning skipped. Updated file not found. (classifierDirectory=${classifierDirectory})")
+            loadClassifier(classifierName = classifierName)
             return
         }
 
-        this.imageClassifierDirectory.toPath().toFile().walkTopDown().forEach {
-            if (it.extension == "png" || it.extension == "jpg") {
-                val label = it.toPath().parent.name
-                if (labelMap.containsKey(label).not()) {
-                    labelMap[label] = LabelFileInfo(
-                        label = label,
-                        imageClassifierDirectory = this.imageClassifierDirectory
-                    )
-                }
-                val file = it.toString()
-                if (file.toPath().parent.parent.name != "test") {
-                    val labelFiles = labelMap[label]!!
-                    labelFiles.files.add(it.toString())
-//                    println("label: $label, file: $it")
-                }
-            }
-        }
+        /**
+         * Setup classifier
+         */
+        val classifier = setupClassifier(classifierName = classifierName, createBinary = createBinary)
 
         /**
-         * Check label duplication
+         * Run learning
          */
-        for (label in labelMap.keys) {
-            val files = labelMap[label]!!.files
-            val dirs = files.map { it.toPath().parent }.distinct()
-            if (dirs.count() > 1) {
-                val duplicated = dirs.joinToString(", ")
-                throw TestConfigException("Label directory is duplicated. A label can be belong to only one directory. (label=$label, dirs=$duplicated)")
-            }
-        }
-
-        val classifierName = imageClassifierDirectory.toPath().name
-        printInfo("Classifier files loaded.($classifierName, ${labelMap.keys.count()} labels, directory=$imageClassifierDirectory)")
+        classifier.runLearning()
     }
 
     /**
-     * getFiles
+     * setupClassifier
      */
-    fun getFiles(label: String): List<String> {
+    fun setupClassifier(
+        classifierName: String,
+        createBinary: Boolean?
+    ): VisionClassifier {
+        this.createBinary = createBinary
 
-        val keys = labelMap.keys.filter { it.endsWith(label) }
-        if (keys.isEmpty()) {
-            return listOf()
+        if (Files.exists(buildClassifiersDirectory.toPath()).not()) {
+            buildClassifiersDirectory.toFile().mkdirs()
         }
-        val files = mutableListOf<String>()
-        for (key in keys) {
-            val items = labelMap[key]!!.files.filter { it.toPath().name.contains("_binary.").not() }
-            files.addAll(items)
-        }
-        return files
+
+        val classifier = VisionClassifier()
+        classifier.setup(
+            visionClassifierDirectory = visionClassifiersDirectory.resolve(classifierName),
+            buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName),
+            createBinary = createBinary
+        )
+        classifierMap[classifierName] = classifier
+        return classifier
     }
 
     /**
-     * getFile
+     * loadClassifier
      */
-    fun getFile(label: String): String? {
+    fun loadClassifier(
+        classifierName: String,
+    ): VisionClassifier {
 
-        val files = getFiles(label = label)
-        val platformSymbol = if (isAndroid) "@a." else "@i."
-        val file = files.firstOrNull() {
-            it.toPath().name.contains(platformSymbol) ||
-                    it.toPath().toString().replace("\\", "").contains("/@a{platformSymbol}/")
-        }
-        if (file != null) {
-            return file
-        }
-        val currentScreen = TestDriver.currentScreen
-        if (currentScreen.isNotBlank() && currentScreen != "?") {
-            val filesInScreen = files.filter { it.toPath().toString().contains(currentScreen) }
-            if (filesInScreen.isNotEmpty()) {
-                return filesInScreen.first()
-            }
-        }
-        return files.firstOrNull()
+        val classifier = VisionClassifier()
+        classifier.loadLabelInfoMap(buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName))
+        classifierMap[classifierName] = classifier
+
+        return classifier
     }
 
-    class LabelFileInfo(
-        val label: String,
-        val imageClassifierDirectory: String,
-        val files: MutableList<String> = mutableListOf(),
+    /**
+     * hasClassifier
+     */
+    fun hasClassifier(classifierName: String): Boolean {
+
+        return classifierMap.containsKey(classifierName)
+    }
+
+    /**
+     * getClassifierNames
+     */
+    fun getClassifierNames(
+        visionDirectory: String
+    ): List<String> {
+
+        val dirs = visionDirectory.resolve("classifiers").toPath().toFile().walkTopDown()
+            .filter { it.name.endsWith("Classifier.swift") }.map { it.parentFile.toString() }.toList()
+        return dirs.map { it.toPath().name }
+    }
+
+    /**
+     * getClassifier
+     */
+    fun getClassifier(
+        classifierName: String
+    ): VisionClassifier {
+        if (classifierMap.containsKey(classifierName).not()) {
+            throw TestConfigException("Classifier not found. (classifierName=$classifierName)")
+        }
+        return classifierMap[classifierName]!!
+    }
+
+    /**
+     * getClassifiers
+     */
+    fun getClassifiers(): List<VisionClassifier> {
+
+        return classifierMap.values.toList()
+    }
+
+    private fun printLastLearningResultOnWarning(
+        classifierName: String
     ) {
-        val primaryFile: String?
-            get() {
-                val annotation = TestMode.platformAnnotation
-                val annotatedFile = files.firstOrNull() { it.toPath().name.contains(annotation) }
-                if (annotatedFile != null) {
-                    return annotatedFile
-                }
-                return files.firstOrNull()
+        val logFile = buildClassifiersDirectory.resolve(classifierName).resolve("createML.log")
+        if (logFile.exists()) {
+            val content = logFile.toFile().readText()
+            val accuracy100 = checkAccuracy(content = content)
+            if (accuracy100.not()) {
+                println(content)
             }
+        }
     }
+
+    internal fun checkAccuracy(content: String): Boolean {
+
+        val accuracy100 = content.contains("Accuracy: 100.00%")
+        if (accuracy100.not()) {
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            printInfo("!!                                                                  !!")
+            printInfo("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
+            printInfo("!!                                                                  !!")
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
+        return accuracy100
+    }
+
+    internal fun getFileListInVisionClassifierDirectory(
+        classifierName: String
+    ): String {
+
+        val projectRoot = "".toPath().toString()
+        val files = visionClassifiersDirectory.resolve(classifierName).toFile().walkTopDown()
+            .filter { it.isFile && it.name != ".DS_Store" && it.name.endsWith(".txt").not() }
+            .map {
+                "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${
+                    it.toString().removePrefix(projectRoot).trimStart('/')
+                }"
+            }
+        val result = files.joinToString("\n")
+        return result
+    }
+
 }

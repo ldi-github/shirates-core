@@ -16,7 +16,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
-import shirates.core.vision.configration.repository.VisionClassifierRepositoryContainer
+import shirates.core.vision.configration.repository.VisionClassifierRepository
 import shirates.core.vision.driver.classify
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
@@ -34,7 +34,7 @@ fun VisionDrive.findImages(
     skinThickness: Int = 2,
 ): List<VisionElement> {
 
-    val templateFile = VisionClassifierRepositoryContainer.defaultClassifierRepository.getFile(label = label)
+    val templateFile = VisionClassifierRepository.defaultClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     val workingRegionElement = CodeExecutionContext.workingRegionElement
@@ -164,7 +164,7 @@ private fun VisionDrive.findImageCore(
     waitSeconds: Double,
     intervalSeconds: Double,
 ): VisionElement {
-    val templateFile = VisionClassifierRepositoryContainer.defaultClassifierRepository.getFile(label = label)
+    val templateFile = VisionClassifierRepository.defaultClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     var r: FindImagesWithTemplateResult? = null

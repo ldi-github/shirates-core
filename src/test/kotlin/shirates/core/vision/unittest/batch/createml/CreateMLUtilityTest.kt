@@ -15,11 +15,11 @@ import java.util.*
 
 class CreateMLUtilityTest {
 
-    private fun getFileListInClassifiersDirectoryInVision(
-        classifiersDirectoryInVision: String,
+    private fun getFileListInClassifier(
+        visionClassifierDirectory: String,
     ): String {
 
-        val files = classifiersDirectoryInVision.toFile().walkTopDown()
+        val files = visionClassifierDirectory.toFile().walkTopDown()
             .filter { it.isFile && it.name != ".DS_Store" }
             .map { "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${it}" }
         val result = files.joinToString("\n")
@@ -32,59 +32,55 @@ class CreateMLUtilityTest {
 
         // Arrange
         val visionDirectory = "unitTestData/vision/batch/leaning1/vision1"
-        val visionDirectoryInWork = "build/tmp/vision1"
+        val classifiersDirectory = "build/vision/classifiers"
 
         fun getSkipMessageCount(): Int {
-            return TestLog.lines.count {
-                it.message.contains("Learning skipped. Updated file not found. (visionDirectory=$visionDirectory)")
-            }
+            return TestLog.lines.count { it.message.contains("Learning skipped. Updated file not found.") }
         }
 
         run {
             // Arrange
-            FileUtils.deleteDirectory(visionDirectoryInWork.toFile())
+            FileUtils.deleteDirectory(classifiersDirectory.toFile())
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
+                force = true
             )
             // Assert
-            val fileList = getFileListInClassifiersDirectoryInVision(
-                classifiersDirectoryInVision = "build/tmp/vision1/classifiers",
-            ).split("\n").map { it.substringAfter("/shirates-core/").trim() }
-//            assertThat(fileList.count()).isEqualTo(19)
+            val buildClassifierDirectory = classifiersDirectory.resolve("CheckStateClassifier")
+            val files = buildClassifierDirectory.toFile().walkTopDown()
+                .map { it.toString().substringAfter("/shirates-core/").trim() }.toList()
             val expected = """
-build/tmp/vision1/classifiers/CheckStateClassifier/MLImageClassifier.swift
-build/tmp/vision1/classifiers/CheckStateClassifier/test/[ON]/radio_bright.png
-build/tmp/vision1/classifiers/CheckStateClassifier/test/[OFF]/radio_bright.png
-build/tmp/vision1/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel
-build/tmp/vision1/classifiers/CheckStateClassifier/training/[ON]/radio_bright_binary.png
-build/tmp/vision1/classifiers/CheckStateClassifier/training/[ON]/radio_bright.png
-build/tmp/vision1/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_binary.png
-build/tmp/vision1/classifiers/CheckStateClassifier/training/[OFF]/radio_bright.png
-build/tmp/vision1/classifiers/CheckStateClassifier/createML.log
-build/tmp/vision1/classifiers/DefaultClassifier/MLImageClassifier.swift
-build/tmp/vision1/classifiers/DefaultClassifier/test/@a_[Android Files App]_[Images Button]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/test/@i_[iOS Settings App]_[Accessibility Icon]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@a_[Android Files App]_[Images Button]/img_binary.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@a_[Android Files App]_[Images Button]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@i_[iOS Settings App]_[Accessibility Icon]/img_binary.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@i_[iOS Settings App]_[Accessibility Icon]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/DefaultClassifier.mlmodel
-build/tmp/vision1/classifiers/DefaultClassifier/createML.log
-build/tmp/vision1/classifiers/fileList.txt
+build/vision/classifiers/CheckStateClassifier
+build/vision/classifiers/CheckStateClassifier/MLImageClassifier.swift
+build/vision/classifiers/CheckStateClassifier/test
+build/vision/classifiers/CheckStateClassifier/test/[ON]
+build/vision/classifiers/CheckStateClassifier/test/[ON]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/test/[OFF]
+build/vision/classifiers/CheckStateClassifier/test/[OFF]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel
+build/vision/classifiers/CheckStateClassifier/training
+build/vision/classifiers/CheckStateClassifier/training/[ON]
+build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright_binary2.png
+build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright_binary.png
+build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/training/[OFF]
+build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_binary2.png
+build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_binary.png
+build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/createML.log
+build/vision/classifiers/CheckStateClassifier/fileList.txt
 """.trimIndent().split("\n").map { it.trim() }
-            assertThat(fileList).containsSubsequence(expected)
+            assertThat(files).containsSubsequence(expected)
             assertThat(getSkipMessageCount()).isEqualTo(0)
         }
         run {
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
-            assertThat(getSkipMessageCount()).isEqualTo(1)  // skipped
+            assertThat(getSkipMessageCount()).isEqualTo(2)  // skipped
         }
         run {
             // Arrange (Update file)
@@ -94,29 +90,26 @@ build/tmp/vision1/classifiers/fileList.txt
             // Act
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
-            assertThat(getSkipMessageCount()).isEqualTo(1)  // executed
+            assertThat(getSkipMessageCount()).isEqualTo(3)  // executed
         }
         run {
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
             )
             // Assert
-            assertThat(getSkipMessageCount()).isEqualTo(2)  // skipped
+            assertThat(getSkipMessageCount()).isEqualTo(5)  // skipped
         }
         run {
             // Act (force = true)
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
                 force = true
             )
             // Assert
-            assertThat(getSkipMessageCount()).isEqualTo(2)  // executed
+            assertThat(getSkipMessageCount()).isEqualTo(5)  // executed
         }
     }
 
@@ -141,7 +134,6 @@ build/tmp/vision1/classifiers/fileList.txt
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
-                visionDirectoryInBuild = visionDirectoryInWork,
                 createBinary = false
             )
             // Assert

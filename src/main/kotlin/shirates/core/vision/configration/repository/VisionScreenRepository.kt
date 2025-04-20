@@ -2,7 +2,6 @@ package shirates.core.vision.configration.repository
 
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
-import shirates.core.vision.configration.repository.VisionClassifierRepositoryContainer.classifierRepositoryMap
 import shirates.core.vision.result.RecognizeTextResult
 
 object VisionScreenRepository {
@@ -14,7 +13,7 @@ object VisionScreenRepository {
      */
     val directory: String
         get() {
-            return VisionClassifierRepositoryContainer.screenClassifierRepository.imageClassifierDirectory
+            return VisionClassifierRepository.screenClassifierRepository.buildClassifierDirectory
         }
 
     /**
@@ -22,18 +21,15 @@ object VisionScreenRepository {
      */
     val hasRepository: Boolean
         get() {
-            return classifierRepositoryMap.containsKey("ScreenClassifier")
+            return VisionClassifierRepository.classifierMap.containsKey("ScreenClassifier")
         }
 
     /**
      * labelMap
      */
-    val labelMap: Map<String, VisionClassifierRepository.LabelFileInfo>
+    val labelMap: Map<String, LabelFileInfo>
         get() {
-            if (hasRepository.not()) {
-                return mapOf()
-            }
-            return VisionClassifierRepositoryContainer.screenClassifierRepository.labelMap
+            return VisionClassifierRepository.screenClassifierRepository.labelFileInfoMap
         }
 
     /**
@@ -41,9 +37,6 @@ object VisionScreenRepository {
      */
     fun setup() {
 
-        if (hasRepository.not()) {
-            return
-        }
         screenMap.clear()
         for (key in labelMap.keys) {
             val labelFileInfo = labelMap[key]!!
@@ -93,7 +86,7 @@ object VisionScreenRepository {
 
     class ScreenEntry(
         val screenName: String,
-        val labelFileInfo: VisionClassifierRepository.LabelFileInfo,
+        val labelFileInfo: LabelFileInfo,
         var recognizeTextResult: RecognizeTextResult? = null,
     )
 

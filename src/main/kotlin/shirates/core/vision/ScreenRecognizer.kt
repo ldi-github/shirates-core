@@ -166,7 +166,8 @@ object ScreenRecognizer {
 
         val list = mutableListOf<ScreenRecognizedTextMatchingInfo>()
         for (screenLabel in screenLabels) {
-            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenLabel)
+            val screenName = LabelUtility.getShortLabel(screenLabel).getNicknameWithoutSuffix()
+            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenName)
             var r = screenEntry.recognizeTextResult
             if (r == null) {
                 screenEntry.recognizeTextResult =
