@@ -1,5 +1,6 @@
 package shirates.core.vision.configration.repository
 
+import okio.FileNotFoundException
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
@@ -168,10 +169,20 @@ object VisionClassifierRepository {
      */
     fun setupClassifier(
         classifierName: String,
-        createBinary: Boolean?
+        createBinary: Boolean?,
+        visionDirectory: String? = null,
+        buildVisionDirectory: String? = null
     ): VisionClassifier {
         this.createBinary = createBinary
-
+        if (visionDirectory != null) {
+            this.visionDirectory = visionDirectory
+        }
+        if (buildVisionDirectory != null) {
+            this.buildVisionDirectory = buildVisionDirectory
+        }
+        if (this.visionDirectory.exists().not()) {
+            throw FileNotFoundException("vision directory not found. (visionDirectory=$visionDirectory)")
+        }
         if (Files.exists(buildClassifiersDirectory.toPath()).not()) {
             buildClassifiersDirectory.toFile().mkdirs()
         }
@@ -227,7 +238,7 @@ object VisionClassifierRepository {
         classifierName: String
     ): VisionClassifier {
         if (classifierMap.containsKey(classifierName).not()) {
-            throw TestConfigException("Classifier not found. (classifierName=$classifierName)")
+            throw TestConfigException("Classifier not found. (classifierName=$classifierName, buildClassifiersDirectory=$buildClassifiersDirectory)")
         }
         return classifierMap[classifierName]!!
     }

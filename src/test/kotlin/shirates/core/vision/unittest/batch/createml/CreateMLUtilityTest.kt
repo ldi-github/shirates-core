@@ -1,7 +1,9 @@
 package shirates.core.vision.unittest.batch.createml
 
+import okio.FileNotFoundException
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.logging.TestLog
@@ -138,6 +140,34 @@ build/vision/classifiers/CheckStateClassifier/fileList.txt
             )
             // Assert
             assertThat(getWarningMessageCount()).isEqualTo(1)
+        }
+    }
+
+    @Order(30)
+    @Test
+    fun runLearning_error() {
+
+        run {
+            // Arrange
+            val visionDirectory = ""
+            assertThatThrownBy {
+                CreateMLUtility.runLearning(
+                    visionDirectory = visionDirectory,
+                    createBinary = false
+                )
+            }.isInstanceOf(FileNotFoundException::class.java)
+                .hasMessage("visionDirectory is blank. Check the testrun properties file.")
+        }
+        run {
+            // Arrange
+            val visionDirectory = "no/exist/path"
+            assertThatThrownBy {
+                CreateMLUtility.runLearning(
+                    visionDirectory = visionDirectory,
+                    createBinary = false
+                )
+            }.isInstanceOf(FileNotFoundException::class.java)
+                .hasMessage("visionDirectory not found. (visionDirectory=no/exist/path)")
         }
     }
 

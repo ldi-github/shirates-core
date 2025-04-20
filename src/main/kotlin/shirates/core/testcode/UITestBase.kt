@@ -368,7 +368,7 @@ abstract class UITestBase : Drive {
                 // MacroRepository
                 MacroRepository.setup()
 
-                if (isRunningOnMacOS) {
+                if (isRunningOnMacOS && TestMode.isVisionTest) {
                     // run learning
                     CreateMLUtility.runLearning()
 

@@ -6,6 +6,7 @@ import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.file.exists
 import shirates.core.utility.toPath
 import shirates.core.vision.configration.repository.VisionClassifierRepository
+import java.io.FileNotFoundException
 
 object CreateMLUtility {
 
@@ -20,6 +21,16 @@ object CreateMLUtility {
         force: Boolean = false,
         createBinary: Boolean? = null
     ) {
+        if (visionDirectory.isBlank()) {
+            throw FileNotFoundException("visionDirectory is blank. Check the testrun properties file.")
+        }
+        if (visionDirectory.exists().not()) {
+            throw FileNotFoundException("visionDirectory not found. (visionDirectory=$visionDirectory)")
+        }
+        if (TestMode.isRunningOnMacOS.not()) {
+            throw NotImplementedError("CreateMLUtility is for only MacOS.")
+        }
+
         lockFile(filePath = visionDirectory.toPath()) {
             runLearningCore(
                 visionDirectory = visionDirectory,
@@ -34,12 +45,6 @@ object CreateMLUtility {
         force: Boolean,
         createBinary: Boolean?
     ) {
-        if (visionDirectory.exists().not()) {
-            return
-        }
-        if (TestMode.isRunningOnMacOS.not()) {
-            throw NotImplementedError("CreateMLUtility is for only MacOS.")
-        }
         val classifierNames = VisionClassifierRepository.getClassifierNames(visionDirectory = visionDirectory)
         for (classifierName in classifierNames) {
             VisionClassifierRepository.runLearning(

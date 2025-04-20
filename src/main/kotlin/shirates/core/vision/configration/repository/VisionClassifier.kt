@@ -19,7 +19,6 @@ import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.batch.CreateMLUtility
-import java.io.File
 import java.nio.file.Files
 import kotlin.io.path.name
 
@@ -68,11 +67,6 @@ class VisionClassifier {
             return _filterName
         }
     private var _filterName: String? = null
-
-//    /**
-//     * imageFileList
-//     */
-//    val imageFileList = mutableListOf<LearningImageFileEntry>()
 
     /**
      * trainingDirectory
@@ -126,7 +120,6 @@ class VisionClassifier {
         val classifierName = buildClassifierDirectory.toPath().name
         printInfo("Classifier files loaded.($classifierName, ${labelFileInfoMap.keys.count()} labels, directory=$buildClassifierDirectory)")
 
-        getImageFiles()
         setupLearningFiles(createBinary = createBinary)
         copyScriptFilesIntoWork()
         setupScripts()
@@ -161,6 +154,7 @@ class VisionClassifier {
          * Get image files and create the labelFileInfoMap
          */
         createLabelFileInfoMap(directory = this.buildClassifierDirectory)
+        printInfo("Classifier files loaded.($classifierName, ${labelFileInfoMap.keys.count()} labels, directory=$buildClassifierDirectory)")
     }
 
     /**
@@ -232,26 +226,6 @@ class VisionClassifier {
             }
         }
         return files.firstOrNull()
-    }
-
-    private fun getImageFiles() {
-
-        fun File.isImageFile(): Boolean {
-            val ext = this.extension.lowercase()
-            return ext == "png" || ext == "jpg" || ext == "jpeg"
-        }
-
-        val imageFiles = visionScriptFile.parent().toFile().walkTopDown().filter { it.isImageFile() }
-        for (imageFile in imageFiles) {
-            val entry = LearningImageFileEntry(
-                learningImageFile = imageFile.toString(),
-                visionClassifier = this,
-            )
-            if (labelFileInfoMap.containsKey(entry.label).not()) {
-                labelFileInfoMap[entry.label] = LabelFileInfo(label = entry.label)
-            }
-            labelFileInfoMap[entry.label]!!.files.add(entry)
-        }
     }
 
     private fun setupLearningFiles(createBinary: Boolean?) {
