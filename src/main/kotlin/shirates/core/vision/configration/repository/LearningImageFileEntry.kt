@@ -8,7 +8,7 @@ import kotlin.io.path.name
 
 class LearningImageFileEntry(
     val learningImageFile: String,
-    val visionClassifier: VisionClassifier,
+    val visionClassifierShard: VisionClassifierShard,
 ) {
     /**
      * isTextIndex
@@ -41,7 +41,7 @@ class LearningImageFileEntry(
         get() {
             val imageFilePath = learningImageFile.toPath().toString()
             val imageFileName = learningImageFile.toPath().name
-            val classifierDirectoryPath = visionClassifier.visionClassifierDirectory
+            val classifierDirectoryPath = visionClassifierShard.visionClassifierDirectory
             val combinedLabel = imageFilePath.replace(classifierDirectoryPath, "").removeSuffix(imageFileName)
                 .replace("/", "_").replace("\\", "_").trim('_')
             return combinedLabel
@@ -52,7 +52,7 @@ class LearningImageFileEntry(
      */
     val testCombinedLabelDirectory: String
         get() {
-            return visionClassifier.testDirectory.resolve(combinedLabel)
+            return visionClassifierShard.testDirectory.resolve(combinedLabel)
         }
 
     /**
@@ -60,7 +60,7 @@ class LearningImageFileEntry(
      */
     val trainingCombinedLabelDirectory: String
         get() {
-            return visionClassifier.trainingDirectory.resolve(combinedLabel)
+            return visionClassifierShard.trainingDirectory.resolve(combinedLabel)
         }
 
     /**

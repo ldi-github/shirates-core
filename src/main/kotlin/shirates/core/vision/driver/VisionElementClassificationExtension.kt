@@ -1,8 +1,6 @@
 package shirates.core.vision.driver
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
-import shirates.core.utility.file.resolve
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.utility.label.LabelUtility
@@ -24,15 +22,15 @@ fun VisionElement.classifyFull(
         this.saveImage()
     }
 
-    val mlmodelFile =
-        PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
-
-    val result = VisionServerProxy.classifyImage(
+    val result = VisionServerProxy.classifyImageWithShard(
         inputFile = this.imageFile!!,
-        mlmodelFile = mlmodelFile,
+        classifierName = classifierName,
     )
+    val primaryClassifications = result.classifyImageResults.map { it.primaryClassification }
+        .sortedByDescending { it.confidence }
+    val first = primaryClassifications.first()
 
-    return result.primaryClassification.identifier
+    return first.identifier
 }
 
 /**

@@ -3,15 +3,13 @@ package shirates.core.vision.configration.repository
 import okio.FileNotFoundException
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
-import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
-import shirates.core.utility.format
 import shirates.core.utility.toPath
 import java.nio.file.Files
-import java.util.*
+import java.security.MessageDigest
 import kotlin.io.path.name
 
 object VisionClassifierRepository {
@@ -69,52 +67,44 @@ object VisionClassifierRepository {
         }
 
     /**
-     * defaultClassifierRepository
+     * defaultClassifier
      */
-    val defaultClassifierRepository: VisionClassifier
+    val defaultClassifier: VisionClassifier
         get() {
             return getClassifier("DefaultClassifier")
         }
 
     /**
-     * screenClassifierRepository
+     * screenClassifier
      */
-    val screenClassifierRepository: VisionClassifier
+    val screenClassifier: VisionClassifier
         get() {
             return getClassifier("ScreenClassifier")
         }
 
     /**
-     * buttonStateClassifierRepository
+     * buttonStateClassifier
      */
-    val buttonStateClassifierRepository: VisionClassifier
+    val buttonStateClassifier: VisionClassifier
         get() {
             return getClassifier("ButtonStateClassifier")
         }
 
     /**
-     * checkStateClassifierRepository
+     * checkStateClassifier
      */
-    val checkStateClassifierRepository: VisionClassifier
+    val checkStateClassifier: VisionClassifier
         get() {
             return getClassifier("CheckStateClassifier")
         }
 
 //    /**
-//     * radioButtonStateClassifierRepository
+//     * radioButtonStateClassifier
 //     */
-//    val radioButtonStateClassifierRepository: VisionClassifierRepository
-//        get() {
-//            return getRepository("RadioButtonStateClassifier")
-//        }
-//
+
 //    /**
-//     * switchStateClassifierRepository
+//     * switchStateClassifier
 //     */
-//    val switchStateClassifierRepository: VisionClassifierRepository
-//        get() {
-//            return getRepository("SwitchStateClassifier")
-//        }
 
     /**
      * clear
@@ -138,30 +128,18 @@ object VisionClassifierRepository {
         this.createBinary = createBinary
 
         /**
-         * Check if any file in the classifier directory is updated
-         */
-        val buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName)
-        val fileListFile = buildClassifierDirectory.resolve("fileList.txt")
-        val lastListString = if (fileListFile.exists()) fileListFile.toFile().readText() else ""
-        val currentListString = getFileListInVisionClassifierDirectory(classifierName = classifierName)
-        val doLearning = currentListString != lastListString || force
-        if (doLearning.not()) {
-//            printLastLearningResultOnWarning(classifierName = classifierName)
-            val classifierDirectory = visionClassifiersDirectory.resolve(classifierName)
-            TestLog.info("Learning skipped. Updated file not found. (classifierDirectory=${classifierDirectory})")
-            loadClassifier(classifierName = classifierName)
-            return
-        }
-
-        /**
          * Setup classifier
          */
-        val classifier = setupClassifier(classifierName = classifierName, createBinary = createBinary)
+        val classifier = setupClassifier(
+            classifierName = classifierName,
+            createBinary = createBinary,
+            force = force,
+        )
 
         /**
          * Run learning
          */
-        classifier.runLearning()
+        classifier.runLearning(force = force)
     }
 
     /**
@@ -170,8 +148,9 @@ object VisionClassifierRepository {
     fun setupClassifier(
         classifierName: String,
         createBinary: Boolean?,
+        force: Boolean,
         visionDirectory: String? = null,
-        buildVisionDirectory: String? = null
+        buildVisionDirectory: String? = null,
     ): VisionClassifier {
         this.createBinary = createBinary
         if (visionDirectory != null) {
@@ -187,29 +166,16 @@ object VisionClassifierRepository {
             buildClassifiersDirectory.toFile().mkdirs()
         }
 
-        val classifier = VisionClassifier()
-        classifier.setup(
-            visionClassifierDirectory = visionClassifiersDirectory.resolve(classifierName),
-            buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName),
-            createBinary = createBinary
-        )
-        classifierMap[classifierName] = classifier
-        return classifier
-    }
-
-    /**
-     * loadClassifier
-     */
-    fun loadClassifier(
-        classifierName: String,
-    ): VisionClassifier {
-
-        val classifier = VisionClassifier()
-        classifier.loadLabelInfoMap(buildClassifierDirectory = buildClassifiersDirectory.resolve(classifierName))
-        classifierMap[classifierName] = classifier
+        if (classifierMap.containsKey(classifierName).not()) {
+            classifierMap[classifierName] =
+                VisionClassifier(classifierName = classifierName, visionClassifierRepository = this)
+        }
+        val classifier = classifierMap[classifierName]!!
+        classifier.setup(force = force)
 
         return classifier
     }
+
 
     /**
      * hasClassifier
@@ -277,20 +243,42 @@ object VisionClassifierRepository {
         return accuracy100
     }
 
-    internal fun getFileListInVisionClassifierDirectory(
+    /**
+     * getShardNodeCount
+     */
+    fun getShardNodeCount(
         classifierName: String
-    ): String {
+    ): Int {
 
-        val projectRoot = "".toPath().toString()
-        val files = visionClassifiersDirectory.resolve(classifierName).toFile().walkTopDown()
-            .filter { it.isFile && it.name != ".DS_Store" && it.name.endsWith(".txt").not() }
-            .map {
-                "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${
-                    it.toString().removePrefix(projectRoot).trimStart('/')
-                }"
-            }
-        val result = files.joinToString("\n")
-        return result
+        val tokens = PropertiesManager.visionClassifierShardNodeCount.split(",", ";", ":")
+        val nameValue = tokens.firstOrNull() { it.contains(classifierName) }?.split("=")
+        if (nameValue == null) {
+            throw TestConfigException("classifierName is missing. visionClassifierShardNodeCount is invalid. (classifiername: $classifierName, visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+        }
+        if (nameValue.count() < 2) {
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+        }
+        val value = nameValue[1].toIntOrNull()
+        if (value == null) {
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+        }
+
+        return value
+    }
+
+    /**
+     * getShardID
+     */
+    fun getShardID(
+        classifierName: String,
+        label: String,
+    ): Int {
+
+        val md5 = MessageDigest.getInstance("MD5")
+        val hashBytes = md5.digest(label.toByteArray())
+        val hashValue = hashBytes.fold(0) { acc, byte -> (acc shl 8) + (byte.toInt() and 0xFF) }
+        val shardNodeCount = getShardNodeCount(classifierName = classifierName)
+        return Math.abs(hashValue) % shardNodeCount + 1
     }
 
 }

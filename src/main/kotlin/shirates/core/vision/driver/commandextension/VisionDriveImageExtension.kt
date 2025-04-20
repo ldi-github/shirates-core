@@ -34,7 +34,7 @@ fun VisionDrive.findImages(
     skinThickness: Int = 2,
 ): List<VisionElement> {
 
-    val templateFile = VisionClassifierRepository.defaultClassifierRepository.getFile(label = label)
+    val templateFile = VisionClassifierRepository.defaultClassifier.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     val workingRegionElement = CodeExecutionContext.workingRegionElement
@@ -164,7 +164,7 @@ private fun VisionDrive.findImageCore(
     waitSeconds: Double,
     intervalSeconds: Double,
 ): VisionElement {
-    val templateFile = VisionClassifierRepository.defaultClassifierRepository.getFile(label = label)
+    val templateFile = VisionClassifierRepository.defaultClassifier.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     var r: FindImagesWithTemplateResult? = null

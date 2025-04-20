@@ -58,16 +58,12 @@ object ScreenRecognizer {
             }
         }
 
-        /**
-         * Get screen candidates from current screen image
-         */
-        val mlmodelFile: String =
-            PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
-        val classifyScreenResult = VisionServerProxy.classifyScreen(
+        val classifierDirectory = PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName")
+        val classifyScreenResult = VisionServerProxy.classifyScreenWithShard(
             inputFile = screenImageFile,
-            mlmodelFile = mlmodelFile,
+            classifierDirectory = classifierDirectory,
         )
-        val screenCandidates = classifyScreenResult.classifications.filter { it.confidence > 0.1 }
+        val screenCandidates = classifyScreenResult.classifyScreenResults.flatMap { it.classifications }
         if (screenCandidates.isEmpty()) {
             return "?"
         }
