@@ -4,13 +4,12 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.result.CompareResult
 import shirates.core.driver.vision
+import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
-import shirates.core.logging.printWarn
 import shirates.core.vision.VisionDrive
-import shirates.core.vision.configration.repository.VisionScreenRepository
-import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.commandextension.isScreen
 import shirates.core.vision.driver.commandextension.isScreenOf
+import shirates.core.vision.driver.commandextension.isScreenRegistered
 
 /**
  * ScreenCompareResult
@@ -49,10 +48,8 @@ class VisionDriveScreenCompareResult() : CompareResult(), VisionDrive {
         }
         if (TestMode.isNoLoadRun.not()) {
             for (screenName in screenNames) {
-                if (VisionScreenRepository.isRegistered(screenName).not()
-                    && VisionTextIndexRepository.isRegistered(screenName).not()
-                ) {
-                    printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
+                if (isScreenRegistered(screenName = screenName).not()) {
+                    throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
                 }
             }
         }

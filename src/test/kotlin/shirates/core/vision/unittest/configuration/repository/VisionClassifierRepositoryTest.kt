@@ -3,12 +3,20 @@ package shirates.core.vision.unittest.configuration.repository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
+import shirates.core.testcode.UnitTest
 import shirates.core.utility.toPath
 import shirates.core.vision.configration.repository.VisionClassifierRepository
 
-class VisionClassifierRepositoryTest {
+class VisionClassifierRepositoryTest : UnitTest() {
+
+    override fun beforeEach(context: ExtensionContext?) {
+
+        PropertiesManager.clear()
+    }
 
     @Test
     fun setup_valid() {
@@ -118,5 +126,38 @@ class VisionClassifierRepositoryTest {
             }
         }
 
+    }
+
+    @Test
+    fun getShardNodeCount() {
+
+        // Arrange
+        val v = VisionClassifierRepository
+        run {
+            // Act
+            val actual = v.getShardNodeCount(classifierName = "CheckStateClassifier")
+            // Assert
+            assertThat(actual).isEqualTo(1)
+        }
+        run {
+            // Act
+            val actual = v.getShardNodeCount(classifierName = "ScreenClassifier")
+            // Assert
+            assertThat(actual).isEqualTo(3)
+        }
+        run {
+            // Arrange
+            PropertiesManager.setPropertyValue(
+                "visionClassifierShardNodeCount",
+                "DefaultClassifier=10:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40"
+            )
+            // Act, Assert
+            assertThat(v.getShardNodeCount(classifierName = "DefaultClassifier")).isEqualTo(10)
+            assertThat(v.getShardNodeCount(classifierName = "ScreenClassifier")).isEqualTo(20)
+            assertThat(v.getShardNodeCount(classifierName = "ButtonStateClassifier")).isEqualTo(30)
+            assertThat(v.getShardNodeCount(classifierName = "CheckStateClassifier")).isEqualTo(40)
+            assertThat(v.getShardNodeCount(classifierName = "")).isEqualTo(1)
+            assertThat(v.getShardNodeCount(classifierName = "not registered classifier")).isEqualTo(1)
+        }
     }
 }

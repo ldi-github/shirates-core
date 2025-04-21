@@ -151,7 +151,7 @@ class TranslatorTest : UnitTest() {
         }
         run {
             val actual = t.conditionMessageToFunction(case = case, message = "Tap <Label>")
-            assertThat(actual).isEqualTo("tap(\"<Label>\")")
+            assertThat(actual).isEqualTo("tap(\"Label\")")
         }
     }
 
@@ -175,7 +175,7 @@ class TranslatorTest : UnitTest() {
         }
         run {
             val actual = t.actionMessageToFunction(case = case, message = "Tap <Label>")
-            assertThat(actual).isEqualTo("tap(\"<Label>\")")
+            assertThat(actual).isEqualTo("tap(\"Label\")")
         }
     }
 

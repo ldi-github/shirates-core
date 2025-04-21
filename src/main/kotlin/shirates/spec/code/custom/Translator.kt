@@ -1,12 +1,12 @@
 package shirates.spec.code.custom
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.findNickname
 import shirates.core.configuration.isElementExpression
 import shirates.core.logging.Message
 import shirates.core.logging.Message.message
 import shirates.core.logging.MessageRecord
 import shirates.core.logging.TestLog
-import shirates.core.utility.string.forVisionComparison
 import shirates.spec.code.entity.Case
 import shirates.spec.code.entity.Target
 import shirates.spec.utilily.*
@@ -52,14 +52,14 @@ interface Translator {
         /**
          * Contains "[*Screen]" or "[*Screen(something)]"
          */
+        val msg = formatArg(message)
+        val nickname = msg.findNickname() ?: return ""
+
         for (keyword in Keywords.screenKeywords) {
-            val msg = formatArg(message)
-            val m = msg.forVisionComparison()
-            if (m.contains("${keyword}]") || m.contains("${keyword}(")) {
-                return msg
+            if (nickname.contains(keyword)) {
+                return nickname
             }
         }
-
         return ""
     }
 
@@ -110,11 +110,12 @@ interface Translator {
     fun messageToFunction(message: String, defaultFunc: String = "manual"): String {
 
         val screenNickname = getScreenNickName(message)
-
-        if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
+        if (screenNickname.isNotBlank()) {
             return "screenIs(\"$screenNickname\")"
         }
-
+        if (message.isDisplayedAssertion) {
+            return "manual(\"$message\")"
+        }
         if (defaultFunc == "macro") {
             val arg = formatArg(message)
             return "$defaultFunc(\"[$arg]\")"
@@ -125,7 +126,7 @@ interface Translator {
          */
         val matchedFunction = matchWithMessageMaster(message = message)
         if (matchedFunction.isBlank()) {
-            return message
+            return "manual(\"$message\")"
         }
         if (matchedFunction.isNotBlank()) {
             return matchedFunction
@@ -182,7 +183,7 @@ interface Translator {
             }
         }
 
-        val key = candidates.keys.sortedBy { it.id.length }.lastOrNull() ?: return ""
+        val key = candidates.keys.maxByOrNull { it.id.length } ?: return ""
         val result = candidates[key]!!
         return result
     }

@@ -6,6 +6,7 @@ import shirates.core.driver.commandextension.appIs
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.toVisionElement
+import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -209,6 +210,11 @@ fun VisionDrive.screenIs(
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
         TestDriver.currentScreen = "?"
+
+        if (isScreenRegistered(screenName = screenName).not()) {
+            throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
+        }
+
         var match = isScreen(screenName = screenName)
         if (match.not()) {
             doUntilTrue(

@@ -7,7 +7,35 @@ import shirates.core.logging.TestLog
 class ClassifyImageWithShardResult(
     val jsonString: String
 ) {
+    /**
+     * classifyImageResults
+     */
     val classifyImageResults = mutableListOf<ClassifyImageResult>()
+
+    /**
+     * primaryClassification
+     */
+    val primaryClassification: ClassifyImageResult.Classification
+        get() {
+            if (_primaryClassification == null) {
+                _primaryClassification = classifications.first()
+            }
+            return _primaryClassification!!
+        }
+    private var _primaryClassification: ClassifyImageResult.Classification? = null
+
+    /**
+     * getClassifications
+     */
+    val classifications: List<ClassifyImageResult.Classification>
+        get() {
+            if (_classifications == null) {
+                _classifications =
+                    classifyImageResults.flatMap { it.classifications }.sortedByDescending { it.confidence }
+            }
+            return _classifications!!
+        }
+    private var _classifications: List<ClassifyImageResult.Classification>? = null
 
     init {
         val jsonObject = try {

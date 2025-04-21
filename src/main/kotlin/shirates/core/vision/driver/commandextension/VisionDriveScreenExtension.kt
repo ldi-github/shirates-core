@@ -13,6 +13,8 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenPredicateRepository
+import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.syncScreen
@@ -59,6 +61,15 @@ fun VisionDrive.clearScreenPredicates() {
     VisionScreenPredicateRepository.clear()
 }
 
+/**
+ * isScreenRegistered
+ */
+fun VisionDrive.isScreenRegistered(screenName: String): Boolean {
+
+    val result = VisionScreenRepository.isRegistered(screenName) ||
+            VisionTextIndexRepository.isRegistered(screenName)
+    return result
+}
 
 /**
  * isScreen

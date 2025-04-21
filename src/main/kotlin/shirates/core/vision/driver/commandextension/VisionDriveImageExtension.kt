@@ -5,14 +5,17 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.driver.testProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.file.toFile
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.Candidate
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
@@ -164,58 +167,86 @@ private fun VisionDrive.findImageCore(
     waitSeconds: Double,
     intervalSeconds: Double,
 ): VisionElement {
-    val templateFile = VisionClassifierRepository.defaultClassifier.getFile(label = label)
-        ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    var r: FindImagesWithTemplateResult? = null
+    fun findImageCoreCore(
+        templateFile: String
+    ): VisionElement {
+        var result: FindImagesWithTemplateResult? = null
 
-    var found = false
-    val waitContext = doUntilTrue(
-        waitSeconds = waitSeconds,
-        intervalSeconds = intervalSeconds,
-        throwOnFinally = false,
-        onBeforeRetry = {
-            screenshot(force = true)
+        var found = false
+        val waitContext = doUntilTrue(
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            throwOnFinally = false,
+            onBeforeRetry = {
+                screenshot(force = true)
+            }
+        ) {
+            var workingRegionElement = CodeExecutionContext.workingRegionElement
+            if (workingRegionElement.isEmpty) {
+                workingRegionElement = workingRegionElement.newVisionElement()
+            }
+            if (workingRegionElement.imageFile == null) {
+                workingRegionElement.saveImage()
+            }
+
+            val r = VisionServerProxy.findImagesWithTemplate(
+                mergeIncluded = mergeIncluded,
+                imageFile = workingRegionElement.imageFile!!,
+                imageX = workingRegionElement.rect.left,
+                imageY = workingRegionElement.rect.top,
+                templateImageFile = templateFile,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
+                skinThickness = skinThickness,
+                binaryThreshold = binaryThreshold,
+                aspectRatioTolerance = aspectRatioTolerance,
+            )
+
+            found = threshold == null || r.primaryCandidate.distance <= threshold
+            if (found.not()) {
+                val candidateLabel = r.primaryCandidate.toVisionElement().classify()
+                found = candidateLabel == label
+            }
+            result = r
+
+            found
         }
-    ) {
-        var workingRegionElement = CodeExecutionContext.workingRegionElement
-        if (workingRegionElement.isEmpty) {
-            workingRegionElement = workingRegionElement.newVisionElement()
+        if (waitContext.hasError && waitContext.isTimeout.not()) {
+            waitContext.throwIfError()
         }
-        if (workingRegionElement.imageFile == null) {
-            workingRegionElement.saveImage()
+        if (found) {
+            val v = result!!.primaryCandidate.toVisionElement()
+            return v
         }
-
-        r = VisionServerProxy.findImagesWithTemplate(
-            mergeIncluded = mergeIncluded,
-            imageFile = workingRegionElement.imageFile!!,
-            imageX = workingRegionElement.rect.left,
-            imageY = workingRegionElement.rect.top,
-            templateImageFile = templateFile,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            skinThickness = skinThickness,
-            binaryThreshold = binaryThreshold,
-            aspectRatioTolerance = aspectRatioTolerance,
-        )
-
-        found = threshold == null || r!!.primaryCandidate.distance <= threshold
-        if (found.not()) {
-            val candidateLabel = r?.primaryCandidate?.toVisionElement()?.classify()
-            found = candidateLabel == label
-        }
-
-        found
+        return VisionElement.emptyElement
     }
-    if (waitContext.hasError && waitContext.isTimeout.not()) {
-        waitContext.throwIfError()
+
+    val files = VisionClassifierRepository.defaultClassifier.getFiles(label = label)
+
+    val annotation = testProfile.platformAnnotation
+    val filesForThePlatform = files.filter { it.toFile().name.contains(annotation) }
+    val filesNotForThePlatform = files.filter { it.toFile().name.contains(annotation).not() }
+    val templateFiles = filesForThePlatform.toMutableList()
+    templateFiles.addAll(filesNotForThePlatform)
+    if (templateFiles.isEmpty()) {
+        throw IllegalArgumentException("Template file not found. (label=$label)")
     }
-    if (found) {
-        val v = r!!.primaryCandidate.toVisionElement()
+
+    var v = VisionElement.emptyElement
+    for (templateFile in templateFiles) {
+        v = findImageCoreCore(templateFile = templateFile)
+        if (v.isFound) {
+            break
+        }
+    }
+    if (v.isFound) {
         return v
     }
-    val v = VisionElement.emptyElement
-    val subMessage = if (r == null) "" else " (distance:${r!!.primaryCandidate.distance} > threshold:$threshold)"
+
+    val subMessage =
+        if (v.isFound || v.observation == null) ""
+        else " (distance:${(v.observation as Candidate).distance} > threshold:$threshold)"
     v.lastError = TestDriverException("findImage(\"$label\") not found.$subMessage")
     TestLog.info(v.lastError!!.message!!)
     return v

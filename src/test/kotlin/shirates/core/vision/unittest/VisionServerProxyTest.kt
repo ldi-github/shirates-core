@@ -50,12 +50,13 @@ class VisionServerProxyTest : UnitTest() {
     }
 
     @Test
-    fun classifyScreen() {
+    fun classifyScreenWithShard() {
 
         run {
             // Act
-            val inputFile = "unitTestData/vision/screens/1/[Android Settings Top Screen].png"
-            val result = VisionServerProxy.classifyScreen(inputFile = inputFile)
+            val inputFile =
+                "vision/classifiers/ScreenClassifier/@a/Android/[Android Home Screen]/@a.png".toPath().toString()
+            val result = VisionServerProxy.classifyScreenWithShard(inputFile = inputFile)
             result.jsonString
         }
     }
@@ -254,41 +255,40 @@ class VisionServerProxyTest : UnitTest() {
     }
 
     @Test
-    fun classifyImage() {
+    fun classifyImageWithShard() {
 
         run {
             // Arrange
-            val inputFile = "unitTestData/vision/files/[ON]/switch_14_bright.png".toPath().toString()
-            val mlmodelFile = "build/vision/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel"
+            val inputFile = "vision/classifiers/CheckStateClassifier/[ON]/radio_bright.png".toPath().toString()
+            val classifierDirectory = "build/vision/classifiers/CheckStateClassifier"
             // Act
-            val result = VisionServerProxy.classifyImage(
+            val result = VisionServerProxy.classifyImageWithShard(
                 inputFile = inputFile,
-                mlmodelFile = mlmodelFile,
+                classifierName = "CheckStateClassifier",
+                classifierDirectory = classifierDirectory,
             )
             // Assert
             assertThat(result.primaryClassification.identifier).isEqualTo("[ON]")
-            assertThat(result.primaryClassification.confidence).isEqualTo(1.0f)
+            assertThat(result.primaryClassification.confidence).isGreaterThan(0.5f)
             assertThat(result.classifications[0].identifier).isEqualTo("[ON]")
-            assertThat(result.classifications[0].confidence).isEqualTo(1.0f)
             assertThat(result.classifications[1].identifier).isEqualTo("[OFF]")
-            assertThat(result.classifications[1].confidence < 1.0f).isTrue()
+            assertThat(result.classifications[0].confidence).isGreaterThan(result.classifications[1].confidence)
         }
         run {
             // Arrange
-            val inputFile = "unitTestData/vision/files/[ON]/switch_ios_bright.png".toPath().toString()
-            val mlmodelFile = "build/vision/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel"
+            val inputFile = "vision/classifiers/CheckStateClassifier/[OFF]/radio_bright.png".toPath().toString()
+            val classifierDirectory = "build/vision/classifiers/CheckStateClassifier"
             // Act
-            val result = VisionServerProxy.classifyImage(
+            val result = VisionServerProxy.classifyImageWithShard(
                 inputFile = inputFile,
-                mlmodelFile = mlmodelFile,
+                classifierName = "CheckStateClassifier",
+                classifierDirectory = classifierDirectory,
             )
             // Assert
-            assertThat(result.primaryClassification.identifier).isEqualTo("[ON]")
-            assertThat(result.primaryClassification.confidence).isEqualTo(1.0f)
-            assertThat(result.classifications[0].identifier).isEqualTo("[ON]")
-            assertThat(result.classifications[0].confidence).isEqualTo(1.0f)
-            assertThat(result.classifications[1].identifier).isEqualTo("[OFF]")
-            assertThat(result.classifications[1].confidence < 1.0f).isTrue()
+            assertThat(result.primaryClassification.identifier).isEqualTo("[OFF]")
+            assertThat(result.classifications[0].identifier).isEqualTo("[OFF]")
+            assertThat(result.classifications[1].identifier).isEqualTo("[ON]")
+            assertThat(result.classifications[0].confidence).isGreaterThan(result.classifications[1].confidence)
         }
     }
 

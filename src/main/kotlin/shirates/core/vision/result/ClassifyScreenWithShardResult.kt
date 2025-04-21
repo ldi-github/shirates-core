@@ -26,7 +26,8 @@ class ClassifyScreenWithShardResult(
         val jsonArray = jsonObject.getJSONArray("items")
         for (i in 0 until jsonArray.length()) {
             val jso = jsonArray.getJSONObject(i)
-            val item = ClassifyScreenResult(jso.toString())
+            val shardID = if (jso.has("shardID")) jso.getInt("shardID") else 0
+            val item = ClassifyScreenResult(jsonString = jso.toString(), shardID = shardID)
             classifyScreenResults.add(item)
         }
     }

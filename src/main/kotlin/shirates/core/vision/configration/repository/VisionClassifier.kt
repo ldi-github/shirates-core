@@ -73,4 +73,18 @@ class VisionClassifier(
         }
         return null
     }
+
+    /**
+     * getFiles
+     */
+    fun getFiles(label: String): List<String> {
+
+        for (shard in classifierShards) {
+            val files = shard.getFiles(label = label)
+            if (files.any()) {
+                return files
+            }
+        }
+        return listOf()
+    }
 }

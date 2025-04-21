@@ -162,7 +162,7 @@ class SpecReport_platformBranch_Test : UITest() {
                 id = 2,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 android {
   - in android
@@ -328,7 +328,7 @@ stubNot {
                 id = 15,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 android {
   - in android

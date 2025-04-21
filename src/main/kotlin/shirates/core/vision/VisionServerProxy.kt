@@ -107,7 +107,7 @@ object VisionServerProxy {
         file.toFile().writeText(jsonString)
 
         sw.stop()
-        return ClassifyScreenResult(jsonString)
+        return ClassifyScreenResult(jsonString = jsonString, shardID = 0)
     }
 
     /**

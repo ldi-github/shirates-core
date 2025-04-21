@@ -64,6 +64,7 @@ object ScreenRecognizer {
             classifierDirectory = classifierDirectory,
         )
         val screenCandidates = classifyScreenResult.classifyScreenResults.flatMap { it.classifications }
+            .sortedByDescending { it.confidence }
         if (screenCandidates.isEmpty()) {
             return "?"
         }

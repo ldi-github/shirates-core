@@ -250,10 +250,20 @@ object VisionClassifierRepository {
         classifierName: String
     ): Int {
 
-        val tokens = PropertiesManager.visionClassifierShardNodeCount.split(",", ";", ":")
+        if (classifierName.isBlank()) {
+            return 1
+        }
+
+        val visionClassifierShardNodeCount = PropertiesManager.visionClassifierShardNodeCount
+        val count = visionClassifierShardNodeCount.toIntOrNull()
+        if (count != null) {
+            return count
+        }
+
+        val tokens = visionClassifierShardNodeCount.split(",", ";", ":")
         val nameValue = tokens.firstOrNull() { it.contains(classifierName) }?.split("=")
         if (nameValue == null) {
-            throw TestConfigException("classifierName is missing. visionClassifierShardNodeCount is invalid. (classifiername: $classifierName, visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+            return 1
         }
         if (nameValue.count() < 2) {
             throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")

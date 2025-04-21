@@ -26,9 +26,9 @@ fun VisionElement.classifyFull(
         inputFile = this.imageFile!!,
         classifierName = classifierName,
     )
-    val primaryClassifications = result.classifyImageResults.map { it.primaryClassification }
-        .sortedByDescending { it.confidence }
-    val first = primaryClassifications.first()
+    val classifications =
+        result.classifyImageResults.flatMap { it.classifications }.sortedByDescending { it.confidence }
+    val first = classifications.first()
 
     return first.identifier
 }

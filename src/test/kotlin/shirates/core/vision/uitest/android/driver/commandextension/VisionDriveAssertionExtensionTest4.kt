@@ -58,6 +58,7 @@ class VisionDriveAssertionExtensionTest4 : VisionTest() {
                     }.expectation {
                         it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
                             it.appIs("Settings2", waitSeconds = 1.0)
+                            it.screenIs("[Android Settings Top Screen]")
                         }
                     }
                 }

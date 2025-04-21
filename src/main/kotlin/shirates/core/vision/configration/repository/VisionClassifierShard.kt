@@ -267,7 +267,7 @@ class VisionClassifierShard(
     /**
      * getFiles
      */
-    private fun getFiles(label: String): List<String> {
+    fun getFiles(label: String): List<String> {
 
         val keys = labelFileInfoMap.keys.filter { it.endsWith(label) }
         if (keys.isEmpty()) {
