@@ -2006,7 +2006,7 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionClassifierShardNodeCapacity() {
+    fun visionClassifierShardNodeCount() {
 
         run {
             // Arrange
@@ -2016,7 +2016,7 @@ class PropertiesManagerTest : UnitTest() {
         }
         run {
             // Arrange
-            val value = 99
+            val value = Const.VISION_CLASSIFIER_SHARD_NODE_COUNT
             PropertiesManager.setPropertyValue("visionClassifierShardNodeCapacity", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionClassifierShardNodeCount).isEqualTo(value)
