@@ -1,5 +1,9 @@
 package shirates.core.vision.configration.repository
 
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
+
 class VisionClassifier(
     val classifierName: String,
     val visionClassifierRepository: VisionClassifierRepository
@@ -23,6 +27,13 @@ class VisionClassifier(
      */
     fun setup(force: Boolean) {
 
+        val shardDirectories = getShardDirectories()
+        if (shardDirectories.count() != shardCount) {
+            for (shardDirectory in shardDirectories) {
+                shardDirectory.toFile().deleteRecursively()
+            }
+        }
+
         for (shardID in 1..shardCount) {
 
             val classifierShard = VisionClassifierShard(shardID = shardID, classifier = this)
@@ -45,6 +56,23 @@ class VisionClassifier(
             val classifierShard = classifierShards.firstOrNull { it.shardID == shardID }!!
             classifierShard.runLearning()
         }
+    }
+
+    /**
+     * getShardDirectories
+     */
+    fun getShardDirectories(): List<String> {
+
+        val list = mutableListOf<String>()
+        for (i in 1..100) {
+            val directory = visionClassifierRepository.buildClassifiersDirectory.resolve("$classifierName/$i")
+            if (directory.exists()) {
+                list.add(directory)
+            } else {
+                break
+            }
+        }
+        return list
     }
 
     /**

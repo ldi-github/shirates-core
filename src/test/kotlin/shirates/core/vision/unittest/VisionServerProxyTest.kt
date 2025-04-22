@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.logging.LogType
@@ -15,9 +16,15 @@ import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionServerProxy
+import shirates.core.vision.batch.CreateMLUtility
 import shirates.core.vision.driver.VisionContext
 
 class VisionServerProxyTest : UnitTest() {
+
+    override fun beforeAll(context: ExtensionContext?) {
+
+        CreateMLUtility.runLearning()
+    }
 
     @Test
     fun setupImageFeaturePrintConfig() {

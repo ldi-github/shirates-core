@@ -130,10 +130,9 @@ object VisionClassifierRepository {
         /**
          * Setup classifier
          */
-        val classifier = setupClassifier(
+        val classifier = createClassifier(
             classifierName = classifierName,
             createBinary = createBinary,
-            force = force,
         )
 
         /**
@@ -143,12 +142,11 @@ object VisionClassifierRepository {
     }
 
     /**
-     * setupClassifier
+     * createClassifier
      */
-    fun setupClassifier(
+    fun createClassifier(
         classifierName: String,
         createBinary: Boolean?,
-        force: Boolean,
         visionDirectory: String? = null,
         buildVisionDirectory: String? = null,
     ): VisionClassifier {
@@ -171,7 +169,6 @@ object VisionClassifierRepository {
                 VisionClassifier(classifierName = classifierName, visionClassifierRepository = this)
         }
         val classifier = classifierMap[classifierName]!!
-        classifier.setup(force = force)
 
         return classifier
     }
@@ -250,14 +247,14 @@ object VisionClassifierRepository {
         classifierName: String
     ): Int {
 
-        if (classifierName.isBlank()) {
-            return 1
-        }
-
         val visionClassifierShardNodeCount = PropertiesManager.visionClassifierShardNodeCount
         val count = visionClassifierShardNodeCount.toIntOrNull()
         if (count != null) {
             return count
+        }
+
+        if (classifierName.isBlank()) {
+            return 1
         }
 
         val tokens = visionClassifierShardNodeCount.split(",", ";", ":")
@@ -266,11 +263,14 @@ object VisionClassifierRepository {
             return 1
         }
         if (nameValue.count() < 2) {
-            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
         }
         val value = nameValue[1].toIntOrNull()
         if (value == null) {
-            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: ${PropertiesManager.visionClassifierShardNodeCount})")
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
+        }
+        if (value < 1) {
+            throw TestConfigException("visionClassifierShardNodeCount must be greater than 0. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
         }
 
         return value

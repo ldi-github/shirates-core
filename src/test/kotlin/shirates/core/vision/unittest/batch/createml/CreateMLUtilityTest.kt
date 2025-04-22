@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
@@ -43,6 +44,7 @@ class CreateMLUtilityTest {
         run {
             // Arrange
             FileUtils.deleteDirectory(classifiersDirectory.toFile())
+            PropertiesManager.setPropertyValue("visionClassifierShardNodeCount", "1")
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,
@@ -54,24 +56,25 @@ class CreateMLUtilityTest {
                 .map { it.toString().substringAfter("/shirates-core/").trim() }.toList()
             val expected = """
 build/vision/classifiers/CheckStateClassifier
-build/vision/classifiers/CheckStateClassifier/MLImageClassifier.swift
-build/vision/classifiers/CheckStateClassifier/test
-build/vision/classifiers/CheckStateClassifier/test/[ON]
-build/vision/classifiers/CheckStateClassifier/test/[ON]/radio_bright.png
-build/vision/classifiers/CheckStateClassifier/test/[OFF]
-build/vision/classifiers/CheckStateClassifier/test/[OFF]/radio_bright.png
-build/vision/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel
-build/vision/classifiers/CheckStateClassifier/training
-build/vision/classifiers/CheckStateClassifier/training/[ON]
-build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright_binary2.png
-build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright_binary.png
-build/vision/classifiers/CheckStateClassifier/training/[ON]/radio_bright.png
-build/vision/classifiers/CheckStateClassifier/training/[OFF]
-build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_binary2.png
-build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_binary.png
-build/vision/classifiers/CheckStateClassifier/training/[OFF]/radio_bright.png
-build/vision/classifiers/CheckStateClassifier/createML.log
-build/vision/classifiers/CheckStateClassifier/fileList.txt
+build/vision/classifiers/CheckStateClassifier/1
+build/vision/classifiers/CheckStateClassifier/1/MLImageClassifier.swift
+build/vision/classifiers/CheckStateClassifier/1/test
+build/vision/classifiers/CheckStateClassifier/1/test/[ON]
+build/vision/classifiers/CheckStateClassifier/1/test/[ON]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/1/test/[OFF]
+build/vision/classifiers/CheckStateClassifier/1/test/[OFF]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/1/training
+build/vision/classifiers/CheckStateClassifier/1/training/[ON]
+build/vision/classifiers/CheckStateClassifier/1/training/[ON]/radio_bright_binary2.png
+build/vision/classifiers/CheckStateClassifier/1/training/[ON]/radio_bright_binary.png
+build/vision/classifiers/CheckStateClassifier/1/training/[ON]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/1/training/[OFF]
+build/vision/classifiers/CheckStateClassifier/1/training/[OFF]/radio_bright_binary2.png
+build/vision/classifiers/CheckStateClassifier/1/training/[OFF]/radio_bright_binary.png
+build/vision/classifiers/CheckStateClassifier/1/training/[OFF]/radio_bright.png
+build/vision/classifiers/CheckStateClassifier/1/createML.log
+build/vision/classifiers/CheckStateClassifier/1/1.mlmodel
+build/vision/classifiers/CheckStateClassifier/1/fileList.txt
 """.trimIndent().split("\n").map { it.trim() }
             assertThat(files).containsSubsequence(expected)
             assertThat(getSkipMessageCount()).isEqualTo(0)
@@ -133,6 +136,7 @@ build/vision/classifiers/CheckStateClassifier/fileList.txt
         run {
             // Arrange
             FileUtils.deleteDirectory(visionDirectoryInWork.toFile())
+            PropertiesManager.setPropertyValue("visionClassifierShardNodeCount", "1")
             // Action
             CreateMLUtility.runLearning(
                 visionDirectory = visionDirectory,

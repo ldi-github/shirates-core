@@ -7,12 +7,26 @@ import kotlin.io.path.name
 class LabelFileInfo(
     val label: String,
 ) {
+    /**
+     * files
+     */
     val files: MutableList<LearningImageFileEntry> = mutableListOf()
 
+    /**
+     * learningFiles
+     */
+    val learningFiles: List<LearningImageFileEntry>
+        get() {
+            return files.filter { it.isTextIndex.not() }
+        }
+
+    /**
+     * primaryFile
+     */
     val primaryFile: String?
         get() {
             val annotation = TestMode.platformAnnotation
-            val annotatedFile = files.firstOrNull() { it.learningImageFile.toPath().name.contains(annotation) }
+            val annotatedFile = learningFiles.firstOrNull() { it.learningImageFile.toPath().name.contains(annotation) }
             if (annotatedFile != null) {
                 return annotatedFile.learningImageFile
             }

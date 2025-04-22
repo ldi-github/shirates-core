@@ -11,9 +11,9 @@ class VisionClassifierRepositoryContainerTest {
 
         // Act
         val v = VisionClassifierRepository
-        v.setupClassifier(classifierName = "CheckStateClassifier", createBinary = null, force = true)
-        v.setupClassifier(classifierName = "DefaultClassifier", createBinary = null, force = true)
-        v.setupClassifier(classifierName = "ScreenClassifier", createBinary = null, force = true)
+        v.createClassifier(classifierName = "CheckStateClassifier", createBinary = null)
+        v.createClassifier(classifierName = "DefaultClassifier", createBinary = null)
+        v.createClassifier(classifierName = "ScreenClassifier", createBinary = null)
         // Assert
         assertThat(VisionClassifierRepository.classifierMap.count()).isEqualTo(3)
         assertThat(VisionClassifierRepository.classifierMap.containsKey("CheckStateClassifier")).isTrue()

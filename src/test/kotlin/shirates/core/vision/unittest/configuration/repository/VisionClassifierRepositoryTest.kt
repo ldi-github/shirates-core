@@ -22,11 +22,10 @@ class VisionClassifierRepositoryTest : UnitTest() {
     fun setup_valid() {
 
         // Arrange
-        val classifier = VisionClassifierRepository.setupClassifier(
+        val classifier = VisionClassifierRepository.createClassifier(
             "valid",
             createBinary = null,
             visionDirectory = "unitTestData/files/vision",
-            force = true
         )
         // Act
         classifier.setup(force = true)
@@ -50,14 +49,14 @@ class VisionClassifierRepositoryTest : UnitTest() {
     fun setup_invalid() {
 
         // Arrange
-        val classifier = VisionClassifierRepository.setupClassifier(
-            "invalid",
-            createBinary = null,
-            visionDirectory = "unitTestData/files/vision",
-            force = true
-        )
+        PropertiesManager.setPropertyValue("visionClassifierShardNodeCount", "1")
         // Act, Assert
         assertThatThrownBy {
+            val classifier = VisionClassifierRepository.createClassifier(
+                "invalid",
+                createBinary = null,
+                visionDirectory = "unitTestData/files/vision",
+            )
             classifier.setup(force = true)
         }.isInstanceOf(TestConfigException::class.java)
             .hasMessageStartingWith("Label directory is duplicated. A label can belong to only one directory. (label=[Label1], dirs=")
@@ -67,11 +66,10 @@ class VisionClassifierRepositoryTest : UnitTest() {
     fun getFile() {
 
         // Arrange
-        val classifier = VisionClassifierRepository.setupClassifier(
+        val classifier = VisionClassifierRepository.createClassifier(
             "valid",
             createBinary = null,
             visionDirectory = "unitTestData/files/vision",
-            force = true
         )
         TestMode.runAsAndroid {
             run {
@@ -159,5 +157,46 @@ class VisionClassifierRepositoryTest : UnitTest() {
             assertThat(v.getShardNodeCount(classifierName = "")).isEqualTo(1)
             assertThat(v.getShardNodeCount(classifierName = "not registered classifier")).isEqualTo(1)
         }
+        run {
+            // Arrange
+            PropertiesManager.setPropertyValue("visionClassifierShardNodeCount", "5")
+            // Act, Assert
+            assertThat(v.getShardNodeCount(classifierName = "")).isEqualTo(5)
+            assertThat(v.getShardNodeCount(classifierName = "DefaultClassifier")).isEqualTo(5)
+        }
+        run {
+            // Arrange
+            PropertiesManager.setPropertyValue(
+                "visionClassifierShardNodeCount",
+                "DefaultClassifier=:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40"
+            )
+            // Act, Assert
+            assertThat(v.getShardNodeCount(classifierName = "")).isEqualTo(1)
+        }
+        run {
+            // Arrange
+            PropertiesManager.setPropertyValue(
+                "visionClassifierShardNodeCount",
+                "DefaultClassifier=:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40"
+            )
+            // Act, Assert
+            assertThatThrownBy {
+                v.getShardNodeCount(classifierName = "DefaultClassifier")
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: DefaultClassifier=:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40)")
+        }
+        run {
+            // Arrange
+            PropertiesManager.setPropertyValue(
+                "visionClassifierShardNodeCount",
+                "DefaultClassifier=0:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40"
+            )
+            assertThatThrownBy {
+                v.getShardNodeCount(classifierName = "DefaultClassifier")
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("visionClassifierShardNodeCount must be greater than 0. (visionClassifierShardNodeCount: DefaultClassifier=0:ScreenClassifier=20:ButtonStateClassifier=30:CheckStateClassifier=40)")
+        }
+
+
     }
 }

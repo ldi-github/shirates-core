@@ -7,9 +7,11 @@ import boofcv.io.image.ConvertBufferedImage
 import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayF32
 import boofcv.struct.image.GrayU8
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.logging.printWarn
@@ -24,6 +26,7 @@ import shirates.core.vision.configration.repository.VisionClassifierRepository.b
 import shirates.core.vision.configration.repository.VisionClassifierRepository.visionClassifiersDirectory
 import java.nio.file.Files
 import java.util.*
+import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.name
 
 class VisionClassifierShard(
@@ -214,7 +217,11 @@ class VisionClassifierShard(
             return
         }
         if (this.buildClassifierShardDirectory.resolve("training").exists().not()) {
-            return
+            throw TestConfigException("Too few labels. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, visionClassifierShardNodeCount=${PropertiesManager.visionClassifierShardNodeCount})")
+        }
+        val labelCount = this.trainingDirectory.toPath().listDirectoryEntries().count()
+        if (labelCount < 2) {
+            throw TestConfigException("Too few labels in training directory. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, labelCount=$labelCount, trainingDirectory=$trainingDirectory, visionClassifierShardNodeCount=${PropertiesManager.visionClassifierShardNodeCount})")
         }
 
         val sw = StopWatch("learning [$classifierName]")
@@ -227,7 +234,7 @@ class VisionClassifierShard(
         if (r.hasError) {
             printInfo(r.command)
             printWarn(r.resultString)
-            throw r.error!!
+            throw TestDriverException("Leaning error: ${r.resultString}")
         }
         println(r.resultString)
 
