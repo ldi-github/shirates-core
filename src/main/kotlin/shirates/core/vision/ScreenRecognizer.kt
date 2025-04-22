@@ -63,19 +63,9 @@ object ScreenRecognizer {
             inputFile = screenImageFile,
             classifierDirectory = classifierDirectory,
         )
-        val screenCandidates = classifyScreenResult.classifyScreenResults.flatMap { it.classifications }
-            .sortedByDescending { it.confidence }
+        val screenCandidates = classifyScreenResult.getCandidates()
         if (screenCandidates.isEmpty()) {
             return "?"
-        }
-        /**
-         * Determine the screen name if confidence == 1.0
-         */
-        for (candidate in screenCandidates) {
-            val screenName = LabelUtility.getShortLabel(candidate.identifier).getNicknameWithoutSuffix()
-            if (candidate.confidence == 1.0f) {
-                return screenName
-            }
         }
         /**
          * Determine the screen name with screenPredicate
@@ -219,6 +209,11 @@ object ScreenRecognizer {
             get() {
                 return LabelUtility.getShortLabel(screenLabel)
             }
+
+        override fun toString(): String {
+
+            return "shortScreenLabel=$shortScreenLabel, totalTextCount=$totalTextCount matchScore=$matchScore, matchTextCountRate=$matchTextCountRate, screenLabel=$screenLabel"
+        }
 
         /**
          * matchWith

@@ -36,4 +36,16 @@ class ClassifyScreenWithShardResult(
         return jsonString
     }
 
+    /**
+     * getCandidates
+     */
+    fun getCandidates(
+        count: Int = 5
+    ): List<ClassifyScreenResult.Classification> {
+
+        val list = classifyScreenResults.flatMap { it.classifications }
+            .sortedByDescending { it.confidence }.take(count).filter { it.confidence > 0.1 }
+        return list
+    }
+
 }
