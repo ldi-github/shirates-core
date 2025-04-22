@@ -123,7 +123,8 @@ object VisionClassifierRepository {
         classifierName: String,
         createBinary: Boolean?,
         force: Boolean = false,
-    ) {
+        setupOnly: Boolean = false,
+    ): VisionClassifier {
         this.visionDirectory = visionDirectory
         this.createBinary = createBinary
 
@@ -134,11 +135,16 @@ object VisionClassifierRepository {
             classifierName = classifierName,
             createBinary = createBinary,
         )
+        if (setupOnly) {
+            return classifier
+        }
 
         /**
          * Run learning
          */
         classifier.runLearning(force = force)
+
+        return classifier
     }
 
     /**

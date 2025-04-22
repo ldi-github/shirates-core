@@ -3,6 +3,7 @@ package shirates.core.vision.configration.repository
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
+import shirates.core.utility.toPath
 
 class VisionClassifier(
     val classifierName: String,
@@ -10,9 +11,9 @@ class VisionClassifier(
 ) {
 
     /**
-     * classifierShards
+     * classifierShardsMap
      */
-    val classifierShards = mutableListOf<VisionClassifierShard>()
+    val classifierShardsMap = mutableMapOf<Int, VisionClassifierShard>()
 
     /**
      * shardCount
@@ -23,37 +24,41 @@ class VisionClassifier(
         }
 
     /**
-     * setup
-     */
-    fun setup(force: Boolean) {
-
-        val shardDirectories = getShardDirectories()
-        if (shardDirectories.count() != shardCount) {
-            for (shardDirectory in shardDirectories) {
-                shardDirectory.toFile().deleteRecursively()
-            }
-        }
-
-        for (shardID in 1..shardCount) {
-
-            val classifierShard = VisionClassifierShard(shardID = shardID, classifier = this)
-            classifierShards.add(classifierShard)
-            classifierShard.setup(force = force)
-        }
-    }
-
-
-    /**
      * runLearning
      */
     fun runLearning(
-        force: Boolean
+        force: Boolean,
+        setupOnly: Boolean = false,
     ) {
-
-        setup(force = force)
-
+        /**
+         * setup
+         */
+        val shardDirectories = getShardDirectories()
+        val shardRecreateRequired = shardDirectories.count() != shardCount
+        if (shardRecreateRequired) {
+            val classifierDirectory = visionClassifierRepository.buildClassifiersDirectory.resolve(classifierName)
+            val thisProjectDirectory = "".toPath().toString()
+            if (classifierDirectory.contains(thisProjectDirectory)) {
+                classifierDirectory.toFile().deleteRecursively()
+            }
+        }
         for (shardID in 1..shardCount) {
-            val classifierShard = classifierShards.firstOrNull { it.shardID == shardID }!!
+            val classifierShard = VisionClassifierShard(shardID = shardID, classifier = this)
+            classifierShardsMap[shardID] = classifierShard
+            classifierShard.setup(force = force || shardRecreateRequired)
+        }
+        val fileListFile = visionClassifierRepository.buildClassifiersDirectory.resolve("fileList.txt")
+        if (fileListFile.exists()) {
+            fileListFile.toFile().delete()
+        }
+        if (setupOnly) {
+            return
+        }
+        /**
+         * run
+         */
+        for (shardID in 1..shardCount) {
+            val classifierShard = classifierShardsMap[shardID]!!
             classifierShard.runLearning()
         }
     }
@@ -80,7 +85,7 @@ class VisionClassifier(
      */
     fun getLabelInfoMap(): Map<String, LabelFileInfo> {
 
-        val list = classifierShards.flatMap { it.getLabelInfoList() }
+        val list = classifierShardsMap.flatMap { it.value.getLabelInfoList() }.sortedBy { it.label }
         val map = mutableMapOf<String, LabelFileInfo>()
         for (info in list) {
             map[info.label] = info
@@ -93,7 +98,8 @@ class VisionClassifier(
      */
     fun getFile(label: String): String? {
 
-        for (shard in classifierShards) {
+        val shards = classifierShardsMap.values.sortedBy { it.shardID }
+        for (shard in shards) {
             val file = shard.getFile(label)
             if (file != null) {
                 return file
@@ -107,7 +113,8 @@ class VisionClassifier(
      */
     fun getFiles(label: String): List<String> {
 
-        for (shard in classifierShards) {
+        val shards = classifierShardsMap.values.sortedBy { it.shardID }
+        for (shard in shards) {
             val files = shard.getFiles(label = label)
             if (files.any()) {
                 return files

@@ -100,6 +100,11 @@ class VisionClassifierShard(
             classifier.visionClassifierRepository.buildClassifiersDirectory.resolve("${classifier.classifierName}/$shardID")
     }
 
+    override fun toString(): String {
+
+        return "classifierName=$classifierName, shardID=$shardID, labelsCount=${labelFileInfoMap.count()}, buildClassifierShardDirectory=$buildClassifierShardDirectory"
+    }
+
     /**
      * getFileListContent
      */

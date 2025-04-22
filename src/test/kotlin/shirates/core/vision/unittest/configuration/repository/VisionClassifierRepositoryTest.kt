@@ -28,7 +28,7 @@ class VisionClassifierRepositoryTest : UnitTest() {
             visionDirectory = "unitTestData/files/vision",
         )
         // Act
-        classifier.setup(force = true)
+        classifier.runLearning(force = true, setupOnly = true)
         // Assert
         val labelMap = classifier.getLabelInfoMap()
         assertThat(labelMap.keys).contains("[Label1]", "[Label2]", "[Label3]")
@@ -57,7 +57,7 @@ class VisionClassifierRepositoryTest : UnitTest() {
                 createBinary = null,
                 visionDirectory = "unitTestData/files/vision",
             )
-            classifier.setup(force = true)
+            classifier.runLearning(force = true, setupOnly = true)
         }.isInstanceOf(TestConfigException::class.java)
             .hasMessageStartingWith("Label directory is duplicated. A label can belong to only one directory. (label=[Label1], dirs=")
     }
@@ -141,7 +141,7 @@ class VisionClassifierRepositoryTest : UnitTest() {
             // Act
             val actual = v.getShardNodeCount(classifierName = "ScreenClassifier")
             // Assert
-            assertThat(actual).isEqualTo(3)
+            assertThat(actual).isEqualTo(1)
         }
         run {
             // Arrange
