@@ -3,6 +3,7 @@ package shirates.core.vision.result
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
+import shirates.core.vision.configration.repository.VisionClassifierRepository
 
 class ClassifyImageWithShardResult(
     val jsonString: String
@@ -62,4 +63,17 @@ class ClassifyImageWithShardResult(
     override fun toString(): String {
         return jsonString
     }
+
+    /**
+     * getCandidates
+     */
+    fun getCandidates(
+        count: Int = VisionClassifierRepository.defaultClassifier.shardCount
+    ): List<ClassifyImageResult.Classification> {
+
+        val list = classifyImageResults.flatMap { it.classifications }
+            .sortedByDescending { it.confidence }.take(count).filter { it.confidence > 0.1 }
+        return list
+    }
+
 }
