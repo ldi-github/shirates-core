@@ -221,12 +221,18 @@ class VisionClassifierShard(
         if (isLearningRequired().not()) {
             return
         }
+        val visionClassifierShardNodeCount = PropertiesManager.visionClassifierShardNodeCount
         if (this.buildClassifierShardDirectory.resolve("training").exists().not()) {
-            throw TestConfigException("Too few labels. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, visionClassifierShardNodeCount=${PropertiesManager.visionClassifierShardNodeCount})")
+            throw TestConfigException("Too few labels. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, visionClassifierShardNodeCount=$visionClassifierShardNodeCount)")
         }
         val labelCount = this.trainingDirectory.toPath().listDirectoryEntries().count()
         if (labelCount < 2) {
-            throw TestConfigException("Too few labels in training directory. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, labelCount=$labelCount, trainingDirectory=$trainingDirectory, visionClassifierShardNodeCount=${PropertiesManager.visionClassifierShardNodeCount})")
+            if (VisionClassifierRepository.getShardNodeCount(classifierName) == 1) {
+                TestLog.info("Learning skipped. Too few labels in training directory. Increase labels. (trainingDirectory=$trainingDirectory)")
+            } else {
+                TestLog.warn("Too few labels in training directory. Increase labels or decrease visionClassifierShardNodeCount. (classifierName=$classifierName, labelCount=$labelCount, trainingDirectory=$trainingDirectory, visionClassifierShardNodeCount=$visionClassifierShardNodeCount)")
+            }
+            return
         }
 
         val sw = StopWatch("learning [$classifierName]")
