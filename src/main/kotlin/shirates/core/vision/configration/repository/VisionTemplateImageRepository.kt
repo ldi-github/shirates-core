@@ -28,21 +28,14 @@ object VisionTemplateImageRepository {
             return templateImageMap[imageFile]!!
         }
 
-        val segmentContainer = SegmentContainer(
-            mergeIncluded = true,
-            containerImageFile = imageFile,
-            containerX = 0,
-            containerY = 0,
+        val image = SegmentContainer.getNormalizedImage(
+            imageFile = imageFile,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
-            aspectRatioTolerance = aspectRatioTolerance
-        ).split(segmentationPng = false)
-//            .saveImages()
-
-        val image = segmentContainer.segments.sortedByDescending { it.toRect().area }.firstOrNull()?.segmentImage
-            ?: return null
+            aspectRatioTolerance = aspectRatioTolerance,
+        ) ?: return null
         templateImageMap[imageFile] = image
 
         return image

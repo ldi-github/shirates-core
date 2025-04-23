@@ -829,6 +829,14 @@ class Selector(
     }
 
     /**
+     * getEscapedFileName
+     */
+    fun getEscapedFileName(): String {
+
+        return this.toString().replace(":", "_").replace("/", "_").replace("\\", "_")
+    }
+
+    /**
      * basePartExpression
      */
     val basePartExpression: String

@@ -2,6 +2,9 @@ package shirates.core.vision.driver
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
+import shirates.core.logging.TestLog
+import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.configration.repository.VisionClassifierRepository
@@ -22,12 +25,19 @@ fun VisionElement.classifyFull(
     if (this.image == null) {
         return ""
     }
+
+    val thisImageFileName = "${TestLog.currentLineNo}_${this.selector?.getEscapedFileName()}"
     if (this.imageFile == null) {
-        this.saveImage()
+        this.saveImage(thisImageFileName)
     }
 
+    val normalizedImage = SegmentContainer.getNormalizedImage(imageFile = this.imageFile!!)
+    val normalizedImageFile = normalizedImage!!.saveImage(
+        file = TestLog.directoryForLog.resolve("${thisImageFileName}_normalized").toString()
+    )
+
     val result = VisionServerProxy.classifyImageWithShard(
-        inputFile = this.imageFile!!,
+        inputFile = normalizedImageFile,
         classifierName = classifierName,
     )
     val classifierRepository = VisionClassifierRepository.getClassifier(classifierName)
@@ -47,7 +57,7 @@ fun VisionElement.classifyFull(
         val label = LabelUtility.getShortLabel(fullLabel = fullLabel)
         val files = classifierRepository.getFiles(label = label)
         for (file in files) {
-            val distanceResult = VisionServerProxy.getDistance(imageFile1 = file, imageFile2 = this.imageFile!!)
+            val distanceResult = VisionServerProxy.getDistance(imageFile1 = file, imageFile2 = normalizedImageFile)
             val labelDistance = LabelDistance(label = label, fullLabel = fullLabel, distanceResult = distanceResult)
             distanceList.add(labelDistance)
         }
