@@ -1,6 +1,7 @@
 package shirates.core.configuration
 
 import shirates.core.exception.TestDriverException
+import shirates.spec.utilily.getGroupValue
 
 /**
  * isValidNickname
@@ -43,4 +44,16 @@ fun String.getNicknameWithoutSuffix(): String {
         return ""
     }
     return this.substring(0, index + 1)
+}
+
+/**
+ * findNickname
+ */
+fun String.findNickname(): String? {
+
+    val nickname = this.getGroupValue(".*(\\[.*]).*".toRegex())
+    if (nickname.isNotBlank()) {
+        return nickname
+    }
+    return null
 }

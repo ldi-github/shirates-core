@@ -459,7 +459,7 @@ fun VisionDrive.dontExistWithoutScroll(
  */
 fun VisionDrive.existImage(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     skinThickness: Int = 2,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
@@ -511,7 +511,7 @@ fun VisionDrive.existImage(
  */
 fun VisionDrive.existImageWithoutScroll(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     skinThickness: Int = 2,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
@@ -547,7 +547,7 @@ fun VisionDrive.existImageWithoutScroll(
  */
 fun VisionDrive.dontExistImage(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -598,7 +598,7 @@ fun VisionDrive.dontExistImage(
  */
 fun VisionDrive.dontExistImageWithoutScroll(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -628,7 +628,7 @@ fun VisionDrive.dontExistImageWithoutScroll(
  */
 fun VisionDrive.existImageWithScrollDown(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
@@ -660,7 +660,7 @@ fun VisionDrive.existImageWithScrollDown(
  */
 fun VisionDrive.existImageWithScrollUp(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,

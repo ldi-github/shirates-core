@@ -167,7 +167,7 @@ class SpecReport_ifCanSelectTest : UITest() {
                 id = 2,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 if can select [Network & internet] {
   - in ifCanSelect
@@ -310,7 +310,7 @@ if else {
                 id = 5,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 if can select [Network & internet] {
   - in ifCanSelect

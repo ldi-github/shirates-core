@@ -2,17 +2,21 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.appIs
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
-import shirates.core.logging.*
+import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.classicScope
-import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.driver.*
 
@@ -21,7 +25,8 @@ internal fun VisionDrive.checkImageLabelContains(
     message: String,
     classifierName: String,
     waitSeconds: Double,
-    fullLabel: Boolean
+    fullLabel: Boolean,
+    threshold: Double
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -39,11 +44,11 @@ internal fun VisionDrive.checkImageLabelContains(
         }
     ) {
         if (fullLabel) {
-            val label = v.classifyFull(classifierName = classifierName)
-            printInfo("fullLabel: $label")
-            result = label == containedText
+            val fullLabel = v.classifyFull(classifierName = classifierName, threshold = threshold)
+            printInfo("fullLabel: $fullLabel")
+            result = fullLabel == containedText
         } else {
-            val label = v.classify(classifierName = classifierName)
+            val label = v.classify(classifierName = classifierName, threshold = threshold)
             printInfo("label: $label")
             result = label.contains(containedText)
         }
@@ -64,6 +69,7 @@ internal fun VisionDrive.checkIsCore(
     message: String,
     classifierName: String,
     waitSeconds: Double,
+    threshold: Double
 ): VisionElement {
 
     return checkImageLabelContains(
@@ -71,7 +77,8 @@ internal fun VisionDrive.checkIsCore(
         message = message,
         classifierName = classifierName,
         waitSeconds = waitSeconds,
-        fullLabel = false
+        fullLabel = false,
+        threshold = threshold
     )
 }
 
@@ -199,18 +206,18 @@ fun VisionDrive.screenIs(
         return e.toVisionElement()
     }
 
-    if (TestMode.isNoLoadRun.not() && VisionScreenRepository.isRegistered(screenName).not()) {
-        throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
-    }
-
     val command = "screenIs"
     val assertMessage = message ?: message(id = command, subject = screenName)
 
-    var verifyFuncException: Throwable? = null
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
         TestDriver.currentScreen = "?"
+
+        if (isScreenRegistered(screenName = screenName).not()) {
+            throw TestConfigException("screenName is not registered in ScreenClassifier. (screenName=$screenName)")
+        }
+
         var match = isScreen(screenName = screenName)
         if (match.not()) {
             doUntilTrue(

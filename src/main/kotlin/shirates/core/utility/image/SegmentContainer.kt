@@ -72,6 +72,38 @@ class SegmentContainer(
         return "segments: ${segments.count()} $segments"
     }
 
+    companion object {
+
+        /**
+         * getNormalizedImage
+         */
+        fun getNormalizedImage(
+            imageFile: String,
+            segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+            segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+            skinThickness: Int = 2,
+            binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+            aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+        ): BufferedImage? {
+
+            val segmentContainer = SegmentContainer(
+                mergeIncluded = true,
+                containerImageFile = imageFile,
+                containerX = 0,
+                containerY = 0,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
+                skinThickness = skinThickness,
+                binaryThreshold = binaryThreshold,
+                aspectRatioTolerance = aspectRatioTolerance
+            ).split(segmentationPng = false)
+
+            val image = segmentContainer.segments.maxByOrNull { it.toRect().area }?.segmentImage
+                ?: return null
+            return image
+        }
+    }
+
     /**
      * addSegment
      */

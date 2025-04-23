@@ -170,6 +170,7 @@ object Const {
     const val VISION_FIND_IMAGE_ASPECT_RATIO_TOLERANCE = 0.2
     const val VISION_SYNC_IMAGE_MATCH_RATE = 0.995
     const val VISION_TEXT_INDEX_TRIM_CHARS_FOR_JA = " '・■▪️◾️◎、,-」"
+    const val VISION_CLASSIFIER_SHARD_NODE_COUNT = "DefaultClassifier=1:ScreenClassifier=1"
 
     /**
      * internal

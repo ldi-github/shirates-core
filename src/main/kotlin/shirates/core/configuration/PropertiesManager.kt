@@ -1115,11 +1115,18 @@ object PropertiesManager {
      */
     val visionSyncImageMatchRate: Double
         get() {
-            return getPropertyValue(
-                propertyName = "" +
-                        "visionSyncImageMatchRate"
-            )?.toDoubleOrNull()
+            return getPropertyValue(propertyName = "visionSyncImageMatchRate")?.toDoubleOrNull()
                 ?: Const.VISION_SYNC_IMAGE_MATCH_RATE
+        }
+
+    /**
+     * visionClassifierShardNodeCount
+     */
+    val visionClassifierShardNodeCount: String
+        get() {
+            val value = getPropertyValue(propertyName = "visionClassifierShardNodeCount")
+                ?: return Const.VISION_CLASSIFIER_SHARD_NODE_COUNT
+            return value
         }
 
     // Custom --------------------------------------------------

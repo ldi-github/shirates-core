@@ -2006,6 +2006,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionClassifierShardNodeCount() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionClassifierShardNodeCount).isEqualTo(Const.VISION_CLASSIFIER_SHARD_NODE_COUNT)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_CLASSIFIER_SHARD_NODE_COUNT
+            PropertiesManager.setPropertyValue("visionClassifierShardNodeCapacity", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionClassifierShardNodeCount).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {

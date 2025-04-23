@@ -31,7 +31,6 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.batch.CreateMLUtility
-import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.configration.repository.VisionTextIndexRepository
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
@@ -369,12 +368,9 @@ abstract class UITestBase : Drive {
                 // MacroRepository
                 MacroRepository.setup()
 
-                if (isRunningOnMacOS) {
+                if (isRunningOnMacOS && TestMode.isVisionTest) {
                     // run learning
                     CreateMLUtility.runLearning()
-
-                    // setup mlmodel repository
-                    VisionMLModelRepository.setup()
 
                     // setup textReplacement repository
                     VisionTextReplacementRepository.setup()

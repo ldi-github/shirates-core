@@ -5,7 +5,8 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 
 class ClassifyScreenResult(
-    val jsonString: String
+    val jsonString: String,
+    val shardID: Int
 ) {
     var classifications = mutableListOf<Classification>()
 
@@ -36,7 +37,7 @@ class ClassifyScreenResult(
             val jso = jsonArray.getJSONObject(i)
             val identifier = jso.getString("identifier")
             val confidence = jso.getFloat("confidence")
-            val classification = Classification(identifier = identifier, confidence = confidence)
+            val classification = Classification(identifier = identifier, confidence = confidence, shardID = shardID)
             classifications.add(classification)
         }
     }
@@ -48,9 +49,10 @@ class ClassifyScreenResult(
     class Classification(
         val identifier: String,
         val confidence: Float,
+        val shardID: Int
     ) {
         override fun toString(): String {
-            return "identifier $identifier, confidence $confidence"
+            return "identifier=$identifier, confidence=$confidence, shardID=$shardID"
         }
     }
 }

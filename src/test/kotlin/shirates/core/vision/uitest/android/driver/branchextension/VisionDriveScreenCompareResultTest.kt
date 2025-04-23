@@ -1,10 +1,11 @@
 package shirates.core.vision.uitest.android.driver.branchextension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.logging.TestLog
+import shirates.core.exception.TestConfigException
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.branchextension.android
 import shirates.core.vision.driver.branchextension.result.VisionDriveScreenCompareResult
@@ -128,10 +129,12 @@ class VisionDriveScreenCompareResultTest : VisionTest() {
             case(5) {
                 expectation {
                     val result = VisionDriveScreenCompareResult()
-                    result.ifScreenIs("[not exist screen]") {
-                        NG("never called")
-                    }
-                    assertThat(TestLog.lastTestLog?.message).startsWith("screenName '[not exist screen]' is not registered in ")
+                    assertThatThrownBy {
+                        result.ifScreenIs("[not exist screen]") {
+                            NG("never called")
+                        }
+                    }.isInstanceOf(TestConfigException::class.java)
+                        .hasMessage("screenName is not registered in ScreenClassifier. (screenName=[not exist screen])")
                 }
             }
         }

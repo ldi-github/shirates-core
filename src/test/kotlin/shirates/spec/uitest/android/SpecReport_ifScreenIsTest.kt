@@ -169,7 +169,7 @@ class SpecReport_ifScreenIsTest : UITest() {
                 id = 2,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 if screen is [Android Settings Top Screen] {
   - in ifScreenIs
@@ -352,7 +352,7 @@ if else {
                 id = 6,
                 step = "1",
                 condition = """
-- Launch app <Settings>
+- Launch <Settings>
 - [Android Settings Top Screen] is displayed
 if screen is [Android Settings Top Screen] {
   - in ifScreenIs

@@ -1,127 +1,300 @@
 package shirates.core.vision.configration.repository
 
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestMode
-import shirates.core.driver.TestMode.isAndroid
+import okio.FileNotFoundException
+import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.printInfo
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
 import shirates.core.utility.toPath
 import java.nio.file.Files
+import java.security.MessageDigest
 import kotlin.io.path.name
 
-class VisionClassifierRepository {
-
-    var imageClassifierDirectory = ""
-    val labelMap = mutableMapOf<String, LabelFileInfo>()
+object VisionClassifierRepository {
 
     /**
-     * classifierName
+     * classifierMap
      */
-    val classifierName: String
+    val classifierMap = mutableMapOf<String, VisionClassifier>()
+
+    /**
+     * visionDirectory
+     */
+    var visionDirectory: String
         get() {
-            return imageClassifierDirectory.toPath().name
+            if (_visionDirectory != null) return _visionDirectory!!
+            return PropertiesManager.visionDirectory
+        }
+        set(value) {
+            _visionDirectory = value
+        }
+    private var _visionDirectory: String? = null
+
+    /**
+     * createBinary
+     */
+    var createBinary: Boolean? = null
+
+    /**
+     * buildVisionDirectory
+     */
+    var buildVisionDirectory: String
+        get() {
+            if (_buildVisionDirectory != null) return _buildVisionDirectory!!
+            return PropertiesManager.visionBuildDirectory.resolve("vision")
+        }
+        set(value) {
+            _buildVisionDirectory = value
+        }
+    private var _buildVisionDirectory: String? = null
+
+    /**
+     * buildClassifiersDirectory
+     */
+    val buildClassifiersDirectory: String
+        get() {
+            return "$buildVisionDirectory/classifiers"
         }
 
     /**
-     * setup
+     * visionClassifiersDirectory
      */
-    fun setup(imageClassifierDirectory: String) {
-
-        this.imageClassifierDirectory = imageClassifierDirectory.toPath().toString()
-        labelMap.clear()
-
-        if (Files.exists(this.imageClassifierDirectory.toPath()).not()) {
-            return
+    val visionClassifiersDirectory: String
+        get() {
+            return visionDirectory.resolve("classifiers")
         }
 
-        this.imageClassifierDirectory.toPath().toFile().walkTopDown().forEach {
-            if (it.extension == "png" || it.extension == "jpg") {
-                val label = it.toPath().parent.name
-                if (labelMap.containsKey(label).not()) {
-                    labelMap[label] = LabelFileInfo(
-                        label = label,
-                        imageClassifierDirectory = this.imageClassifierDirectory
-                    )
-                }
-                val file = it.toString()
-                if (file.toPath().parent.parent.name != "test") {
-                    val labelFiles = labelMap[label]!!
-                    labelFiles.files.add(it.toString())
-//                    println("label: $label, file: $it")
-                }
-            }
+    /**
+     * defaultClassifier
+     */
+    val defaultClassifier: VisionClassifier
+        get() {
+            return getClassifier("DefaultClassifier")
+        }
+
+    /**
+     * screenClassifier
+     */
+    val screenClassifier: VisionClassifier
+        get() {
+            return getClassifier("ScreenClassifier")
+        }
+
+    /**
+     * buttonStateClassifier
+     */
+    val buttonStateClassifier: VisionClassifier
+        get() {
+            return getClassifier("ButtonStateClassifier")
+        }
+
+    /**
+     * checkStateClassifier
+     */
+    val checkStateClassifier: VisionClassifier
+        get() {
+            return getClassifier("CheckStateClassifier")
+        }
+
+//    /**
+//     * radioButtonStateClassifier
+//     */
+
+//    /**
+//     * switchStateClassifier
+//     */
+
+    /**
+     * clear
+     */
+    fun clear() {
+
+        classifierMap.clear()
+        visionDirectory = ""
+    }
+
+    /**
+     * runLearning
+     */
+    fun runLearning(
+        visionDirectory: String,
+        classifierName: String,
+        createBinary: Boolean?,
+        force: Boolean = false,
+        setupOnly: Boolean = false,
+    ): VisionClassifier {
+        this.visionDirectory = visionDirectory
+        this.createBinary = createBinary
+
+        /**
+         * Setup classifier
+         */
+        val classifier = createClassifier(
+            classifierName = classifierName,
+            createBinary = createBinary,
+        )
+        if (setupOnly) {
+            return classifier
         }
 
         /**
-         * Check label duplication
+         * Run learning
          */
-        for (label in labelMap.keys) {
-            val files = labelMap[label]!!.files
-            val dirs = files.map { it.toPath().parent }.distinct()
-            if (dirs.count() > 1) {
-                val duplicated = dirs.joinToString(", ")
-                throw TestConfigException("Label directory is duplicated. A label can be belong to only one directory. (label=$label, dirs=$duplicated)")
-            }
-        }
+        classifier.runLearning(force = force)
 
-        val classifierName = imageClassifierDirectory.toPath().name
-        printInfo("Classifier files loaded.($classifierName, ${labelMap.keys.count()} labels, directory=$imageClassifierDirectory)")
+        return classifier
     }
 
     /**
-     * getFiles
+     * createClassifier
      */
-    fun getFiles(label: String): List<String> {
+    fun createClassifier(
+        classifierName: String,
+        createBinary: Boolean?,
+        visionDirectory: String? = null,
+        buildVisionDirectory: String? = null,
+    ): VisionClassifier {
+        this.createBinary = createBinary
+        if (visionDirectory != null) {
+            this.visionDirectory = visionDirectory
+        }
+        if (buildVisionDirectory != null) {
+            this.buildVisionDirectory = buildVisionDirectory
+        }
+        if (this.visionDirectory.exists().not()) {
+            throw FileNotFoundException("vision directory not found. (visionDirectory=$visionDirectory)")
+        }
+        if (Files.exists(buildClassifiersDirectory.toPath()).not()) {
+            buildClassifiersDirectory.toFile().mkdirs()
+        }
 
-        val keys = labelMap.keys.filter { it.endsWith(label) }
-        if (keys.isEmpty()) {
-            return listOf()
+        if (classifierMap.containsKey(classifierName).not()) {
+            classifierMap[classifierName] =
+                VisionClassifier(classifierName = classifierName, visionClassifierRepository = this)
         }
-        val files = mutableListOf<String>()
-        for (key in keys) {
-            val items = labelMap[key]!!.files.filter { it.toPath().name.contains("_binary.").not() }
-            files.addAll(items)
-        }
-        return files
+        val classifier = classifierMap[classifierName]!!
+
+        return classifier
+    }
+
+
+    /**
+     * hasClassifier
+     */
+    fun hasClassifier(classifierName: String): Boolean {
+
+        return classifierMap.containsKey(classifierName)
     }
 
     /**
-     * getFile
+     * getClassifierNames
      */
-    fun getFile(label: String): String? {
+    fun getClassifierNames(
+        visionDirectory: String
+    ): List<String> {
 
-        val files = getFiles(label = label)
-        val platformSymbol = if (isAndroid) "@a." else "@i."
-        val file = files.firstOrNull() {
-            it.toPath().name.contains(platformSymbol) ||
-                    it.toPath().toString().replace("\\", "").contains("/@a{platformSymbol}/")
-        }
-        if (file != null) {
-            return file
-        }
-        val currentScreen = TestDriver.currentScreen
-        if (currentScreen.isNotBlank() && currentScreen != "?") {
-            val filesInScreen = files.filter { it.toPath().toString().contains(currentScreen) }
-            if (filesInScreen.isNotEmpty()) {
-                return filesInScreen.first()
-            }
-        }
-        return files.firstOrNull()
+        val dirs = visionDirectory.resolve("classifiers").toPath().toFile().walkTopDown()
+            .filter { it.name.endsWith("Classifier.swift") }.map { it.parentFile.toString() }.toList()
+        return dirs.map { it.toPath().name }
     }
 
-    class LabelFileInfo(
-        val label: String,
-        val imageClassifierDirectory: String,
-        val files: MutableList<String> = mutableListOf(),
+    /**
+     * getClassifier
+     */
+    fun getClassifier(
+        classifierName: String
+    ): VisionClassifier {
+        if (classifierMap.containsKey(classifierName).not()) {
+            throw TestConfigException("Classifier not found. (classifierName=$classifierName, buildClassifiersDirectory=$buildClassifiersDirectory)")
+        }
+        return classifierMap[classifierName]!!
+    }
+
+    /**
+     * getClassifiers
+     */
+    fun getClassifiers(): List<VisionClassifier> {
+
+        return classifierMap.values.toList()
+    }
+
+    private fun printLastLearningResultOnWarning(
+        classifierName: String
     ) {
-        val primaryFile: String?
-            get() {
-                val annotation = TestMode.platformAnnotation
-                val annotatedFile = files.firstOrNull() { it.toPath().name.contains(annotation) }
-                if (annotatedFile != null) {
-                    return annotatedFile
-                }
-                return files.firstOrNull()
+        val logFile = buildClassifiersDirectory.resolve(classifierName).resolve("createML.log")
+        if (logFile.exists()) {
+            val content = logFile.toFile().readText()
+            val accuracy100 = checkAccuracy(content = content)
+            if (accuracy100.not()) {
+                println(content)
             }
+        }
     }
+
+    internal fun checkAccuracy(content: String): Boolean {
+
+        val accuracy100 = content.contains("Accuracy: 100.00%")
+        if (accuracy100.not()) {
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            printInfo("!!                                                                  !!")
+            printInfo("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
+            printInfo("!!                                                                  !!")
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
+        return accuracy100
+    }
+
+    /**
+     * getShardNodeCount
+     */
+    fun getShardNodeCount(
+        classifierName: String
+    ): Int {
+
+        val visionClassifierShardNodeCount = PropertiesManager.visionClassifierShardNodeCount
+        val count = visionClassifierShardNodeCount.toIntOrNull()
+        if (count != null) {
+            return count
+        }
+
+        if (classifierName.isBlank()) {
+            return 1
+        }
+
+        val tokens = visionClassifierShardNodeCount.split(",", ";", ":")
+        val nameValue = tokens.firstOrNull() { it.contains(classifierName) }?.split("=")
+        if (nameValue == null) {
+            return 1
+        }
+        if (nameValue.count() < 2) {
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
+        }
+        val value = nameValue[1].toIntOrNull()
+        if (value == null) {
+            throw TestConfigException("visionClassifierShardNodeCount is invalid. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
+        }
+        if (value < 1) {
+            throw TestConfigException("visionClassifierShardNodeCount must be greater than 0. (visionClassifierShardNodeCount: $visionClassifierShardNodeCount)")
+        }
+
+        return value
+    }
+
+    /**
+     * getShardID
+     */
+    fun getShardID(
+        classifierName: String,
+        label: String,
+    ): Int {
+
+        val md5 = MessageDigest.getInstance("MD5")
+        val hashBytes = md5.digest(label.toByteArray())
+        val hashValue = hashBytes.fold(0) { acc, byte -> (acc shl 8) + (byte.toInt() and 0xFF) }
+        val shardNodeCount = getShardNodeCount(classifierName = classifierName)
+        return Math.abs(hashValue) % shardNodeCount + 1
+    }
+
 }

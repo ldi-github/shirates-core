@@ -1,6 +1,8 @@
 package shirates.spec.code.custom
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.findNickname
+import shirates.core.configuration.isElementExpression
 import shirates.core.logging.Message
 import shirates.core.logging.Message.message
 import shirates.core.logging.MessageRecord
@@ -48,16 +50,16 @@ interface Translator {
     ): String {
 
         /**
-         * "[*Screen]"
+         * Contains "[*Screen]" or "[*Screen(something)]"
          */
+        val msg = formatArg(message)
+        val nickname = msg.findNickname() ?: return ""
+
         for (keyword in Keywords.screenKeywords) {
-            val msg = formatArg(message)
-            val screenNickname = msg.getGroupValue(".*(\\[.*$keyword]).*".toRegex())
-            if (screenNickname.isNotBlank()) {
-                return screenNickname
+            if (nickname.contains(keyword)) {
+                return nickname
             }
         }
-
         return ""
     }
 
@@ -108,11 +110,12 @@ interface Translator {
     fun messageToFunction(message: String, defaultFunc: String = "manual"): String {
 
         val screenNickname = getScreenNickName(message)
-
-        if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
+        if (screenNickname.isNotBlank()) {
             return "screenIs(\"$screenNickname\")"
         }
-
+        if (message.isDisplayedAssertion) {
+            return "manual(\"$message\")"
+        }
         if (defaultFunc == "macro") {
             val arg = formatArg(message)
             return "$defaultFunc(\"[$arg]\")"
@@ -122,10 +125,11 @@ interface Translator {
          * Match with message master
          */
         val matchedFunction = matchWithMessageMaster(message = message)
-        if (matchedFunction.hasBracket()) {
-            if (matchedFunction.startsWith("screenIs").not()) {
-                return matchedFunction
-            }
+        if (matchedFunction.isBlank()) {
+            return "manual(\"$message\")"
+        }
+        if (matchedFunction.isNotBlank()) {
+            return matchedFunction
         }
 
         val msg = escapeForCode(message)
@@ -141,7 +145,8 @@ interface Translator {
         val codeMap = Message.getMessageMap("code")
         val candidates = mutableMapOf<MessageRecord, String>()
 
-        for (key in codeMap.keys) {
+        val keys = codeMap.keys.sortedByDescending { it.length }
+        for (key in keys) {
             val code = codeMap[key]!!
             if (code.message.isBlank() || code.message == "-") {
                 continue
@@ -164,17 +169,21 @@ interface Translator {
                 map["id"] = code.id
                 for (i in 1 until m.groupValues.count()) {
                     val name = groupValues[i - 1].get(1)
-                    val value = escapeForCode(m.groupValues[i])
+                    var value = escapeForCode(m.groupValues[i])
+                    if (value.isElementExpression()) {
+                        value = value.trimStart('<').trimEnd('>')
+                    }
                     map[name] = value
                 }
                 val result = message(map)
                 if (result.contains("InCell").not()) {
                     candidates[code] = result
+                    break
                 }
             }
         }
 
-        val key = candidates.keys.sortedBy { it.id.length }.lastOrNull() ?: return ""
+        val key = candidates.keys.maxByOrNull { it.id.length } ?: return ""
         val result = candidates[key]!!
         return result
     }
@@ -253,11 +262,16 @@ interface Translator {
         if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
             return "exist(\"$subject\")"
         }
-        if (message.endsWith("]") || message.endsWith(">")) {
+        if (message.endsWith("]")) {
             return "exist(\"$message\")"
         }
+        if (message.endsWith(">")) {
+            val s = message.trimStart('<').trimEnd('>')
+            return "exist(\"$s\")"
+        }
 
-        return messageToFunction(message = message, defaultFunc = defaultFunc)
+        val msg = messageToFunction(message = message, defaultFunc = defaultFunc)
+        return msg
     }
 
     /**

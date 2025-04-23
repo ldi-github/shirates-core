@@ -16,6 +16,7 @@ import shirates.core.utility.file.toFile
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
+import shirates.core.vision.configration.repository.VisionClassifierRepository
 import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -79,6 +80,9 @@ object VisionServerProxy {
         if (Files.exists(inputFile.toPath()).not()) {
             throw IllegalArgumentException("file not found: $inputFile.")
         }
+        if (Files.exists(mlmodelFile.toPath()).not()) {
+            throw IllegalArgumentException("file not found: $mlmodelFile.")
+        }
 
         val sw = StopWatch("ScreenClassifier/classifyScreen")
 
@@ -103,7 +107,54 @@ object VisionServerProxy {
         file.toFile().writeText(jsonString)
 
         sw.stop()
-        return ClassifyScreenResult(jsonString)
+        return ClassifyScreenResult(jsonString = jsonString, shardID = 0)
+    }
+
+    /**
+     * classifyScreenWithShard
+     */
+    fun classifyScreenWithShard(
+        inputFile: String,
+        classifierDirectory: String = PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/ScreenClassifier"),
+        shardCount: Int = VisionClassifierRepository.getShardNodeCount(classifierName = "ScreenClassifier")
+    ): ClassifyScreenWithShardResult {
+
+        if (Files.exists(inputFile.toPath()).not()) {
+            throw IllegalArgumentException("file not found: $inputFile.")
+        }
+        if (Files.exists(classifierDirectory.toPath()).not()) {
+            throw IllegalArgumentException("directory not found: $classifierDirectory.")
+        }
+
+        val sw = StopWatch("ScreenClassifier/classifyScreenWithShard")
+
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ScreenClassifier/classifyScreenWithShard").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "inputFile",
+            value = inputFile.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "classifierDirectory",
+            value = classifierDirectory.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "shardCount",
+            value = shardCount.toString()
+        )
+
+        val url = urlBuilder.build()
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
+
+        val name = inputFile.toFile().name
+        val file =
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$name]_ScreenClassifier_classifyScreenWithShard.json")
+        file.parent.toFile().mkdirs()
+        file.toFile().writeText(jsonString)
+
+        sw.stop()
+        return ClassifyScreenWithShardResult(jsonString)
     }
 
 //    /**
@@ -385,6 +436,48 @@ object VisionServerProxy {
 
         sw.stop()
         return ClassifyImageResult(jsonString = result)
+    }
+
+    /**
+     * classifyImage
+     */
+    fun classifyImageWithShard(
+        inputFile: String,
+        classifierName: String = "DefaultClassifier",
+        classifierDirectory: String = PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName"),
+        shardCount: Int = VisionClassifierRepository.getShardNodeCount(classifierName = classifierName),
+        log: Boolean = CodeExecutionContext.shouldOutputLog,
+    ): ClassifyImageWithShardResult {
+
+        val sw = StopWatch("ImageClassifier/classifyImageWithShard")
+
+        if (inputFile.exists().not()) {
+            throw FileNotFoundException("Input file not found. (inputFile=$inputFile)")
+        }
+        if (classifierDirectory.exists().not()) {
+            throw FileNotFoundException("classifierDirectory file not found. (classifierDirectory=$classifierDirectory)")
+        }
+
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageClassifier/classifyImageWithShard").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "input",
+            value = inputFile.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "classifierDirectory",
+            value = classifierDirectory.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "shardCount",
+            value = shardCount.toString()
+        )
+        val url = urlBuilder.build()
+        val result = getResponseBody(url)
+        lastJsonString = result
+
+        sw.stop()
+        return ClassifyImageWithShardResult(jsonString = result)
     }
 
     /**

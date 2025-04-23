@@ -70,7 +70,7 @@ class TestFixtureEvent1 : VisionTest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
 
-        context.irregularHandler = {}
+        printEvent("setEventHandlers")
     }
 
     @Test
@@ -126,17 +126,17 @@ AppiumDriver: available
 ...
 [afterAll] --------------------------------------------------
 AppiumDriver: available
-139	[00:00:25]	2025/02/07 16:39:05.030	{}	0	-	[info]	+1009	C	()	ログは次の場所に出力します。 file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/
-Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1
-Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1
-Loading: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/TestLog(commandList)_20250207163839.log
-Saved: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/TestFixtureEvent1@a.xlsx
+267	[00:02:42]	2025/04/24 03:55:27.699	{}	0	-	[info]	+1028	C	()	ログは次の場所に出力します。 file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035245/TestFixtureEvent1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035245/TestFixtureEvent1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035245/TestFixtureEvent1
+Loading: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035245/TestFixtureEvent1/TestLog(commandList)_20250424035245.log
+Saved: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035245/TestFixtureEvent1/TestFixtureEvent1@a.xlsx
 
-140	[00:00:26]	2025/02/07 16:39:05.958	{}	0	-	[info]	+928	C	()	Quitting TestDriver.
-141	[00:00:26]	2025/02/07 16:39:06.091	{}	0	-	[info]	+133	C	()	テストクラスの実行が完了しました。(処理時間: 26.6 sec)
+268	[00:02:43]	2025/04/24 03:55:28.820	{}	0	-	[info]	+1121	C	()	Quitting TestDriver.
+269	[00:02:44]	2025/04/24 03:55:29.373	{}	0	-	[info]	+553	C	()	テストクラスの実行が完了しました。(処理時間: 164.2 sec)
 [finally] --------------------------------------------------
 AppiumDriver: NOT available
-Disconnected from the target VM, address: '127.0.0.1:55727', transport: 'socket'
+Disconnected from the target VM, address: '127.0.0.1:56827', transport: 'socket'
 
 Process finished with exit code 0
 ```

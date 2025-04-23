@@ -58,27 +58,14 @@ object ScreenRecognizer {
             }
         }
 
-        /**
-         * Get screen candidates from current screen image
-         */
-        val mlmodelFile: String =
-            PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
-        val classifyScreenResult = VisionServerProxy.classifyScreen(
+        val classifierDirectory = PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName")
+        val classifyScreenResult = VisionServerProxy.classifyScreenWithShard(
             inputFile = screenImageFile,
-            mlmodelFile = mlmodelFile,
+            classifierDirectory = classifierDirectory,
         )
-        val screenCandidates = classifyScreenResult.classifications.filter { it.confidence > 0.1 }
+        val screenCandidates = classifyScreenResult.getCandidates()
         if (screenCandidates.isEmpty()) {
             return "?"
-        }
-        /**
-         * Determine the screen name if confidence == 1.0
-         */
-        for (candidate in screenCandidates) {
-            val screenName = LabelUtility.getShortLabel(candidate.identifier).getNicknameWithoutSuffix()
-            if (candidate.confidence == 1.0f) {
-                return screenName
-            }
         }
         /**
          * Determine the screen name with screenPredicate
@@ -166,7 +153,8 @@ object ScreenRecognizer {
 
         val list = mutableListOf<ScreenRecognizedTextMatchingInfo>()
         for (screenLabel in screenLabels) {
-            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenLabel)
+            val screenName = LabelUtility.getShortLabel(screenLabel).getNicknameWithoutSuffix()
+            val screenEntry = VisionScreenRepository.getScreenEntry(screenName = screenName)
             var r = screenEntry.recognizeTextResult
             if (r == null) {
                 screenEntry.recognizeTextResult =
@@ -221,6 +209,11 @@ object ScreenRecognizer {
             get() {
                 return LabelUtility.getShortLabel(screenLabel)
             }
+
+        override fun toString(): String {
+
+            return "shortScreenLabel=$shortScreenLabel, totalTextCount=$totalTextCount matchScore=$matchScore, matchTextCountRate=$matchTextCountRate, screenLabel=$screenLabel"
+        }
 
         /**
          * matchWith
