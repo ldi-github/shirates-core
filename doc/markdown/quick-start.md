@@ -178,7 +178,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 4. Select `Pixcel 8` and click `Next`.<br>
    ![](classic/_images/create_avd_2.png)
 5. Set fields.<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>**Services**
-   `Google Play Store`<br>**System Image** (Select the item)
+   `Google Play Store`<br>**System Image** (Select the item)<br>
    ![](classic/_images/create_avd_3.png)
 6. Click `Additional settings`. <br>Set **Device skin** `[None]`. <br>Click `Finish`.<br>
    ![](classic/_images/create_avd_4.png)

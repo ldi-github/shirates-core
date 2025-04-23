@@ -76,13 +76,13 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
 
 ![](_images/full_label_and_label.png)
 
-`fullLabel` is the full description of the label.
+**fullLabel** is the full description of the label.
 
 ```
 @a_Android Settings_Android Settings Top Screen_[Network & internet Icon]
 ```
 
-`label` is the short description.
+**label** is the short description.
 
 ```
 [Network & internet Icon]

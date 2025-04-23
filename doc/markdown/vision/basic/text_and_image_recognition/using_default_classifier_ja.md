@@ -72,17 +72,17 @@ TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)に�
 
 ### fullLabel と label
 
-ディレクトリ`build/vision/classifiers/DefaultClassifier/training`を開きます。
+ディレクトリ`build/vision/classifiers/DefaultClassifier/1/training`を開きます。
 
 ![](_images/full_label_and_label_ja.png)
 
-`fullLabel` ラベルの完全な記述です。
+**fullLabel** はラベルの完全な記述です。
 
 ```
 @a_Android設定_Android設定トップ画面_[ネットワークとインターネットアイコン]
 ```
 
-`label` は短い記述です。
+**label** は短い記述です。
 
 ```
 [ネットワークとインターネットアイコン]
