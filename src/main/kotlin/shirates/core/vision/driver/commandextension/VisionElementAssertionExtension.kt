@@ -63,6 +63,7 @@ fun VisionElement.textIs(
  */
 fun VisionElement.imageIs(
     label: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "DefaultClassifier",
     waitSeconds: Double = testContext.syncWaitSeconds,
     message: String? = null,
@@ -80,7 +81,8 @@ fun VisionElement.imageIs(
             message = assertMessage,
             classifierName = classifierName,
             waitSeconds = waitSeconds,
-            fullLabel = false
+            fullLabel = false,
+            threshold = threshold
         )
     }
     return this
@@ -91,6 +93,7 @@ fun VisionElement.imageIs(
  */
 fun VisionElement.imageFullLabelIs(
     label: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "DefaultClassifier",
     waitSeconds: Double = testContext.syncWaitSeconds,
     message: String? = null,
@@ -108,7 +111,8 @@ fun VisionElement.imageFullLabelIs(
             message = assertMessage,
             classifierName = classifierName,
             waitSeconds = waitSeconds,
-            fullLabel = true
+            fullLabel = true,
+            threshold = threshold
         )
     }
     return this
@@ -118,6 +122,7 @@ fun VisionElement.imageFullLabelIs(
  * checkIsON
  */
 fun VisionElement.checkIsON(
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "CheckStateClassifier",
     containedText: String = "[ON]",
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -133,7 +138,8 @@ fun VisionElement.checkIsON(
             containedText = containedText,
             message = assertMessage,
             classifierName = classifierName,
-            waitSeconds = waitSeconds
+            waitSeconds = waitSeconds,
+            threshold = threshold
         )
     }
     return this
@@ -143,6 +149,7 @@ fun VisionElement.checkIsON(
  * checkIsOFF
  */
 fun VisionElement.checkIsOFF(
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "CheckStateClassifier",
     containedText: String = "[OFF]",
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -158,7 +165,8 @@ fun VisionElement.checkIsOFF(
             containedText = containedText,
             message = assertMessage,
             classifierName = classifierName,
-            waitSeconds = waitSeconds
+            waitSeconds = waitSeconds,
+            threshold = threshold
         )
     }
     return this
@@ -169,6 +177,7 @@ fun VisionElement.checkIsOFF(
  */
 fun VisionElement.buttonStateIs(
     expectedLabel: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     waitSeconds: Double = testContext.syncWaitSeconds,
     classifierName: String = "ButtonStateClassifier",
     message: String? = null,
@@ -185,7 +194,8 @@ fun VisionElement.buttonStateIs(
             message = assertMessage,
             waitSeconds = waitSeconds,
             classifierName = classifierName,
-            fullLabel = false
+            fullLabel = false,
+            threshold = threshold
         )
     }
     return this
@@ -477,7 +487,7 @@ fun VisionElement.existOnBelow(
  */
 fun VisionElement.existImageOnLine(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
@@ -538,7 +548,7 @@ fun VisionElement.existImageOnLine(
  */
 fun VisionElement.existImageOnColumn(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,
@@ -599,7 +609,7 @@ fun VisionElement.existImageOnColumn(
  */
 fun VisionElement.existImageOnLeft(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
@@ -660,7 +670,7 @@ fun VisionElement.existImageOnLeft(
  */
 fun VisionElement.existImageOnRight(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
@@ -721,7 +731,7 @@ fun VisionElement.existImageOnRight(
  */
 fun VisionElement.existImageOnAbove(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,
@@ -782,7 +792,7 @@ fun VisionElement.existImageOnAbove(
  */
 fun VisionElement.existImageOnBelow(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     columnWidth: Int = this.rect.height * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,

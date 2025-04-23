@@ -1,5 +1,6 @@
 package shirates.core.vision.driver.branchextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.logging.Message.message
@@ -11,6 +12,7 @@ import shirates.core.vision.driver.classify
  * ifCheckIsON
  */
 fun VisionElement.ifCheckIsON(
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "CheckStateClassifier",
     onSwitchON: ((VisionElement) -> Unit)
 ): VisionElement {
@@ -20,7 +22,7 @@ fun VisionElement.ifCheckIsON(
         return this
     }
 
-    val label = this.classify(classifierName = classifierName)
+    val label = this.classify(classifierName = classifierName, threshold = threshold)
 
     if (label == "[ON]") {
         onSwitchON.invoke(this)
@@ -32,6 +34,7 @@ fun VisionElement.ifCheckIsON(
  * ifCheckIsOFF
  */
 fun VisionElement.ifCheckIsOFF(
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "CheckStateClassifier",
     onSwitchOFF: ((VisionElement) -> Unit)
 ): VisionElement {
@@ -41,7 +44,7 @@ fun VisionElement.ifCheckIsOFF(
         return this
     }
 
-    val label = this.classify(classifierName = classifierName)
+    val label = this.classify(classifierName = classifierName, threshold = threshold)
 
     if (label == "[OFF]") {
         onSwitchOFF.invoke(this)
@@ -54,6 +57,7 @@ fun VisionElement.ifCheckIsOFF(
  */
 fun VisionElement.ifImageIs(
     label: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): VisionDriveBooleanCompareResult {
@@ -65,7 +69,7 @@ fun VisionElement.ifImageIs(
         return VisionDriveBooleanCompareResult(value = true, command = command)
     }
 
-    val classifyResult = this.classify(classifierName = classifierName)
+    val classifyResult = this.classify(classifierName = classifierName, threshold = threshold)
 
     val matched = classifyResult == label
     val result = VisionDriveBooleanCompareResult(value = matched, command = command)
@@ -86,6 +90,7 @@ fun VisionElement.ifImageIs(
  */
 fun VisionElement.ifImageIsNot(
     label: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): VisionDriveBooleanCompareResult {
@@ -97,7 +102,7 @@ fun VisionElement.ifImageIsNot(
         return VisionDriveBooleanCompareResult(value = true, command = command)
     }
 
-    val classifyResult = this.classify(classifierName = classifierName)
+    val classifyResult = this.classify(classifierName = classifierName, threshold = threshold)
 
     val matched = classifyResult != label
     val result = VisionDriveBooleanCompareResult(value = matched, command = command)

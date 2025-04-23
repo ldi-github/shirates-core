@@ -16,7 +16,7 @@ import shirates.core.vision.driver.commandextension.findImage
  */
 fun VisionDrive.ifImageExist(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -60,7 +60,7 @@ fun VisionDrive.ifImageExist(
  */
 fun VisionDrive.ifImageExistNot(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,

@@ -25,7 +25,8 @@ internal fun VisionDrive.checkImageLabelContains(
     message: String,
     classifierName: String,
     waitSeconds: Double,
-    fullLabel: Boolean
+    fullLabel: Boolean,
+    threshold: Double
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -43,11 +44,11 @@ internal fun VisionDrive.checkImageLabelContains(
         }
     ) {
         if (fullLabel) {
-            val label = v.classifyFull(classifierName = classifierName)
-            printInfo("fullLabel: $label")
-            result = label == containedText
+            val fullLabel = v.classifyFull(classifierName = classifierName, threshold = threshold)
+            printInfo("fullLabel: $fullLabel")
+            result = fullLabel == containedText
         } else {
-            val label = v.classify(classifierName = classifierName)
+            val label = v.classify(classifierName = classifierName, threshold = threshold)
             printInfo("label: $label")
             result = label.contains(containedText)
         }
@@ -68,6 +69,7 @@ internal fun VisionDrive.checkIsCore(
     message: String,
     classifierName: String,
     waitSeconds: Double,
+    threshold: Double
 ): VisionElement {
 
     return checkImageLabelContains(
@@ -75,7 +77,8 @@ internal fun VisionDrive.checkIsCore(
         message = message,
         classifierName = classifierName,
         waitSeconds = waitSeconds,
-        fullLabel = false
+        fullLabel = false,
+        threshold = threshold
     )
 }
 

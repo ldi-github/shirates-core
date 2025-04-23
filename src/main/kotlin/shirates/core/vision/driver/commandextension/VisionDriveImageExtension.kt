@@ -69,7 +69,7 @@ fun VisionDrive.findImages(
  */
 fun VisionDrive.findImage(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -157,7 +157,7 @@ fun VisionDrive.findImage(
 
 private fun VisionDrive.findImageCore(
     label: String,
-    threshold: Double?,
+    threshold: Double,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
@@ -203,9 +203,10 @@ private fun VisionDrive.findImageCore(
                 aspectRatioTolerance = aspectRatioTolerance,
             )
 
-            found = threshold == null || r.primaryCandidate.distance <= threshold
+            found = r.primaryCandidate.distance <= threshold
             if (found.not()) {
-                val candidateLabel = r.primaryCandidate.toVisionElement().classify()
+                val candidateLabel = r.primaryCandidate.toVisionElement()
+                    .classify(threshold = threshold)
                 found = candidateLabel == label
             }
             result = r
@@ -298,6 +299,7 @@ internal fun VisionDrive.getElementWithScroll(
  */
 fun VisionDrive.findImageWithScrollDown(
     label: String,
+    threshold: Double = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = 0,
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = false,
@@ -305,7 +307,6 @@ fun VisionDrive.findImageWithScrollDown(
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -344,7 +345,7 @@ fun VisionDrive.findImageWithScrollDown(
  */
 fun VisionDrive.findImageWithScrollUp(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -390,7 +391,7 @@ fun VisionDrive.findImageWithScrollUp(
  */
 fun VisionDrive.findImageWithScrollRight(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -436,7 +437,7 @@ fun VisionDrive.findImageWithScrollRight(
  */
 fun VisionDrive.findImageWithScrollLeft(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
@@ -482,7 +483,7 @@ fun VisionDrive.findImageWithScrollLeft(
  */
 fun VisionDrive.canFindImage(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,

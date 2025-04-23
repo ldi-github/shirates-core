@@ -282,7 +282,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapImage(
     label: String,
-    threshold: Double? = testContext.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
