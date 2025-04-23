@@ -27,13 +27,12 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
-import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
-import shirates.core.driver.commandextension.exist
-import shirates.core.testcode.UITest
+import shirates.core.driver.driver
+import shirates.core.vision.driver.commandextension.exist
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class TestFixtureEvent1 : UITest() {
+class TestFixtureEvent1 : VisionTest() {
 
     private fun printEvent(eventName: String) {
 
@@ -73,7 +72,7 @@ class TestFixtureEvent1 : UITest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
 
-        context.irregularHandler = {}
+        printEvent("setEventHandlers")
     }
 
     @Test
@@ -112,6 +111,9 @@ class TestFixtureEvent1 : UITest() {
 [beforeAll] --------------------------------------------------
 AppiumDriver: NOT available
 ...
+[setEventHandlers] --------------------------------------------------
+AppiumDriver: available
+...
 [beforeAllAfterSetup] --------------------------------------------------
 AppiumDriver: available
 ...
@@ -119,6 +121,9 @@ AppiumDriver: available
 AppiumDriver: available
 ...
 [afterEach] --------------------------------------------------
+AppiumDriver: available
+...
+[setEventHandlers] --------------------------------------------------
 AppiumDriver: available
 ...
 [beforeEach] --------------------------------------------------
@@ -129,21 +134,17 @@ AppiumDriver: available
 ...
 [afterAll] --------------------------------------------------
 AppiumDriver: available
-...
-202	2023/04/04 22:20:07.238	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/
-Copying _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1
-Copying _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1
-Loading: /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/TestLog(commandList)_20230404221948.log
-Saved: /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/UITestEvent1@a.xlsx
+262	[00:01:25]	2025/04/24 03:57:54.611	{}	0	-	[info]	+1030	C	()	Logging to file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035628/TestFixtureEvent1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035628/TestFixtureEvent1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035628/TestFixtureEvent1
+Loading: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035628/TestFixtureEvent1/TestLog(commandList)_20250424035628.log
+Saved: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-24_035628/TestFixtureEvent1/TestFixtureEvent1@a.xlsx
 
-Cleaning up unclosed ZipFile for archive /Users/wave1008/Downloads/TestResults/androidSettingsConfig/TestList_androidSettingsConfig.xlsx
-203	2023/04/04 22:20:07.664	{}	[info]	()	Quitting TestDriver.
-204	2023/04/04 22:20:07.766	{}	[info]	()	Test class executed. (duration: 19.1 sec)
-...
+263	[00:01:27]	2025/04/24 03:57:55.762	{}	0	-	[info]	+1151	C	()	Quitting TestDriver.
+264	[00:01:27]	2025/04/24 03:57:56.369	{}	0	-	[info]	+607	C	()	Test class executed. (duration: 87.8 sec)
 [finally] --------------------------------------------------
 AppiumDriver: NOT available
-...
-Disconnected from the target VM, address: '127.0.0.1:49896', transport: 'socket'
+Disconnected from the target VM, address: '127.0.0.1:57962', transport: 'socket'
 
 Process finished with exit code 0
 ```
