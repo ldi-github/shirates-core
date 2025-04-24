@@ -122,7 +122,7 @@ fun VisionElement.imageFullLabelIs(
  * checkIsON
  */
 fun VisionElement.checkIsON(
-    threshold: Double = PropertiesManager.visionFindImageThreshold,
+    threshold: Double = 1.0,
     classifierName: String = "CheckStateClassifier",
     containedText: String = "[ON]",
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -149,7 +149,7 @@ fun VisionElement.checkIsON(
  * checkIsOFF
  */
 fun VisionElement.checkIsOFF(
-    threshold: Double = PropertiesManager.visionFindImageThreshold,
+    threshold: Double = 1.0,
     classifierName: String = "CheckStateClassifier",
     containedText: String = "[OFF]",
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -177,7 +177,7 @@ fun VisionElement.checkIsOFF(
  */
 fun VisionElement.buttonStateIs(
     expectedLabel: String,
-    threshold: Double = PropertiesManager.visionFindImageThreshold,
+    threshold: Double = 1.0,
     waitSeconds: Double = testContext.syncWaitSeconds,
     classifierName: String = "ButtonStateClassifier",
     message: String? = null,
