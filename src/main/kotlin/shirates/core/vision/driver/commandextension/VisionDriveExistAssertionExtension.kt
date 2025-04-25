@@ -12,6 +12,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.Candidate
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -495,7 +496,9 @@ fun VisionDrive.existImage(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val candidate = v.observation as Candidate?
+            val submessage = if (candidate == null) "" else " (distance:${candidate.distance} > threshold:$threshold)"
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
