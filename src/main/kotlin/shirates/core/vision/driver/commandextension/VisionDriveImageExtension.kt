@@ -130,7 +130,7 @@ fun VisionDrive.findImage(
             silent {
                 v.swipeToSafePosition()
             }
-            action(waitSeconds = 0.0)
+            v = action(waitSeconds = 0.0)
         }
         lastElement = v
         if (v.isEmpty) {
@@ -220,7 +220,9 @@ private fun VisionDrive.findImageCore(
             val v = result!!.primaryCandidate.toVisionElement()
             return v
         }
-        return VisionElement.emptyElement
+        val v = VisionElement.emptyElement
+        v.observation = result?.primaryCandidate
+        return v
     }
 
     val files = VisionClassifierRepository.defaultClassifier.getFiles(label = label)
