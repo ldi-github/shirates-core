@@ -532,7 +532,8 @@ fun VisionElement.existImageOnLine(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -593,7 +594,8 @@ fun VisionElement.existImageOnColumn(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -654,7 +656,8 @@ fun VisionElement.existImageOnLeft(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -715,7 +718,8 @@ fun VisionElement.existImageOnRight(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -776,7 +780,8 @@ fun VisionElement.existImageOnAbove(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -837,7 +842,8 @@ fun VisionElement.existImageOnBelow(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
