@@ -37,6 +37,7 @@ object AndroidDeviceUtility {
      */
     fun getAvdList(): List<String> {
 
+        ShellUtility.validateCommand("emulator")
         val shellResult = ShellUtility.executeCommand("emulator", "-list-avds")
         return shellResult.resultString.split(Const.NEW_LINE)
     }
