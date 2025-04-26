@@ -149,7 +149,7 @@ class VisionClassifierShard(
             }
 
             loadLabelInfoMap()
-            printInfo("Classifier files loaded.($classifierName, ${labelFileInfoMap.keys.count()} labels, directory=${this.buildClassifierShardDirectory})")
+            printInfo("Classifier files loaded.(${classifier.classifierName}($shardID), ${labelFileInfoMap.keys.count()} labels, directory=${this.buildClassifierShardDirectory})")
 
             if (isLearningRequired().not() && force.not()) {
                 TestLog.info("Learning skipped. Updated file not found. (${classifier.classifierName}($shardID), ${visionClassifierDirectory}/$shardID)")
