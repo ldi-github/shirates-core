@@ -185,7 +185,7 @@
 ## Tutorial(In action)
 
 - Debugging
-    - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
+    - [Watching recognizeText.txt](vision/in_action/debugging/watching_recognize_text.md)
     - [Watching image in debugger](vision/in_action/debugging/watching_image_in_debugger.md)
 - TextIndex
     - [Improving screen recognition accuracy with TextIndex](vision/in_action/text_indexing/text_index_for_screen_recognition.md)

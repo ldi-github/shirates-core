@@ -184,7 +184,7 @@
 ## チュートリアル(In action)
 
 - デバッグ
-    - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
+    - [recognizeText.txtを確認する](vision/in_action/debugging/watching_recognize_text_ja.md)
     - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)
 - テキストインデックス
     - [テキストインデックスによる画面認識精度の向上](vision/in_action/text_indexing/text_index_for_screen_recognition_ja.md)
