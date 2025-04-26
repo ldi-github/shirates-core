@@ -12,8 +12,11 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.time.StopWatch
+import shirates.core.utility.toPath
+import shirates.core.vision.Candidate
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionObservation
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -454,6 +457,15 @@ fun VisionDrive.dontExistWithoutScroll(
     return lastElement
 }
 
+
+internal fun VisionObservation?.getSubMessage(threshold: Double): String {
+
+    val candidate = this as Candidate? ?: return ""
+    val dir = candidate.file?.toPath()?.parent
+    val submessage = " (distance=${candidate.distance}, threshold:$threshold, file://$dir)"
+    return submessage
+}
+
 /**
  * existImage
  */
@@ -495,7 +507,8 @@ fun VisionDrive.existImage(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
@@ -582,7 +595,8 @@ fun VisionDrive.dontExistImage(
         lastElement = v
 
         if (v.isFound) {
-            val error = TestNGException(message = "$assertMessage ($v)")
+            val submessage = v.observation.getSubMessage(threshold = threshold)
+            val error = TestNGException(message = "$assertMessage$submessage")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error

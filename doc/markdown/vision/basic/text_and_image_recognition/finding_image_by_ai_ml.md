@@ -61,28 +61,47 @@ If you have to match images pixel-by-pixel, use classic mode (Boof-CV).
 ### Console output
 
 ```
-123	[00:00:22]	2025/01/27 18:10:41.488	{findImage-1}	0	-	[CASE]	+362	!	()	(1)
-124	[00:00:22]	2025/01/27 18:10:41.489	{findImage-1}	0	-	[CONDITION]	+1	!	()	condition
-125	[00:00:22]	2025/01/27 18:10:41.490	{findImage-1}	0	-	[operate]	+1	!	()	[Android Settings Top Screen]
-126	[00:00:25]	2025/01/27 18:10:45.013	{findImage-1}	0	-	[ACTION]	+3523	!	()	action
-127	[00:00:25]	2025/01/27 18:10:45.015	{findImage-1}	0	-	[info]	+2	!	()	Trying to find image with scroll. (label="[Network & internet Icon]")
-128	[00:00:26]	2025/01/27 18:10:45.102	{findImage-1}	0	-	[info]	+87	!	()	127_[0, 0, 1079, 2399](w=1080, h=2400).png
-129	[00:00:26]	2025/01/27 18:10:45.485	{findImage-1}	0	-	[info]	+383	!	()	normalized_template_img.png
-2025-01-27 18:10:45.675 java[77255:8203431] +[IMKClient subclass]: chose IMKClient_Modern
-2025-01-27 18:10:45.675 java[77255:8203431] +[IMKInputSession subclass]: chose IMKInputSession_Modern
-130	[00:00:28]	2025/01/27 18:10:47.954	{findImage-1}	0	-	[info]	+2469	!	()	[findImage] in 2.939 sec
-131	[00:00:28]	2025/01/27 18:10:47.956	{findImage-1}	0	-	[info]	+2	!	()	Trying to find image with scroll. (label="[Display Icon]")
-132	[00:00:29]	2025/01/27 18:10:48.084	{findImage-1}	0	-	[info]	+128	!	()	131_[0, 0, 1079, 2399](w=1080, h=2400).png
-133	[00:00:29]	2025/01/27 18:10:48.195	{findImage-1}	0	-	[info]	+111	!	()	normalized_template_img.png
-134	[00:00:31]	2025/01/27 18:10:50.223	{findImage-1}	0	-	[info]	+2028	!	()	findImage("[Display Icon]") not found. (distance 0.6129697 > 0.1)
-135	[00:00:31]	2025/01/27 18:10:50.225	{findImage-1}	0	-	[operate]	+2	!	(scrollDown)	Scroll down
-136	[00:00:35]	2025/01/27 18:10:54.434	{findImage-1}	0	-	[info]	+4209	!	()	endOfScroll=false
-137	[00:00:35]	2025/01/27 18:10:54.435	{findImage-1}	0	-	[info]	+1	!	()	136_[0, 0, 1079, 2399](w=1080, h=2400).png
-138	[00:00:35]	2025/01/27 18:10:54.513	{findImage-1}	0	-	[info]	+78	!	()	normalized_template_img.png
-139	[00:00:37]	2025/01/27 18:10:56.795	{findImage-1}	0	-	[info]	+2282	!	()	[findImage] in 8.839 sec
-140	[00:00:37]	2025/01/27 18:10:56.796	{findImage-1}	0	-	[EXPECTATION]	+1	!	()	expectation
-141	[00:00:37]	2025/01/27 18:10:56.797	{findImage-1}	0	-	[OK]	+1	!	(thisIsTrue)	[Network & internet Icon] is found.
-142	[00:00:37]	2025/01/27 18:10:56.801	{findImage-1}	0	-	[OK]	+4	!	(thisIsTrue)	[Display Icon] is found.
+132	[00:01:03]	2025/04/26 16:44:05.829	{findImage-1}	0	-	[CASE]	+368	!	()	(1)
+133	[00:01:03]	2025/04/26 16:44:05.835	{findImage-1}	0	-	[CONDITION]	+6	!	()	condition
+134	[00:01:03]	2025/04/26 16:44:05.836	{findImage-1}	0	-	[operate]	+1	!	()	[Android Settings Top Screen]
+135	[00:01:05]	2025/04/26 16:44:07.689	{findImage-1}	1	[Android Settings Top Screen]	[screenshot]	+1853	!	()	screenshot: 135.png
+136	[00:01:06]	2025/04/26 16:44:08.026	{findImage-1}	1	[Android Settings Top Screen]	[info]	+337	!	()	135_[135.png]_recognizeText_rectangles.png
+137	[00:01:06]	2025/04/26 16:44:08.141	{findImage-1}	1	[Android Settings Top Screen]	[info]	+115	!	()	[Android Settings Top Screen] found by matchTextScoreRate
+138	[00:01:07]	2025/04/26 16:44:09.267	{findImage-1}	0	-	[info]	+1126	!	()	Syncing screen.(isSame: true, changed: false, matchRate: 0.9999645929347025, distance=3.540706529747695E-5)
+139	[00:01:07]	2025/04/26 16:44:09.269	{findImage-1}	0	-	[ACTION]	+2	!	()	action
+140	[00:01:07]	2025/04/26 16:44:09.272	{findImage-1}	0	-	[info]	+3	!	()	Trying to find image with scroll. (label="[Network & internet Icon]")
+141	[00:01:07]	2025/04/26 16:44:09.369	{findImage-1}	0	-	[info]	+97	!	()	140_[0, 0, 1079, 2399](w=1080, h=2400).png
+142	[00:01:07]	2025/04/26 16:44:09.677	{findImage-1}	0	-	[info]	+308	!	()	template_img.png
+143	[00:01:08]	2025/04/26 16:44:10.344	{findImage-1}	0	-	[info]	+667	!	()	Trying to find image with scroll. (label="[Display Icon]")
+144	[00:01:08]	2025/04/26 16:44:10.436	{findImage-1}	0	-	[info]	+92	!	()	143_[0, 0, 1079, 2399](w=1080, h=2400).png
+145	[00:01:08]	2025/04/26 16:44:10.715	{findImage-1}	0	-	[info]	+279	!	()	template_img.png
+146	[00:01:09]	2025/04/26 16:44:11.391	{findImage-1}	0	-	[info]	+676	!	()	145_null_normalized.png
+147	[00:01:09]	2025/04/26 16:44:11.820	{findImage-1}	0	-	[info]	+429	!	()	Syncing screen.(isSame: false, changed: false, matchRate: 0.0, distance=1.0)
+148	[00:01:10]	2025/04/26 16:44:12.749	{findImage-1}	0	-	[info]	+929	!	()	Syncing screen.(isSame: true, changed: true, matchRate: 1.0, distance=0.0)
+149	[00:01:10]	2025/04/26 16:44:12.750	{findImage-1}	0	-	[screenshot]	+1	!	()	screenshot: 149.png
+150	[00:01:11]	2025/04/26 16:44:13.085	{findImage-1}	0	-	[info]	+335	!	()	149_[149.png]_recognizeText_rectangles.png
+151	[00:01:11]	2025/04/26 16:44:13.228	{findImage-1}	0	-	[info]	+143	!	()	[Android Settings Top Screen] found by matchTextScoreRate
+152	[00:01:11]	2025/04/26 16:44:13.229	{findImage-1}	0	-	[info]	+1	!	()	[recognizeScreen] in 0.478 sec
+153	[00:01:11]	2025/04/26 16:44:13.229	{findImage-1}	0	-	[info]	+0	!	()	currentScreen=[Android Settings Top Screen]
+154	[00:01:11]	2025/04/26 16:44:13.230	{findImage-1}	0	-	[info]	+1	!	()	153_[0, 0, 1079, 2399](w=1080, h=2400).png
+155	[00:01:11]	2025/04/26 16:44:13.470	{findImage-1}	0	-	[info]	+240	!	()	template_img.png
+156	[00:01:12]	2025/04/26 16:44:14.039	{findImage-1}	0	-	[info]	+569	!	()	155_null_normalized.png
+157	[00:01:12]	2025/04/26 16:44:14.135	{findImage-1}	0	-	[info]	+96	!	()	findImage("[Display Icon]") not found.
+158	[00:01:12]	2025/04/26 16:44:14.138	{findImage-1}	0	-	[operate]	+3	!	(scrollDown)	Scroll down
+159	[00:01:12]	2025/04/26 16:44:14.142	{findImage-1}	0	-	[info]	+4	!	(scrollDown)	scrollableRect: [0,0][1079,2399] width=1080, height=2400, centerX=540, centerY=1200
+160	[00:01:15]	2025/04/26 16:44:17.624	{findImage-1}	0	-	[info]	+3482	!	(scrollDown)	Syncing screen.(isSame: false, changed: false, matchRate: 0.8399565517902374, distance=0.16004344820976257)
+161	[00:01:16]	2025/04/26 16:44:18.542	{findImage-1}	0	-	[info]	+918	!	(scrollDown)	Syncing screen.(isSame: false, changed: true, matchRate: 0.9607135504484177, distance=0.039286449551582336)
+162	[00:01:17]	2025/04/26 16:44:19.484	{findImage-1}	0	-	[info]	+942	!	(scrollDown)	Syncing screen.(isSame: true, changed: true, matchRate: 1.0, distance=0.0)
+163	[00:01:17]	2025/04/26 16:44:19.485	{findImage-1}	0	-	[screenshot]	+1	!	(scrollDown)	screenshot: 163.png
+164	[00:01:17]	2025/04/26 16:44:19.887	{findImage-1}	0	-	[info]	+402	!	(scrollDown)	163_[163.png]_recognizeText_rectangles.png
+165	[00:01:18]	2025/04/26 16:44:20.254	{findImage-1}	0	-	[info]	+367	!	(scrollDown)	[recognizeScreen] in 0.768 sec
+166	[00:01:18]	2025/04/26 16:44:20.257	{findImage-1}	0	-	[info]	+3	!	(scrollDown)	currentScreen=[Android Settings Top Screen]
+167	[00:01:18]	2025/04/26 16:44:20.367	{findImage-1}	0	-	[info]	+110	!	()	endOfScroll=false
+168	[00:01:18]	2025/04/26 16:44:20.369	{findImage-1}	0	-	[info]	+2	!	()	167_[0, 0, 1079, 2399](w=1080, h=2400).png
+169	[00:01:18]	2025/04/26 16:44:20.610	{findImage-1}	0	-	[info]	+241	!	()	template_img.png
+170	[00:01:19]	2025/04/26 16:44:21.263	{findImage-1}	0	-	[EXPECTATION]	+653	!	()	expectation
+171	[00:01:19]	2025/04/26 16:44:21.270	{findImage-1}	0	-	[OK]	+7	!	(thisIsTrue)	[Network & internet Icon] is found.
+172	[00:01:19]	2025/04/26 16:44:21.273	{findImage-1}	0	-	[OK]	+3	!	(thisIsTrue)	[Display Icon] is found.
 ```
 
 ### TestResults
@@ -91,25 +110,21 @@ You got test results files in TestResults directory(`~/Downloads/TestResults` is
 
 ![](_images/find_image_testresults.png)
 
-### 128
+### 170
 
-![](_images/128/128.png)
+![](_images/170.png)
 
-### 128/workingregion
+### segmentation
 
-![](_images/128/workingRegion_%5B0,%200,%201079,%202399%5D(w=1080,%20h=2400).png)
+![](_images/170_segmentation.png)
 
-### 128/segmentation
+### templage
 
-![](_images/128/segmentation.png)
+![](_images/170_template.png)
 
-### 128/templage
+### candidate (find result)
 
-![](_images/128/template.png)
-
-### 128/candidate (find result)
-
-![](_images/128/candidate.png)
+![](_images/170_candidate.png)
 
 ### template files
 

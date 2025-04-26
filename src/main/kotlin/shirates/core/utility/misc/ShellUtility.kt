@@ -9,9 +9,11 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
+import shirates.core.utility.file.exists
 import shirates.core.utility.time.StopWatch
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
 import java.io.InputStreamReader
 
 object ShellUtility {
@@ -123,6 +125,31 @@ object ShellUtility {
         vararg args: String
     ): ShellResult {
         return executeCommandCore(args = args, log = false)
+    }
+
+    /**
+     * which
+     */
+    fun which(
+        command: String
+    ): String {
+
+        val whichCommand = if (TestMode.isRunningOnWindows) "where" else "which"
+        val r = executeCommand(whichCommand, command).resultString.trim()
+        if (r.exists()) {
+            return r
+        }
+        return ""
+    }
+
+    /**
+     * validateCommand
+     */
+    fun validateCommand(command: String) {
+
+        if (which(command).isBlank()) {
+            throw FileNotFoundException("`$command` not found. Install the command, and set environment variables and PATH correctly. Then restart IntelliJ IDEA to take effect.")
+        }
     }
 
     /**

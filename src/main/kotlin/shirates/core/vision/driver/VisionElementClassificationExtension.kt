@@ -45,7 +45,7 @@ fun VisionElement.classifyFull(
     if (classifications.isEmpty()) {
         return "?"
     }
-    if (classifications.count() == 1 && classifications[0].confidence == 1.0f) {
+    if (classifications.count() == 1 && classifications[0].confidence <= threshold) {
         val fullLabel = classifications[0].identifier
         return fullLabel
     }

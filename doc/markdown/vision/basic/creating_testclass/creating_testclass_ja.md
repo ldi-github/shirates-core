@@ -72,241 +72,149 @@ shirates.core.exception.TestEnvironmentException: Could not connect to vision-se
 #### コンソール出力
 
 ```
+Connected to the target VM, address: '127.0.0.1:60644', transport: 'socket'
 lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
-1	[00:00:00]	2025/02/03 02:35:31.055	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-2	[00:00:00]	2025/02/03 02:35:31.072	{}	0	-	[-]	+17	C	()	///
-3	[00:00:00]	2025/02/03 02:35:31.072	{}	0	-	[-]	+0	C	()	/// shirates-core 8.0.6
-4	[00:00:00]	2025/02/03 02:35:31.073	{}	0	-	[-]	+1	C	()	///
-5	[00:00:00]	2025/02/03 02:35:31.074	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.4.0)
-6	[00:00:00]	2025/02/03 02:35:31.074	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-7	[00:00:00]	2025/02/03 02:35:31.074	{}	0	-	[-]	+0	C	()	testClass: exercise.VisionTestClass1
-8	[00:00:00]	2025/02/03 02:35:31.074	{}	0	-	[-]	+0	C	()	sheetName: VisionTestClass1
-9	[00:00:00]	2025/02/03 02:35:31.075	{}	0	-	[-]	+1	C	()	logLanguage: 
-10	[00:00:00]	2025/02/03 02:35:31.086	{}	0	-	[info]	+11	C	()	
-11	[00:00:00]	2025/02/03 02:35:31.087	{}	0	-	[info]	+1	C	()	----------------------------------------------------------------------------------------------------
-12	[00:00:00]	2025/02/03 02:35:31.087	{}	0	-	[info]	+0	C	()	Test function: testFunc1 [testFunc1()]
-13	[00:00:00]	2025/02/03 02:35:31.088	{}	0	-	[info]	+1	C	()	----------------------------------------------------------------------------------------------------
-14	[00:00:00]	2025/02/03 02:35:31.689	{}	0	-	[info]	+601	C	()	Initializing with testrun file.(testrun.global.properties)
-15	[00:00:00]	2025/02/03 02:35:31.694	{}	0	-	[info]	+5	C	()	Logging to file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1/
-16	[00:00:00]	2025/02/03 02:35:31.793	{}	0	-	[info]	+99	C	()	Loading config.(configFile=/Users/wave1008/Downloads/Vision1/testConfig/android/testConfig@a.json, profileName=Pixel 8(Android 14))
-17	[00:00:00]	2025/02/03 02:35:31.833	{}	0	-	[info]	+40	C	()	Scanning macro under '/Users/wave1008/Downloads/Vision1/src/test/kotlin'
-Copying jar content createml/MLImageClassifier.swift to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1
-Copying jar content createml/MLImageClassifier.swift to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1
-18	[00:00:01]	2025/02/03 02:35:32.729	{}	0	-	[info]	+896	C	()	Starting leaning. [CheckStateClassifier]
-19	[00:00:04]	2025/02/03 02:35:35.162	{}	0	-	[info]	+2433	C	()	Learning completed. (in 2.428 sec)
-["/Users/wave1008/Downloads/Vision1/build/vision/classifiers/CheckStateClassifier/MLImageClassifier.swift", "/Users/wave1008/Downloads/Vision1/build/vision/classifiers/CheckStateClassifier", "-noise", "-blur"]
-----------------------------------
-dataSourceName: CheckStateClassifier
-dataSourcePath: file:///Users/wave1008/Downloads/Vision1/build/vision/classifiers/CheckStateClassifier/
-options: ["-noise", "-blur"]
-featureExtractor: Image Feature Print V2
-----------------------------------
-Number of examples: 16
-Number of classes: 2
-Accuracy: 100.00%
+1	[00:00:00]	2025/04/26 14:51:20.546	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+2	[00:00:00]	2025/04/26 14:51:20.564	{}	0	-	[-]	+18	C	()	///
+3	[00:00:00]	2025/04/26 14:51:20.564	{}	0	-	[-]	+0	C	()	/// shirates-core 8.3.1-SNAPSHOT
+4	[00:00:00]	2025/04/26 14:51:20.565	{}	0	-	[-]	+1	C	()	///
+5	[00:00:00]	2025/04/26 14:51:20.566	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.4.0)
+6	[00:00:00]	2025/04/26 14:51:20.566	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+7	[00:00:00]	2025/04/26 14:51:20.566	{}	0	-	[-]	+0	C	()	testClass: exercise.VisionTestClass1
+8	[00:00:00]	2025/04/26 14:51:20.567	{}	0	-	[-]	+1	C	()	sheetName: VisionTestClass1
+9	[00:00:00]	2025/04/26 14:51:20.567	{}	0	-	[-]	+0	C	()	logLanguage: ja
+10	[00:00:00]	2025/04/26 14:51:20.576	{}	0	-	[info]	+9	C	()	
+11	[00:00:00]	2025/04/26 14:51:20.577	{}	0	-	[info]	+1	C	()	----------------------------------------------------------------------------------------------------
+12	[00:00:00]	2025/04/26 14:51:20.577	{}	0	-	[info]	+0	C	()	Test function: testFunc1 [testFunc1()]
+13	[00:00:00]	2025/04/26 14:51:20.577	{}	0	-	[info]	+0	C	()	----------------------------------------------------------------------------------------------------
+14	[00:00:00]	2025/04/26 14:51:21.194	{}	0	-	[info]	+617	C	()	testrunファイルを使用して初期化します。(testrun.global.properties)
+15	[00:00:00]	2025/04/26 14:51:21.201	{}	0	-	[info]	+7	C	()	ログは次の場所に出力します。 file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-26_145120/VisionTestClass1/
+16	[00:00:01]	2025/04/26 14:51:21.374	{}	0	-	[info]	+173	C	()	Loading config.(configFile=/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/testConfig/android/testConfig@a.json, profileName=Pixel 8(Android 14))
+17	[00:00:01]	2025/04/26 14:51:22.037	{}	0	-	[info]	+663	C	()	Scanning macro under '/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/src/test/kotlin'
+18	[00:00:01]	2025/04/26 14:51:22.059	{}	0	-	[info]	+22	C	()	Registering macro. (macro.ios.iOSSettingsMacro)
+19	[00:00:01]	2025/04/26 14:51:22.087	{}	0	-	[info]	+28	C	()	Registering macro. (macro.android.AndroidSettingsMacro)
+20	[00:00:01]	2025/04/26 14:51:22.091	{}	0	-	[info]	+4	C	()	Registering macro. (macro.android.FilesMacro)
+21	[00:00:01]	2025/04/26 14:51:22.095	{}	0	-	[info]	+4	C	()	Registering macro. (macro.android.MapsMacro)
+22	[00:00:01]	2025/04/26 14:51:22.099	{}	0	-	[info]	+4	C	()	Registering macro. (macro.MacroObject1)
+23	[00:00:01]	2025/04/26 14:51:22.155	{}	0	-	[info]	+56	C	()	Classifier files loaded.(CheckStateClassifier, 2 labels, directory=/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/build/vision/classifiers/CheckStateClassifier/1)
+24	[00:00:01]	2025/04/26 14:51:22.162	{}	0	-	[info]	+7	C	()	Learning skipped. Updated file not found. (CheckStateClassifier(1), /Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/vision/classifiers/CheckStateClassifier/1)
+25	[00:00:01]	2025/04/26 14:51:22.173	{}	0	-	[info]	+11	C	()	Classifier files loaded.(ScreenClassifier, 20 labels, directory=/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/build/vision/classifiers/ScreenClassifier/1)
+26	[00:00:01]	2025/04/26 14:51:22.179	{}	0	-	[info]	+6	C	()	Learning skipped. Updated file not found. (ScreenClassifier(1), /Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/vision/classifiers/ScreenClassifier/1)
+27	[00:00:01]	2025/04/26 14:51:22.191	{}	0	-	[info]	+12	C	()	Classifier files loaded.(DefaultClassifier, 32 labels, directory=/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/build/vision/classifiers/DefaultClassifier/1)
+28	[00:00:01]	2025/04/26 14:51:22.199	{}	0	-	[info]	+8	C	()	Learning skipped. Updated file not found. (DefaultClassifier(1), /Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/vision/classifiers/DefaultClassifier/1)
+TextIndex: [開発者向けオプション画面] priority=1, length=3, [開発者向けオプション, 開発者向けオプションを, 使用], imageIndexFile=/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/vision/classifiers/ScreenClassifier/@a/Android設定/[開発者向けオプション画面]/#1.png
+29	[00:00:01]	2025/04/26 14:51:22.223	{}	0	-	[info]	+24	C	()	Initializing TestDriver.(profileName=Pixel 8(Android 14))
+30	[00:00:01]	2025/04/26 14:51:22.224	{}	0	-	[info]	+1	C	()	noLoadRun: false
+31	[00:00:01]	2025/04/26 14:51:22.224	{}	0	-	[info]	+0	C	()	boundsToRectRatio: 1
+32	[00:00:01]	2025/04/26 14:51:22.225	{}	0	-	[info]	+1	C	()	reuseDriver: true
+33	[00:00:01]	2025/04/26 14:51:22.225	{}	0	-	[info]	+0	C	()	autoScreenshot: true
+34	[00:00:01]	2025/04/26 14:51:22.226	{}	0	-	[info]	+1	C	()	onChangedOnly: true
+35	[00:00:01]	2025/04/26 14:51:22.226	{}	0	-	[info]	+0	C	()	onCondition: true
+36	[00:00:01]	2025/04/26 14:51:22.227	{}	0	-	[info]	+1	C	()	onAction: true
+37	[00:00:01]	2025/04/26 14:51:22.227	{}	0	-	[info]	+0	C	()	onExpectation: true
+38	[00:00:01]	2025/04/26 14:51:22.228	{}	0	-	[info]	+1	C	()	onExecOperateCommand: true
+39	[00:00:01]	2025/04/26 14:51:22.228	{}	0	-	[info]	+0	C	()	onCheckCommand: true
+40	[00:00:01]	2025/04/26 14:51:22.229	{}	0	-	[info]	+1	C	()	onScrolling: true
+41	[00:00:01]	2025/04/26 14:51:22.229	{}	0	-	[info]	+0	C	()	manualScreenshot: true
+42	[00:00:01]	2025/04/26 14:51:22.230	{}	0	-	[info]	+1	C	()	retryMaxCount: 2
+43	[00:00:01]	2025/04/26 14:51:22.231	{}	0	-	[info]	+1	C	()	retryIntervalSeconds: 2.0
+44	[00:00:01]	2025/04/26 14:51:22.231	{}	0	-	[info]	+0	C	()	shortWaitSeconds: 1.5
+45	[00:00:01]	2025/04/26 14:51:22.232	{}	0	-	[info]	+1	C	()	waitSecondsOnIsScreen: 15.0
+46	[00:00:01]	2025/04/26 14:51:22.232	{}	0	-	[info]	+0	C	()	waitSecondsForLaunchAppComplete: 15.0
+47	[00:00:01]	2025/04/26 14:51:22.233	{}	0	-	[info]	+1	C	()	waitSecondsForAnimationComplete: 0.5
+48	[00:00:01]	2025/04/26 14:51:22.234	{}	0	-	[info]	+1	C	()	waitSecondsForConnectionEnabled: 8.0
+49	[00:00:01]	2025/04/26 14:51:22.234	{}	0	-	[info]	+0	C	()	swipeDurationSeconds: 3.0
+50	[00:00:01]	2025/04/26 14:51:22.235	{}	0	-	[info]	+1	C	()	flickDurationSeconds: 0.3
+51	[00:00:01]	2025/04/26 14:51:22.235	{}	0	-	[info]	+0	C	()	swipeMarginRatio: 0.0
+52	[00:00:01]	2025/04/26 14:51:22.236	{}	0	-	[info]	+1	C	()	scrollVerticalStartMarginRatio: 0.15
+53	[00:00:01]	2025/04/26 14:51:22.236	{}	0	-	[info]	+0	C	()	scrollVerticalEndMarginRatio: 0.1
+54	[00:00:01]	2025/04/26 14:51:22.237	{}	0	-	[info]	+1	C	()	scrollHorizontalStartMarginRatio: 0.2
+55	[00:00:01]	2025/04/26 14:51:22.237	{}	0	-	[info]	+0	C	()	scrollHorizontalEndMarginRatio: 0.1
+56	[00:00:01]	2025/04/26 14:51:22.238	{}	0	-	[info]	+1	C	()	tapHoldSeconds: 0.0
+57	[00:00:01]	2025/04/26 14:51:22.238	{}	0	-	[info]	+0	C	()	tapAppIconMethod: auto
+58	[00:00:01]	2025/04/26 14:51:22.239	{}	0	-	[info]	+1	C	()	tapAppIconMacro: 
+59	[00:00:01]	2025/04/26 14:51:22.239	{}	0	-	[info]	+0	C	()	enableCache: true
+60	[00:00:01]	2025/04/26 14:51:22.240	{}	0	-	[info]	+1	C	()	syncWaitSeconds: 1.8
+61	[00:00:02]	2025/04/26 14:51:22.534	{}	0	-	[info]	+294	C	()	Running device found. (udid=emulator-5554, avd=Pixel_8_Android_14)
+62	[00:00:02]	2025/04/26 14:51:22.535	{}	0	-	[info]	+1	C	()	接続された端末が見つかりました。(Pixel_8_Android_14:5554, Android 14, emulator-5554)
+63	[00:00:02]	2025/04/26 14:51:22.665	{}	0	-	[info]	+130	C	()	Terminating Appium Server. (pid=22986, port=4722)
+64	[00:00:02]	2025/04/26 14:51:22.685	{}	0	-	[info]	+20	C	()	Starting Appium Server.
+65	[00:00:02]	2025/04/26 14:51:22.686	{}	0	-	[info]	+1	C	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-26_145120/VisionTestClass1/appium_2025-04-26_145122537.log --port 4722
+66	[00:00:05]	2025/04/26 14:51:25.954	{}	0	-	[info]	+3268	C	()	Appium Serverを開始しました。 (pid=23767, port=4722)
+67	[00:00:06]	2025/04/26 14:51:26.973	{}	0	-	[info]	+1019	C	()	Appium Serverへ接続しています。(http://127.0.0.1:4722/)
+68	[00:00:12]	2025/04/26 14:51:32.870	{}	0	-	[info]	+5897	C	()	implicitlyWaitSeconds: 5.0
+69	[00:00:12]	2025/04/26 14:51:32.999	{}	0	-	[info]	+129	C	()	(settings) always_finish_activities: 0
+70	[00:00:15]	2025/04/26 14:51:35.595	{}	0	-	[info]	+2596	C	()	Syncing screen.(isSame: false, changed: false, matchRate: 0.0, distance=1.0)
+71	[00:00:16]	2025/04/26 14:51:36.839	{}	0	-	[info]	+1244	C	()	Syncing screen.(isSame: true, changed: true, matchRate: 1.0, distance=0.0)
+72	[00:00:16]	2025/04/26 14:51:36.841	{}	0	-	[screenshot]	+2	C	()	screenshot: 72.png
+73	[00:00:17]	2025/04/26 14:51:37.717	{}	0	-	[info]	+876	C	()	72_[72.png]_recognizeText_rectangles.png
+2025-04-26 14:51:37.912 java[23745:292689] +[IMKClient subclass]: chose IMKClient_Modern
+2025-04-26 14:51:37.912 java[23745:292689] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+74	[00:00:18]	2025/04/26 14:51:38.528	{}	0	-	[info]	+811	C	()	[Android設定トップ画面] found by matchTextScoreRate
+75	[00:00:18]	2025/04/26 14:51:38.532	{}	0	-	[info]	+4	C	()	[recognizeScreen] in 1.688 sec
+76	[00:00:18]	2025/04/26 14:51:38.533	{}	0	-	[info]	+1	C	()	currentScreen=[Android設定トップ画面]
+77	[00:00:18]	2025/04/26 14:51:38.534	{}	0	-	[info]	+1	C	()	AppiumDriver initialized.
+78	[00:00:18]	2025/04/26 14:51:38.535	{}	0	-	[-]	+1	C	()	testMode: Vision
+79	[00:00:18]	2025/04/26 14:51:38.535	{}	0	-	[-]	+0	C	()	testrun: testrun.global.properties
+80	[00:00:18]	2025/04/26 14:51:38.536	{}	0	-	[-]	+1	C	()	testConfigName: testConfig@a(/Users/wave1008/github/ldi-github/shirates-core-vision-samples_ja/testConfig/android/testConfig@a.json)
+81	[00:00:18]	2025/04/26 14:51:38.537	{}	0	-	[-]	+1	C	()	profileName: Pixel 8(Android 14)
+82	[00:00:18]	2025/04/26 14:51:38.538	{}	0	-	[-]	+1	C	()	appIconName: 設定
+83	[00:00:18]	2025/04/26 14:51:38.538	{}	0	-	[-]	+0	C	()	(capabilities)
+84	[00:00:18]	2025/04/26 14:51:38.539	{}	0	-	[-]	+1	C	()	appium:newCommandTimeout: 300
+85	[00:00:18]	2025/04/26 14:51:38.540	{}	0	-	[-]	+1	C	()	appium:takesScreenshot: true
+86	[00:00:18]	2025/04/26 14:51:38.540	{}	0	-	[-]	+0	C	()	appium:warnings: {}
+87	[00:00:18]	2025/04/26 14:51:38.541	{}	0	-	[-]	+1	C	()	appium:deviceApiLevel: 34
+88	[00:00:18]	2025/04/26 14:51:38.542	{}	0	-	[-]	+1	C	()	appium:automationName: UiAutomator2
+89	[00:00:18]	2025/04/26 14:51:38.542	{}	0	-	[-]	+0	C	()	appium:locationContextEnabled: false
+90	[00:00:18]	2025/04/26 14:51:38.543	{}	0	-	[-]	+1	C	()	appium:deviceScreenSize: 1080x2400
+91	[00:00:18]	2025/04/26 14:51:38.544	{}	0	-	[-]	+1	C	()	appium:deviceManufacturer: Google
+92	[00:00:18]	2025/04/26 14:51:38.544	{}	0	-	[-]	+0	C	()	appium:enforceXPath1: true
+93	[00:00:18]	2025/04/26 14:51:38.553	{}	0	-	[-]	+9	C	()	appium:udid: emulator-5554
+94	[00:00:18]	2025/04/26 14:51:38.554	{}	0	-	[-]	+1	C	()	appium:pixelRatio: 2.625
+95	[00:00:18]	2025/04/26 14:51:38.554	{}	0	-	[-]	+0	C	()	platformName: ANDROID
+96	[00:00:18]	2025/04/26 14:51:38.555	{}	0	-	[-]	+1	C	()	appium:networkConnectionEnabled: true
+97	[00:00:18]	2025/04/26 14:51:38.555	{}	0	-	[-]	+0	C	()	appium:locale: JP
+98	[00:00:18]	2025/04/26 14:51:38.556	{}	0	-	[-]	+1	C	()	appium:deviceScreenDensity: 420
+99	[00:00:18]	2025/04/26 14:51:38.556	{}	0	-	[-]	+0	C	()	appium:viewportRect: {left=0, top=132, width=1080, height=2268}
+100	[00:00:18]	2025/04/26 14:51:38.557	{}	0	-	[-]	+1	C	()	appium:language: ja
+101	[00:00:18]	2025/04/26 14:51:38.557	{}	0	-	[-]	+0	C	()	appium:avd: Pixel_8_Android_14
+102	[00:00:18]	2025/04/26 14:51:38.558	{}	0	-	[-]	+1	C	()	appium:deviceModel: sdk_gphone64_arm64
+103	[00:00:18]	2025/04/26 14:51:38.558	{}	0	-	[-]	+0	C	()	appium:platformVersion: 14
+104	[00:00:18]	2025/04/26 14:51:38.558	{}	0	-	[-]	+0	C	()	appium:databaseEnabled: false
+105	[00:00:18]	2025/04/26 14:51:38.559	{}	0	-	[-]	+1	C	()	appium:deviceUDID: emulator-5554
+106	[00:00:18]	2025/04/26 14:51:38.559	{}	0	-	[-]	+0	C	()	appium:statBarHeight: 132
+107	[00:00:18]	2025/04/26 14:51:38.560	{}	0	-	[-]	+1	C	()	appium:webStorageEnabled: false
+108	[00:00:18]	2025/04/26 14:51:38.560	{}	0	-	[-]	+0	C	()	appium:appActivity: com.android.settings.Settings
+109	[00:00:18]	2025/04/26 14:51:38.560	{}	0	-	[-]	+0	C	()	appium:deviceName: emulator-5554
+110	[00:00:18]	2025/04/26 14:51:38.561	{}	0	-	[-]	+1	C	()	appium:javascriptEnabled: true
+111	[00:00:18]	2025/04/26 14:51:38.561	{}	0	-	[-]	+0	C	()	appium:appPackage: com.android.settings
+112	[00:00:18]	2025/04/26 14:51:38.565	{}	0	-	[-]	+4	C	()	settings
+113	[00:00:18]	2025/04/26 14:51:38.667	{}	0	-	[-]	+102	C	()	always_finish_activities: 0
+114	[00:00:18]	2025/04/26 14:51:38.668	{}	0	-	[-]	+1	C	()	(others)
+115	[00:00:18]	2025/04/26 14:51:38.669	{}	0	-	[-]	+1	C	()	isEmulator: true
+116	[00:00:18]	2025/04/26 14:51:38.670	{}	0	-	[-]	+1	C	()	hasOsaifuKeitai: false
+117	[00:00:18]	2025/04/26 14:51:38.672	{}	0	-	[info]	+2	C	()	disableCache
+118	[00:00:18]	2025/04/26 14:51:38.675	{}	0	-	[info]	+3	!	()	セットアップの実行が完了しました。(処理時間: 18.0 sec)
+119	[00:00:18]	2025/04/26 14:51:38.680	{}	0	-	[info]	+5	C	()	テスト関数の実行が完了しました。(処理時間: 18.1 sec)
+120	[00:00:18]	2025/04/26 14:51:38.680	{}	0	-	[info]	+0	C	()	End of Test function: testFunc1 [testFunc1()]
+121	[00:00:18]	2025/04/26 14:51:38.707	{}	0	-	[WARN]	+27	C	()	scenario not implemented.
 
-******CONFUSION MATRIX******
-----------------------------------
-True\Pred [OFF] [ON]  
-[OFF]     8     0     
-[ON]      0     8     
-
-******PRECISION RECALL******
-----------------------------------
-Class Precision(%) Recall(%)
-[OFF] 100.00          100.00         
-[ON]  100.00          100.00         
+org.opentest4j.TestAbortedException: scenario not implemented.
 
 
-Model saved to /Users/wave1008/Downloads/Vision1/build/vision/classifiers/CheckStateClassifier/CheckStateClassifier.mlmodel
-20	[00:00:04]	2025/02/03 02:35:35.179	{}	0	-	[info]	+17	C	()	[learning [CheckStateClassifier]] in 2.449 sec
-21	[00:00:04]	2025/02/03 02:35:35.180	{}	0	-	[info]	+1	C	()	Starting leaning. [DefaultClassifier]
-22	[00:00:08]	2025/02/03 02:35:38.939	{}	0	-	[info]	+3759	C	()	Learning completed. (in 3.758 sec)
-["/Users/wave1008/Downloads/Vision1/build/vision/classifiers/DefaultClassifier/MLImageClassifier.swift", "/Users/wave1008/Downloads/Vision1/build/vision/classifiers/DefaultClassifier", "-noise", "-blur"]
-----------------------------------
-dataSourceName: DefaultClassifier
-dataSourcePath: file:///Users/wave1008/Downloads/Vision1/build/vision/classifiers/DefaultClassifier/
-options: ["-noise", "-blur"]
-featureExtractor: Image Feature Print V2
-----------------------------------
-Number of examples: 33
-Number of classes: 32
-Accuracy: 100.00%
+	at shirates.core.testcode.UITestCallbackExtension.afterEach(UITestCallbackExtension.kt:387)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-******CONFUSION MATRIX******
-**** (upperleft 20-by-20) ****
-----------------------------------
-True\Pred                                                                      @a[Android Files App][Audio Button]                                            @a[Android Files App][Documents Button]                                        @a[Android Files App][Images Button]                                           @a[Android Files App][Large files Button]                                      @a[Android Files App][This week Button]                                        @a[Android Files App][Videos Button]                                           @a[Android Settings App][Android Settings Top Screen][Apps Icon]               @a[Android Settings App][Android Settings Top Screen][Battery Icon]            @a[Android Settings App][Android Settings Top Screen][Connected devices Icon]  @a[Android Settings App][Android Settings Top Screen][Display Icon]            @a[Android Settings App][Android Settings Top Screen][Location Icon]           @a[Android Settings App][Android Settings Top Screen][Network & internet Icon] @a[Android Settings App][Android Settings Top Screen][Sound & vibration Icon]  @a[Android Settings App][Android Settings Top Screen][Storage Icon]            @a[Android Settings App][Android Settings Top Screen][System Icon]             @a[Android Settings App][Network & internet Screen][Airplane mode Icon]        @a[Android Settings App][Network & internet Screen][Calls & SMS Icon]          @a[Android Settings App][Network & internet Screen][Data Saver Icon]           @a[Android Settings App][Network & internet Screen][Hotspot & tethering Icon]  @a[Android Settings App][Network & internet Screen][Internet Icon]             
-@a[Android Files App][Audio Button]                                            1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Files App][Documents Button]                                        0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Files App][Images Button]                                           0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Files App][Large files Button]                                      0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Files App][This week Button]                                        0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Files App][Videos Button]                                           0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Apps Icon]               0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Battery Icon]            0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Connected devices Icon]  0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Display Icon]            0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Location Icon]           0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Network & internet Icon] 0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Sound & vibration Icon]  0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][Storage Icon]            0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Android Settings Top Screen][System Icon]             0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Network & internet Screen][Airplane mode Icon]        0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Network & internet Screen][Calls & SMS Icon]          0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Network & internet Screen][Data Saver Icon]           0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              0                                                                              
-@a[Android Settings App][Network & internet Screen][Hotspot & tethering Icon]  0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              0                                                                              
-@a[Android Settings App][Network & internet Screen][Internet Icon]             0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              0                                                                              1                                                                              
-
-******PRECISION RECALL******
-----------------------------------
-Class                                                                          Precision(%) Recall(%)
-@a[Android Files App][Audio Button]                                            100.00          100.00         
-@a[Android Files App][Documents Button]                                        100.00          100.00         
-@a[Android Files App][Images Button]                                           100.00          100.00         
-@a[Android Files App][Large files Button]                                      100.00          100.00         
-@a[Android Files App][This week Button]                                        100.00          100.00         
-@a[Android Files App][Videos Button]                                           100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Apps Icon]               100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Battery Icon]            100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Connected devices Icon]  100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Display Icon]            100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Location Icon]           100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Network & internet Icon] 100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Sound & vibration Icon]  100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][Storage Icon]            100.00          100.00         
-@a[Android Settings App][Android Settings Top Screen][System Icon]             100.00          100.00         
-@a[Android Settings App][Network & internet Screen][Airplane mode Icon]        100.00          100.00         
-@a[Android Settings App][Network & internet Screen][Calls & SMS Icon]          100.00          100.00         
-@a[Android Settings App][Network & internet Screen][Data Saver Icon]           100.00          100.00         
-@a[Android Settings App][Network & internet Screen][Hotspot & tethering Icon]  100.00          100.00         
-@a[Android Settings App][Network & internet Screen][Internet Icon]             100.00          100.00         
-@a[Android Settings App][Network & internet Screen][SIMs Icon]                 100.00          100.00         
-@a[Android Settings App][Network & internet Screen][VPN Icon]                  100.00          100.00         
-@a[misc][RadioButton(OFF)]                                                     100.00          100.00         
-@a[misc][RadioButton(ON)]                                                      100.00          100.00         
-@a[misc][←]                                                                    100.00          100.00         
-@i[iOS Settings App][Accessibility Icon]                                       100.00          100.00         
-@i[iOS Settings App][Action Button Icon]                                       100.00          100.00         
-@i[iOS Settings App][Apple Intelligence & Siri Icon]                           100.00          100.00         
-@i[iOS Settings App][Camera Icon]                                              100.00          100.00         
-@i[iOS Settings App][Developer Icon]                                           100.00          100.00         
-@i[iOS Settings App][General Icon]                                             100.00          100.00         
-@i[iOS Settings App][Screen Time Icon]                                         100.00          100.00         
-
-
-Model saved to /Users/wave1008/Downloads/Vision1/build/vision/classifiers/DefaultClassifier/DefaultClassifier.mlmodel
-23	[00:00:08]	2025/02/03 02:35:38.946	{}	0	-	[info]	+7	C	()	[learning [DefaultClassifier]] in 3.766 sec
-24	[00:00:08]	2025/02/03 02:35:38.979	{}	0	-	[info]	+33	C	()	Classifier files loaded.(CheckStateClassifier, 2 labels, directory=/Users/wave1008/Downloads/Vision1/build/vision/classifiers/CheckStateClassifier)
-25	[00:00:08]	2025/02/03 02:35:38.988	{}	0	-	[info]	+9	C	()	Classifier files loaded.(DefaultClassifier, 32 labels, directory=/Users/wave1008/Downloads/Vision1/build/vision/classifiers/DefaultClassifier)
-26	[00:00:08]	2025/02/03 02:35:38.993	{}	0	-	[info]	+5	C	()	Initializing TestDriver.(profileName=Pixel 8(Android 14))
-27	[00:00:08]	2025/02/03 02:35:38.994	{}	0	-	[info]	+1	C	()	noLoadRun: false
-28	[00:00:08]	2025/02/03 02:35:38.995	{}	0	-	[info]	+1	C	()	boundsToRectRatio: 1
-29	[00:00:08]	2025/02/03 02:35:38.995	{}	0	-	[info]	+0	C	()	reuseDriver: true
-30	[00:00:08]	2025/02/03 02:35:38.996	{}	0	-	[info]	+1	C	()	autoScreenshot: true
-31	[00:00:08]	2025/02/03 02:35:38.996	{}	0	-	[info]	+0	C	()	onChangedOnly: true
-32	[00:00:08]	2025/02/03 02:35:38.997	{}	0	-	[info]	+1	C	()	onCondition: true
-33	[00:00:08]	2025/02/03 02:35:38.997	{}	0	-	[info]	+0	C	()	onAction: true
-34	[00:00:08]	2025/02/03 02:35:38.998	{}	0	-	[info]	+1	C	()	onExpectation: true
-35	[00:00:08]	2025/02/03 02:35:38.998	{}	0	-	[info]	+0	C	()	onExecOperateCommand: true
-36	[00:00:08]	2025/02/03 02:35:38.999	{}	0	-	[info]	+1	C	()	onCheckCommand: true
-37	[00:00:08]	2025/02/03 02:35:39.006	{}	0	-	[info]	+7	C	()	onScrolling: true
-38	[00:00:08]	2025/02/03 02:35:39.008	{}	0	-	[info]	+2	C	()	manualScreenshot: true
-39	[00:00:08]	2025/02/03 02:35:39.009	{}	0	-	[info]	+1	C	()	retryMaxCount: 2
-40	[00:00:08]	2025/02/03 02:35:39.011	{}	0	-	[info]	+2	C	()	retryIntervalSeconds: 2.0
-41	[00:00:08]	2025/02/03 02:35:39.011	{}	0	-	[info]	+0	C	()	shortWaitSeconds: 1.5
-42	[00:00:08]	2025/02/03 02:35:39.012	{}	0	-	[info]	+1	C	()	waitSecondsOnIsScreen: 15.0
-43	[00:00:08]	2025/02/03 02:35:39.013	{}	0	-	[info]	+1	C	()	waitSecondsForLaunchAppComplete: 15.0
-44	[00:00:08]	2025/02/03 02:35:39.013	{}	0	-	[info]	+0	C	()	waitSecondsForAnimationComplete: 0.5
-45	[00:00:08]	2025/02/03 02:35:39.014	{}	0	-	[info]	+1	C	()	waitSecondsForConnectionEnabled: 8.0
-46	[00:00:08]	2025/02/03 02:35:39.015	{}	0	-	[info]	+1	C	()	swipeDurationSeconds: 3.0
-47	[00:00:08]	2025/02/03 02:35:39.015	{}	0	-	[info]	+0	C	()	flickDurationSeconds: 0.3
-48	[00:00:08]	2025/02/03 02:35:39.016	{}	0	-	[info]	+1	C	()	swipeMarginRatio: 0.0
-49	[00:00:08]	2025/02/03 02:35:39.016	{}	0	-	[info]	+0	C	()	scrollVerticalStartMarginRatio: 0.15
-50	[00:00:08]	2025/02/03 02:35:39.017	{}	0	-	[info]	+1	C	()	scrollVerticalEndMarginRatio: 0.1
-51	[00:00:08]	2025/02/03 02:35:39.017	{}	0	-	[info]	+0	C	()	scrollHorizontalStartMarginRatio: 0.2
-52	[00:00:08]	2025/02/03 02:35:39.018	{}	0	-	[info]	+1	C	()	scrollHorizontalEndMarginRatio: 0.1
-53	[00:00:08]	2025/02/03 02:35:39.018	{}	0	-	[info]	+0	C	()	tapHoldSeconds: 0.0
-54	[00:00:08]	2025/02/03 02:35:39.019	{}	0	-	[info]	+1	C	()	tapAppIconMethod: auto
-55	[00:00:08]	2025/02/03 02:35:39.020	{}	0	-	[info]	+1	C	()	tapAppIconMacro: 
-56	[00:00:08]	2025/02/03 02:35:39.020	{}	0	-	[info]	+0	C	()	enableCache: true
-57	[00:00:08]	2025/02/03 02:35:39.021	{}	0	-	[info]	+1	C	()	syncWaitSeconds: 1.8
-58	[00:00:08]	2025/02/03 02:35:39.299	{}	0	-	[info]	+278	C	()	Running device found. (udid=emulator-5554, avd=Pixel_8_Android_14_)
-59	[00:00:08]	2025/02/03 02:35:39.300	{}	0	-	[info]	+1	C	()	Connected device found. (Pixel_8_Android_14_:5554, Android 14, emulator-5554)
-60	[00:00:08]	2025/02/03 02:35:39.417	{}	0	-	[info]	+117	C	()	Terminating Appium Server. (pid=28162, port=4720)
-61	[00:00:08]	2025/02/03 02:35:39.431	{}	0	-	[info]	+14	C	()	Starting Appium Server.
-62	[00:00:08]	2025/02/03 02:35:39.432	{}	0	-	[info]	+1	C	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1/appium_2025-02-03_023539302.log --port 4720
-63	[00:00:14]	2025/02/03 02:35:44.980	{}	0	-	[info]	+5548	C	()	Appium Server started. (pid=28319, port=4720)
-64	[00:00:15]	2025/02/03 02:35:46.000	{}	0	-	[info]	+1020	C	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
-65	[00:00:18]	2025/02/03 02:35:49.540	{}	0	-	[info]	+3540	C	()	implicitlyWaitSeconds: 5.0
-66	[00:00:18]	2025/02/03 02:35:49.662	{}	0	-	[info]	+122	C	()	(settings) always_finish_activities: 0
-67	[00:00:18]	2025/02/03 02:35:49.704	{}	0	-	[info]	+42	C	(syncCache)	Syncing (1)
-68	[00:00:19]	2025/02/03 02:35:50.671	{}	0	-	[info]	+967	C	(syncCache)	imageProfile: @a_1080x2268
-69	[00:00:19]	2025/02/03 02:35:50.671	{}	0	-	[info]	+0	C	(syncCache)	Synced. (elapsed=0.967)
-70	[00:00:19]	2025/02/03 02:35:50.673	{}	0	-	[info]	+2	C	()	[syncCache] in 0.972 sec
-71	[00:00:20]	2025/02/03 02:35:51.463	{}	0	-	[info]	+790	C	()	Syncing screen.
-72	[00:00:20]	2025/02/03 02:35:51.675	{}	0	-	[info]	+212	C	()	[syncScreenshot] in 0.499 sec
-73	[00:00:20]	2025/02/03 02:35:51.778	{}	0	-	[screenshot]	+103	C	()	screenshot: 73.png
-74	[00:00:21]	2025/02/03 02:35:51.885	{}	0	-	[info]	+107	C	()	AppiumDriver initialized.
-75	[00:00:21]	2025/02/03 02:35:51.886	{}	0	-	[-]	+1	C	()	testrun: testrun.global.properties
-76	[00:00:21]	2025/02/03 02:35:51.886	{}	0	-	[-]	+0	C	()	testConfigName: testConfig@a(/Users/wave1008/Downloads/Vision1/testConfig/android/testConfig@a.json)
-77	[00:00:21]	2025/02/03 02:35:51.887	{}	0	-	[-]	+1	C	()	profileName: Pixel 8(Android 14)
-78	[00:00:21]	2025/02/03 02:35:51.887	{}	0	-	[-]	+0	C	()	appIconName: Settings
-79	[00:00:21]	2025/02/03 02:35:51.889	{}	0	-	[-]	+2	C	()	(capabilities)
-80	[00:00:21]	2025/02/03 02:35:51.889	{}	0	-	[-]	+0	C	()	appium:newCommandTimeout: 300
-81	[00:00:21]	2025/02/03 02:35:51.890	{}	0	-	[-]	+1	C	()	appium:takesScreenshot: true
-82	[00:00:21]	2025/02/03 02:35:51.890	{}	0	-	[-]	+0	C	()	appium:warnings: {}
-83	[00:00:21]	2025/02/03 02:35:51.891	{}	0	-	[-]	+1	C	()	appium:deviceApiLevel: 34
-84	[00:00:21]	2025/02/03 02:35:51.891	{}	0	-	[-]	+0	C	()	appium:automationName: UiAutomator2
-85	[00:00:21]	2025/02/03 02:35:51.892	{}	0	-	[-]	+1	C	()	appium:locationContextEnabled: false
-86	[00:00:21]	2025/02/03 02:35:51.893	{}	0	-	[-]	+1	C	()	appium:deviceScreenSize: 1080x2400
-87	[00:00:21]	2025/02/03 02:35:51.893	{}	0	-	[-]	+0	C	()	appium:deviceManufacturer: Google
-88	[00:00:21]	2025/02/03 02:35:51.894	{}	0	-	[-]	+1	C	()	appium:enforceXPath1: true
-89	[00:00:21]	2025/02/03 02:35:51.894	{}	0	-	[-]	+0	C	()	appium:udid: emulator-5554
-90	[00:00:21]	2025/02/03 02:35:51.895	{}	0	-	[-]	+1	C	()	appium:pixelRatio: 2.625
-91	[00:00:21]	2025/02/03 02:35:51.895	{}	0	-	[-]	+0	C	()	platformName: ANDROID
-92	[00:00:21]	2025/02/03 02:35:51.896	{}	0	-	[-]	+1	C	()	appium:networkConnectionEnabled: true
-93	[00:00:21]	2025/02/03 02:35:51.896	{}	0	-	[-]	+0	C	()	appium:locale: US
-94	[00:00:21]	2025/02/03 02:35:51.897	{}	0	-	[-]	+1	C	()	appium:deviceScreenDensity: 420
-95	[00:00:21]	2025/02/03 02:35:51.898	{}	0	-	[-]	+1	C	()	appium:viewportRect: {left=0, top=132, width=1080, height=2268}
-96	[00:00:21]	2025/02/03 02:35:51.898	{}	0	-	[-]	+0	C	()	appium:language: en
-97	[00:00:21]	2025/02/03 02:35:51.899	{}	0	-	[-]	+1	C	()	appium:avd: Pixel_8_Android_14_
-98	[00:00:21]	2025/02/03 02:35:51.899	{}	0	-	[-]	+0	C	()	appium:deviceModel: sdk_gphone64_arm64
-99	[00:00:21]	2025/02/03 02:35:51.900	{}	0	-	[-]	+1	C	()	appium:platformVersion: 14
-100	[00:00:21]	2025/02/03 02:35:51.901	{}	0	-	[-]	+1	C	()	appium:databaseEnabled: false
-101	[00:00:21]	2025/02/03 02:35:51.901	{}	0	-	[-]	+0	C	()	appium:deviceUDID: emulator-5554
-102	[00:00:21]	2025/02/03 02:35:51.902	{}	0	-	[-]	+1	C	()	appium:statBarHeight: 132
-103	[00:00:21]	2025/02/03 02:35:51.902	{}	0	-	[-]	+0	C	()	appium:webStorageEnabled: false
-104	[00:00:21]	2025/02/03 02:35:51.903	{}	0	-	[-]	+1	C	()	appium:appActivity: com.android.settings.Settings
-105	[00:00:21]	2025/02/03 02:35:51.903	{}	0	-	[-]	+0	C	()	appium:deviceName: emulator-5554
-106	[00:00:21]	2025/02/03 02:35:51.904	{}	0	-	[-]	+1	C	()	appium:javascriptEnabled: true
-107	[00:00:21]	2025/02/03 02:35:51.905	{}	0	-	[-]	+1	C	()	appium:appPackage: com.android.settings
-108	[00:00:21]	2025/02/03 02:35:51.906	{}	0	-	[-]	+1	C	()	settings
-109	[00:00:21]	2025/02/03 02:35:51.999	{}	0	-	[-]	+93	C	()	always_finish_activities: 0
-110	[00:00:21]	2025/02/03 02:35:52.007	{}	0	-	[-]	+8	C	()	(others)
-111	[00:00:21]	2025/02/03 02:35:52.008	{}	0	-	[-]	+1	C	()	isEmulator: true
-112	[00:00:21]	2025/02/03 02:35:52.009	{}	0	-	[-]	+1	C	()	hasOsaifuKeitai: false
-113	[00:00:21]	2025/02/03 02:35:52.576	{}	0	-	[info]	+567	C	()	[ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig] in 0.565 sec
-114	[00:00:21]	2025/02/03 02:35:52.581	{}	0	-	[info]	+5	C	()	disableCache
-115	[00:00:23]	2025/02/03 02:35:54.800	{}	0	-	[info]	+2219	!	()	Syncing screen.
-116	[00:00:25]	2025/02/03 02:35:56.309	{}	0	-	[info]	+1509	!	()	[syncScreenshot] in 3.222 sec
-117	[00:00:25]	2025/02/03 02:35:56.394	{}	0	-	[screenshot]	+85	!	()	screenshot: 117.png
-118	[00:00:25]	2025/02/03 02:35:56.396	{}	0	-	[info]	+2	!	()	Setup executed. (duration: 25.0 sec)
-119	[00:00:25]	2025/02/03 02:35:56.401	{}	0	-	[info]	+5	C	()	Test function executed. (duration: 25.3 sec)
-120	[00:00:25]	2025/02/03 02:35:56.401	{}	0	-	[info]	+0	C	()	End of Test function: testFunc1 [testFunc1()]
-121	[00:00:25]	2025/02/03 02:35:56.402	{}	0	-	[WARN]	+1	C	()	scenario not implemented.
-122	[00:00:26]	2025/02/03 02:35:57.408	{}	0	-	[info]	+1006	C	()	Logging to file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1/
-Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1
-Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-03_023530/VisionTestClass1
+122	[00:00:19]	2025/04/26 14:51:39.718	{}	0	-	[info]	+1011	C	()	ログは次の場所に出力します。 file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-26_145120/VisionTestClass1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-26_145120/VisionTestClass1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-04-26_145120/VisionTestClass1
 No scenario found. Outputting Spec-Report skipped.
-123	[00:00:26]	2025/02/03 02:35:57.782	{}	0	-	[info]	+374	C	()	Quitting TestDriver.
-124	[00:00:30]	2025/02/03 02:36:01.476	{}	0	-	[info]	+3694	C	()	Test class executed. (duration: 30.6 sec)
-> Task :test
-The automatic loading of test framework implementation dependencies has been deprecated. This is scheduled to be removed in Gradle 9.0. Declare the desired test framework directly on the test suite or explicitly declare the test framework implementation dependencies on the test's runtime classpath. Consult the upgrading guide for further information: https://docs.gradle.org/8.10/userguide/upgrading_version_8.html#test_framework_implementation_dependencies
-Disconnected from the target VM, address: 'localhost:58798', transport: 'socket'
-BUILD SUCCESSFUL in 31s
-3 actionable tasks: 1 executed, 2 up-to-date
-2:36:01: Execution finished ':test --tests "exercise.VisionTestClass1.testFunc1"'.
+123	[00:00:19]	2025/04/26 14:51:40.160	{}	0	-	[info]	+442	C	()	Quitting TestDriver.
+124	[00:00:20]	2025/04/26 14:51:40.757	{}	0	-	[info]	+597	C	()	テストクラスの実行が完了しました。(処理時間: 20.5 sec)
+Disconnected from the target VM, address: '127.0.0.1:60644', transport: 'socket'
+
+Process finished with exit code 255
 ```
 
 ## テストを実行する (iOS)
@@ -319,13 +227,13 @@ BUILD SUCCESSFUL in 31s
 
 ```
 ...
-54	[00:00:07]	2025/01/24 13:31:25.678	{}	0	-	[info]	+29	C	()	Starting Appium Server.
-55	[00:00:07]	2025/01/24 13:31:25.679	{}	0	-	[info]	+1	C	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/testConfig/2025-01-24_133117/VisionTestClass1/appium_2025-01-24_133125523.log --port 4720
-56	[00:00:15]	2025/01/24 13:31:33.504	{}	0	-	[info]	+7825	C	()	Appium Server started. (pid=73432, port=4720)
-57	[00:00:16]	2025/01/24 13:31:34.510	{}	0	-	[info]	+1006	C	()	Optimizing installing WebDriverAgent.
-58	[00:00:16]	2025/01/24 13:31:34.616	{}	0	-	[info]	+106	C	()	WebDriverAgentRunner-Runner.app not found. Optimization skipped.
-59	[00:00:16]	2025/01/24 13:31:34.619	{}	0	-	[info]	+3	C	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
-60	[00:00:16]	2025/01/24 13:31:34.626	{}	0	-	[info]	+7	C	()	Note: Initializing IOSDriver may take a few minutes to build and install WebDriverAgent.
+62	[00:00:06]	2025/04/26 14:40:32.250	{}	0	-	[info]	+7	C	()	Starting Appium Server.
+63	[00:00:06]	2025/04/26 14:40:32.262	{}	0	-	[info]	+12	C	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/testConfig@i/2025-04-26_144026/VisionTestClass1/appium_2025-04-26_144032117.log --port 4722
+64	[00:00:09]	2025/04/26 14:40:35.579	{}	0	-	[info]	+3317	C	()	Appium Serverを開始しました。 (pid=19583, port=4722)
+65	[00:00:10]	2025/04/26 14:40:36.606	{}	0	-	[info]	+1027	C	()	Optimizing installing WebDriverAgent.
+66	[00:00:10]	2025/04/26 14:40:36.738	{}	0	-	[info]	+132	C	()	WebDriverAgentRunner-Runner.app not found. Optimization skipped.
+67	[00:00:10]	2025/04/26 14:40:36.750	{}	0	-	[info]	+12	C	()	Appium Serverへ接続しています。(http://127.0.0.1:4722/)
+68	[00:00:10]	2025/04/26 14:40:36.756	{}	0	-	[info]	+6	C	()	注意：iOSDriverの初期化はWebDriverAgentのビルドとインストールのため数分かかる場合があります。
 ...
 ```
 
@@ -378,7 +286,7 @@ class VisionTestClass1 : VisionTest() {
 
 ## @Nestedのサポートについて
 
-JUnit5の `@Nested`アノテーションは使用しないでください。 これはshirates-coreのソフトウェアデザインに伴う制限です。
+JUnit 5の `@Nested`アノテーションは使用しないでください。 これはshirates-coreのソフトウェアデザインに伴う制限です。
 
 ### Link
 

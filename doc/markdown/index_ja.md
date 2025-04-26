@@ -184,10 +184,12 @@
 ## チュートリアル(In action)
 
 - デバッグ
-    - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
+    - [recognizeText.txtを確認する](vision/in_action/debugging/watching_recognize_text_ja.md)
     - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)
 - テキストインデックス
     - [テキストインデックスによる画面認識精度の向上](vision/in_action/text_indexing/text_index_for_screen_recognition_ja.md)
+- 分類器のシャーディング
+    - [分類器のシャーディングよる学習時間の短縮](vision/in_action/classifier_sharding/sharding_classifiers_to_reduce_learning_time_ja.md)
 - classicモードとvisionモードの相互運用
     - [classic APIをVisionTestで使用する (Vision) (classicScope, visionScrope)](vision/in_action/hybrid_scripting/using_classic_apis_in_vision_test_ja.md)
 - テストフィクスチャ
@@ -204,8 +206,8 @@
 - リモートのAppium Serverを利用する
     - [リモートのAppium Serverの構成](common/using_remote_appium_server/configuring_remote_appium_server_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
-    - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
-    - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)
+    - [フレーキーテストの原因](common/stabilizing_test_execution/causes_of_flaky_test_ja.md)
+    - [scenarioの再実行](common/stabilizing_test_execution/rerun_scenario_ja.md)
 
 ## チュートリアル(Advanced)
 

@@ -14,6 +14,11 @@
 
 Indicates that the accuracy did not reach 100% as a result of training with CreateML.
 
+## Note
+
+Don't care if it does not affect your test result.
+Accuracy does not necessarily have to be 100%.
+
 ## Solution
 
 ### nan

@@ -57,17 +57,22 @@ If you have to avoid the cons, use classic mode.
 ### Console output
 
 ```
-125	[00:00:20]	2025/01/26 02:47:26.298	{detect-1}	0	-	[CASE]	+834	!	()	(1)
-126	[00:00:20]	2025/01/26 02:47:26.299	{detect-1}	0	-	[ACTION]	+1	!	()	action
-127	[00:00:20]	2025/01/26 02:47:27.051	{detect-1}	0	-	[info]	+752	!	()	Syncing screen.
-128	[00:00:21]	2025/01/26 02:47:27.267	{detect-1}	0	-	[info]	+216	!	()	[syncScreenshot] in 0.459 sec
-129	[00:00:21]	2025/01/26 02:47:27.354	{detect-1}	0	-	[screenshot]	+87	!	()	screenshot: 129.png
-130	[00:00:21]	2025/01/26 02:47:27.688	{detect-1}	0	-	[info]	+334	!	()	[TextRecognizer/recognizeText] in 0.332 sec
-131	[00:00:21]	2025/01/26 02:47:27.990	{detect-1}	0	-	[info]	+302	!	()	130_[129.png]_recognized_text_rectangles.png
-132	[00:00:22]	2025/01/26 02:47:28.180	{detect-1}	0	-	[info]	+190	!	()	[detect] in 1.879 sec
-133	[00:00:22]	2025/01/26 02:47:28.185	{detect-1}	0	-	[output]	+5	!	(output)	text: "Q Search settings", bounds: [97,634][552,701] width=456, height=68, centerX=325, centerY=668, rect: [97, 634, 552, 701](w=456, h=68)
-134	[00:00:22]	2025/01/26 02:47:28.190	{detect-1}	0	-	[info]	+5	!	()	[detect] in 0.004 sec
-135	[00:00:22]	2025/01/26 02:47:28.198	{detect-1}	0	-	[output]	+8	!	(output)	text: "Network & internet", bounds: [184,844][628,887] width=445, height=44, centerX=406, centerY=866, rect: [184, 844, 628, 887](w=445, h=44)
+132	[00:00:25]	2025/04/26 15:32:53.243	{detect-1}	0	-	[CASE]	+507	!	()	(1)
+133	[00:00:25]	2025/04/26 15:32:53.243	{detect-1}	0	-	[ACTION]	+0	!	()	action
+134	[00:00:26]	2025/04/26 15:32:53.765	{detect-1}	0	-	[info]	+522	!	()	Syncing screen.(isSame: false, changed: false, matchRate: 0.3052353858947754, distance=0.6947646141052246)
+135	[00:00:27]	2025/04/26 15:32:54.689	{detect-1}	0	-	[info]	+924	!	()	Syncing screen.(isSame: false, changed: true, matchRate: 0.22204530239105225, distance=0.7779546976089478)
+136	[00:00:27]	2025/04/26 15:32:55.603	{detect-1}	0	-	[info]	+914	!	()	Syncing screen.(isSame: true, changed: true, matchRate: 0.999935973144602, distance=6.402685539796948E-5)
+137	[00:00:27]	2025/04/26 15:32:55.604	{detect-1}	0	-	[screenshot]	+1	!	()	screenshot: 137.png
+138	[00:00:28]	2025/04/26 15:32:55.903	{detect-1}	0	-	[info]	+299	!	()	137_[137.png]_recognizeText_rectangles.png
+139	[00:00:28]	2025/04/26 15:32:56.046	{detect-1}	0	-	[info]	+143	!	()	[Android Settings Top Screen] found by matchTextScoreRate
+140	[00:00:28]	2025/04/26 15:32:56.047	{detect-1}	0	-	[info]	+1	!	()	[recognizeScreen] in 0.442 sec
+141	[00:00:28]	2025/04/26 15:32:56.047	{detect-1}	0	-	[info]	+0	!	()	currentScreen=[Android Settings Top Screen]
+142	[00:00:28]	2025/04/26 15:32:56.120	{detect-1}	0	-	[info]	+73	!	()	141_[101, 642, 552, 699](w=452, h=58).png
+143	[00:00:28]	2025/04/26 15:32:56.242	{detect-1}	0	-	[info]	+122	!	()	142_[141_[101, 642, 552, 699](w=452, h=58).png]_recognizeText_rectangles.png
+144	[00:00:28]	2025/04/26 15:32:56.368	{detect-1}	0	-	[output]	+126	!	(output)	text: "Search settings", bounds: [101,642][552,699] width=452, height=58, centerX=327, centerY=671, rect: [101, 642, 552, 699](w=452, h=58)
+145	[00:00:28]	2025/04/26 15:32:56.403	{detect-1}	0	-	[info]	+35	!	()	144_[84, 844, 625, 923](w=542, h=80).png
+146	[00:00:28]	2025/04/26 15:32:56.573	{detect-1}	0	-	[info]	+170	!	()	145_[144_[84, 844, 625, 923](w=542, h=80).png]_recognizeText_rectangles.png
+147	[00:00:29]	2025/04/26 15:32:56.662	{detect-1}	0	-	[output]	+89	!	(output)	text: "Network & internet", bounds: [84,844][625,923] width=542, height=80, centerX=355, centerY=884, rect: [84, 844, 625, 923](w=542, h=80)
 ```
 
 ### TestResults
@@ -76,203 +81,36 @@ You got test results files in TestResults directory(`~/Downloads/TestResults` is
 
 ![](_images/detect_testresults.png)
 
-### 130_[129.png]_recognized_text_rectangles.png
+### recognizeText_rectangles.png
 
 You can see recognized text rectangles.
 
-![](_images/recognized_texts.png)
+![](_images/recognizeText_rectangles.png)
 
-### 129_[129.png]_TextRecognizer_recognizeText.json
+### recognizeText.txt
 
-You can see text recognition results in json file.
+You can see text recognition results in a text file.
 
-```json
-{
-  "input" : "\/Users\/wave1008\/Downloads\/TestResults\/testConfig@a\/2025-01-26_024706\/Detect1\/129.png",
-  "language" : "",
-  "candidates" : [
-    {
-      "confidence" : 0.5,
-      "text" : "2:47 0 0•0•",
-      "rect" : {
-        "height" : 44,
-        "width" : 364,
-        "y" : 49,
-        "x" : 36
-      }
-    },
-    {
-      "text" : "Settings",
-      "rect" : {
-        "y" : 435,
-        "x" : 67,
-        "width" : 342,
-        "height" : 90
-      },
-      "confidence" : 1
-    },
-    {
-      "rect" : {
-        "width" : 456,
-        "x" : 97,
-        "y" : 634,
-        "height" : 68
-      },
-      "text" : "Q Search settings",
-      "confidence" : 1
-    },
-    {
-      "text" : "Network & internet",
-      "rect" : {
-        "x" : 184,
-        "y" : 844,
-        "width" : 445,
-        "height" : 44
-      },
-      "confidence" : 1
-    },
-    {
-      "rect" : {
-        "y" : 912,
-        "x" : 184,
-        "height" : 40,
-        "width" : 364
-      },
-      "confidence" : 1,
-      "text" : "Mobile, Wi-Fi, hotspot"
-    },
-    {
-      "confidence" : 1,
-      "rect" : {
-        "width" : 454,
-        "x" : 184,
-        "height" : 49,
-        "y" : 1074
-      },
-      "text" : "Connected devices"
-    },
-    {
-      "text" : "Bluetooth, pairing",
-      "rect" : {
-        "y" : 1141,
-        "width" : 292,
-        "height" : 40,
-        "x" : 184
-      },
-      "confidence" : 1
-    },
-    {
-      "rect" : {
-        "width" : 76,
-        "height" : 53,
-        "x" : 85,
-        "y" : 1325
-      },
-      "confidence" : 0.5,
-      "text" : "88:"
-    },
-    {
-      "text" : "Apps",
-      "confidence" : 0.5,
-      "rect" : {
-        "height" : 62,
-        "x" : 153,
-        "width" : 166,
-        "y" : 1303
-      }
-    },
-    {
-      "rect" : {
-        "x" : 184,
-        "y" : 1370,
-        "height" : 44,
-        "width" : 594
-      },
-      "text" : "Assistant, recent apps, default apps",
-      "confidence" : 1
-    },
-    {
-      "text" : "Notifications",
-      "rect" : {
-        "y" : 1537,
-        "x" : 189,
-        "height" : 49,
-        "width" : 301
-      },
-      "confidence" : 1
-    },
-    {
-      "text" : "Notification history, conversations",
-      "confidence" : 1,
-      "rect" : {
-        "width" : 557,
-        "x" : 188,
-        "y" : 1599,
-        "height" : 40
-      }
-    },
-    {
-      "rect" : {
-        "width" : 189,
-        "x" : 171,
-        "y" : 1770,
-        "height" : 53
-      },
-      "confidence" : 1,
-      "text" : "Battery"
-    },
-    {
-      "text" : "100%",
-      "rect" : {
-        "y" : 1833,
-        "x" : 184,
-        "width" : 98,
-        "height" : 35
-      },
-      "confidence" : 1
-    },
-    {
-      "rect" : {
-        "y" : 2003,
-        "width" : 212,
-        "x" : 161,
-        "height" : 50
-      },
-      "confidence" : 1,
-      "text" : "Storage"
-    },
-    {
-      "confidence" : 1,
-      "rect" : {
-        "x" : 184,
-        "height" : 40,
-        "width" : 400,
-        "y" : 2062
-      },
-      "text" : "57% used - 6.82 GB free"
-    },
-    {
-      "text" : "Sound & vibration",
-      "confidence" : 1,
-      "rect" : {
-        "height" : 49,
-        "x" : 184,
-        "width" : 418,
-        "y" : 2229
-      }
-    },
-    {
-      "rect" : {
-        "y" : 2296,
-        "width" : 522,
-        "x" : 184,
-        "height" : 40
-      },
-      "confidence" : 1,
-      "text" : "Volume, haptics, Do Not Disturb"
-    }
-  ]
-}
+```text
+x	y	width	height	confidence	text
+35	48	252	46	0.5	332 0 0 0
+67	435	342	90	1.0	Settings
+99	642	454	58	1.0	Q Search settings
+76	844	553	80	1.0	= Network & internet
+189	912	360	35	1.0	Mobile, Wi-Fi, hotspot
+184	1074	454	49	1.0	Connected devices
+184	1141	292	40	1.0	Bluetooth, pairing
+94	1334	54	35	0.3	300.
+157	1303	161	62	0.5	Apps
+184	1370	594	44	1.0	Assistant, recent apps, default apps
+189	1537	301	49	1.0	Notifications
+188	1599	557	40	1.0	Notification history, conversations
+171	1770	189	53	1.0	Battery
+184	1833	98	35	1.0	100%
+161	1999	211	53	1.0	Storage
+184	2062	400	40	1.0	58% used - 3.35 GB free
+184	2229	418	49	1.0	Sound & vibration
+184	2296	522	40	1.0	Volume, haptics, Do Not Disturb
 ```
 
 ### Text recognition errors
@@ -282,18 +120,12 @@ It maybe improved in the future version.<br>
 
 ![](_images/text_recognition_errors.png)
 
-![](_images/text_recognition_errors_2.png)
-
-You can detect text by `detect` function with **substrings** argument.
+You can detect text by `detect` function just as followings.
 
 ```kotlin
 // works
 detect("Search settings")
-detect("App security, device lock, permissions")
-detect("Location")
-detect("controls")
-detect("Google")
-detect("System")
+detect("Apps")
 ```
 
 On the other hand, if text recognition does not function properly and results in garbled characters, the expected text
