@@ -307,7 +307,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         assertThatThrownBy {
                             it.existImageWithoutScroll("[System Icon]")
                         }.isInstanceOf(TestNGException::class.java)
-                            .hasMessage("Image of [System Icon] exists (text: \"\", bounds: [0,0][-1,-1] width=0, height=0, centerX=0, centerY=0, rect: [0, 0, 0, 0](w=0, h=0))")
+                            .hasMessageStartingWith("Image of [System Icon] exists (distance=")
                     }
                 }
             }
@@ -318,7 +318,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         assertThatThrownBy {
                             it.dontExistImageWithoutScroll("[Network & internet Icon]")
                         }.isInstanceOf(TestNGException::class.java)
-                            .hasMessageStartingWith("Image of [Network & internet Icon] does not exist (text: \"\", bounds:")
+                            .hasMessageStartingWith("Image of [Network & internet Icon] does not exist (distance=")
                     }
                 }
             }
