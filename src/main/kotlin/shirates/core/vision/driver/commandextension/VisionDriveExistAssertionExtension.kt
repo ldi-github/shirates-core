@@ -461,7 +461,7 @@ fun VisionDrive.dontExistWithoutScroll(
 internal fun VisionObservation?.getSubMessage(threshold: Double): String {
 
     val candidate = this as Candidate? ?: return ""
-    val dir = candidate?.file?.toPath()?.parent
+    val dir = candidate.file?.toPath()?.parent
     val submessage = " (distance=${candidate.distance}, threshold:$threshold, file://$dir)"
     return submessage
 }
