@@ -36,7 +36,7 @@ visionClassifierShardNodeCount=2
 
 ### 例3
 
-ScreenClassifierを10に分割するように設定します。
+ScreenClassifierを10に分割します。
 
 ```properties
 visionClassifierShardNodeCount=ScreenClassifier=10

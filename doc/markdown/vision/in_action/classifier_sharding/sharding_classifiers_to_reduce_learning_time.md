@@ -39,7 +39,7 @@ visionClassifierShardNodeCount=2
 
 ### Example 3
 
-Set ScreenClassifier to be divided into 10.
+Split ScreenClassifier into 10.
 
 ```properties
 visionClassifierShardNodeCount=ScreenClassifier=10
