@@ -4,6 +4,7 @@ import okio.FileNotFoundException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.driver.TestMode
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.toPath
@@ -90,7 +91,11 @@ class ShellUtilityTest : UnitTest() {
             // Act
             val r = ShellUtility.which("emulator")
             // Assert
-            assertThat(r.toPath().name).isEqualTo("emulator")
+            if (TestMode.isRunningOnWindows) {
+                assertThat(r.toPath().name).isEqualTo("emulator.exe")
+            } else {
+                assertThat(r.toPath().name).isEqualTo("emulator")
+            }
         }
         run {
             // Act

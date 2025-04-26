@@ -134,7 +134,8 @@ object ShellUtility {
         command: String
     ): String {
 
-        val r = executeCommand("which", command).resultString.trim()
+        val whichCommand = if (TestMode.isRunningOnWindows) "where" else "which"
+        val r = executeCommand(whichCommand, command).resultString.trim()
         if (r.exists()) {
             return r
         }
