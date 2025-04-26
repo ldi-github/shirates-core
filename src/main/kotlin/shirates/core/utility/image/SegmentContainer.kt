@@ -532,10 +532,10 @@ class SegmentContainer(
         if (grid) {
             g2d.color = gridColor
             for (x in 0 until image.width step gridWidth) {
-                g2d.drawLine(x, 0, x, image.rect.right)
+                g2d.drawLine(x, 0, x, image.rect.bottom)
             }
             for (y in 0 until image.height step gridWidth) {
-                g2d.drawLine(0, y, image.rect.bottom, y)
+                g2d.drawLine(0, y, image.rect.right, y)
             }
         }
         /**
