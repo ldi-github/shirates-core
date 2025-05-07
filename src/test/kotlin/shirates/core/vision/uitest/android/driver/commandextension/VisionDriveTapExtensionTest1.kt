@@ -105,7 +105,7 @@ class VisionDriveTapExtensionTest1 : VisionTest() {
         }
     }
 
-    @Order(10)
+    @Order(60)
     @Test
     fun tapImage() {
 
@@ -131,4 +131,18 @@ class VisionDriveTapExtensionTest1 : VisionTest() {
         }
     }
 
+    @Order(60)
+    @Test
+    fun tapLast() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.tapLast("*Settings*")
+                }.expectation {
+                    it.screenIs("[Android Settings Search Screen]")
+                }
+            }
+        }
+    }
 }
