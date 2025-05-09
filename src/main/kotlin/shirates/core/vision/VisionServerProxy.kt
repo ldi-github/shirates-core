@@ -250,6 +250,7 @@ object VisionServerProxy {
             TestLog.directoryForLog.toFile().mkdirs()
         }
         val baseFile = inputFile.toPath().toFile().name
+        CodeExecutionContext.lastRecognizedTsvFile = "${TestLog.currentLineNo}_[$baseFile]_recognizeText.txt"
         if (CodeExecutionContext.lastRecognizedFileName != baseFile) {
             val sb = StringBuilder()
             sb.append("x\ty\twidth\theight\tconfidence\ttext\n")
@@ -257,8 +258,7 @@ object VisionServerProxy {
                 sb.append("${c.rect.x1}\t${c.rect.y1}\t${c.rect.width}\t${c.rect.height}\t${c.confidence}\t${c.text}\n")
             }
             val tsvString = sb.toString()
-            val tsvFile =
-                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$baseFile]_recognizeText.txt").toString()
+            val tsvFile = TestLog.directoryForLog.resolve(CodeExecutionContext.lastRecognizedTsvFile!!).toString()
             tsvFile.toFile().writeText(tsvString)
         }
         sw.stop()

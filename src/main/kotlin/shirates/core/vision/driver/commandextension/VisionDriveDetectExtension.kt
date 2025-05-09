@@ -205,7 +205,7 @@ private fun VisionDrive.detectCoreCore(
     }
 
     /**
-     * Try to detect in current context
+     * Try to detect in the current context
      */
     var v = VisionElement.emptyElement
     doUntilTrue(
@@ -258,6 +258,7 @@ private fun VisionDrive.detectCoreCore(
             )
         )
         if (throwsException) {
+            TestDriver.visionRootElement.visionContext.printRecognizedTextInfo()
             throw v.lastError!!
         }
     }
