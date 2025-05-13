@@ -310,6 +310,11 @@ object CodeExecutionContext {
     var lastRecognizedFileName: String? = null
 
     /**
+     * lastRecognizedTsvFile
+     */
+    var lastRecognizedTsvFile: String? = null
+
+    /**
      * lastCropInfo
      */
     var lastCropInfo: CropInfo? = null

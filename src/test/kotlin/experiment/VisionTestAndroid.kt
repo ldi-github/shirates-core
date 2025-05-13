@@ -164,4 +164,32 @@ class VisionTestAndroid : VisionTest() {
             }
         }
     }
+
+    @Test
+    fun detectNotFound() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    it.detect("not exist element")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun existNG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    it.exist("not exist element")
+                }
+            }
+        }
+    }
 }

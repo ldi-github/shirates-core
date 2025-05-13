@@ -78,7 +78,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
     }
 
     @Test
-    fun exist_existImage() {
+    fun exist() {
 
         scenario {
             case(1, "exist") {
@@ -119,7 +119,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
                     }
                 }
             }
-            case(4, "onLeft") {
+            case(4, "onLeft, onLeftScreen") {
                 expectation {
                     val radioButton = detect("Airplane mode").rightItem()
 
@@ -129,9 +129,13 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         exist("Airplane mode")
                         dontExist("Internet")
                     }
+                    radioButton.onLeftScreen {
+                        exist("Airplane mode")
+                        exist("Internet")
+                    }
                 }
             }
-            case(5, "onRight") {
+            case(6, "onRight, onRightScreen") {
                 expectation {
                     val icon = detect("Airplane mode").leftItem()
 
@@ -141,9 +145,13 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         exist("Airplane mode")
                         dontExist("Internet")
                     }
+                    icon.onRightScreen {
+                        exist("Airplane mode")
+                        exist("Internet")
+                    }
                 }
             }
-            case(6, "onAbove") {
+            case(6, "onAbove, onAboveScreen") {
                 expectation {
                     val label = detect("Airplane mode")
 
@@ -156,9 +164,16 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         dontExist("VPN")
                         dontExist("Mobile plan")
                     }
+                    label.onAboveScreen {
+                        exist("Internet")
+                        exist("SIMs")
+                        dontExist("Airplane mode")
+                        dontExist("VPN")
+                        dontExist("Mobile plan")
+                    }
                 }
             }
-            case(7, "onBelow") {
+            case(7, "onBelow, onBelowScreen") {
                 expectation {
                     val label = detect("Airplane mode")
 
@@ -171,13 +186,19 @@ class TestElementAssertionExtensionTest : VisionTest() {
                         exist("VPN")
                         exist("Mobile plan")
                     }
+                    label.onBelowScreen {
+                        dontExist("Internet")
+                        dontExist("SIMs")
+                        exist("VPN")
+                        exist("Mobile plan")
+                    }
                 }
             }
         }
     }
 
     @Test
-    fun existImage() {
+    fun exist_existImage() {
 
         scenario {
             case(1, "existImage, dontExistImage") {
@@ -197,9 +218,17 @@ class TestElementAssertionExtensionTest : VisionTest() {
                     label.existImageOnLine("[RadioButton(OFF)]")
 
                     label.onLine {
+                        dontExistImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
                         existImage("[Airplane mode Icon]")
+                        exist("Airplane mode")
+
                         existImage("[RadioButton(OFF)]")
                         dontExistImage("[RadioButton(ON)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
                     }
                 }
             }
@@ -214,40 +243,82 @@ class TestElementAssertionExtensionTest : VisionTest() {
 
                     icon.onColumn {
                         existImage("[Internet Icon]")
+                        dontExist("Internet")
+
                         existImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
                         existImage("[Airplane mode Icon]")
-                        existImage("[VPN Icon]")
+                        dontExist("Airplane mode")
                         dontExistImage("[RadioButton(OFF)]")
+
+                        existImage("[VPN Icon]")
+                        dontExist("VPN")
                     }
                 }
             }
-            case(4, "onLeft") {
+            case(4, "onLeft, onLeftScreen") {
                 expectation {
                     val radioButton = detect("Airplane mode").rightItem()
 
                     radioButton.existImageOnLeft("[Airplane mode Icon]")
 
                     radioButton.onLeft {
-                        existImage("[Airplane mode Icon]")
-                        dontExistImage("[RadioButton(OFF)]")
                         dontExistImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
+                        existImage("[Airplane mode Icon]")
+                        exist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
+                    }
+                    radioButton.onLeftScreen {
+                        existImage("[SIMs Icon]")
+                        exist("SIMs")
+
+                        existImage("[Airplane mode Icon]")
+                        exist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+
+                        existImage("[Hotspot & tethering Icon]")
+                        exist("Hotspot & tethering")
                     }
                 }
             }
-            case(5, "onRight") {
+            case(5, "onRight, onRightScreen") {
                 expectation {
                     val icon = detect("Airplane mode").leftItem()
 
                     icon.existImageOnRight("[RadioButton(OFF)]")
 
                     icon.onRight {
+                        dontExistImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
                         dontExistImage("[Airplane mode Icon]")
                         existImage("[RadioButton(OFF)]")
                         dontExistImage("[RadioButton(ON)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
+                    }
+                    icon.onRightScreen {
+                        dontExistImage("[SIMs Icon]")
+                        exist("SIMs")
+
+                        dontExistImage("[Airplane mode Icon]")
+                        exist("Airplane mode")
+                        existImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        exist("Hotspot & tethering")
                     }
                 }
             }
-            case(6, "onAbove") {
+            case(6, "onAbove, onAboveScreen") {
                 expectation {
                     val icon = detect("Airplane mode").leftItem()
 
@@ -256,14 +327,37 @@ class TestElementAssertionExtensionTest : VisionTest() {
 
                     icon.onAbove {
                         existImage("[Internet Icon]")
+                        dontExist("Internet")
+
                         existImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
                         dontExistImage("[Airplane mode Icon]")
-                        dontExistImage("[VPN Icon]")
-                        dontExist("Mobile plan")
+                        dontExist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
+                    }
+                    icon.onAboveScreen {
+                        existImage("[Internet Icon]")
+                        exist("Internet")
+
+                        existImage("[SIMs Icon]")
+                        exist("SIMs")
+
+                        dontExistImage("[Airplane mode Icon]")
+                        dontExist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+
+                        dontExistImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
                     }
                 }
             }
-            case(7, "onBelow") {
+            case(7, "onBelow, onBelowScreen") {
                 expectation {
                     val icon = detect("Airplane mode").leftItem()
 
@@ -271,8 +365,39 @@ class TestElementAssertionExtensionTest : VisionTest() {
 
                     icon.onBelow {
                         dontExistImage("[Internet Icon]")
+                        dontExist("Internet")
+
                         dontExistImage("[SIMs Icon]")
-                        existImage("[VPN Icon]")
+                        dontExist("SIMs")
+
+                        dontExistImage("[Airplane mode Icon]")
+                        dontExist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+
+                        existImage("[Hotspot & tethering Icon]")
+                        dontExist("Hotspot & tethering")
+
+                        existImage("[Data Saver Icon]")
+                        dontExist("Data Saver")
+                    }
+                    icon.onBelowScreen {
+                        dontExistImage("[Internet Icon]")
+                        dontExist("Internet")
+
+                        dontExistImage("[SIMs Icon]")
+                        dontExist("SIMs")
+
+                        dontExistImage("[Airplane mode Icon]")
+                        dontExist("Airplane mode")
+                        dontExistImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+
+                        existImage("[Hotspot & tethering Icon]")
+                        exist("Hotspot & tethering")
+
+                        existImage("[Data Saver Icon]")
+                        exist("Data Saver")
                     }
                 }
             }

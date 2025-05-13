@@ -2,6 +2,8 @@ package shirates.core.unittest.utility.string
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.logging.LogType
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.string.*
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
@@ -99,6 +101,15 @@ class StringExtensionTest : UnitTest() {
             val actual = "STOP STAMP STOMP".replaceWithRegisteredWord()
             // Assert
             assertThat(actual).isEqualTo("STAMP STAMP STAMP")
+        }
+
+        run {
+            VisionTextReplacementRepository.setup(
+                "unitTestData/files/vision_text_replacement/text.replacement_with_header_irregular.tsv"
+            )
+            val line =
+                TestLog.lines.first() { it.message.startsWith("Invalid format. Missing tab character. (\"no tab\"") }
+            assertThat(line.logType).isEqualTo(LogType.WARN)
         }
     }
 }

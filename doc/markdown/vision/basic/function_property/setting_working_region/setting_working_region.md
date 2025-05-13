@@ -1,7 +1,8 @@
 # Setting working region (Vision)
 
 Finding image is a computationally intensive process. Especially splitting the image into segments is heavy.<br>
-You can set working region to get better performance with reducing size of the image using these functions.
+You can set working region to get better performance by reducing the size of the image using these functions.<br>
+Also, by setting a work area, you can verify whether the text/image exists within that work area.
 
 | function          | description                                                                   |
 |:------------------|:------------------------------------------------------------------------------|
@@ -13,6 +14,14 @@ You can set working region to get better performance with reducing size of the i
 | onLowerHalfRegion | Cut the screen image of lower half region and set it as a working region.     |
 | onLeftHalfRegion  | Cut the screen image of left half region and set it as a working region.      |
 | onRightHalfRegion | Cut the screen image of right half region and set it as a working region.     |
+| onAbove           | Cut above region of the column of the element and set it as a working region. |
+| onBelow           | Cut below region of the column of the element and set it as a working region. |
+| onLeft            | Cut left region of the line of the region and set it as a working region.     |
+| onRight           | Cut right region of the line of the region and set it as a working region.    |
+| onAboveScreen     | Cut above region of the element and set it as a working region.               |
+| onBelowScreen     | Cut below region of the element and set it as a working region.               |
+| onLeftScreen      | Cut left region and set it as a working region.                               |
+| onRightScreen     | Cut right region and set it as a working region.                              |
 
 ## Sample code
 

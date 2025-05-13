@@ -2,6 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
@@ -109,6 +110,7 @@ internal fun VisionDrive.existCore(
             }
         }
     } else {
+        TestDriver.visionRootElement.visionContext.printRecognizedTextInfo()
         val error = TestNGException(message = message)
         v.lastError = error
         v.lastResult = LogType.NG

@@ -1,6 +1,7 @@
 package shirates.core.vision.configration.repository
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import java.nio.file.Files
 
@@ -97,6 +98,9 @@ object VisionTextReplacementRepository {
             }
             val tokens = line.split("\t")
             if (tokens.size != 2) {
+                if (line.isNotBlank()) {
+                    TestLog.warn("Invalid format. Missing tab character. (\"$line\", line=${i + 1}, file=$textReplacementFile)")
+                }
                 continue
             }
             val key = tokens[0]

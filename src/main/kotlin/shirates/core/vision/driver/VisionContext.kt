@@ -1,7 +1,9 @@
 package shirates.core.vision.driver
 
+import org.apache.commons.codec.net.URLCodec
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
@@ -752,7 +754,7 @@ class VisionContext(
     val joinedText: String
         get() {
             recognizeText()
-            return recognizeTextObservations.map { it.text }.joinToString(" ")
+            return recognizeTextObservations.joinToString(" ") { it.text }
         }
 
     /**
@@ -774,5 +776,17 @@ class VisionContext(
             }
             return newImage
         }
+
+    internal fun printRecognizedTextInfo() {
+
+        if (CodeExecutionContext.lastRecognizedTsvFile != null) {
+            val texts = TestDriver.visionRootElement.visionContext.getVisionElements().joinToString("\n") { it.text }
+            TestLog.info(message = "Recognized text: $texts")
+            val tsvFile = TestLog.directoryForLog.resolve(CodeExecutionContext.lastRecognizedTsvFile!!).toString()
+            val codec = URLCodec("UTF-8")
+            val encoded = codec.encode(tsvFile.trimStart('/'), "utf-8")
+            println("Recognized text: file:///$encoded")
+        }
+    }
 
 }

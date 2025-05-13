@@ -89,6 +89,35 @@ fun VisionDrive.tap(
     return v
 }
 
+/**
+ * tapLast
+ */
+fun VisionDrive.tapLast(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitForElementFocused: Boolean = false,
+    directAccess: Boolean = false,
+    removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
+): VisionElement {
+
+    return this.tap(
+        expression = expression,
+        language = language,
+        last = true,
+        holdSeconds = holdSeconds,
+        waitSeconds = waitSeconds,
+        swipeToSafePosition = swipeToSafePosition,
+        waitForElementFocused = waitForElementFocused,
+        directAccess = directAccess,
+        removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
+    )
+}
+
 internal fun VisionDrive.waitForElementFocused(
     waitSeconds: Double,
     throwOnError: Boolean,
