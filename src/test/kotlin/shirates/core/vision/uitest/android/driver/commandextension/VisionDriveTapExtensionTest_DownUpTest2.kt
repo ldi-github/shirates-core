@@ -16,7 +16,7 @@ class VisionDriveTapExtensionTest_DownUpTest2 : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.tapWithScrollDown("yste")
+                    it.tapWithScrollDown("*yste*")
                 }.expectation {
                     it.screenIs("[System Screen]")
                 }
@@ -25,7 +25,7 @@ class VisionDriveTapExtensionTest_DownUpTest2 : VisionTest() {
                 condition {
                     it.pressBack()
                 }.action {
-                    it.tapWithScrollUp("onnected device")
+                    it.tapWithScrollUp("*onnected device*")
                 }.expectation {
                     it.screenIs("[Connected devices Screen]")
                 }
