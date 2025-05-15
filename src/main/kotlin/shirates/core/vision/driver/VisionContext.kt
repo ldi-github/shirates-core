@@ -469,10 +469,8 @@ class VisionContext(
         selector: Selector,
         mergeBoundingBox: Boolean,
     ): List<VisionElement> {
-        val targetText =
-            selector.text ?: selector.textStartsWith ?: selector.textContains ?: selector.textEndsWith ?: ""
-        val targetTextForComparison = targetText.forVisionComparison()
-        var candidates = detectCandidates(containedText = targetTextForComparison, mergeBoundingBox = mergeBoundingBox)
+
+        var candidates = detectCandidates(selector = selector, mergeBoundingBox = mergeBoundingBox)
 
         if (selector.text != null) {
             /**
@@ -586,21 +584,16 @@ class VisionContext(
      * detectCandidates
      */
     fun detectCandidates(
-        containedText: String,
+        selector: Selector,
         mergeBoundingBox: Boolean,
     ): List<VisionElement> {
 
-        if (containedText.isBlank()) {
-            return getVisionElements()
-        }
-
-        val normalizedText = containedText.forVisionComparison()
         val list = getVisionElements()
 
         /**
          * Search in single line
          */
-        var elements = list.filter { it.textForComparison.contains(normalizedText) }
+        var elements = list.filter { selector.evaluateText(it) }
         if (elements.any()) {
             elements = elements.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.right })
             return elements
@@ -611,7 +604,7 @@ class VisionContext(
         /**
          * Search in multiline
          */
-        elements = detectMultilineElements(containedText = containedText, searchElements = list)
+        elements = detectMultilineElements(selector = selector, searchElements = list)
         if (elements.count() <= 1) {
             return elements
         }
@@ -628,7 +621,7 @@ class VisionContext(
             val item = items.merge()
             item
         }
-        val rowElements2 = rowElements.filter { it.textForComparison.contains(normalizedText) }
+        val rowElements2 = rowElements.filter { selector.evaluateText(it) }
         if (rowElements2.any()) {
             return rowElements2
         }
@@ -636,8 +629,8 @@ class VisionContext(
         /**
          * Merge multiple lines
          */
-        val joinedText = elements.map { it.text }.joinToString("").forVisionComparison()
-        if (joinedText.contains(normalizedText)) {
+        val joinedText = elements.joinToString("") { it.text }.forVisionComparison()
+        if (joinedText.contains(selector.containedText.forVisionComparison())) {
             val v = elements.merge()
             return listOf(v)
         }
@@ -665,11 +658,11 @@ class VisionContext(
     }
 
     private fun detectMultilineElements(
-        containedText: String,
+        selector: Selector,
         searchElements: MutableList<VisionElement>,
         confirmedElements: MutableList<VisionElement> = mutableListOf(),
     ): List<VisionElement> {
-        var filteredElements = searchElements.toMutableList()
+        var filteredElements = searchElements.toList()
         val lastConfirmedElement = confirmedElements.lastOrNull()
         if (lastConfirmedElement != null) {
             val ix = filteredElements.indexOf(lastConfirmedElement)
@@ -677,14 +670,14 @@ class VisionContext(
                 filteredElements = filteredElements.slice(ix + 1 until filteredElements.size).toMutableList()
             }
         }
-        val normalizedText = containedText.forVisionComparison()
+        val containedText = selector.containedText.forVisionComparison()
         var tempText = ""
 
         /**
          * Finds partial matched elements
          */
-        for (i in normalizedText.indices) {
-            val s = normalizedText.substring(0, i + 1)
+        for (i in containedText.indices) {
+            val s = containedText.substring(0, i + 1)
             val list = filteredElements.filter { it.textForComparison.contains(s) }.toMutableList()
             if (list.isEmpty()) {
                 break
@@ -695,22 +688,25 @@ class VisionContext(
         if (tempText.isEmpty()) {
             return confirmedElements
         }
-        if (confirmedElements.isEmpty()) {
-            filteredElements = filteredElements.filter { it.textForComparison.contains(tempText) }.toMutableList()
-        } else {
-            filteredElements = filteredElements.filter { it.textForComparison.startsWith(tempText) }.toMutableList()
-        }
+        val exp = selector.expression!!
+        val sel =
+            if (exp.startsWith("*") && exp.endsWith("*")) Selector("*${tempText}*")
+            else if (exp.startsWith("*")) Selector("*${tempText}")
+            else if (exp.endsWith("*")) Selector("${tempText}*")
+            else Selector(tempText)
+        filteredElements = filteredElements.filter { sel.evaluateText(it) }
         confirmedElements.addAll(filteredElements)
 
         /**
          * detect recursively
          */
-        tempText = normalizedText.removePrefix(tempText)
+        tempText = containedText.removePrefix(tempText)
         if (tempText.isBlank()) {
             return confirmedElements
         }
+        val newSelector = Selector("*${tempText}*")
         detectMultilineElements(
-            containedText = tempText,
+            selector = newSelector,
             searchElements = searchElements,
             confirmedElements = confirmedElements,
         )
@@ -729,8 +725,6 @@ class VisionContext(
             }
 
             val v2 = sortedList.first()
-            val distance = v2.rect.top - v1.rect.bottom
-//            val canMerge = distance < v1.rect.height
             val canMerge = true
             if (canMerge) {
                 sortedList.remove(v2)
@@ -744,7 +738,7 @@ class VisionContext(
         /**
          * filter
          */
-        val resultList = meregedList.filter { it.joinedText.forVisionComparison().contains(normalizedText) }
+        val resultList = meregedList.filter { it.joinedText.forVisionComparison().contains(containedText) }
         return resultList
     }
 

@@ -405,6 +405,47 @@ class TestElementAssertionExtensionTest : VisionTest() {
     }
 
     @Test
+    fun existSingleline() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Network & internet Screen]")
+                }.expectation {
+                    it.exist("Airplane mode")
+                    it.exist("*Airplane mode")
+                    it.exist("*Airplane mode*")
+                    it.exist("Airplane mode*")
+                    it.exist("*irplane mode")
+                    it.exist("*irplane mode*")
+                    it.exist("Airplane mod*")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun existMultiline() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Battery Screen]")
+                }.expectation {
+                    it.exist("Battery Saver")
+                    it.exist("Battery Saver Off")
+                    it.exist("*Battery Saver Off")
+                    it.exist("*Battery Saver Off*")
+                    it.exist("Battery Saver Off*")
+                    it.exist("*attery Saver Off")
+                    it.exist("*attery Saver Of*")
+                    it.exist("Battery Saver Of*")
+                }
+            }
+        }
+    }
+
+    @Test
     fun existImageWithScrollDown_existImageWithScrollUp() {
 
         scenario {

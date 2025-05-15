@@ -8,7 +8,9 @@ import shirates.core.logging.Message.message
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.string.normalize
+import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
 import java.text.Normalizer
 import kotlin.reflect.full.memberProperties
@@ -440,6 +442,11 @@ class Selector(
     val canMergePos: Boolean
         get() {
             return posMergeEnabledBaseNames.any { (command ?: "").startsWith(it) }
+        }
+
+    val containedText: String
+        get() {
+            return this.text ?: this.textStartsWith ?: this.textContains ?: textEndsWith ?: ""
         }
 
     companion object {
@@ -1414,7 +1421,7 @@ class Selector(
             formatString.replace("%s", expressions[0])
         } else {
             val operator = if (predicate) "OR" else "or"
-            expressions.map { formatString.replace("%s", it) }.joinToString(" $operator ")
+            expressions.joinToString(" $operator ") { formatString.replace("%s", it) }
         }
     }
 
@@ -1489,6 +1496,45 @@ class Selector(
     fun evaluateText(element: TestElement): Boolean {
 
         return evaluate(filterName = "text", value = element.textOrLabel)
+    }
+
+    /**
+     * evaluateText
+     */
+    fun evaluateText(element: VisionElement): Boolean {
+
+        fun eval(text: String): Boolean {
+            if (this.textStartsWith != null) {
+                return text.startsWith(this.textStartsWith!!.forVisionComparison())
+            } else if (this.textContains != null) {
+                return text.contains(this.textContains!!.forVisionComparison())
+            } else if (this.textEndsWith != null) {
+                return text.endsWith(this.textEndsWith!!.forVisionComparison())
+            } else {
+                return text == this.text!!.forVisionComparison()
+            }
+        }
+
+        val elementText = element.textForComparison
+
+        val r1 = eval(text = elementText)
+        if (r1) {
+            return true
+        }
+
+        /**
+         * Removing OCR noise
+         * (miss recognition for icons)
+         */
+        if (elementText.length >= 2) {
+            val text1 = elementText.substring(1).forVisionComparison()  // "# Airplane mode" -> "Airplane mode"
+            val r2 = eval(text = text1)
+            if (r2) {
+                return true
+            }
+        }
+
+        return false
     }
 
     /**
