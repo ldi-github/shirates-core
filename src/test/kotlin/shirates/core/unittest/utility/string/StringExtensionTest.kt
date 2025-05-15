@@ -52,6 +52,11 @@ class StringExtensionTest : UnitTest() {
             val actual = "く＜＞<>".forVisionComparison()
             assertThat(actual).isEqualTo("<<><>")
         }
+        run {
+            // Act
+            val actual = "〜～｜二−".forVisionComparison()
+            assertThat(actual).isEqualTo("~~iﾆ-")
+        }
     }
 
     @Test
