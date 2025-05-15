@@ -93,7 +93,7 @@ class VisionDriveTapExtensionTest1 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    it.tap("enera") // General
+                    it.tap("*enera*") // General
                 }.expectation {
                     it.screenIs("[General Screen]")
                 }
