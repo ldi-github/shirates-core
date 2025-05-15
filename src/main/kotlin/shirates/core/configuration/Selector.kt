@@ -1527,9 +1527,23 @@ class Selector(
          * (miss recognition for icons)
          */
         if (elementText.length >= 2) {
-            val text1 = elementText.substring(1).forVisionComparison()  // "# Airplane mode" -> "Airplane mode"
-            val r2 = eval(text = text1)
-            if (r2) {
+            val text = elementText.substring(1).forVisionComparison()  // "# Airplane mode" -> "Airplane mode"
+            val r = eval(text = text)
+            if (r) {
+                return true
+            }
+        }
+        if (elementText.length >= 3) {
+            val text = elementText.substring(2).forVisionComparison()  // "W! Restaurants" -> "Restaurants"
+            val r = eval(text = text)
+            if (r) {
+                return true
+            }
+        }
+        if (elementText.length >= 4) {
+            val text = elementText.substring(3).forVisionComparison()  // "... More" -> "More"
+            val r = eval(text = text)
+            if (r) {
                 return true
             }
         }
