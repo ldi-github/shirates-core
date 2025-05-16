@@ -604,7 +604,7 @@ class VisionContext(
         /**
          * Search in multiline
          */
-        elements = detectMultilineElements(selector = selector, searchElements = list)
+        elements = detectMultilineElements(contained = selector.containedText, searchElements = list)
         if (elements.count() <= 1) {
             return elements
         }
@@ -658,7 +658,7 @@ class VisionContext(
     }
 
     private fun detectMultilineElements(
-        selector: Selector,
+        contained: String,
         searchElements: MutableList<VisionElement>,
         confirmedElements: MutableList<VisionElement> = mutableListOf(),
     ): List<VisionElement> {
@@ -670,7 +670,7 @@ class VisionContext(
                 filteredElements = filteredElements.slice(ix + 1 until filteredElements.size).toMutableList()
             }
         }
-        val containedText = selector.containedText.forVisionComparison()
+        val containedText = contained.forVisionComparison()
         var tempText = ""
 
         /**
@@ -678,7 +678,9 @@ class VisionContext(
          */
         for (i in containedText.indices) {
             val s = containedText.substring(0, i + 1)
-            val list = filteredElements.filter { it.textForComparison.contains(s) }.toMutableList()
+            val list =
+                if (confirmedElements.isEmpty()) filteredElements.filter { it.textForComparison.contains(s) }
+                else filteredElements.filter { it.textForComparison.startsWith(s) }
             if (list.isEmpty()) {
                 break
             }
@@ -688,13 +690,6 @@ class VisionContext(
         if (tempText.isEmpty()) {
             return confirmedElements
         }
-        val exp = selector.expression!!
-        val sel =
-            if (exp.startsWith("*") && exp.endsWith("*")) Selector("*${tempText}*")
-            else if (exp.startsWith("*")) Selector("*${tempText}")
-            else if (exp.endsWith("*")) Selector("${tempText}*")
-            else Selector(tempText)
-        filteredElements = filteredElements.filter { sel.evaluateText(it) }
         confirmedElements.addAll(filteredElements)
 
         /**
@@ -704,9 +699,8 @@ class VisionContext(
         if (tempText.isBlank()) {
             return confirmedElements
         }
-        val newSelector = Selector("*${tempText}*")
         detectMultilineElements(
-            selector = newSelector,
+            contained = tempText,
             searchElements = searchElements,
             confirmedElements = confirmedElements,
         )
