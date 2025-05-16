@@ -23,7 +23,7 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                     it.macro("[iOS Settings Top Screen]")
                         .flickBottomToTop()
                 }.action {
-                    it.tapWithScrollUp("enera")
+                    it.tapWithScrollUp("*enera*")
                 }.expectation {
                     it.screenIs("[General Screen]")
                 }
