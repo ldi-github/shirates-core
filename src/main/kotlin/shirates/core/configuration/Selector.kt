@@ -1503,6 +1503,12 @@ class Selector(
      */
     fun evaluateText(element: VisionElement): Boolean {
 
+        val text = element.textForComparison
+        return evaluateTextCore(text = text)
+    }
+
+    internal fun evaluateTextCore(text: String): Boolean {
+
         fun eval(text: String): Boolean {
             if (this.textStartsWith != null) {
                 return text.startsWith(this.textStartsWith!!.forVisionComparison())
@@ -1515,39 +1521,67 @@ class Selector(
             }
         }
 
-        val elementText = element.textForComparison
-
-        val r1 = eval(text = elementText)
-        if (r1) {
-            return true
-        }
-
         /**
          * Removing OCR noise
          * (miss recognition for icons)
          */
-        if (elementText.length >= 2) {
-            val text = elementText.substring(1).forVisionComparison()  // "# Airplane mode" -> "Airplane mode"
-            val r = eval(text = text)
-            if (r) {
-                return true
+        fun String.evalWithNoiseRemoval(startNoise: Int, endNoise: Int): Boolean {
+            if (startNoise < 0 || endNoise < 0) {
+                return false
             }
-        }
-        if (elementText.length >= 3) {
-            val text = elementText.substring(2).forVisionComparison()  // "W! Restaurants" -> "Restaurants"
-            val r = eval(text = text)
-            if (r) {
-                return true
+            /**
+             * Remove end noise
+             */
+            var s = this
+            if (s.length > endNoise) {
+                val l = s.length - endNoise
+                if (l < s.length) {
+                    s = s.substring(0, l).trimEnd()
+                }
             }
-        }
-        if (elementText.length >= 4) {
-            val text = elementText.substring(3).forVisionComparison()  // "... More" -> "More"
-            val r = eval(text = text)
-            if (r) {
-                return true
+            /**
+             * Remove start noise
+             */
+            if (s.length >= startNoise) {
+                val index = startNoise - 1
+                if (index > 0) {
+                    s = s.substring(index).forVisionComparison()
+                }
             }
+            return eval(text = s)
         }
 
+        if (eval(text = text)) {
+            return true
+        }
+
+        if (text.evalWithNoiseRemoval(startNoise = 0, endNoise = 1)) { // "Airplane mode V" -> "Airplane mode"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 1, endNoise = 0)) { // "# Airplane mode" -> "Airplane mode"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 1, endNoise = 1)) { // "# Airplane mode V" -> "Airplane mode"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 2, endNoise = 0)) { // "# Airplane mode" -> "Airplane mode"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 2, endNoise = 1)) { // "# Airplane mode V" -> "Airplane mode"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 3, endNoise = 0)) { // "W! Restaurants" -> "Restaurants"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 3, endNoise = 1)) { // "W! Restaurants V" -> "Restaurants"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 4, endNoise = 0)) { // "... More" -> "More"
+            return true
+        }
+        if (text.evalWithNoiseRemoval(startNoise = 4, endNoise = 1)) { // "... More V" -> "More"
+            return true
+        }
         return false
     }
 
