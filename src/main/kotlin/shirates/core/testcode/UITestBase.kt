@@ -33,6 +33,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.batch.CreateMLUtility
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.configration.repository.VisionTextIndexRepository
+import shirates.core.vision.configration.repository.VisionTextRecognitionNoiseRepository
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
 import shirates.core.vision.driver.commandextension.launchApp
 import shirates.core.vision.driver.commandextension.rootElement
@@ -374,6 +375,9 @@ abstract class UITestBase : Drive {
 
                     // setup textReplacement repository
                     VisionTextReplacementRepository.setup()
+
+                    // setup textRecognitionNoise repository
+                    VisionTextRecognitionNoiseRepository.setup()
 
                     // setup screen repository
                     VisionScreenRepository.setup()

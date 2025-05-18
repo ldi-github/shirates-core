@@ -29,27 +29,40 @@ class Selector_VisionTest : UnitTest() {
 
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
         }
         run {
             val s = Selector("Ite*")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
         }
         run {
             val s = Selector("*te*")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
         }
         run {
             val s = Selector("*tem")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
         }
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), removeRedundantText = false)).isFalse()
         }
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "# Item V".forVisionComparison())).isTrue()
+            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), removeRedundantText = true)).isTrue()
+        }
+        run {
+            val s = Selector("Item")
+            assertThat(
+                s.evaluateTextCore(
+                    text = "# Item V".forVisionComparison(),
+                    removeRedundantText = false
+                )
+            ).isFalse()
+        }
+        run {
+            val s = Selector("Item")
+            assertThat(s.evaluateTextCore(text = "# Item V".forVisionComparison(), removeRedundantText = true)).isTrue()
         }
     }
 }

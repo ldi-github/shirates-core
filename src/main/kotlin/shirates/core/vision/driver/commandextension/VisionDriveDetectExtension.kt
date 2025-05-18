@@ -34,8 +34,8 @@ fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
  */
 fun VisionDrive.detect(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
+    language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,

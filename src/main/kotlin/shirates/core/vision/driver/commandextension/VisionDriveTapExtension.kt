@@ -357,6 +357,7 @@ fun VisionDrive.tapImage(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
+    last: Boolean = true,
     language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -375,7 +376,7 @@ fun VisionDrive.tapWithScrollDown(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -397,6 +398,7 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
+    last: Boolean = false,
     language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -415,7 +417,7 @@ fun VisionDrive.tapWithScrollUp(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -437,6 +439,7 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
+    last: Boolean = true,
     language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -454,7 +457,7 @@ fun VisionDrive.tapWithScrollRight(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -476,6 +479,7 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
+    last: Boolean = false,
     language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -493,7 +497,7 @@ fun VisionDrive.tapWithScrollLeft(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -563,6 +567,7 @@ fun VisionDrive.tapTopOfScreen(
  */
 fun VisionDrive.tapCenterOf(
     expression: String,
+    last: Boolean = false,
     language: String = PropertiesManager.visionOCRLanguage,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
@@ -578,6 +583,7 @@ fun VisionDrive.tapCenterOf(
 
         val testElement = detect(
             expression = expression,
+            last = last,
             language = language,
         )
         val bounds = testElement.bounds
@@ -592,6 +598,7 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapItemUnder(
     expression: String,
+    last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
@@ -611,6 +618,7 @@ fun VisionDrive.tapItemUnder(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
@@ -641,6 +649,7 @@ fun VisionDrive.tapItemUnder(
  */
 fun VisionDrive.tapTextUnder(
     expression: String,
+    last: Boolean = false,
     language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
@@ -658,6 +667,7 @@ fun VisionDrive.tapTextUnder(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
@@ -685,6 +695,7 @@ fun VisionDrive.tapTextUnder(
  */
 fun VisionDrive.tapItemOver(
     expression: String,
+    last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
@@ -704,6 +715,7 @@ fun VisionDrive.tapItemOver(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
@@ -734,6 +746,7 @@ fun VisionDrive.tapItemOver(
  */
 fun VisionDrive.tapTextOver(
     expression: String,
+    last: Boolean = false,
     language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
@@ -751,6 +764,7 @@ fun VisionDrive.tapTextOver(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
@@ -778,6 +792,7 @@ fun VisionDrive.tapTextOver(
  */
 fun VisionDrive.tapItemRightOf(
     expression: String,
+    last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
@@ -797,6 +812,7 @@ fun VisionDrive.tapItemRightOf(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
@@ -827,6 +843,7 @@ fun VisionDrive.tapItemRightOf(
  */
 fun VisionDrive.tapItemLeftOf(
     expression: String,
+    last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
@@ -846,6 +863,7 @@ fun VisionDrive.tapItemLeftOf(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,

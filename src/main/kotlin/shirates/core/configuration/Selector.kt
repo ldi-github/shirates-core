@@ -11,6 +11,7 @@ import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.string.normalize
 import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionTextRecognitionNoiseRepository
 import java.awt.image.BufferedImage
 import java.text.Normalizer
 import kotlin.reflect.full.memberProperties
@@ -394,7 +395,7 @@ class Selector(
 
     val isNegation: Boolean
         get() {
-            return relativeSelectors.filter { it.expression == ":not" }.any()
+            return relativeSelectors.any { it.expression == ":not" }
         }
 
     val isTextSelector: Boolean
@@ -1501,15 +1502,18 @@ class Selector(
     /**
      * evaluateText
      */
-    fun evaluateText(element: VisionElement): Boolean {
+    fun evaluateText(element: VisionElement, removeRedundantText: Boolean): Boolean {
 
         val text = element.textForComparison
-        return evaluateTextCore(text = text)
+        return evaluateTextCore(text = text, removeRedundantText = removeRedundantText)
     }
 
-    internal fun evaluateTextCore(text: String): Boolean {
+    internal fun evaluateTextCore(text: String, removeRedundantText: Boolean): Boolean {
 
         fun eval(text: String): Boolean {
+            if (text.isBlank()) {
+                return false
+            }
             if (this.textStartsWith != null) {
                 return text.startsWith(this.textStartsWith!!.forVisionComparison())
             } else if (this.textContains != null) {
@@ -1521,68 +1525,43 @@ class Selector(
             }
         }
 
-        /**
-         * Removing OCR noise
-         * (miss recognition for icons)
-         */
-        fun String.evalWithNoiseRemoval(startNoise: Int, endNoise: Int): Boolean {
-            if (startNoise < 0 || endNoise < 0) {
-                return false
-            }
-            /**
-             * Remove end noise
-             */
-            var s = this
-            if (s.length > endNoise) {
-                val l = s.length - endNoise
-                if (l < s.length) {
-                    s = s.substring(0, l).trimEnd()
-                }
-            }
-            /**
-             * Remove start noise
-             */
-            if (s.length >= startNoise) {
-                val index = startNoise - 1
-                if (index > 0) {
-                    s = s.substring(index).forVisionComparison()
-                }
-            }
-            return eval(text = s)
-        }
-
         if (eval(text = text)) {
             return true
         }
 
-        if (text.evalWithNoiseRemoval(startNoise = 0, endNoise = 1)) { // "Airplane mode V" -> "Airplane mode"
-            return true
+        if (removeRedundantText.not()) {
+            return false
         }
-        if (text.evalWithNoiseRemoval(startNoise = 1, endNoise = 0)) { // "# Airplane mode" -> "Airplane mode"
-            return true
+
+        /**
+         * Removing redundant text of left edge and right edge
+         */
+        if (text.length > 2) {
+            for (s in 0..3) {
+                for (e in 0..2) {
+                    try {
+                        val x = s + e < text.length
+                        if (x) {
+                            val t = text.substring(s, text.length - e).trim()
+                            val r = eval(text = t)
+                            if (r) {
+                                return true
+                            }
+                        }
+                    } catch (t: Throwable) {
+                        println(t)
+                    }
+                }
+            }
         }
-        if (text.evalWithNoiseRemoval(startNoise = 1, endNoise = 1)) { // "# Airplane mode V" -> "Airplane mode"
-            return true
+        /**
+         * Removing redundant text in noise.txt
+         */
+        var t = text
+        for (noise in VisionTextRecognitionNoiseRepository.noiseList) {
+            t = t.removePrefix(noise).removeSuffix(noise).trim()
         }
-        if (text.evalWithNoiseRemoval(startNoise = 2, endNoise = 0)) { // "# Airplane mode" -> "Airplane mode"
-            return true
-        }
-        if (text.evalWithNoiseRemoval(startNoise = 2, endNoise = 1)) { // "# Airplane mode V" -> "Airplane mode"
-            return true
-        }
-        if (text.evalWithNoiseRemoval(startNoise = 3, endNoise = 0)) { // "W! Restaurants" -> "Restaurants"
-            return true
-        }
-        if (text.evalWithNoiseRemoval(startNoise = 3, endNoise = 1)) { // "W! Restaurants V" -> "Restaurants"
-            return true
-        }
-        if (text.evalWithNoiseRemoval(startNoise = 4, endNoise = 0)) { // "... More" -> "More"
-            return true
-        }
-        if (text.evalWithNoiseRemoval(startNoise = 4, endNoise = 1)) { // "... More V" -> "More"
-            return true
-        }
-        return false
+        return eval(text = t)
     }
 
     /**

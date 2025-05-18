@@ -18,7 +18,6 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionObservation
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
-import shirates.core.vision.driver.commandextension.removeRedundantText
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
 import java.awt.BasicStroke
@@ -26,6 +25,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import kotlin.math.abs
 
 class VisionContext(
     val capture: Boolean,
@@ -441,89 +441,22 @@ class VisionContext(
 
         val candidates = mutableListOf<VisionElement>()
         for (sel in selectors) {
-            val list = filterCore(selector = sel, mergeBoundingBox = mergeBoundingBox)
+            val list =
+                detectCandidates(
+                    selector = sel,
+                    removeRedundantText = removeRedundantText,
+                    mergeBoundingBox = mergeBoundingBox
+                )
             candidates.addAll(list)
         }
 
-        var v =
+
+        val v =
             (if (last) candidates.lastOrNull()
             else candidates.firstOrNull())
                 ?: VisionElement.emptyElement
-        if (selector.text != null &&
-            removeRedundantText &&
-            v.isMerged.not() &&
-            v.textForComparison.indexOf(selector.text!!.forVisionComparison()) > 0
-        ) {
-            val v2 = removeRedundantText(
-                visionElement = v,
-                expectedText = selector.text!!,
-                language = language,
-            )
-            v = v2
-        }
         detectCacheMap[selector.expression!!] = v.visionContext
         return v
-    }
-
-    private fun filterCore(
-        selector: Selector,
-        mergeBoundingBox: Boolean,
-    ): List<VisionElement> {
-
-        var candidates = detectCandidates(selector = selector, mergeBoundingBox = mergeBoundingBox)
-
-        if (selector.text != null) {
-            /**
-             * Exact match
-             */
-            var list = candidates.filter { it.textForComparison == selector.text.forVisionComparison() }
-            if (list.any()) {
-                candidates = list
-            } else {
-                /**
-                 * Loose match
-                 */
-                val length = selector.text!!.length
-                val maxLength = (if (length <= 6) (length + 3) else (length * 1.5)).toInt()
-                val filteredByLength = candidates.filter { it.textForComparison.length <= maxLength }
-                candidates = filteredByLength
-
-                if (candidates.count() >= 2) {
-                    /**
-                     * Additional filter
-                     */
-                    list = candidates.filter { it.textForComparison.length <= length + 2 }
-                    if (list.any()) {
-                        candidates = list
-                    }
-                }
-            }
-        } else {
-            if (selector.textStartsWith != null) {
-                val textStartsWith = selector.textStartsWith!!.forVisionComparison()
-                val list = candidates.filter {
-                    val ix = it.textForComparison.indexOf(textStartsWith)
-                    0 <= ix && ix <= 2
-                }
-                candidates = list
-            }
-            if (selector.textContains != null) {
-                val textContains = selector.textContains!!.forVisionComparison()
-                val list = candidates.filter { it.textForComparison.contains(textContains) }
-                candidates = list
-            }
-            if (selector.textEndsWith != null) {
-                val textEndsWith = selector.textEndsWith!!.forVisionComparison()
-                val list = candidates.filter {
-                    val ix = it.textForComparison.indexOf(textEndsWith)
-                    val subtext = it.textForComparison.substring(ix + 1)
-                    val lengthDiff = subtext.length - textEndsWith.length
-                    lengthDiff <= 2
-                }
-                candidates = list
-            }
-        }
-        return candidates
     }
 
     /**
@@ -585,6 +518,7 @@ class VisionContext(
      */
     fun detectCandidates(
         selector: Selector,
+        removeRedundantText: Boolean?,
         mergeBoundingBox: Boolean,
     ): List<VisionElement> {
 
@@ -593,49 +527,41 @@ class VisionContext(
         /**
          * Search in single line
          */
-        var elements = list.filter { selector.evaluateText(it) }
+        var elements = listOf<VisionElement>()
+        if (removeRedundantText != null) {
+            elements = list.filter { selector.evaluateText(it, removeRedundantText = removeRedundantText) }
+        }
+        if (elements.isEmpty()) {
+            elements = list.filter { selector.evaluateText(it, removeRedundantText = false) }
+        }
+        if (elements.isEmpty()) {
+            elements = list.filter { selector.evaluateText(it, removeRedundantText = true) }
+        }
+
         if (elements.any()) {
             elements = elements.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.right })
             return elements
-        } else if (mergeBoundingBox.not()) {
+        }
+        if (mergeBoundingBox.not()) {
             return listOf()
         }
 
         /**
          * Search in multiline
          */
-        elements = detectMultilineElements(contained = selector.containedText, searchElements = list)
-        if (elements.count() <= 1) {
+        val multilineElements = detectMultilineElements(
+            selector = selector,
+            partialContained = selector.containedText,
+            searchElements = list
+        )
+
+        elements = multilineElements.filter { selector.evaluateText(it, removeRedundantText = false) }
+        if (elements.any()) {
             return elements
         }
 
-        /**
-         * Merge elements on the same line
-         */
-        val flowContainer = FlowContainer()
-        for (v in elements) {
-            flowContainer.addElement(v)
-        }
-        val rowElements = flowContainer.rows.map {
-            val items = it.members.map { (it as VisionElement) }
-            val item = items.merge()
-            item
-        }
-        val rowElements2 = rowElements.filter { selector.evaluateText(it) }
-        if (rowElements2.any()) {
-            return rowElements2
-        }
-
-        /**
-         * Merge multiple lines
-         */
-        val joinedText = elements.joinToString("") { it.text }.forVisionComparison()
-        if (joinedText.contains(selector.containedText.forVisionComparison())) {
-            val v = elements.merge()
-            return listOf(v)
-        }
-
-        return listOf()
+        elements = multilineElements.filter { selector.evaluateText(it, removeRedundantText = true) }
+        return elements
     }
 
     private fun List<VisionElement>.merge(): VisionElement {
@@ -658,19 +584,110 @@ class VisionContext(
     }
 
     private fun detectMultilineElements(
-        contained: String,
-        searchElements: MutableList<VisionElement>,
+        selector: Selector,
+        partialContained: String,
+        searchElements: List<VisionElement>,
         confirmedElements: MutableList<VisionElement> = mutableListOf(),
     ): List<VisionElement> {
-        var filteredElements = searchElements.toList()
-        val lastConfirmedElement = confirmedElements.lastOrNull()
-        if (lastConfirmedElement != null) {
-            val ix = filteredElements.indexOf(lastConfirmedElement)
-            if (ix >= 0) {
-                filteredElements = filteredElements.slice(ix + 1 until filteredElements.size).toMutableList()
+
+        val resultList = mutableListOf<VisionElement>()
+        if (confirmedElements.isEmpty()) {
+            val list = detectMultilineElementsCore(
+                selector = selector,
+                partialContained = partialContained,
+                searchElements = searchElements,
+                confirmedElements = confirmedElements
+            )
+            resultList.addAll(list)
+        } else {
+            val confirmedList = confirmedElements.toList()
+            for (v in confirmedList) {
+                val filteredElements = searchElements.filter { it != v && v.rect.top < it.rect.centerY }
+                    .sortedBy { it.rect.top }
+                val list = detectMultilineElementsCore(
+                    selector = selector,
+                    partialContained = partialContained,
+                    searchElements = filteredElements,
+                    confirmedElements = confirmedElements
+                )
+                resultList.addAll(list)
             }
         }
-        val containedText = contained.forVisionComparison()
+
+        fun merge() {
+            /**
+             * merge
+             */
+            confirmedElements.sortBy { it.rect.top }
+            if (confirmedElements.count() > 1) {
+
+                /**
+                 * group
+                 */
+                val groups = mutableListOf<MutableList<VisionElement>>()
+                for (v in confirmedElements) {
+                    if (groups.isEmpty()) {
+                        val l = mutableListOf(v)
+                        groups.add(l)
+                    } else {
+                        fun findGroup(
+                            v: VisionElement,
+                            groups: MutableList<MutableList<VisionElement>>
+                        ): MutableList<VisionElement>? {
+                            for (group in groups) {
+                                for (gv in group) {
+                                    val yDiff = abs(gv.rect.centerY - v.rect.centerY)
+                                    val h = Math.max(gv.rect.height, v.rect.height)
+                                    if (yDiff < h * 2) {
+                                        return group
+                                    }
+                                }
+                            }
+                            return null
+                        }
+
+                        val group = findGroup(v, groups)
+                        if (group == null) {
+                            val newGroup = mutableListOf(v)
+                            groups.add(newGroup)
+                        } else {
+                            group.add(v)
+                        }
+                    }
+                }
+
+                confirmedElements.clear()
+
+                /**
+                 * merge
+                 */
+                val mergedElements = mutableListOf<VisionElement>()
+                for (group in groups) {
+                    var v = group[0]
+                    for (i in 1 until group.count()) {
+                        val v2 = group[i]
+                        v = v.mergeWith(v2)
+                    }
+                    confirmedElements.add(v)
+                }
+
+            }
+
+        }
+        merge()
+
+        return confirmedElements
+    }
+
+    internal fun detectMultilineElementsCore(
+        selector: Selector,
+        partialContained: String,
+        searchElements: List<VisionElement>,
+        confirmedElements: MutableList<VisionElement> = mutableListOf(),
+    ): List<VisionElement> {
+
+        var filteredElements = searchElements.toList()
+        val containedText = partialContained.forVisionComparison()
         var tempText = ""
 
         /**
@@ -687,52 +704,23 @@ class VisionContext(
             filteredElements = list
             tempText = s
         }
-        if (tempText.isEmpty()) {
-            return confirmedElements
-        }
         confirmedElements.addAll(filteredElements)
-
         /**
          * detect recursively
          */
         tempText = containedText.removePrefix(tempText)
-        if (tempText.isBlank()) {
-            return confirmedElements
+        if (tempText != containedText && tempText.isNotBlank()) {
+            detectMultilineElementsCore(
+                selector = selector,
+                partialContained = tempText,
+                searchElements = searchElements,
+                confirmedElements = confirmedElements,
+            )
         }
-        detectMultilineElements(
-            contained = tempText,
-            searchElements = searchElements,
-            confirmedElements = confirmedElements,
-        )
-
-        /**
-         * merge
-         */
-        val sortedList = confirmedElements.sortedBy { it.rect.top }.toMutableList()
-        val meregedList = mutableListOf<VisionElement>()
-        while (sortedList.size != 0) {
-            val v1 = sortedList.first()
-            sortedList.remove(v1)
-            if (sortedList.isEmpty()) {
-                meregedList.add(v1)
-                break
-            }
-
-            val v2 = sortedList.first()
-            val canMerge = true
-            if (canMerge) {
-                sortedList.remove(v2)
-                val vMerged = v1.mergeWith(v2)
-                sortedList.add(0, vMerged)
-            } else {
-                meregedList.add(v1)
-            }
-        }
-
         /**
          * filter
          */
-        val resultList = meregedList.filter { it.joinedText.forVisionComparison().contains(containedText) }
+        val resultList = confirmedElements.filter { it.joinedText.forVisionComparison().contains(containedText) }
         return resultList
     }
 
