@@ -107,10 +107,13 @@ internal fun VisionElement.rightLeftCore(
 
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
         .sortedBy { it.rect.left }
-    val baseElement =
+    val largestWidth = visionElements.maxOfOrNull { it.rect.width }
+    val baseElement = if (largestWidth == null) {
         if (relative.isLeft) visionElements.firstOrNull() ?: this
         else visionElements.lastOrNull() ?: this
-
+    } else {
+        visionElements.first { it.rect.width == largestWidth }
+    }
 
     /**
      * split screenshot into segments

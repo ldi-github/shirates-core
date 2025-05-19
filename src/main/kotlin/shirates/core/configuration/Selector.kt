@@ -1514,15 +1514,30 @@ class Selector(
             if (text.isBlank()) {
                 return false
             }
-            if (this.textStartsWith != null) {
-                return text.startsWith(this.textStartsWith!!.forVisionComparison())
-            } else if (this.textContains != null) {
-                return text.contains(this.textContains!!.forVisionComparison())
-            } else if (this.textEndsWith != null) {
-                return text.endsWith(this.textEndsWith!!.forVisionComparison())
-            } else {
-                return text == this.text!!.forVisionComparison()
+            if (this.text != null) {
+                val r = (text == this.text!!.forVisionComparison())
+                return r
             }
+
+            if (this.textStartsWith != null) {
+                val r = text.startsWith(this.textStartsWith!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            if (this.textContains != null) {
+                val r = text.contains(this.textContains!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            if (this.textEndsWith != null) {
+                val r = text.endsWith(this.textEndsWith!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            return true
         }
 
         if (eval(text = text)) {

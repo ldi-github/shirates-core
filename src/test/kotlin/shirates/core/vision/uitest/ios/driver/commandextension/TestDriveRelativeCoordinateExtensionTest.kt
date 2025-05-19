@@ -71,7 +71,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v1.belowText(2).textIs("Action Button")
                     v1.belowText(99).textIs("")
 
-                    v2 = it.detect("Search")
+                    v2 = it.detect("Search", last = true)
                     v2.aboveText(99).textIs("")
                     v2.aboveText(2).textIs("Camera")
                     v2.aboveText(1).textIs("Home Screen & App Library")
@@ -86,7 +86,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v1.belowText("StandBy").textIs("StandBy")
                     v1.belowText("No exist").textIs("")
 
-                    v2 = it.detect("Search")
+                    v2 = it.detect("Search", last = true)
                     v2.aboveText("Camera").textIs("Camera")
                     v2.aboveText("Action Button").textIs("Action Button")
                     v2.aboveText("No exist").textIs("")
@@ -100,7 +100,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v1.rightText(1).textIs("General")
                     v1.rightText(99).textIs("")
 
-                    v2 = it.detect("Search").rightItem()
+                    v2 = it.detect("Search", last = true).rightItem()
                     v2.leftText(-1).textIs("")
                     v2.leftText(0).textIs("")
                     v2.leftText(1).textIs("Search")
@@ -115,7 +115,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v1.rightText("General").textIs("General")
                     v1.rightText("No exist").textIs("")
 
-                    v2 = it.detect("Search").rightItem()
+                    v2 = it.detect("Search", last = true).rightItem()
                     v2.leftText("Search").textIs("Search")
                     v2.leftText("No exist").textIs("")
                 }
