@@ -2024,6 +2024,60 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionLooseMatch() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionLooseMatch).isEqualTo(Const.VISION_LOOSE_MATCH)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_LOOSE_MATCH.not()
+            PropertiesManager.setPropertyValue("visionLooseMatch", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionLooseMatch).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionMergeBoundingBox() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionMergeBoundingBox).isEqualTo(Const.VISION_MERGE_BOUNDING_BOX)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_MERGE_BOUNDING_BOX.not()
+            PropertiesManager.setPropertyValue("visionMergeBoundingBox", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionMergeBoundingBox).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionLineSpacingRatio() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionLineSpacingRatio).isEqualTo(Const.VISION_SYNC_IMAGE_MATCH_RATE)
+        }
+        run {
+            // Arrange
+            val value = 1.0
+            PropertiesManager.setPropertyValue("visionLineSpacingRatio", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionLineSpacingRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {

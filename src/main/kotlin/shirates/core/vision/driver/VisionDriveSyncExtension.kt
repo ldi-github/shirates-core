@@ -90,9 +90,11 @@ fun VisionDrive.wait(): VisionElement {
 fun VisionDrive.waitForClose(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -112,11 +114,13 @@ fun VisionDrive.waitForClose(
             found = canDetectCore(
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
                 allowScroll = false,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
             found.not()
         }
@@ -140,9 +144,11 @@ fun VisionDrive.waitForClose(
 fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -163,11 +169,13 @@ fun VisionDrive.waitForDisplay(
             found = canDetectCore(
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = waitSeconds,
                 allowScroll = false,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
             found
         }

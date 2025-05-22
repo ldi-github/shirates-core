@@ -1502,13 +1502,13 @@ class Selector(
     /**
      * evaluateText
      */
-    fun evaluateText(element: VisionElement, removeRedundantText: Boolean): Boolean {
+    fun evaluateText(element: VisionElement, looseMatch: Boolean): Boolean {
 
         val text = element.textForComparison
-        return evaluateTextCore(text = text, removeRedundantText = removeRedundantText)
+        return evaluateTextCore(text = text, looseMatch = looseMatch)
     }
 
-    internal fun evaluateTextCore(text: String, removeRedundantText: Boolean): Boolean {
+    internal fun evaluateTextCore(text: String, looseMatch: Boolean): Boolean {
 
         fun eval(text: String): Boolean {
             if (text.isBlank()) {
@@ -1544,7 +1544,7 @@ class Selector(
             return true
         }
 
-        if (removeRedundantText.not()) {
+        if (looseMatch.not()) {
             return false
         }
 

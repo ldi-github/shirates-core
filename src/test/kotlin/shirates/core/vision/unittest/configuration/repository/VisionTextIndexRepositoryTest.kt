@@ -12,7 +12,7 @@ class VisionTextIndexRepositoryTest {
     fun setup() {
 
         // Act
-        VisionTextIndexRepository.setup(visionDirectory = "unitTestData/files/vision_text_index/1", force = true)
+        VisionTextIndexRepository.setup(visionDirectory = "unitTestData/files/vision_text_index/1")
         // Assert
         val indices = VisionTextIndexRepository.imageIndexFiles.sortedBy { it.screenName }
         assertThat(indices.count()).isEqualTo(3)
@@ -46,7 +46,7 @@ class VisionTextIndexRepositoryTest {
     fun getList() {
 
         // Arrange
-        VisionTextIndexRepository.setup(visionDirectory = "unitTestData/files/vision_text_index/1", force = true)
+        VisionTextIndexRepository.setup(visionDirectory = "unitTestData/files/vision_text_index/1")
         run {
             // Act
             val screenName = "[A Screen]"

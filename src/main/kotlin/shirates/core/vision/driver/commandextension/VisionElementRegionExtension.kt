@@ -308,7 +308,8 @@ fun VisionElement.rightRegionElement(
  * onLine
  */
 fun VisionElement.onLine(
-    lineHeight: Int = this.rect.height * 2,
+    lineHeightRatio: Double = 2.0,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
@@ -325,7 +326,8 @@ fun VisionElement.onLine(
  * onColumn
  */
 fun VisionElement.onColumn(
-    columnWidth: Int = this.rect.width * 2,
+    columnWidthRatio: Double = 2.0,
+    columnWidth: Int = (this.rect.width * columnWidthRatio).toInt(),
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
@@ -342,7 +344,8 @@ fun VisionElement.onColumn(
  * lineRegionElement
  */
 fun VisionElement.lineRegionElement(
-    lineHeight: Int = this.rect.height * 2,
+    lineHeightRatio: Double = 2.0,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
     verticalOffset: Int = 0,
 ): VisionElement {
     var top = this.rect.centerY - lineHeight / 2 + verticalOffset
@@ -363,7 +366,8 @@ fun VisionElement.lineRegionElement(
  * columnRegionElement
  */
 fun VisionElement.columnRegionElement(
-    columnWidth: Int = this.rect.width * 2,
+    columnWidthRatio: Double = 2.0,
+    columnWidth: Int = (this.rect.width * columnWidthRatio).toInt(),
     horizontalOffset: Int = 0,
 ): VisionElement {
     var left = this.rect.centerX - columnWidth / 2 + horizontalOffset

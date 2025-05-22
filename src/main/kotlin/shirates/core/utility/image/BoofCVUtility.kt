@@ -1,9 +1,14 @@
 package shirates.core.utility.image
 
+import boofcv.alg.enhance.EnhanceImageOps
+import boofcv.alg.enhance.GEnhanceImageOps
 import boofcv.factory.template.FactoryTemplateMatching
 import boofcv.factory.template.TemplateScoreType
+import boofcv.io.image.ConvertBufferedImage
 import boofcv.struct.feature.Match
 import boofcv.struct.image.GrayF32
+import boofcv.struct.image.GrayU8
+import boofcv.struct.image.Planar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
 import java.awt.image.BufferedImage
@@ -204,5 +209,28 @@ object BoofCVUtility {
         )
         TestLog.trace(imageMatchResult.toString())
         return imageMatchResult
+    }
+
+    /**
+     * enhanceFaintAreas
+     */
+    fun enhanceFaintAreas(
+        inputBufferedImage: BufferedImage,
+        radius: Int = 50
+    ): BufferedImage {
+        val rgb =
+            ConvertBufferedImage.convertFromPlanar(inputBufferedImage, null, true, GrayU8::class.java) as Planar<GrayU8>
+
+        val localEq = rgb.createSameShape()
+        GEnhanceImageOps.equalizeLocal(rgb, radius, localEq, 256, null)
+
+        for (b in 0 until localEq.numBands) {
+            val tmp = localEq.getBand(b).createSameShape()
+            EnhanceImageOps.sharpen4(localEq.getBand(b), tmp)
+            localEq.setBand(b, tmp)
+        }
+
+        val bufferedImage = ConvertBufferedImage.convertTo(localEq, null, true)
+        return bufferedImage
     }
 }

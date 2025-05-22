@@ -26,12 +26,14 @@ import shirates.core.vision.driver.lastElement
 fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -48,11 +50,13 @@ fun VisionDrive.exist(
             message = assertMessage,
             selector = sel,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -66,11 +70,13 @@ internal fun VisionDrive.existCore(
     message: String,
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
 ): VisionElement {
 
     fun detectAction(): VisionElement {
@@ -78,12 +84,14 @@ internal fun VisionDrive.existCore(
         return detectCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = null,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
     }
@@ -125,6 +133,10 @@ internal fun VisionDrive.existCore(
 fun VisionDrive.existWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
@@ -135,6 +147,10 @@ fun VisionDrive.existWithoutScroll(
         exist(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             message = message,
@@ -150,11 +166,13 @@ fun VisionDrive.existWithoutScroll(
  */
 fun VisionDrive.existAll(
     vararg expressions: String,
+    autoImageFilter: Boolean = false,
 ): VisionElement {
 
     for (expression in expressions) {
         this.exist(
             expression = expression,
+            autoImageFilter = autoImageFilter,
         )
     }
     return lastElement
@@ -165,10 +183,14 @@ fun VisionDrive.existAll(
  */
 fun VisionDrive.dontExistAll(
     vararg expressions: String,
+    autoImageFilter: Boolean = false,
 ): VisionElement {
 
     for (expression in expressions) {
-        this.dontExist(expression = expression)
+        this.dontExist(
+            expression = expression,
+            autoImageFilter = autoImageFilter
+        )
     }
     return lastElement
 }
@@ -179,6 +201,10 @@ fun VisionDrive.dontExistAll(
 fun VisionDrive.existWithScrollDown(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -186,8 +212,6 @@ fun VisionDrive.existWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -210,11 +234,13 @@ fun VisionDrive.existWithScrollDown(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -231,6 +257,10 @@ fun VisionDrive.existWithScrollDown(
 fun VisionDrive.existWithScrollUp(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -238,8 +268,6 @@ fun VisionDrive.existWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -262,11 +290,13 @@ fun VisionDrive.existWithScrollUp(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -283,6 +313,10 @@ fun VisionDrive.existWithScrollUp(
 fun VisionDrive.existWithScrollRight(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -290,8 +324,6 @@ fun VisionDrive.existWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -314,11 +346,13 @@ fun VisionDrive.existWithScrollRight(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -335,6 +369,10 @@ fun VisionDrive.existWithScrollRight(
 fun VisionDrive.existWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -342,8 +380,6 @@ fun VisionDrive.existWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -366,11 +402,13 @@ fun VisionDrive.existWithScrollLeft(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -387,9 +425,12 @@ fun VisionDrive.existWithScrollLeft(
 fun VisionDrive.dontExist(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,
-    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -407,13 +448,15 @@ fun VisionDrive.dontExist(
         v = detectCore(
             selector = sel,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = false,
             allowScroll = null,
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
-            removeRedundantText = false,
-            mergeBoundingBox = mergeBoundingBox,
         )
     }
     if (v.isFound) {
@@ -442,6 +485,10 @@ fun VisionDrive.dontExist(
 fun VisionDrive.dontExistWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
@@ -451,6 +498,10 @@ fun VisionDrive.dontExistWithoutScroll(
         dontExist(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             waitSeconds = waitSeconds,
             message = message,
             func = func

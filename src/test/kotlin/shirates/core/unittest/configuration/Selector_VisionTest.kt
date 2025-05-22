@@ -29,40 +29,40 @@ class Selector_VisionTest : UnitTest() {
 
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), looseMatch = false)).isTrue()
         }
         run {
             val s = Selector("Ite*")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), looseMatch = false)).isTrue()
         }
         run {
             val s = Selector("*te*")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), looseMatch = false)).isTrue()
         }
         run {
             val s = Selector("*tem")
-            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), removeRedundantText = false)).isTrue()
+            assertThat(s.evaluateTextCore(text = "Item".forVisionComparison(), looseMatch = false)).isTrue()
         }
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), removeRedundantText = false)).isFalse()
+            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), looseMatch = false)).isFalse()
         }
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), removeRedundantText = true)).isTrue()
+            assertThat(s.evaluateTextCore(text = "# Item".forVisionComparison(), looseMatch = true)).isTrue()
         }
         run {
             val s = Selector("Item")
             assertThat(
                 s.evaluateTextCore(
                     text = "# Item V".forVisionComparison(),
-                    removeRedundantText = false
+                    looseMatch = false
                 )
             ).isFalse()
         }
         run {
             val s = Selector("Item")
-            assertThat(s.evaluateTextCore(text = "# Item V".forVisionComparison(), removeRedundantText = true)).isTrue()
+            assertThat(s.evaluateTextCore(text = "# Item V".forVisionComparison(), looseMatch = true)).isTrue()
         }
     }
 }

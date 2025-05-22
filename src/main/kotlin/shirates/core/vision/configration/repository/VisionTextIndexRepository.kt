@@ -21,13 +21,9 @@ object VisionTextIndexRepository {
      */
     fun setup(
         visionDirectory: String = PropertiesManager.visionDirectory,
-        force: Boolean = false
     ) {
         lockFile(filePath = visionDirectory.toPath()) {
-            setupCore(
-                visionDirectory = visionDirectory,
-                force = force,
-            )
+            setupCore(visionDirectory = visionDirectory)
         }
     }
 
@@ -43,7 +39,6 @@ object VisionTextIndexRepository {
 
     private fun setupCore(
         visionDirectory: String,
-        force: Boolean
     ) {
         this.visionDirectory = visionDirectory
 

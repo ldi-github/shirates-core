@@ -28,13 +28,19 @@ object ScreenRecognizer {
 
         val sw = StopWatch("recognizeScreen")
         try {
-            return recognizeScreenCore(classifierName, screenImageFile)
+            return recognizeScreenCore(
+                classifierName = classifierName,
+                screenImageFile = screenImageFile,
+            )
         } finally {
             sw.printInfo()
         }
     }
 
-    private fun recognizeScreenCore(classifierName: String, screenImageFile: String): String {
+    private fun recognizeScreenCore(
+        classifierName: String,
+        screenImageFile: String,
+    ): String {
 
         /**
          * Determine the screen name with textIndex
@@ -109,7 +115,7 @@ object ScreenRecognizer {
          */
         val textMatchingInfoList = getScreenRecognizedTextMatchingInfoList(
             screenLabels = screenCandidates.map { it.identifier },
-            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
+            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations,
         )
         if (textMatchingInfoList.isEmpty()) {
             return "?"
@@ -148,7 +154,7 @@ object ScreenRecognizer {
 
     private fun getScreenRecognizedTextMatchingInfoList(
         screenLabels: List<String>,
-        recognizeTextObservations: List<RecognizeTextObservation>
+        recognizeTextObservations: List<RecognizeTextObservation>,
     ): List<ScreenRecognizedTextMatchingInfo> {
 
         val list = mutableListOf<ScreenRecognizedTextMatchingInfo>()

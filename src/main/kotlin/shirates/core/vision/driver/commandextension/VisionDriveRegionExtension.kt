@@ -6,18 +6,53 @@ import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 
 /**
+ * lineOf
+ */
+fun VisionElement.lineOf(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
+    verticalOffset: Int = 0,
+): VisionElement {
+
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
+    return v.lineRegionElement(
+        lineHeightRatio = lineHeightRatio,
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset
+    )
+}
+
+/**
  * onLineOf
  */
 fun VisionDrive.onLineOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    lineHeight: Int = this.getThisOrIt().rect.height * 2,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.getThisOrIt().rect.height * lineHeightRatio).toInt(),
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val v = detect(expression = expression, language = language)
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
     return v.onLine(
+        lineHeightRatio = lineHeightRatio,
         lineHeight = lineHeight,
         verticalOffset = verticalOffset,
         func = func
@@ -25,20 +60,143 @@ fun VisionDrive.onLineOf(
 }
 
 /**
+ * rightLineOf
+ */
+fun VisionElement.rightLineOf(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
+    width: Int? = null,
+    verticalOffset: Int = 0,
+): VisionElement {
+
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
+    return v.rightRegionElement(
+        width = width,
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset
+    )
+}
+
+/**
+ * onRightLineOf
+ */
+fun VisionDrive.onRightLineOf(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.getThisOrIt().rect.height * lineHeightRatio).toInt(),
+    verticalOffset: Int = 0,
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
+    val regionElement = v.rightRegionElement(
+        width = null,
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset
+    )
+    regionCore(regionElement = regionElement, func = func)
+    return regionElement
+}
+
+
+/**
  * onColumnOf
  */
 fun VisionDrive.onColumnOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    columnWidth: Int = this.getThisOrIt().rect.width * 2,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    columnWidthRatio: Double = 2.0,
+    columnWidth: Int = (this.getThisOrIt().rect.width * columnWidthRatio).toInt(),
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val v = detect(expression = expression, language = language)
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
     return v.onColumn(
         columnWidth = columnWidth,
         horizontalOffset = horizontalOffset,
+        func = func
+    )
+}
+
+/**
+ * onRightOf
+ */
+fun VisionElement.onRightOf(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
+    width: Int? = null,
+    verticalOffset: Int = 0,
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
+    return v.onRight(
+        width = width,
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset,
+        func = func
+    )
+}
+
+/**
+ * onLeftOf
+ */
+fun VisionElement.onLeftOf(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int = (this.rect.height * lineHeightRatio).toInt(),
+    width: Int? = null,
+    verticalOffset: Int = 0,
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
+    )
+    return v.onLeft(
+        width = width,
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset,
         func = func
     )
 }

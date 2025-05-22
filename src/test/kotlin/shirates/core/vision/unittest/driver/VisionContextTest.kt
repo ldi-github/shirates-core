@@ -93,7 +93,7 @@ class VisionContextTest {
             TestDriver.visionRootElement.visionContext.screenshotFile = screenshotFile
             CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
             // Act
-            val v = c.detect(selector = Selector("SIMs"), last = false, removeRedundantText = true)
+            val v = c.detect(selector = Selector("SIMs"), last = false, looseMatch = true)
             // Assert
             assertThat(v.isFound).isTrue()
         }

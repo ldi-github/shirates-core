@@ -37,8 +37,14 @@ open class VisionElement(
      */
     var visionContext: VisionContext
 
+    /**
+     * visionOcrContext
+     */
+    var visionOcrContext: VisionContext
+
     init {
         visionContext = VisionContext(capture = capture)
+        visionOcrContext = visionContext
     }
 
     constructor(visionContext: VisionContext) : this(capture = false) {
@@ -224,9 +230,11 @@ open class VisionElement(
      * recognizeTextLocal
      */
     fun recognizeTextLocal(
-        language: String = PropertiesManager.visionOCRLanguage
+        language: String = PropertiesManager.visionOCRLanguage,
     ) {
-        visionContext.recognizeTextLocal(language = language)
+        visionContext.recognizeTextLocal(
+            language = language,
+        )
     }
 
     /**

@@ -1129,6 +1129,35 @@ object PropertiesManager {
             return value
         }
 
+    /**
+     * visionLooseMatch
+     */
+    val visionLooseMatch: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionLooseMatch")
+                ?: return Const.VISION_LOOSE_MATCH
+            return value == "true"
+        }
+
+    /**
+     * visionMergeBoundingBox
+     */
+    val visionMergeBoundingBox: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionMergeBoundingBox")
+                ?: return Const.VISION_MERGE_BOUNDING_BOX
+            return value == "true"
+        }
+
+    /**
+     * visionLineSpacingRatio
+     */
+    val visionLineSpacingRatio: Double
+        get() {
+            return getPropertyValue(propertyName = "visionLineSpacingRatio")?.toDoubleOrNull()
+                ?: Const.VISION_LINE_SPACING_RATIO
+        }
+
     // Custom --------------------------------------------------
 
     /**
