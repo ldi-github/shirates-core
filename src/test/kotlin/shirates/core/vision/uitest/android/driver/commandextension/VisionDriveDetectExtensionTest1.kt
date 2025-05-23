@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
 import shirates.core.driver.classic
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.Must
@@ -19,7 +19,25 @@ import shirates.core.vision.testcode.VisionTest
 class VisionDriveDetectExtensionTest1 : VisionTest() {
 
     @Test
-    fun detect() {
+    fun detect_detectLast() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    v1 = it.detect("*settings*")
+                    v2 = it.detectLast("*settings*")
+                }.expectation {
+                    v1.textIs("Settings")
+                    v2.textIs("Search Settings")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun detect_orSelectors() {
 
         scenario {
             case(1) {
@@ -30,6 +48,74 @@ class VisionDriveDetectExtensionTest1 : VisionTest() {
                 }.expectation {
                     printInfo("v1.text=${v1.text}")
                     v1.isFound.thisIsTrue()
+                }
+            }
+            case(2) {
+                v2 = it.detect("Apps||System")
+                expectation {
+                    printInfo("v2.text=${v2.text}")
+                    v2.isFound.thisIsTrue()
+                }
+            }
+            case(3) {
+                v3 = it.detect("System||Apps")
+                expectation {
+                    printInfo("v3.text=${v3.text}")
+                    v3.isFound.thisIsTrue()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun detect_multiline() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    val s1 = "Network & internet"
+                    v1 = detect(s1)
+                    v1.isFound.thisIsTrue(s1)
+
+                    val s2 = "Network & internet Mobile,Wi-Fi, hotspot"
+                    v2 = detect(s2)
+                    v2.isFound.thisIsTrue(s2)
+
+                    val s3 = "Network & internet Mobile,Wi-Fi, hotspot Connected devices"
+                    v3 = detect(s3, throwsException = false)
+                    v3.isFound.thisIsFalse(s3)
+                }
+            }
+            case(2) {
+                expectation {
+                    val s1 = "Network & inter*"
+                    v1 = detect(s1)
+                    v1.isFound.thisIsTrue(s1)
+
+                    val s2 = "Network & internet Mobile,Wi-Fi*"
+                    v2 = detect(s2)
+                    v2.isFound.thisIsTrue(s2)
+
+                    val s3 = "Network & internet Mobile,Wi-Fi, hotspot Connected*"
+                    v3 = detect(s3, throwsException = false)
+                    v3.isFound.thisIsFalse(s3)
+                }
+            }
+            case(3) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    val s1 = "Alarm"
+                    v1 = detect(s1)
+                    v1.isFound.thisIsTrue(s1)
+
+                    val s2 = "Alarm Clock"
+                    v1 = detect(s2)
+                    v1.isFound.thisIsTrue(s2)
+
+                    val s3 = "Alarm Clock Timer"
+                    v1 = detect(s3)
+                    v1.isFound.thisIsTrue(s3)
                 }
             }
         }

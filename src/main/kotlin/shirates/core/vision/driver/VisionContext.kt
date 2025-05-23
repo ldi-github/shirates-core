@@ -18,7 +18,6 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionObservation
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
-import shirates.core.vision.driver.commandextension.removeRedundantText
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
 import java.awt.BasicStroke
@@ -26,6 +25,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import kotlin.math.abs
 
 class VisionContext(
     val capture: Boolean,
@@ -57,7 +57,6 @@ class VisionContext(
     verticalMargin = verticalMargin,
 ) {
 
-
     /**
      * jsonString
      */
@@ -84,13 +83,19 @@ class VisionContext(
      */
     fun getVisionElements(): MutableList<VisionElement> {
 
+        val workingRegionRect = CodeExecutionContext.workingRegionElement.rect
         var list = mutableListOf<VisionElement>()
         for (o in recognizeTextObservations) {
-            o.toVisionElement()
             val v = o.toVisionElement()
-            v.visionContext.screenshotFile = this.screenshotFile
-            v.visionContext.screenshotImage = this.screenshotImage
-            list.add(v)
+            if (workingRegionRect.isEmpty) {
+                list.add(v)
+            } else {
+                if (v.rect.isCenterIncludedIn(workingRegionRect)) {
+                    v.visionContext.screenshotFile = this.screenshotFile
+                    v.visionContext.screenshotImage = this.screenshotImage
+                    list.add(v)
+                }
+            }
         }
         list = list.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.left }).toMutableList()
         return list
@@ -271,25 +276,27 @@ class VisionContext(
             rootElement = vision.rootElement
         }
 
-        val rootVisionContext = rootElement!!.visionContext
-        if (rootVisionContext.screenshotFile == null) {
+        if (rootElement!!.visionContext.screenshotFile == null) {
             return this
         }
-        val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
+        if (rootElement!!.visionOcrContext.screenshotFile == null) {
+            rootElement!!.visionOcrContext = rootElement!!.visionContext
+        }
+        val rootVisionOcrContext = rootElement!!.visionOcrContext
+        val recognizedFile = rootVisionOcrContext.screenshotFile.toPath().toFile()
         if (recognizedFile.exists() && recognizedFile.isFile.not()) {
             /**
              * Check screenshotFile exists
              */
             return this
         }
-        if (rootVisionContext.recognizeTextObservations.isEmpty()) {
+        if (rootVisionOcrContext.recognizeTextObservations.isEmpty()) {
             /**
              * Recognize screenshotFile
              */
             recognizeTextAndSaveRectangleImage(
-                inputFile = rootVisionContext.screenshotFile!!,
+                inputFile = rootVisionOcrContext.screenshotFile!!,
                 language = language,
-                visionContext = rootVisionContext,
             )
             CodeExecutionContext.lastRecognizedFileName = recognizedFile.name
         }
@@ -302,7 +309,7 @@ class VisionContext(
              */
             val thisRectOnScreen = this.rectOnScreen
             if (thisRectOnScreen != null) {
-                var list = rootVisionContext.recognizeTextObservations.toList()
+                var list = rootVisionOcrContext.recognizeTextObservations.toList()
                 list = list.filter { it.rectOnScreen != null }
                 list = list.filter {
                     val included = it.rectOnScreen!!.toBoundsWithRatio()
@@ -331,7 +338,6 @@ class VisionContext(
         recognizeTextAndSaveRectangleImage(
             inputFile = imageFile!!,
             language = language,
-            visionContext = this,
         )
         CodeExecutionContext.lastRecognizedFileName = imageFile!!.toFile().name
         this.language = language
@@ -342,27 +348,27 @@ class VisionContext(
     private fun recognizeTextAndSaveRectangleImage(
         inputFile: String,
         language: String,
-        visionContext: VisionContext,
-    ) {
+    ): RecognizeTextResult {
         val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
-            language = language
+            language = language,
         )
-        visionContext.loadTextRecognizerResult(
+        loadTextRecognizerResult(
             inputFile = inputFile,
-            recognizeTextResult = recognizeTextResult
+            recognizeTextResult = recognizeTextResult,
         )
-        visionContext.language = language
+        this.language = language
         val name = inputFile.toFile().name
         if (name != CodeExecutionContext.lastRecognizedFileName) {
             /**
              * Save screenshotImageWithTextRegion
              */
             val fileName = "${TestLog.currentLineNo}_[$name]_recognizeText_rectangles.png"
-            visionContext.screenshotWithTextRectangle?.saveImage(
+            this.screenshotWithTextRectangle?.saveImage(
                 TestLog.directoryForLog.resolve(fileName).toString()
             )
         }
+        return recognizeTextResult
     }
 
     /**
@@ -370,7 +376,7 @@ class VisionContext(
      */
     fun loadTextRecognizerResult(
         inputFile: String,
-        recognizeTextResult: RecognizeTextResult
+        recognizeTextResult: RecognizeTextResult,
     ): VisionContext {
         this.localRegionFile = inputFile
 
@@ -408,8 +414,6 @@ class VisionContext(
             flowContainer.getElements().map { it as RecognizeTextObservation }.toMutableList()
     }
 
-    val detectCacheMap = mutableMapOf<String, VisionContext>()
-
     /**
      * detect
      */
@@ -417,115 +421,41 @@ class VisionContext(
         selector: Selector,
         language: String = this.language,
         last: Boolean,
-        removeRedundantText: Boolean,
+        looseMatch: Boolean,
         mergeBoundingBox: Boolean,
+        lineSpacingRatio: Double,
     ): VisionElement {
-
-        recognizeText(language = language)
 
         if (selector.isTextSelector.not()) {
             return VisionElement.emptyElement
         }
 
-        val cachedVisionContext = if (detectCacheMap.contains(selector.expression)) {
-            detectCacheMap[selector.expression]
-        } else null
-        if (cachedVisionContext != null) {
-            val v = cachedVisionContext.toVisionElement()
-            return v
-        }
+
+        CodeExecutionContext.lastLooseMatch = looseMatch
+        CodeExecutionContext.lastMergeBoundingBox = mergeBoundingBox
+        CodeExecutionContext.lastLineSpacingRatio = lineSpacingRatio
+
+        recognizeText(language = language)
 
         val selectors = mutableListOf(selector)
         selectors.addAll(selector.orSelectors)
 
-
         val candidates = mutableListOf<VisionElement>()
         for (sel in selectors) {
-            val list = filterCore(selector = sel, mergeBoundingBox = mergeBoundingBox)
+            val list =
+                detectCandidates(
+                    selector = sel,
+                    looseMatch = looseMatch,
+                    mergeBoundingBox = mergeBoundingBox,
+                    lineSpacingRatio = lineSpacingRatio,
+                )
             candidates.addAll(list)
         }
-
-        var v =
+        val v =
             (if (last) candidates.lastOrNull()
             else candidates.firstOrNull())
                 ?: VisionElement.emptyElement
-        if (selector.text != null &&
-            removeRedundantText &&
-            v.isMerged.not() &&
-            v.textForComparison.indexOf(selector.text!!.forVisionComparison()) > 0
-        ) {
-            val v2 = removeRedundantText(
-                visionElement = v,
-                expectedText = selector.text!!,
-                language = language,
-            )
-            v = v2
-        }
-        detectCacheMap[selector.expression!!] = v.visionContext
         return v
-    }
-
-    private fun filterCore(
-        selector: Selector,
-        mergeBoundingBox: Boolean,
-    ): List<VisionElement> {
-        val targetText =
-            selector.text ?: selector.textStartsWith ?: selector.textContains ?: selector.textEndsWith ?: ""
-        val targetTextForComparison = targetText.forVisionComparison()
-        var candidates = detectCandidates(containedText = targetTextForComparison, mergeBoundingBox = mergeBoundingBox)
-
-        if (selector.text != null) {
-            /**
-             * Exact match
-             */
-            var list = candidates.filter { it.textForComparison == selector.text.forVisionComparison() }
-            if (list.any()) {
-                candidates = list
-            } else {
-                /**
-                 * Loose match
-                 */
-                val length = selector.text!!.length
-                val maxLength = (if (length <= 6) (length + 3) else (length * 1.5)).toInt()
-                val filteredByLength = candidates.filter { it.textForComparison.length <= maxLength }
-                candidates = filteredByLength
-
-                if (candidates.count() >= 2) {
-                    /**
-                     * Additional filter
-                     */
-                    list = candidates.filter { it.textForComparison.length <= length + 2 }
-                    if (list.any()) {
-                        candidates = list
-                    }
-                }
-            }
-        } else {
-            if (selector.textStartsWith != null) {
-                val textStartsWith = selector.textStartsWith!!.forVisionComparison()
-                val list = candidates.filter {
-                    val ix = it.textForComparison.indexOf(textStartsWith)
-                    0 <= ix && ix <= 2
-                }
-                candidates = list
-            }
-            if (selector.textContains != null) {
-                val textContains = selector.textContains!!.forVisionComparison()
-                val list = candidates.filter { it.textForComparison.contains(textContains) }
-                candidates = list
-            }
-            if (selector.textEndsWith != null) {
-                val textEndsWith = selector.textEndsWith!!.forVisionComparison()
-                val list = candidates.filter {
-                    val ix = it.textForComparison.indexOf(textEndsWith)
-                    val subtext = it.textForComparison.substring(ix + 1)
-                    val lengthDiff = subtext.length - textEndsWith.length
-                    lengthDiff <= 2
-                }
-                candidates = list
-            }
-        }
-        return candidates
     }
 
     /**
@@ -534,41 +464,42 @@ class VisionContext(
     fun detect(
         selector: Selector,
         language: String = this.language,
+        looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+        mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+        lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
         last: Boolean,
-        removeRedundantText: Boolean = true,
-        mergeBoundingBox: Boolean = true,
     ): VisionElement {
 
         if (selector.hasTextFilter.not()) {
             throw TestDriverException("Selector doesn't contains text filter. (selector=$selector, expression=${selector.expression})")
         }
 
-        recognizeText(language = language)
-
         if (selector.textMatches.isNullOrBlank().not()) {
             val v = detectMatches(textMatches = selector.textMatches!!)
             v.selector = selector
             return v
-        } else {
-            val v = detectCore(
-                selector = selector,
-                language = language,
-                last = last,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
-            )
-            if (v.isFound) {
-                v.selector = selector
-                return v
-            }
         }
-        return VisionElement.emptyElement
+
+        val v = detectCore(
+            selector = selector,
+            language = language,
+            last = last,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+        )
+        if (v.isFound) {
+            v.selector = selector
+        }
+        return v
     }
 
     /**
      * detectMatches
      */
-    fun detectMatches(textMatches: String): VisionElement {
+    fun detectMatches(
+        textMatches: String,
+    ): VisionElement {
 
         recognizeText(language = language)
 
@@ -586,63 +517,49 @@ class VisionContext(
      * detectCandidates
      */
     fun detectCandidates(
-        containedText: String,
+        selector: Selector,
+        looseMatch: Boolean?,
         mergeBoundingBox: Boolean,
+        lineSpacingRatio: Double,
     ): List<VisionElement> {
 
-        if (containedText.isBlank()) {
-            return getVisionElements()
-        }
-
-        val normalizedText = containedText.forVisionComparison()
         val list = getVisionElements()
 
         /**
          * Search in single line
          */
-        var elements = list.filter { it.textForComparison.contains(normalizedText) }
-        if (elements.any()) {
+        var elements = listOf<VisionElement>()
+        if (looseMatch != null) {
+            elements = list.filter { selector.evaluateText(it, looseMatch = looseMatch) }
+        }
+        if (elements.isEmpty()) {
+            elements = list.filter { selector.evaluateText(it, looseMatch = false) }
+        } else {
             elements = elements.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.right })
             return elements
-        } else if (mergeBoundingBox.not()) {
+        }
+        if (mergeBoundingBox.not()) {
             return listOf()
         }
 
         /**
          * Search in multiline
          */
-        elements = detectMultilineElements(containedText = containedText, searchElements = list)
-        if (elements.count() <= 1) {
-            return elements
+        val multilineElements = detectMultilineElements(
+            selector = selector,
+            partialContained = selector.containedText,
+            lineSpacingRatio = lineSpacingRatio,
+            searchElements = list
+        )
+
+        if (looseMatch != null) {
+            elements = multilineElements.filter { selector.evaluateText(it, looseMatch = looseMatch) }
+            if (elements.any()) {
+                return elements
+            }
         }
 
-        /**
-         * Merge elements on the same line
-         */
-        val flowContainer = FlowContainer()
-        for (v in elements) {
-            flowContainer.addElement(v)
-        }
-        val rowElements = flowContainer.rows.map {
-            val items = it.members.map { (it as VisionElement) }
-            val item = items.merge()
-            item
-        }
-        val rowElements2 = rowElements.filter { it.textForComparison.contains(normalizedText) }
-        if (rowElements2.any()) {
-            return rowElements2
-        }
-
-        /**
-         * Merge multiple lines
-         */
-        val joinedText = elements.map { it.text }.joinToString("").forVisionComparison()
-        if (joinedText.contains(normalizedText)) {
-            val v = elements.merge()
-            return listOf(v)
-        }
-
-        return listOf()
+        return elements
     }
 
     private fun List<VisionElement>.merge(): VisionElement {
@@ -665,86 +582,145 @@ class VisionContext(
     }
 
     private fun detectMultilineElements(
-        containedText: String,
-        searchElements: MutableList<VisionElement>,
+        selector: Selector,
+        partialContained: String,
+        lineSpacingRatio: Double,
+        searchElements: List<VisionElement>,
         confirmedElements: MutableList<VisionElement> = mutableListOf(),
     ): List<VisionElement> {
-        var filteredElements = searchElements.toMutableList()
-        val lastConfirmedElement = confirmedElements.lastOrNull()
-        if (lastConfirmedElement != null) {
-            val ix = filteredElements.indexOf(lastConfirmedElement)
-            if (ix >= 0) {
-                filteredElements = filteredElements.slice(ix + 1 until filteredElements.size).toMutableList()
+
+        val resultList = mutableListOf<VisionElement>()
+        if (confirmedElements.isEmpty()) {
+            val list = detectMultilineElementsCore(
+                selector = selector,
+                partialContained = partialContained,
+                searchElements = searchElements,
+                confirmedElements = confirmedElements
+            )
+            resultList.addAll(list)
+        } else {
+            val confirmedList = confirmedElements.toList()
+            for (v in confirmedList) {
+                val filteredElements = searchElements.filter { it != v && v.rect.top < it.rect.centerY }
+                    .sortedBy { it.rect.top }
+                val list = detectMultilineElementsCore(
+                    selector = selector,
+                    partialContained = partialContained,
+                    searchElements = filteredElements,
+                    confirmedElements = confirmedElements
+                )
+                resultList.addAll(list)
             }
         }
-        val normalizedText = containedText.forVisionComparison()
+
+        fun merge() {
+            /**
+             * merge
+             */
+            confirmedElements.sortBy { it.rect.top }
+            if (confirmedElements.count() > 1) {
+
+                /**
+                 * group
+                 */
+                val groups = mutableListOf<MutableList<VisionElement>>()
+                for (v in confirmedElements) {
+                    if (groups.isEmpty()) {
+                        val l = mutableListOf(v)
+                        groups.add(l)
+                    } else {
+                        fun findGroup(
+                            v: VisionElement,
+                            groups: MutableList<MutableList<VisionElement>>
+                        ): MutableList<VisionElement>? {
+                            for (group in groups) {
+                                for (gv in group) {
+                                    val yDiff = abs(gv.rect.centerY - v.rect.centerY)
+                                    val h = Math.max(gv.rect.height, v.rect.height)
+                                    if (yDiff < h * lineSpacingRatio) {
+                                        return group
+                                    }
+                                }
+                            }
+                            return null
+                        }
+
+                        val group = findGroup(v, groups)
+                        if (group == null) {
+                            val newGroup = mutableListOf(v)
+                            groups.add(newGroup)
+                        } else {
+                            group.add(v)
+                        }
+                    }
+                }
+
+                confirmedElements.clear()
+
+                /**
+                 * merge
+                 */
+                for (group in groups) {
+                    var v = group[0]
+                    for (i in 1 until group.count()) {
+                        val v2 = group[i]
+                        v = v.mergeWith(v2)
+                        if (selector.evaluateText(v, looseMatch = false)) {
+                            break
+                        }
+                    }
+                    confirmedElements.add(v)
+                }
+            }
+
+        }
+        merge()
+
+        return confirmedElements
+    }
+
+    internal fun detectMultilineElementsCore(
+        selector: Selector,
+        partialContained: String,
+        searchElements: List<VisionElement>,
+        confirmedElements: MutableList<VisionElement> = mutableListOf(),
+    ): List<VisionElement> {
+
+        var filteredElements = searchElements.toList()
+        val containedText = partialContained.forVisionComparison()
         var tempText = ""
 
         /**
          * Finds partial matched elements
          */
-        for (i in normalizedText.indices) {
-            val s = normalizedText.substring(0, i + 1)
-            val list = filteredElements.filter { it.textForComparison.contains(s) }.toMutableList()
+        for (i in containedText.indices) {
+            val s = containedText.substring(0, i + 1)
+            val list =
+                if (confirmedElements.isEmpty()) filteredElements.filter { it.textForComparison.contains(s) }
+                else filteredElements.filter { it.textForComparison.startsWith(s) }
             if (list.isEmpty()) {
                 break
             }
             filteredElements = list
             tempText = s
         }
-        if (tempText.isEmpty()) {
-            return confirmedElements
-        }
-        if (confirmedElements.isEmpty()) {
-            filteredElements = filteredElements.filter { it.textForComparison.contains(tempText) }.toMutableList()
-        } else {
-            filteredElements = filteredElements.filter { it.textForComparison.startsWith(tempText) }.toMutableList()
-        }
         confirmedElements.addAll(filteredElements)
-
         /**
          * detect recursively
          */
-        tempText = normalizedText.removePrefix(tempText)
-        if (tempText.isBlank()) {
-            return confirmedElements
+        tempText = containedText.removePrefix(tempText)
+        if (tempText != containedText && tempText.isNotBlank()) {
+            detectMultilineElementsCore(
+                selector = selector,
+                partialContained = tempText,
+                searchElements = searchElements,
+                confirmedElements = confirmedElements,
+            )
         }
-        detectMultilineElements(
-            containedText = tempText,
-            searchElements = searchElements,
-            confirmedElements = confirmedElements,
-        )
-
-        /**
-         * merge
-         */
-        val sortedList = confirmedElements.sortedBy { it.rect.top }.toMutableList()
-        val meregedList = mutableListOf<VisionElement>()
-        while (sortedList.size != 0) {
-            val v1 = sortedList.first()
-            sortedList.remove(v1)
-            if (sortedList.isEmpty()) {
-                meregedList.add(v1)
-                break
-            }
-
-            val v2 = sortedList.first()
-            val distance = v2.rect.top - v1.rect.bottom
-//            val canMerge = distance < v1.rect.height
-            val canMerge = true
-            if (canMerge) {
-                sortedList.remove(v2)
-                val vMerged = v1.mergeWith(v2)
-                sortedList.add(0, vMerged)
-            } else {
-                meregedList.add(v1)
-            }
-        }
-
         /**
          * filter
          */
-        val resultList = meregedList.filter { it.joinedText.forVisionComparison().contains(normalizedText) }
+        val resultList = confirmedElements.filter { it.joinedText.forVisionComparison().contains(containedText) }
         return resultList
     }
 

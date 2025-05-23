@@ -104,8 +104,8 @@ class VisionDriveDetectExtensionTest9 : VisionTest() {
             case(5) {
                 expectation {
                     val expected =
-                        " will turn on when iPhone is placed on its side while charging to show information like widgets, photo frames, or clocks."
-                    it.exist(expected)
+                        "will turn on when iPhone is placed on its side while charging to show information like widgets, photo frames, or clocks."
+                    it.exist("*${expected}")
                     it.text.thisContains(expected)
                     it.joinedText.thisContains(expected)
 

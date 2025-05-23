@@ -9,6 +9,7 @@ import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionImageFilterContext
 import shirates.core.vision.driver.commandextension.screenRect
 import java.awt.image.BufferedImage
 import java.nio.file.Files
@@ -348,6 +349,12 @@ object CodeExecutionContext {
             return screenshotImageSynced.not()
         }
 
+    /**
+     * visionImageFilterContext
+     */
+    var visionImageFilterContext = VisionImageFilterContext()
+        internal set
+
     // Misc --------------------------------------------------
 
     /**
@@ -363,6 +370,23 @@ object CodeExecutionContext {
         get() {
             return scenarioRerunCause != null
         }
+
+    /**
+     * lastLooseMatch
+     */
+    var lastLooseMatch = Const.VISION_LOOSE_MATCH
+        internal set
+
+    /**
+     * lastMergeBoundingBox
+     */
+    var lastMergeBoundingBox = Const.VISION_MERGE_BOUNDING_BOX
+        internal set
+
+    /**
+     * lineSpacingRatio
+     */
+    var lastLineSpacingRatio = Const.VISION_LINE_SPACING_RATIO
 
     /**
      * clear

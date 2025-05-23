@@ -69,7 +69,13 @@ fun VisionDrive.swipePointToPoint(
     val thisObject = getThisOrIt()
     val sel = thisObject.selector
     if (sel != null) {
-        val v = detect(expression = sel.toString(), throwsException = false)
+        val v = detect(
+            expression = sel.toString(),
+            looseMatch = CodeExecutionContext.lastLooseMatch,
+            mergeBoundingBox = CodeExecutionContext.lastMergeBoundingBox,
+            lineSpacingRatio = CodeExecutionContext.lastLineSpacingRatio,
+            throwsException = false
+        )
         lastElement = v
     }
 

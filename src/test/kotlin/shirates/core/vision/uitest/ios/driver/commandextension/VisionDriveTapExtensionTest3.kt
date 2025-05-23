@@ -26,7 +26,7 @@ class VisionDriveTapExtensionTest3 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    it.tapWithScrollDown("evelop")  // Developer
+                    it.tapWithScrollDown("*evelop*")  // Developer
                 }.expectation {
                     it.screenIs("[Developer Screen]")
                 }
@@ -82,7 +82,7 @@ class VisionDriveTapExtensionTest3 : VisionTest() {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
                     }.action {
-                        it.tapWithScrollDown("Developer")
+                        it.tapWithScrollDown("#Developer")
                     }.expectation {
                         it.screenIs("[Developer Screen]")
                     }

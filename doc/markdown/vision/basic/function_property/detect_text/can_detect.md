@@ -14,6 +14,16 @@ You can know whether you can select the element or not using these functions tha
 | canDetectWithoutScroll   | Finds the first element that matches the selector **without** scrolling and returns true/false.                                            |
 | canDetectAll             | Finds all elements that matches the selector in current screen and returns true/false. Scrolling occurs within `withScroll` function.      |
 
+## Key arguments
+
+| argument        | description                                                                                                      |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------|
+| expression      | [Selector expression](../../selector_and_nickname/selector_expression.md)                                        |
+| language        | [AI-OCR language](../../switching_environment/switching_ai_ocr_language.md)                                      |
+| last            | true: Finds the last element<br>false: Finds the first element(default)                                          |
+| looseMatch      | true: Applies loose matching to text detection(default)<br>false: Do not apply loose matching                    |
+| autoImageFilter | true: Applies image filters to improve AI-OCR recognition accuracy<br>false: Do not apply image filters(default) |
+
 ## Sample code
 
 [Getting samples](../../../getting_samples.md)

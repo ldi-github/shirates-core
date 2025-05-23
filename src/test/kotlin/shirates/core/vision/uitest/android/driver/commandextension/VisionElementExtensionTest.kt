@@ -18,7 +18,7 @@ class VisionElementExtensionTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Search Screen]")
                         .tap("Search settings")
-                        .textIs("Search settings")
+                    focused.textIs("Search settings")
                         .sendKeys("value1")
                         .textIs("value1")
                 }.action {
@@ -143,7 +143,7 @@ class VisionElementExtensionTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Search Screen]")
                         .tap("Search settings")
-                        .textIs("Search settings")
+                    focused.textIs("Search settings")
                         .tap()
                 }.action {
                     it.sendKeys("Connected")

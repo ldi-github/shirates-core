@@ -18,23 +18,67 @@ import shirates.core.vision.utility.label.LabelUtility
 
 object ScreenRecognizer {
 
+    enum class RecognizationMethod {
+        textIndex,
+        classification,
+        screenPredicate,
+        screenRecognizedTextMatching,
+    }
+
+    class RecognizeScreenResult(
+        val screenName: String,
+        val recognizationMethod: RecognizationMethod,
+        val candidateScreenName: String = "",
+        val confidence: Float? = null,
+        val confidenceThreshold: Double? = null,
+    ) {
+        override fun toString(): String {
+            val candidateInfo = if (candidateScreenName.isBlank()) "" else ", candidate: $candidateScreenName"
+            val confidenceInfo =
+                if (confidence != null && confidenceThreshold != null) {
+                    val sign =
+                        if (confidence > confidenceThreshold) ">"
+                        else "<="
+                    ", confidence: $confidence $sign $confidenceThreshold"
+                } else ""
+            return "screenName: $screenName, isValid: $isValid$candidateInfo, recognizationMethod: $recognizationMethod$confidenceInfo"
+        }
+
+        /**
+         * isValid
+         */
+        val isValid: Boolean
+            get() {
+                if (confidence != null && confidenceThreshold != null) {
+                    return confidence > confidenceThreshold
+                }
+                return screenName != "?"
+            }
+    }
+
     /**
      * recognizeScreen
      */
     fun recognizeScreen(
         screenImageFile: String,
         classifierName: String = "ScreenClassifier",
-    ): String {
+    ): RecognizeScreenResult {
 
         val sw = StopWatch("recognizeScreen")
         try {
-            return recognizeScreenCore(classifierName, screenImageFile)
+            return recognizeScreenCore(
+                classifierName = classifierName,
+                screenImageFile = screenImageFile,
+            )
         } finally {
             sw.printInfo()
         }
     }
 
-    private fun recognizeScreenCore(classifierName: String, screenImageFile: String): String {
+    private fun recognizeScreenCore(
+        classifierName: String,
+        screenImageFile: String,
+    ): RecognizeScreenResult {
 
         /**
          * Determine the screen name with textIndex
@@ -53,7 +97,10 @@ object ScreenRecognizer {
                 }
                 if (allFound) {
                     TestLog.info("$screenName found by textIndex: ${entry.indexItems}")
-                    return screenName
+                    return RecognizeScreenResult(
+                        screenName = screenName,
+                        recognizationMethod = RecognizationMethod.textIndex,
+                    )
                 }
             }
         }
@@ -65,7 +112,10 @@ object ScreenRecognizer {
         )
         val screenCandidates = classifyScreenResult.getCandidates()
         if (screenCandidates.isEmpty()) {
-            return "?"
+            return RecognizeScreenResult(
+                screenName = "?",
+                recognizationMethod = RecognizationMethod.classification
+            )
         }
         /**
          * Determine the screen name with screenPredicate
@@ -81,7 +131,10 @@ object ScreenRecognizer {
                     sw.stop()
                     if (r) {
                         TestLog.info("screenPredicate: $screenName")
-                        return screenName
+                        return RecognizeScreenResult(
+                            screenName = screenName,
+                            recognizationMethod = RecognizationMethod.screenPredicate
+                        )
                     } else {
                         val list = screenPredicates.filter { it.screenName != screenName }
                         for (identifier in list) {
@@ -90,7 +143,10 @@ object ScreenRecognizer {
                             sw2.stop()
                             if (r2) {
                                 TestLog.info("$screenName found by screenPredicate")
-                                return identifier.screenName
+                                return RecognizeScreenResult(
+                                    screenName = screenName,
+                                    recognizationMethod = RecognizationMethod.screenPredicate
+                                )
                             }
                         }
                     }
@@ -109,10 +165,13 @@ object ScreenRecognizer {
          */
         val textMatchingInfoList = getScreenRecognizedTextMatchingInfoList(
             screenLabels = screenCandidates.map { it.identifier },
-            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
+            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations,
         )
         if (textMatchingInfoList.isEmpty()) {
-            return "?"
+            return RecognizeScreenResult(
+                screenName = "?",
+                recognizationMethod = RecognizationMethod.screenRecognizedTextMatching
+            )
         }
 
         /**
@@ -125,7 +184,10 @@ object ScreenRecognizer {
         if (highMatchedList.any()) {
             val s = highMatchedList.first()
             TestLog.info("${s.shortScreenLabel} found by matchTextScoreRate")
-            return s.shortScreenLabel.getNicknameWithoutSuffix()
+            return RecognizeScreenResult(
+                screenName = s.shortScreenLabel.getNicknameWithoutSuffix(),
+                recognizationMethod = RecognizationMethod.screenRecognizedTextMatching
+            )
         }
 
         /**
@@ -133,22 +195,33 @@ object ScreenRecognizer {
          * and take the highest confidence one.
          */
         val screenCandidate = screenCandidates.first()
-        val confidenceThread = PropertiesManager.visionSyncImageMatchRate
-        if (screenCandidate.confidence > confidenceThread) {
-            val name = LabelUtility.getShortLabel(screenCandidate.identifier)
-            TestLog.info("$name found by confidence > $confidenceThread")
-            return name.getNicknameWithoutSuffix()
+        val confidenceThreshold = PropertiesManager.visionSyncImageMatchRate
+        val name = LabelUtility.getShortLabel(screenCandidate.identifier)
+        if (screenCandidate.confidence > confidenceThreshold) {
+            TestLog.info("$name found by confidence > $confidenceThreshold")
+            return RecognizeScreenResult(
+                screenName = name.getNicknameWithoutSuffix(),
+                recognizationMethod = RecognizationMethod.classification,
+                confidence = screenCandidate.confidence,
+                confidenceThreshold = confidenceThreshold
+            )
         }
 
         /**
          * Unidentified
          */
-        return "?"
+        return RecognizeScreenResult(
+            screenName = "?",
+            recognizationMethod = RecognizationMethod.classification,
+            candidateScreenName = name,
+            confidence = screenCandidate.confidence,
+            confidenceThreshold = confidenceThreshold
+        )
     }
 
     private fun getScreenRecognizedTextMatchingInfoList(
         screenLabels: List<String>,
-        recognizeTextObservations: List<RecognizeTextObservation>
+        recognizeTextObservations: List<RecognizeTextObservation>,
     ): List<ScreenRecognizedTextMatchingInfo> {
 
         val list = mutableListOf<ScreenRecognizedTextMatchingInfo>()

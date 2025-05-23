@@ -25,14 +25,16 @@ import shirates.core.vision.driver.wait
 fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     if (directAccess) {
@@ -60,12 +62,14 @@ fun VisionDrive.tap(
         v = detectCore(
             selector = sel,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = null,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
             throwsException = true,
         )
         val tapFunc = {
@@ -95,26 +99,30 @@ fun VisionDrive.tap(
 fun VisionDrive.tapLast(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     return this.tap(
         expression = expression,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         last = true,
         holdSeconds = holdSeconds,
         waitSeconds = waitSeconds,
         swipeToSafePosition = swipeToSafePosition,
         waitForElementFocused = waitForElementFocused,
         directAccess = directAccess,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
     )
 }
 
@@ -144,10 +152,12 @@ internal fun VisionDrive.waitForElementFocused(
 internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     waitSeconds: Double,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -155,13 +165,15 @@ internal fun VisionDrive.detectWithAdjustingPosition(
         return detectCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = null,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = true,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -189,7 +201,7 @@ fun VisionDrive.tap(
     offsetY: Int = 1,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
-): VisionDrive {
+): VisionElement {
 
     val testElement = getThisOrIt()
 
@@ -219,7 +231,7 @@ fun VisionDrive.tap(
     wait(waitSeconds = testContext.waitSecondsForAnimationComplete)
     screenshot()
 
-    return this
+    return testElement.newVisionElement()
 }
 
 /**
@@ -255,16 +267,19 @@ fun VisionDrive.tap(
                 }
             }
         }
-        v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
+        lastElement = v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
     }
 
-    lastElement = v.newVisionElement()
     return lastElement
 }
 
 private fun VisionDrive.tapWithScrollCommandCore(
     expression: String,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     command: String,
     direction: ScrollDirection,
@@ -275,8 +290,6 @@ private fun VisionDrive.tapWithScrollCommandCore(
     scrollMaxCount: Int,
     holdSeconds: Double,
     swipeToSafePosition: Boolean,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -288,6 +301,10 @@ private fun VisionDrive.tapWithScrollCommandCore(
         v = detectWithScrollCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -297,8 +314,6 @@ private fun VisionDrive.tapWithScrollCommandCore(
             scrollMaxCount = scrollMaxCount,
             throwsException = true,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -357,7 +372,12 @@ fun VisionDrive.tapImage(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
+    last: Boolean = true,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -365,8 +385,6 @@ fun VisionDrive.tapWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -375,7 +393,11 @@ fun VisionDrive.tapWithScrollDown(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -385,8 +407,6 @@ fun VisionDrive.tapWithScrollDown(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -397,7 +417,12 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
+    last: Boolean = false,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -405,8 +430,6 @@ fun VisionDrive.tapWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -415,7 +438,11 @@ fun VisionDrive.tapWithScrollUp(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -425,8 +452,6 @@ fun VisionDrive.tapWithScrollUp(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -437,15 +462,18 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
+    last: Boolean = true,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollRight"
@@ -454,7 +482,11 @@ fun VisionDrive.tapWithScrollRight(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -464,8 +496,6 @@ fun VisionDrive.tapWithScrollRight(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -476,15 +506,18 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
+    last: Boolean = false,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollLeft"
@@ -493,7 +526,11 @@ fun VisionDrive.tapWithScrollLeft(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
-        last = false,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = last,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -503,8 +540,6 @@ fun VisionDrive.tapWithScrollLeft(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -564,6 +599,11 @@ fun VisionDrive.tapTopOfScreen(
 fun VisionDrive.tapCenterOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
 ): VisionElement {
@@ -579,6 +619,11 @@ fun VisionDrive.tapCenterOf(
         val testElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
         )
         val bounds = testElement.bounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat)
@@ -592,9 +637,14 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapItemUnder(
     expression: String,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -612,6 +662,11 @@ fun VisionDrive.tapItemUnder(
         val labelElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,
@@ -641,7 +696,12 @@ fun VisionDrive.tapItemUnder(
  */
 fun VisionDrive.tapTextUnder(
     expression: String,
+    last: Boolean = false,
     language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -658,7 +718,12 @@ fun VisionDrive.tapTextUnder(
 
         val labelElement = detect(
             expression = expression,
+            last = last,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,
@@ -685,9 +750,14 @@ fun VisionDrive.tapTextUnder(
  */
 fun VisionDrive.tapItemOver(
     expression: String,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -705,6 +775,11 @@ fun VisionDrive.tapItemOver(
         val labelElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,
@@ -735,6 +810,11 @@ fun VisionDrive.tapItemOver(
 fun VisionDrive.tapTextOver(
     expression: String,
     language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -752,6 +832,11 @@ fun VisionDrive.tapTextOver(
         val labelElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,
@@ -778,9 +863,14 @@ fun VisionDrive.tapTextOver(
  */
 fun VisionDrive.tapItemRightOf(
     expression: String,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
-    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -798,6 +888,11 @@ fun VisionDrive.tapItemRightOf(
         val labelElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,
@@ -827,9 +922,14 @@ fun VisionDrive.tapItemRightOf(
  */
 fun VisionDrive.tapItemLeftOf(
     expression: String,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
-    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -847,6 +947,11 @@ fun VisionDrive.tapItemLeftOf(
         val labelElement = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = 0.0,

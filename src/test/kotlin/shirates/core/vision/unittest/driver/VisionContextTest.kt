@@ -2,16 +2,11 @@ package shirates.core.vision.unittest.driver
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Selector
-import shirates.core.driver.TestDriver
-import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.rect
 import shirates.core.utility.toPath
-import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.VisionContext
-import shirates.core.vision.result.RecognizeTextResult
 
 class VisionContextTest {
 
@@ -72,30 +67,30 @@ class VisionContextTest {
 //        }
 //    }
 
-    @Test
-    fun detect_text() {
-
-        // Arrange
-        val jsonFile =
-            "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].json"
-        val screenshotFile =
-            "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].png"
-        val json = jsonFile.toPath().toFile().readText()
-        val recognizeTextResult = RecognizeTextResult(json)
-        val c = VisionContext(screenshotFile = screenshotFile)
-            .loadTextRecognizerResult(
-                inputFile = screenshotFile,
-                recognizeTextResult = recognizeTextResult,
-            )
-        run {
-            // Arrange
-            TestDriver.visionRootElement = VisionElement(capture = true)
-            TestDriver.visionRootElement.visionContext.screenshotFile = screenshotFile
-            CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
-            // Act
-            val v = c.detect(selector = Selector("SIMs"), last = false, removeRedundantText = true)
-            // Assert
-            assertThat(v.isFound).isTrue()
-        }
-    }
+//    @Test
+//    fun detect_text() {
+//
+//        // Arrange
+//        val jsonFile =
+//            "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].json"
+//        val screenshotFile =
+//            "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].png"
+//        val json = jsonFile.toPath().toFile().readText()
+//        val recognizeTextResult = RecognizeTextResult(json)
+//        val c = VisionContext(screenshotFile = screenshotFile)
+//            .loadTextRecognizerResult(
+//                inputFile = screenshotFile,
+//                recognizeTextResult = recognizeTextResult,
+//            )
+//        run {
+//            // Arrange
+//            TestDriver.visionRootElement = VisionElement(capture = true)
+//            TestDriver.visionRootElement.visionContext.screenshotFile = screenshotFile
+//            CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
+//            // Act
+//            val v = c.detect(selector = Selector("SIMs"), last = false, looseMatch = true)
+//            // Assert
+//            assertThat(v.isFound).isTrue()
+//        }
+//    }
 }

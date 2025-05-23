@@ -24,6 +24,7 @@ fun VisionElement.rightItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     centerBase: Boolean = false,
+    filterMargin: Int = 5,
 ): VisionElement {
 
     return rightLeftCore(
@@ -36,6 +37,7 @@ fun VisionElement.rightItem(
         binaryThreshold = binaryThreshold,
         aspectRatioTolerance = aspectRatioTolerance,
         centerBase = centerBase,
+        filterMargin = filterMargin
     )
 }
 
@@ -51,6 +53,7 @@ fun VisionElement.leftItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     centerBase: Boolean = true,
+    filterMargin: Int = 5,
 ): VisionElement {
 
     return rightLeftCore(
@@ -63,6 +66,7 @@ fun VisionElement.leftItem(
         binaryThreshold = binaryThreshold,
         aspectRatioTolerance = aspectRatioTolerance,
         centerBase = centerBase,
+        filterMargin = filterMargin
     )
 }
 
@@ -76,6 +80,7 @@ internal fun VisionElement.rightLeftCore(
     binaryThreshold: Int,
     aspectRatioTolerance: Double,
     centerBase: Boolean,
+    filterMargin: Int,
 ): VisionElement {
 
     val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
@@ -88,29 +93,35 @@ internal fun VisionElement.rightLeftCore(
 
     val sw = StopWatch("rightLeftCore")
 
-    /**
-     * get baseElement
-     */
-    val thisSegmentContainer = SegmentContainer(
-        mergeIncluded = mergeIncluded,
-        containerImage = this.image,
-        containerX = this.rect.left,
-        containerY = this.rect.top,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
-        binaryThreshold = binaryThreshold,
-        aspectRatioTolerance = aspectRatioTolerance,
-    ).split()
-        .saveImages()
+    var baseElement = this
+    if (centerBase) {
+        /**
+         * get baseElement
+         */
+        val thisSegmentContainer = SegmentContainer(
+            mergeIncluded = mergeIncluded,
+            containerImage = this.image,
+            containerX = this.rect.left,
+            containerY = this.rect.top,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
+        ).split()
+            .saveImages()
 
-    sw.lap("get baseElement")
+        sw.lap("get baseElement")
 
-    val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
-        .sortedBy { it.rect.left }
-    val baseElement =
-        if (relative.isLeft) visionElements.firstOrNull() ?: this
-        else visionElements.lastOrNull() ?: this
-
+        val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
+            .sortedBy { it.rect.left }
+        val largestWidth = visionElements.maxOfOrNull { it.rect.width }
+        baseElement = if (largestWidth == null) {
+            if (relative.isLeft) visionElements.firstOrNull() ?: this
+            else visionElements.lastOrNull() ?: this
+        } else {
+            visionElements.first { it.rect.width == largestWidth }
+        }
+    }
 
     /**
      * split screenshot into segments
@@ -123,14 +134,14 @@ internal fun VisionElement.rightLeftCore(
         binaryThreshold = binaryThreshold,
     ).split()
         .saveImages()
-    val count = thisSegmentContainer.visionElements.count()
+    val count = segmentContainer.visionElements.count()
     sw.lap("split screenshot into segments. visionElements:$count")
 
     /**
      * filter items
      */
     var elms = segmentContainer.visionElements.filter {
-        (it.rect.top <= baseElement.rect.bottom && baseElement.rect.top <= it.rect.bottom)
+        (it.rect.top <= baseElement.rect.bottom + filterMargin && baseElement.rect.top - filterMargin <= it.rect.bottom)
     }
     if (mergeIncluded.not()) {
         elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
@@ -154,11 +165,11 @@ internal fun VisionElement.rightLeftCore(
     val sortedElements =
         if (relative.isRight) {
             val minLeft = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.right
-            mergedElements.filter { it.isSameRect(baseElement).not() && minLeft <= it.rect.left }
+            mergedElements.filter { it.isSameRect(baseElement).not() && minLeft < it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         } else {
             val maxRight = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.left
-            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right <= maxRight }
+            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right < maxRight }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         }
     val v =

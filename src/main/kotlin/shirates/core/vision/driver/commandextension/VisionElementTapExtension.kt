@@ -111,3 +111,50 @@ fun VisionElement.tapLeft(
     v = v.tap(holdSeconds = holdSeconds)
     return v
 }
+
+/**
+ * tapOffset
+ */
+fun VisionElement.tapOffset(
+    offsetX: Int = 0,
+    offsetY: Int = 0
+): VisionElement {
+
+    val rect = this.rect
+    var x =
+        if (offsetX < 0) rect.left
+        else rect.right
+    x += offsetX
+    x = x / testContext.boundsToRectRatio
+
+    var y =
+        if (offsetY < 0) rect.top
+        else rect.bottom
+    y += offsetY
+    y = y / testContext.boundsToRectRatio
+
+    tap(x = x, y = y)
+    return this
+}
+
+/**
+ * tapOffsetX
+ */
+fun VisionElement.tapOffsetX(
+    offsetX: Int
+): VisionElement {
+
+    tapOffset(offsetX = offsetX)
+    return this
+}
+
+/**
+ * tapOffsetY
+ */
+fun VisionElement.tapOffsetY(
+    offsetY: Int
+): VisionElement {
+
+    tapOffset(offsetY = offsetY)
+    return this
+}

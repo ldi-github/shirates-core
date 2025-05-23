@@ -7,13 +7,17 @@ import shirates.core.driver.commandextension.getSelector
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.saveImage
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionImageFilterContext
+import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
@@ -35,12 +39,14 @@ fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
 fun VisionDrive.detect(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -51,12 +57,14 @@ fun VisionDrive.detect(
         val v = detectCore(
             selector = sel,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = waitSeconds,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
             throwsException = throwsException,
         )
         lastElement = v
@@ -66,7 +74,38 @@ fun VisionDrive.detect(
     }
 }
 
-internal fun removeRedundantText(
+/**
+ * detectLast
+ */
+fun VisionDrive.detectLast(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    allowScroll: Boolean? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    throwsException: Boolean = true,
+): VisionElement {
+
+    return detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = true,
+        allowScroll = allowScroll,
+        swipeToSafePosition = swipeToSafePosition,
+        waitSeconds = waitSeconds,
+        throwsException = throwsException,
+    )
+}
+
+internal fun looseMatch(
     visionElement: VisionElement,
     expectedText: String,
     language: String,
@@ -112,7 +151,9 @@ internal fun removeRedundantText(
         v2 = rect.toVisionElement()
     }
 
-    v2.recognizeTextLocal(language = language)
+    v2.recognizeTextLocal(
+        language = language,
+    )
     if (v2.visionContext.recognizeTextObservations.isNotEmpty()) {
         v2.recognizeTextObservation!!.text = expectedText
         v2.recognizeTextObservation!!.localRegionX = offsetRect.left
@@ -127,12 +168,14 @@ internal fun removeRedundantText(
 internal fun VisionDrive.detectCore(
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     allowScroll: Boolean?,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -140,16 +183,19 @@ internal fun VisionDrive.detectCore(
 
     var v = VisionElement.emptyElement
     if (TestMode.isNoLoadRun.not()) {
-        fun action() {
+
+        val action = {
             v = detectCoreCore(
                 selector = selector,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 allowScroll = allowScroll,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
                 throwsException = throwsException,
             )
         }
@@ -172,12 +218,14 @@ internal fun VisionDrive.detectCore(
 private fun VisionDrive.detectCoreCore(
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     allowScroll: Boolean?,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -208,6 +256,7 @@ private fun VisionDrive.detectCoreCore(
      * Try to detect in the current context
      */
     var v = VisionElement.emptyElement
+
     doUntilTrue(
         waitSeconds =
             if (CodeExecutionContext.withScroll == false) waitSeconds
@@ -219,13 +268,37 @@ private fun VisionDrive.detectCoreCore(
             screenshot(force = true)
         }
     ) {
-        v = CodeExecutionContext.workingRegionElement.visionContext.detect(
-            selector = selector,
-            language = language,
-            last = last,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
-        )
+        fun action() {
+            v = rootElement.visionOcrContext.detect(
+                selector = selector,
+                language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                last = last,
+            )
+        }
+
+        rootElement.visionOcrContext = rootElement.visionContext
+        action()
+
+        if (v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)) {
+
+            var imageFilterContext = CodeExecutionContext.visionImageFilterContext
+            if (imageFilterContext.hasFilter.not()) {
+                imageFilterContext = VisionImageFilterContext().enhanceFaintAreas()
+            }
+            val filteredImage =
+                imageFilterContext.processFilter(bufferedImage = CodeExecutionContext.lastScreenshotImage!!)
+            val fileName = "${TestLog.currentLineNo}_filtered.png"
+            val filteredFile = TestLog.directoryForLog.resolve(fileName).toString()
+            filteredImage.saveImage(filteredFile)
+            val filteredVisionContext = VisionContext(capture = true)
+            filteredVisionContext.screenshotImage = filteredImage
+            filteredVisionContext.screenshotFile = filteredFile
+            rootElement.visionOcrContext = filteredVisionContext
+            action()
+        }
         v.isFound
     }
     if (v.isFound) {
@@ -240,12 +313,14 @@ private fun VisionDrive.detectCoreCore(
         v = detectWithScrollCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
             throwsException = false,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -268,6 +343,10 @@ private fun VisionDrive.detectCoreCore(
 internal fun VisionDrive.detectWithScrollCore(
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     direction: ScrollDirection,
     scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
@@ -276,8 +355,6 @@ internal fun VisionDrive.detectWithScrollCore(
     endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
     swipeToSafePosition: Boolean,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -287,12 +364,14 @@ internal fun VisionDrive.detectWithScrollCore(
         v = detectCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = false,
             waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
         val stopScroll = v.isFound
@@ -347,6 +426,10 @@ internal fun VisionDrive.detectWithScrollCore(
 fun VisionDrive.detectWithScrollDown(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -367,10 +450,14 @@ fun VisionDrive.detectWithScrollDown(
         v = detect(
             expression = expression,
             language = language,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            throwsException = throwsException,
             allowScroll = true,
             swipeToSafePosition = false,
             waitSeconds = 0.0,
-            throwsException = throwsException,
+            looseMatch = looseMatch,
         )
     }
     if (func != null) {
@@ -386,6 +473,10 @@ fun VisionDrive.detectWithScrollDown(
 fun VisionDrive.detectWithScrollUp(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -406,6 +497,10 @@ fun VisionDrive.detectWithScrollUp(
         v = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             allowScroll = true,
             swipeToSafePosition = false,
             waitSeconds = 0.0,
@@ -425,6 +520,10 @@ fun VisionDrive.detectWithScrollUp(
 fun VisionDrive.detectWithScrollRight(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -445,10 +544,14 @@ fun VisionDrive.detectWithScrollRight(
         v = detect(
             expression = expression,
             language = language,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
+            throwsException = throwsException,
             allowScroll = true,
             swipeToSafePosition = false,
             waitSeconds = 0.0,
-            throwsException = throwsException,
+            looseMatch = looseMatch,
         )
     }
     if (func != null) {
@@ -464,6 +567,10 @@ fun VisionDrive.detectWithScrollRight(
 fun VisionDrive.detectWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -484,6 +591,10 @@ fun VisionDrive.detectWithScrollLeft(
         v = detect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             allowScroll = true,
             swipeToSafePosition = false,
             waitSeconds = 0.0,
@@ -503,6 +614,10 @@ fun VisionDrive.detectWithScrollLeft(
 fun VisionDrive.detectWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     throwsException: Boolean = true,
@@ -511,6 +626,10 @@ fun VisionDrive.detectWithoutScroll(
     return detect(
         expression = expression,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         allowScroll = false,
         swipeToSafePosition = swipeToSafePosition,
         waitSeconds = waitSeconds,
@@ -524,6 +643,10 @@ fun VisionDrive.detectWithoutScroll(
 fun VisionDrive.canDetect(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     allowScroll: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
@@ -535,20 +658,23 @@ fun VisionDrive.canDetect(
     return canDetect(
         selector = sel,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         allowScroll = allowScroll,
     )
 }
 
-/**
- * canDetect
- */
-fun VisionDrive.canDetect(
+internal fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = true,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     allowScroll: Boolean = true,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -562,12 +688,14 @@ fun VisionDrive.canDetect(
         v = detectCore(
             selector = selector,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = allowScroll,
             waitSeconds = 0.0,
             swipeToSafePosition = false,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
     }
@@ -581,22 +709,26 @@ fun VisionDrive.canDetect(
 internal fun VisionDrive.canDetectCore(
     selector: Selector,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     waitSeconds: Double,
     allowScroll: Boolean?,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
 ): Boolean {
 
     val v = detectCore(
         selector = selector,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         last = last,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
         swipeToSafePosition = false,
-        removeRedundantText = removeRedundantText,
-        mergeBoundingBox = mergeBoundingBox,
         throwsException = false,
     )
     lastElement = v
@@ -610,11 +742,17 @@ internal fun VisionDrive.canDetectCore(
 fun VisionDrive.canDetectWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
 ): Boolean {
     return canDetect(
         expression = expression,
         language = language,
         allowScroll = false,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
     )
 }
 
@@ -624,6 +762,9 @@ fun VisionDrive.canDetectWithoutScroll(
 fun VisionDrive.canDetectWithScrollDown(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -642,6 +783,9 @@ fun VisionDrive.canDetectWithScrollDown(
         result = canDetect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
             allowScroll = true,
         )
     }
@@ -654,6 +798,9 @@ fun VisionDrive.canDetectWithScrollDown(
 fun VisionDrive.canDetectWithScrollUp(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -672,6 +819,9 @@ fun VisionDrive.canDetectWithScrollUp(
         result = canDetect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
             allowScroll = true,
         )
     }
@@ -684,6 +834,9 @@ fun VisionDrive.canDetectWithScrollUp(
 fun VisionDrive.canDetectWithScrollRight(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -702,6 +855,9 @@ fun VisionDrive.canDetectWithScrollRight(
         result = canDetect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
             allowScroll = true,
         )
     }
@@ -714,6 +870,9 @@ fun VisionDrive.canDetectWithScrollRight(
 fun VisionDrive.canDetectWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -732,6 +891,9 @@ fun VisionDrive.canDetectWithScrollLeft(
         result = canDetect(
             expression = expression,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
             allowScroll = true,
         )
     }
@@ -741,10 +903,12 @@ fun VisionDrive.canDetectWithScrollLeft(
 internal fun VisionDrive.canDetectAllCore(
     selectors: Iterable<Selector>,
     language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    autoImageFilter: Boolean,
     last: Boolean,
     allowScroll: Boolean?,
-    removeRedundantText: Boolean,
-    mergeBoundingBox: Boolean,
 ): Boolean {
 
     val subject = selectors.joinToString()
@@ -756,11 +920,13 @@ internal fun VisionDrive.canDetectAllCore(
             foundAll = canDetectCore(
                 selector = selector,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = mergeBoundingBox,
             )
             if (foundAll.not()) {
                 break
@@ -780,8 +946,11 @@ internal fun VisionDrive.canDetectAllCore(
 fun VisionDrive.canDetectAll(
     vararg expressions: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     allowScroll: Boolean? = null,
-    mergeBoundingBox: Boolean = true,
 ): Boolean {
 
     val selectors = expressions.map { getSelector(expression = it) }
@@ -792,10 +961,12 @@ fun VisionDrive.canDetectAll(
         foundAll = canDetectAllCore(
             selectors = selectors,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = false,
             allowScroll = allowScroll,
-            removeRedundantText = false,
-            mergeBoundingBox = mergeBoundingBox,
         )
     }
     if (logLine != null) {
@@ -803,3 +974,11 @@ fun VisionDrive.canDetectAll(
     }
     return foundAll
 }
+
+/**
+ * withImageFilter
+ */
+val VisionDrive.withImageFilter: VisionImageFilterContext
+    get() {
+        return VisionImageFilterContext()
+    }

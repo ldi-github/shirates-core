@@ -11,34 +11,25 @@ import shirates.core.vision.VisionElement
 fun VisionDrive.onLineOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    lineHeight: Int = this.getThisOrIt().rect.height * 2,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    autoImageFilter: Boolean = false,
+    lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    lineHeight: Int? = null,
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val v = detect(expression = expression, language = language)
-    return v.onLine(
-        lineHeight = lineHeight,
-        verticalOffset = verticalOffset,
-        func = func
+    val v = detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        autoImageFilter = autoImageFilter,
     )
-}
-
-/**
- * onColumnOf
- */
-fun VisionDrive.onColumnOf(
-    expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    columnWidth: Int = this.getThisOrIt().rect.width * 2,
-    horizontalOffset: Int = 0,
-    func: (VisionElement.() -> Unit)
-): VisionElement {
-
-    val v = detect(expression = expression, language = language)
-    return v.onColumn(
-        columnWidth = columnWidth,
-        horizontalOffset = horizontalOffset,
+    val lh = lineHeight ?: (v.rect.height * lineHeightRatio).toInt()
+    return v.onLine(
+        lineHeightRatio = lineHeightRatio,
+        lineHeight = lh,
+        verticalOffset = verticalOffset,
         func = func
     )
 }

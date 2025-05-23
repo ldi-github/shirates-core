@@ -9,6 +9,7 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import kotlin.math.abs
 
 /**
  * swipeTo
@@ -16,14 +17,16 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
     repeat: Int = 1,
-    removeRedundantText: Boolean = true,
-    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "swipeTo"
@@ -37,13 +40,15 @@ fun VisionElement.swipeTo(
         v = detectCore(
             selector = sel,
             language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            autoImageFilter = autoImageFilter,
             last = last,
             allowScroll = false,
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
         )
 
         v = swipeElementToElement(
@@ -64,6 +69,10 @@ fun VisionElement.swipeTo(
 fun VisionElement.swipeToAdjust(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
 ): VisionElement {
@@ -71,6 +80,10 @@ fun VisionElement.swipeToAdjust(
     return swipeTo(
         expression = expression,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         durationSeconds = durationSeconds,
         marginRatio = marginRatio,
         adjust = true,
@@ -336,6 +349,7 @@ fun VisionElement.swipeToCenter(
     ofScreen: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    avoidTapping: Boolean = false
 ): VisionElement {
 
     val frame =
@@ -344,6 +358,11 @@ fun VisionElement.swipeToCenter(
     val endX = frame.centerX
     val endY = frame.centerY
 
+    val b = this.bounds
+    if (avoidTapping && abs(b.centerY - endY) < 10) {
+        return this
+    }
+
     val command = "swipeToCenter"
     val message = message(id = command, subject = subject)
     var v = VisionElement.emptyElement
@@ -351,7 +370,6 @@ fun VisionElement.swipeToCenter(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
 
-        val b = this.bounds
         v = swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY,

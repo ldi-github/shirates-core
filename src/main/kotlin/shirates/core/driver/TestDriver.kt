@@ -29,13 +29,15 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.driver.eventextension.removeScreenHandler
 import shirates.core.exception.*
-import shirates.core.logging.*
+import shirates.core.logging.LogType
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
 import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.*
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
@@ -55,6 +57,8 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.utility.toBufferedImage
+import shirates.core.utility.toPath
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
@@ -440,6 +444,11 @@ object TestDriver {
 
         clearContext()
     }
+
+    /**
+     * lastRecognizeScreenResult
+     */
+    var lastRecognizeScreenResult: ScreenRecognizer.RecognizeScreenResult? = null
 
     /**
      * currentScreen
@@ -2134,7 +2143,8 @@ object TestDriver {
             screenshotLine.subject = screenshotFileName
 
             currentScreen = "?"
-            currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
+            lastRecognizeScreenResult = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
+            currentScreen = lastRecognizeScreenResult!!.screenName
             currentScreenSynced = true
             TestLog.printInfo("currentScreen=$currentScreen")
         } catch (t: Throwable) {

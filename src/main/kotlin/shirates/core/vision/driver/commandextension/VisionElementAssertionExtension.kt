@@ -5,6 +5,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.thisContains
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
@@ -42,17 +43,22 @@ fun VisionElement.textIs(
     val assertMessage =
         message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
 
-    val expectedForCompare = containedText.process(digitOnly = digitOnly)
-    val actual = if (joinText) {
-        if (digitOnly) joinedDigit else this.joinedText
-    } else {
-        if (digitOnly) digit else text
-    }
-    val actualForCompare = actual.process(digitOnly = digitOnly)
-
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = containedText) {
-        actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
+
+        val expectedForCompare = containedText.process(digitOnly = digitOnly)
+        val actual = if (joinText) {
+            if (digitOnly) joinedDigit else this.joinedText
+        } else {
+            if (digitOnly) digit else text
+        }
+        val actualForCompare = actual.process(digitOnly = digitOnly)
+
+        if (containedText.isBlank()) {
+            actualForCompare.thisIs(expected = containedText, message = assertMessage, strict = false)
+        } else {
+            actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
+        }
     }
     return this
 }
@@ -207,6 +213,10 @@ fun VisionElement.buttonStateIs(
 fun VisionElement.existOnLine(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
@@ -232,11 +242,13 @@ fun VisionElement.existOnLine(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = false,
-                mergeBoundingBox = false,
             )
         }
     }
@@ -253,12 +265,15 @@ fun VisionElement.existOnLine(
 fun VisionElement.existOnColumn(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
-    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -279,11 +294,13 @@ fun VisionElement.existOnColumn(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = false,
             )
         }
     }
@@ -300,12 +317,15 @@ fun VisionElement.existOnColumn(
 fun VisionElement.existOnRight(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
-    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -326,11 +346,13 @@ fun VisionElement.existOnRight(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = false,
             )
         }
     }
@@ -347,12 +369,15 @@ fun VisionElement.existOnRight(
 fun VisionElement.existOnLeft(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
-    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -373,11 +398,13 @@ fun VisionElement.existOnLeft(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = false,
             )
         }
     }
@@ -394,12 +421,15 @@ fun VisionElement.existOnLeft(
 fun VisionElement.existOnAbove(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
-    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -420,11 +450,13 @@ fun VisionElement.existOnAbove(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = false,
             )
         }
     }
@@ -441,12 +473,15 @@ fun VisionElement.existOnAbove(
 fun VisionElement.existOnBelow(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
-    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -467,11 +502,13 @@ fun VisionElement.existOnBelow(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                looseMatch = looseMatch,
+                mergeBoundingBox = mergeBoundingBox,
+                lineSpacingRatio = lineSpacingRatio,
+                autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
-                removeRedundantText = removeRedundantText,
-                mergeBoundingBox = false,
             )
         }
     }

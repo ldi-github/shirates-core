@@ -1,3 +1,4 @@
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.getSelector
@@ -134,6 +135,11 @@ fun VisionDrive.ifFalse(
  */
 fun VisionDrive.ifCanDetect(
     expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     onTrue: (VisionElement) -> Unit = {}
 ): VisionDriveBooleanCompareResult {
@@ -142,6 +148,11 @@ fun VisionDrive.ifCanDetect(
 
     val v = detect(
         expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         waitSeconds = waitSeconds,
         throwsException = false
     )
@@ -168,6 +179,11 @@ fun VisionDrive.ifCanDetect(
  */
 fun VisionDrive.ifCanDetectNot(
     expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     onTrue: (VisionElement) -> Unit
 ): VisionDriveBooleanCompareResult {
 
@@ -175,6 +191,11 @@ fun VisionDrive.ifCanDetectNot(
 
     val v = detect(
         expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         throwsException = false
     )
     val matched = v.isEmpty

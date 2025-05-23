@@ -7,6 +7,7 @@ You can tap an element on the screen using these functions.
 | function                         | description                                                                                           |
 |:---------------------------------|:------------------------------------------------------------------------------------------------------|
 | tap(_expression_)                | Tap the first element that matches the _expression_. Scrolling occurs within **withScroll** function. |
+| tapLast(_expression_)            | Tap the last element that matches the _expression_. Scrolling occurs within **withScroll** function.  |
 | tap(_x, y_)                      | Tap the coordinates (x, y).                                                                           |
 | tapWithScrollDown(_expression_)  | Tap the first element that matches the _expression_ with scrolling down.                              |
 | tapWithScrollUp(_expression_)    | Tap the first element that matches the _expression_ with scrolling up.                                |
@@ -21,6 +22,16 @@ You can tap an element on the screen using these functions.
 | tapItemLeftOf(_expression_)      | Tap the element left of the element of _expression_.                                                  |
 | tapTextUnder(_expression_)       | Tap the text element below of the element of _expression_.                                            |
 | tapTextOver(_expression_)        | Tap the text element above of the element of _expression_.                                            |
+
+## Key arguments
+
+| argument        | description                                                                                                      |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------|
+| expression      | [Selector expression](../../selector_and_nickname/selector_expression.md)                                        |
+| language        | [AI-OCR language](../../switching_environment/switching_ai_ocr_language.md)                                      |
+| last            | true: Finds the last element<br>false: Finds the first element(default)                                          |
+| looseMatch      | true: Applies loose matching to text detection(default)<br>false: Do not apply loose matching                    |
+| autoImageFilter | true: Applies image filters to improve AI-OCR recognition accuracy<br>false: Do not apply image filters(default) |
 
 ## Sample code
 

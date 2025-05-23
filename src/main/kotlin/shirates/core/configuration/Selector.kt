@@ -8,7 +8,10 @@ import shirates.core.logging.Message.message
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.string.normalize
+import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionTextRecognitionNoiseRepository
 import java.awt.image.BufferedImage
 import java.text.Normalizer
 import kotlin.reflect.full.memberProperties
@@ -392,7 +395,7 @@ class Selector(
 
     val isNegation: Boolean
         get() {
-            return relativeSelectors.filter { it.expression == ":not" }.any()
+            return relativeSelectors.any { it.expression == ":not" }
         }
 
     val isTextSelector: Boolean
@@ -440,6 +443,11 @@ class Selector(
     val canMergePos: Boolean
         get() {
             return posMergeEnabledBaseNames.any { (command ?: "").startsWith(it) }
+        }
+
+    val containedText: String
+        get() {
+            return this.text ?: this.textStartsWith ?: this.textContains ?: textEndsWith ?: ""
         }
 
     companion object {
@@ -1414,7 +1422,7 @@ class Selector(
             formatString.replace("%s", expressions[0])
         } else {
             val operator = if (predicate) "OR" else "or"
-            expressions.map { formatString.replace("%s", it) }.joinToString(" $operator ")
+            expressions.joinToString(" $operator ") { formatString.replace("%s", it) }
         }
     }
 
@@ -1489,6 +1497,86 @@ class Selector(
     fun evaluateText(element: TestElement): Boolean {
 
         return evaluate(filterName = "text", value = element.textOrLabel)
+    }
+
+    /**
+     * evaluateText
+     */
+    fun evaluateText(element: VisionElement, looseMatch: Boolean): Boolean {
+
+        val text = element.textForComparison
+        return evaluateTextCore(text = text, looseMatch = looseMatch)
+    }
+
+    internal fun evaluateTextCore(text: String, looseMatch: Boolean): Boolean {
+
+        fun eval(text: String): Boolean {
+            if (text.isBlank()) {
+                return false
+            }
+            if (this.text != null) {
+                val r = (text == this.text!!.forVisionComparison())
+                return r
+            }
+
+            if (this.textStartsWith != null) {
+                val r = text.startsWith(this.textStartsWith!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            if (this.textContains != null) {
+                val r = text.contains(this.textContains!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            if (this.textEndsWith != null) {
+                val r = text.endsWith(this.textEndsWith!!.forVisionComparison())
+                if (r.not()) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        if (eval(text = text)) {
+            return true
+        }
+
+        if (looseMatch.not()) {
+            return false
+        }
+
+        /**
+         * Removing redundant text of left edge and right edge
+         */
+        if (text.length > 2) {
+            for (s in 0..3) {
+                for (e in 0..2) {
+                    try {
+                        val x = s + e < text.length
+                        if (x) {
+                            val t = text.substring(s, text.length - e).trim()
+                            val r = eval(text = t)
+                            if (r) {
+                                return true
+                            }
+                        }
+                    } catch (t: Throwable) {
+                        println(t)
+                    }
+                }
+            }
+        }
+        /**
+         * Removing redundant text in noise.txt
+         */
+        var t = text
+        for (noise in VisionTextRecognitionNoiseRepository.noiseList) {
+            t = t.removePrefix(noise).removeSuffix(noise).trim()
+        }
+        return eval(text = t)
     }
 
     /**

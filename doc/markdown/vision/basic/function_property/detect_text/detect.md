@@ -11,6 +11,7 @@ The function returns `VisionElement` object.
 | function              | description                                                                                                         |
 |:----------------------|:--------------------------------------------------------------------------------------------------------------------|
 | detect                | Finds the first element that matches the selector in current screen. Scrolling occurs within `withScroll` function. |
+| detectLast            | Finds the last element that matches the selector in current screen. Scrolling occurs within `withScroll` function.  |
 | detectWithScrollDown  | Finds the first element that matches the selector with scrolling down.                                              |
 | detectWithScrollUp    | Finds the first element that matches the selector with scrolling up.                                                |
 | detectWithScrollRight | Finds the first element that matches the selector with scrolling right.                                             |
@@ -19,11 +20,13 @@ The function returns `VisionElement` object.
 
 ## Key arguments
 
-| argument   | description                                                                 |
-|:-----------|:----------------------------------------------------------------------------|
-| expression | [Selector expression](../../selector_and_nickname/selector_expression.md)   |
-| language   | [AI-OCR language](../../switching_environment/switching_ai_ocr_language.md) |
-| last       | true: Finds the last element.<br>false: Finds the first element(default).   |
+| argument        | description                                                                                                      |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------|
+| expression      | [Selector expression](../../selector_and_nickname/selector_expression.md)                                        |
+| language        | [AI-OCR language](../../switching_environment/switching_ai_ocr_language.md)                                      |
+| last            | true: Finds the last element<br>false: Finds the first element(default)                                          |
+| looseMatch      | true: Applies loose matching to text detection(default)<br>false: Do not apply loose matching                    |
+| autoImageFilter | true: Applies image filters to improve AI-OCR recognition accuracy<br>false: Do not apply image filters(default) |
 
 ## Sample code
 

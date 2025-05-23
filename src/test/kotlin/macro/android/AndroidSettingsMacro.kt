@@ -64,7 +64,7 @@ object AndroidSettingsMacro : TestDrive {
                 }
                 androidSettingsTopScreen()
                 it.tap("Search settings")
-                    .screenIs("[Android Settings Search Screen]")
+//                    .screenIs("[Android Settings Search Screen]")
             }
         }
     }

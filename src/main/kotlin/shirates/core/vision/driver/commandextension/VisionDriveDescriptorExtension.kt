@@ -199,6 +199,10 @@ fun VisionDrive.codeblock(
 fun VisionDrive.cellOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
     allowScroll: Boolean = true,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
@@ -208,6 +212,10 @@ fun VisionDrive.cellOf(
     val baseElement = detect(
         expression = expression,
         language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
         allowScroll = allowScroll,
         swipeToSafePosition = swipeToSafePosition,
         throwsException = throwsException,
