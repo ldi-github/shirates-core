@@ -2066,7 +2066,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionLineSpacingRatio).isEqualTo(Const.VISION_SYNC_IMAGE_MATCH_RATE)
+            assertThat(PropertiesManager.visionLineSpacingRatio).isEqualTo(Const.VISION_LINE_SPACING_RATIO)
         }
         run {
             // Arrange

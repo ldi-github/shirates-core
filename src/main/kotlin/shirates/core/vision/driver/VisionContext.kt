@@ -87,10 +87,14 @@ class VisionContext(
         var list = mutableListOf<VisionElement>()
         for (o in recognizeTextObservations) {
             val v = o.toVisionElement()
-            if (v.rect.isIncludedIn(workingRegionRect)) {
-                v.visionContext.screenshotFile = this.screenshotFile
-                v.visionContext.screenshotImage = this.screenshotImage
+            if (workingRegionRect.isEmpty) {
                 list.add(v)
+            } else {
+                if (v.rect.isIncludedIn(workingRegionRect)) {
+                    v.visionContext.screenshotFile = this.screenshotFile
+                    v.visionContext.screenshotImage = this.screenshotImage
+                    list.add(v)
+                }
             }
         }
         list = list.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.left }).toMutableList()
