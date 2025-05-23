@@ -5,9 +5,9 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.existInScanResults
 import shirates.core.driver.commandextension.scanElements
-import shirates.core.driver.classic
 import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
 import shirates.core.vision.driver.commandextension.*
@@ -99,7 +99,7 @@ class VisionDriveAssertionExtensionTest1 : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Notifications Screen]", waitSeconds = 0.5)
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Notifications Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Notifications Screen])")
+                        .hasMessage("[Notifications Screen] is displayed(expected=[Notifications Screen], screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: textIndex)")
                 }
             }
             case(2) {

@@ -201,7 +201,7 @@ fun VisionDrive.tap(
     offsetY: Int = 1,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
-): VisionDrive {
+): VisionElement {
 
     val testElement = getThisOrIt()
 
@@ -231,7 +231,7 @@ fun VisionDrive.tap(
     wait(waitSeconds = testContext.waitSecondsForAnimationComplete)
     screenshot()
 
-    return this
+    return testElement.newVisionElement()
 }
 
 /**
@@ -267,10 +267,9 @@ fun VisionDrive.tap(
                 }
             }
         }
-        v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
+        lastElement = v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
     }
 
-    lastElement = v.newVisionElement()
     return lastElement
 }
 

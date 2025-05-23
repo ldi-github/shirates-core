@@ -24,9 +24,13 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
                 }.action {
                     withImageFilter.enhanceFaintAreas {
                         assertThat(CodeExecutionContext.visionImageFilterContext.hasFilter).isTrue
-                        assertThat(TestLog.lines.any { it.message.contains("filtered.png") }).isFalse
+                        assertThat(TestLog.lines.any { it.message.endsWith("filtered.png") }).isFalse
+
                         it.detect("Network & internet")
-                        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(1)
+                        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(0)
+
+                        it.detect("not exist", throwsException = false, waitSeconds = 0.0)
+                        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)
                     }
                     assertThat(CodeExecutionContext.visionImageFilterContext.hasFilter).isFalse
                 }.expectation {
@@ -40,27 +44,29 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
     @Order(20)
     fun autoImageFilter() {
 
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(0)
+        TestLog.clear()
+
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(0)
         it.detect("Network & internet")
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(0)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(0)
 
         it.detect("not exist", throwsException = false)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(0)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(0)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(1)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = false)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)
-        assertThat(TestLog.lines.count { it.message.contains("filtered.png") }).isEqualTo(3)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(3)
     }
 
 }

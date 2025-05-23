@@ -6,6 +6,7 @@ import shirates.core.testcode.UITestBase
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.disableCache
+import shirates.core.vision.driver.commandextension.getFocusedElement
 import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.lastElement
 
@@ -17,6 +18,11 @@ abstract class VisionTest : UITestBase(), VisionDrive {
     val it: VisionElement
         get() {
             return TestDriver.lastVisionElement
+        }
+
+    val focused: VisionElement
+        get() {
+            return getFocusedElement()
         }
 
     var v1 = VisionElement(capture = false)

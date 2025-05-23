@@ -90,7 +90,7 @@ class VisionContext(
             if (workingRegionRect.isEmpty) {
                 list.add(v)
             } else {
-                if (v.rect.isIncludedIn(workingRegionRect)) {
+                if (v.rect.isCenterIncludedIn(workingRegionRect)) {
                     v.visionContext.screenshotFile = this.screenshotFile
                     v.visionContext.screenshotImage = this.screenshotImage
                     list.add(v)

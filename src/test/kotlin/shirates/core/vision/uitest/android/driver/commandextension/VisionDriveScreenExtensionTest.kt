@@ -36,7 +36,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Network & internet Screen]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Network & internet Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Network & internet Screen])")
+                        .hasMessage("[Network & internet Screen] is displayed(expected=[Network & internet Screen], screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: textIndex)")
                 }
             }
             case(3) {
@@ -82,7 +82,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                             exist("Connected devices")
                         }
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[System Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[System Screen])")
+                        .hasMessage("[System Screen] is displayed(expected=[System Screen], screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: textIndex)")
                 }
             }
             case(4) {
