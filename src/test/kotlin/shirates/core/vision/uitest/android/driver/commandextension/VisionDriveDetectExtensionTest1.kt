@@ -19,6 +19,24 @@ import shirates.core.vision.testcode.VisionTest
 class VisionDriveDetectExtensionTest1 : VisionTest() {
 
     @Test
+    fun detect_detectLast() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    v1 = it.detect("*settings*")
+                    v2 = it.detectLast("*settings*")
+                }.expectation {
+                    v1.textIs("Settings")
+                    v2.textIs("Search Settings")
+                }
+            }
+        }
+    }
+
+    @Test
     fun detect_orSelectors() {
 
         scenario {

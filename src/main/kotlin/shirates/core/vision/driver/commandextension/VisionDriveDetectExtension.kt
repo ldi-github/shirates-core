@@ -74,6 +74,37 @@ fun VisionDrive.detect(
     }
 }
 
+/**
+ * detectLast
+ */
+fun VisionDrive.detectLast(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    allowScroll: Boolean? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    throwsException: Boolean = true,
+): VisionElement {
+
+    return detect(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        last = true,
+        allowScroll = allowScroll,
+        swipeToSafePosition = swipeToSafePosition,
+        waitSeconds = waitSeconds,
+        throwsException = throwsException,
+    )
+}
+
 internal fun looseMatch(
     visionElement: VisionElement,
     expectedText: String,

@@ -35,6 +35,10 @@ fun VisionElement.textIs(
     message: String? = null,
 ): VisionElement {
 
+    if (containedText.isBlank()) {
+        throw IllegalArgumentException("containedText must not be blank")
+    }
+
     visionContext.recognizeText()
 
     val command = "textIs"
