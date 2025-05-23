@@ -5,6 +5,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.thisContains
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
@@ -35,10 +36,6 @@ fun VisionElement.textIs(
     message: String? = null,
 ): VisionElement {
 
-    if (containedText.isBlank()) {
-        throw IllegalArgumentException("containedText must not be blank")
-    }
-
     visionContext.recognizeText()
 
     val command = "textIs"
@@ -46,17 +43,22 @@ fun VisionElement.textIs(
     val assertMessage =
         message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
 
-    val expectedForCompare = containedText.process(digitOnly = digitOnly)
-    val actual = if (joinText) {
-        if (digitOnly) joinedDigit else this.joinedText
-    } else {
-        if (digitOnly) digit else text
-    }
-    val actualForCompare = actual.process(digitOnly = digitOnly)
-
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = containedText) {
-        actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
+
+        val expectedForCompare = containedText.process(digitOnly = digitOnly)
+        val actual = if (joinText) {
+            if (digitOnly) joinedDigit else this.joinedText
+        } else {
+            if (digitOnly) digit else text
+        }
+        val actualForCompare = actual.process(digitOnly = digitOnly)
+
+        if (containedText.isBlank()) {
+            actualForCompare.thisIs(expected = containedText, message = assertMessage, strict = false)
+        } else {
+            actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
+        }
     }
     return this
 }

@@ -1,9 +1,9 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.testcode.Want
+import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.detect
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.driver.commandextension.textIs
@@ -25,10 +25,7 @@ class VisionElementAssertionExtensionTest : VisionTest() {
             .textIs("network")
             .textIs("internet")
         // Act, Assert
-        assertThatThrownBy {
-            it.textIs("")
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("containedText must not be blank")
+        VisionElement.emptyElement.textIs("")
     }
 
 }

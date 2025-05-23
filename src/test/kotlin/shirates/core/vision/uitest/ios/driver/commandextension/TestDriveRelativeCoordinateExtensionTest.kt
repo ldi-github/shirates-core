@@ -3,6 +3,7 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIs
+import shirates.core.driver.commandextension.thisIsNot
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.thisStartsWith
 import shirates.core.testcode.Want
@@ -65,7 +66,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
             case(5) {
                 expectation {
                     v1 = it.detect("General")
-                    v1.belowText(-1).textIs("")
+                    v1.belowText(-1).text.thisIsNot("")
                     v1.belowText(0).textIs("General")
                     v1.belowText(1).textIs("Accessibility")
                     v1.belowText(2).textIs("Action Button")
@@ -95,14 +96,14 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
             case(7) {
                 expectation {
                     v1 = it.detect("General").leftItem()
-                    v1.rightText(-1).textIs("")
+                    v1.rightText(-1).text.thisIsNot("")
                     v1.rightText(0).textIs("")
                     v1.rightText(1).textIs("General")
                     v1.rightText(99).textIs("")
 
                     v2 = it.detect("Search", last = true).rightItem()
                     v2.leftText(-1).textIs("")
-                    v2.leftText(0).textIs("")
+                    v2.leftText(0).textIs(v2.text)
                     v2.leftText(1).textIs("Search")
                     v2.leftText(99).textIs("")
                 }
