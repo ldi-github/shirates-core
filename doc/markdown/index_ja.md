@@ -77,9 +77,10 @@
 
 ### 関数/プロパティ
 
-- 要素を選択する
+- テキストを検出する
     - [detect](vision/basic/function_property/detect_text/detect_ja.md)
     - [canDetect](vision/basic/function_property/detect_text/can_detect_ja.md)
+    - [テキスト検出に関する考慮事項](vision/basic/function_property/detect_text/considerations_for_text_detection_ja.md)
 - 画像を見つける
     - [findImage](vision/basic/function_property/getting_image/find_image_ja.md)
     - [canFindImage](vision/basic/function_property/getting_image/can_find_image_ja.md)

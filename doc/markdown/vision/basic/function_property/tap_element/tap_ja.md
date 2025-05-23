@@ -7,6 +7,7 @@
 | 関数                               | 説明                                                                  |
 |:---------------------------------|:--------------------------------------------------------------------|
 | tap(_expression_)                | _expression_ にマッチする最初の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します |
+| tapLast(_expression_)            | _expression_ にマッチする最後の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します |
 | tap(_x, y_)                      | (_x, y_)座標をタップします                                                   |
 | tapWithScrollDown(_expression_)  | _expression_ にマッチする最初の要素をタップします（下方向スクロールあり）                         |
 | tapWithScrollUp(_expression_)    | _expression_ にマッチする最初の要素をタップします（上方向スクロールあり）                         |
@@ -19,6 +20,16 @@
 | tapItemOver(_expression_)        | _expression_ にマッチする要素の上の要素をタップします                                   |
 | tapItemRightOf(_expression_)     | _expression_ にマッチする要素の右の要素をタップします                                   |
 | tapItemLeftOf(_expression_)      | _expression_ にマッチする要素の左の要素をタップします                                   |
+
+## 主要な引数
+
+| 引数              | 説明                                                                       |
+|:----------------|:-------------------------------------------------------------------------|
+| expression      | [セレクター式](../../selector_and_nickname/selector_expression_ja.md)          |
+| language        | [AI-OCRの言語](../../switching_environment/switching_ai_ocr_language_ja.md) |
+| last            | true: 最後の要素を取得します<br>false: 最初の要素を取得します(デフォルト)                           |
+| looseMatch      | true: テキスト検出にルースマッチングを適用します(デフォルト)<br>false: ルースマッチングを適用しません             |
+| autoImageFilter | true: 画像フィルターを自動適用してAI-OCRの認識精度を向上させます<br>false: 画像フィルターを適用しません(デフォルト)   |
 
 ## サンプルコード
 

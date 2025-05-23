@@ -82,6 +82,7 @@
 - Detect text
     - [detect](vision/basic/function_property/detect_text/detect.md)
     - [canDetect](vision/basic/function_property/detect_text/can_detect.md)
+    - [Consideration for text detection](vision/basic/function_property/detect_text/considerations_for_text_detection.md)
 - Find image
     - [findImage](vision/basic/function_property/getting_image/find_image.md)
     - [canFindImage](vision/basic/function_property/getting_image/can_find_image.md)
