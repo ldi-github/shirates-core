@@ -249,7 +249,7 @@ fun VisionDrive.screenIs(
                     TestLog.info("recognizeTexts: ${rootElement.visionContext.recognizeTextObservations.map { "\"${it.text}\"" }}")
                 }
 
-                val msg = "$assertMessage(expected=$screenName, ${TestDriver.lastRecognizeScreenResult})"
+                val msg = "$assertMessage(${TestDriver.lastRecognizeScreenResult})"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }

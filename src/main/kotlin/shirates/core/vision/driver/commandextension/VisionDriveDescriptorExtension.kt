@@ -2,9 +2,6 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestMode
-import shirates.core.exception.TestDriverException
-import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
@@ -122,28 +119,6 @@ fun VisionDrive.manual(
     return testElement
 }
 
-//internal fun VisionDrive.conditionalAuto(
-//    message: String,
-//    arg1: String = "",
-//    arg2: String = ""
-//): VisionElement {
-//
-//    val testElement = getThisOrIt()
-//
-//    val context = TestDriverCommandContext(null)
-//    context.execLogCommand(message = message, subject = message) {
-//        TestLog.conditionalAuto(
-//            message = message,
-//            scriptCommand = "conditionalAuto",
-//            subject = message,
-//            arg1 = arg1,
-//            arg2 = arg2
-//        )
-//    }
-//
-//    return testElement
-//}
-
 /**
  * procedure
  */
@@ -221,10 +196,11 @@ fun VisionDrive.cellOf(
         throwsException = throwsException,
     )
 
-    return baseElement.cellOfCore(
-        throwsException = throwsException,
-        func = func
-    )
+    val cell = baseElement.cell()
+    cell.onThisElementRegion {
+        func?.invoke(cell)
+    }
+    return lastElement
 }
 
 ///**
@@ -251,66 +227,40 @@ fun VisionDrive.cellOf(
 ////    )
 //}
 
-private fun VisionElement.cellOfCore(
-    throwsException: Boolean,
-    func: (VisionElement.() -> Unit)?
-): VisionElement {
-
-    if (func == null) {
-        return this
-    }
-    if (TestMode.isNoLoadRun) {
-        return this
-    }
-    if (text.isBlank()) {
-        throw TestDriverException(message(id = "cellIsEmpty", subject = subject))
-    }
-
-    val command = "cellOf"
-    val cell = this.getCell()
-    if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
-        throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
-
-    val target = message(id = command, subject = selector?.toString())
-
-    val context = TestDriverCommandContext(null)
-    context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.workingRegionElement
-        try {
-            CodeExecutionContext.workingRegionElement = cell
-            cell.apply {
-                func.invoke(cell)
-            }
-        } finally {
-            CodeExecutionContext.workingRegionElement = original
-        }
-    }
-    return this
-}
-
-/**
- * getCell
- */
-fun VisionDrive.getCell(): VisionElement {
-
-    throw NotImplementedError("getCell is not implemented.")
-//    if (CodeExecutionContext.lastCell.isEmpty.not()) {
-//        return CodeExecutionContext.lastCell
+//private fun VisionElement.cellOfCore(
+//    throwsException: Boolean,
+//    func: (VisionElement.() -> Unit)?
+//): VisionElement {
+//
+//    if (func == null) {
+//        return this
+//    }
+//    if (TestMode.isNoLoadRun) {
+//        return this
+//    }
+//    if (text.isBlank()) {
+//        throw TestDriverException(message(id = "cellIsEmpty", subject = subject))
 //    }
 //
-//    val cellHost = getCellHost()
-//    val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
-//    cell.selector = this.getChainedSelector(":cell")
-//    return cell
-}
+//    val command = "cellOf"
+//    val cell = this.getCell()
+//    if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
+//        throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
+//
+//    val target = message(id = command, subject = selector?.toString())
+//
+//    val context = TestDriverCommandContext(null)
+//    context.execBranch(command = command, condition = target) {
+//        val original = CodeExecutionContext.workingRegionElement
+//        try {
+//            CodeExecutionContext.workingRegionElement = cell
+//            cell.apply {
+//                func.invoke(cell)
+//            }
+//        } finally {
+//            CodeExecutionContext.workingRegionElement = original
+//        }
+//    }
+//    return this
+//}
 
-/**
- * getCellHost
- */
-fun VisionDrive.getCellHost(): VisionElement {
-
-    throw NotImplementedError("getCellHost is not implemented.")
-//    val ancestors = this.ancestors
-//    val scrollableElement = ancestors.lastOrNull() { it.isScrollableElement }
-//    return scrollableElement ?: TestElement.emptyElement
-}

@@ -223,7 +223,7 @@ open class VisionElement(
      */
     val textForComparison: String
         get() {
-            return text.forVisionComparison()
+            return joinedText.forVisionComparison()
         }
 
     /**
@@ -307,7 +307,7 @@ open class VisionElement(
 
     override fun toString(): String {
         try {
-            return "text: \"$text\", bounds: $bounds, rect: $rect"
+            return "text: \"$joinedText\", bounds: $bounds, rect: $rect"
         } catch (t: Throwable) {
             println(t)
             return ""
