@@ -27,10 +27,10 @@ You can assert package of current app using these functions.
                     it.packageIs("com.android.settings")
                 }
             }
-
             case(2) {
                 action {
-                    it.launchApp("Chrome")
+                    it.launchApp("[Chrome]")
+                        .wait(5)
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }
