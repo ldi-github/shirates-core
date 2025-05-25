@@ -4,24 +4,26 @@ Finding image is a computationally intensive process. Especially splitting the i
 You can set working region to get better performance by reducing the size of the image using these functions.<br>
 Also, by setting a work area, you can verify whether the text/image exists within that work area.
 
-| function          | description                                                                   |
-|:------------------|:------------------------------------------------------------------------------|
-| onTopRegion       | Cut the screen image of top region and set it as a working region.            |
-| onBottomRegion    | Cut the screen image of bottom region and set it as a working region.         |
-| onMiddleRegion    | Cut the screen image of middle region and set it as a working region.         |
-| onRegion          | Cut the screen image with specified rectangle and set it as a working region. |
-| onUpperHalfRegion | Cut the screen image of upper half region and set it as a working region.     |
-| onLowerHalfRegion | Cut the screen image of lower half region and set it as a working region.     |
-| onLeftHalfRegion  | Cut the screen image of left half region and set it as a working region.      |
-| onRightHalfRegion | Cut the screen image of right half region and set it as a working region.     |
-| onAbove           | Cut above region of the column of the element and set it as a working region. |
-| onBelow           | Cut below region of the column of the element and set it as a working region. |
-| onLeft            | Cut left region of the line of the region and set it as a working region.     |
-| onRight           | Cut right region of the line of the region and set it as a working region.    |
-| onAboveScreen     | Cut above region of the element and set it as a working region.               |
-| onBelowScreen     | Cut below region of the element and set it as a working region.               |
-| onLeftScreen      | Cut left region and set it as a working region.                               |
-| onRightScreen     | Cut right region and set it as a working region.                              |
+| function            | description                                                                   |
+|:--------------------|:------------------------------------------------------------------------------|
+| onThisElementRegion | Set it as working region.                                                     |
+| onCellOf            | Get the rectangle that includes the text and set it as a working region.      |
+| onTopRegion         | Cut the screen image of top region and set it as a working region.            |
+| onBottomRegion      | Cut the screen image of bottom region and set it as a working region.         |
+| onMiddleRegion      | Cut the screen image of middle region and set it as a working region.         |
+| onRegion            | Cut the screen image with specified rectangle and set it as a working region. |
+| onUpperHalfRegion   | Cut the screen image of upper half region and set it as a working region.     |
+| onLowerHalfRegion   | Cut the screen image of lower half region and set it as a working region.     |
+| onLeftHalfRegion    | Cut the screen image of left half region and set it as a working region.      |
+| onRightHalfRegion   | Cut the screen image of right half region and set it as a working region.     |
+| onAbove             | Cut above region of the column of the element and set it as a working region. |
+| onBelow             | Cut below region of the column of the element and set it as a working region. |
+| onLeft              | Cut left region of the line of the region and set it as a working region.     |
+| onRight             | Cut right region of the line of the region and set it as a working region.    |
+| onAboveScreen       | Cut above region of the element and set it as a working region.               |
+| onBelowScreen       | Cut below region of the element and set it as a working region.               |
+| onLeftScreen        | Cut left region and set it as a working region.                               |
+| onRightScreen       | Cut right region and set it as a working region.                              |
 
 ## Sample code
 
