@@ -26,7 +26,10 @@ fun VisionElement.classifyFull(
         return ""
     }
 
-    val thisImageFileName = "${TestLog.currentLineNo}_${this.selector?.getEscapedFileName()}"
+    var thisImageFileName = "${TestLog.currentLineNo}_${this.selector?.getEscapedFileName()}"
+    if (thisImageFileName.length > 200) {
+        thisImageFileName = thisImageFileName.substring(0, 200)
+    }
     if (this.imageFile == null) {
         this.saveImage(thisImageFileName)
     }

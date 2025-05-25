@@ -99,7 +99,7 @@ class VisionDriveAssertionExtensionTest1 : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Notifications Screen]", waitSeconds = 0.5)
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Notifications Screen] is displayed(expected=[Notifications Screen], screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: textIndex)")
+                        .hasMessage("[Notifications Screen] is displayed(screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: screenRecognizedTextMatching)")
                 }
             }
             case(2) {
