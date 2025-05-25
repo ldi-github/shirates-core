@@ -1152,14 +1152,14 @@ class TestElementAssertionExtension_AndroidTest : UnitTest() {
         e.buttonIsActive()
         // Assert
         val log = TestLog.lines.last() { it.scriptCommand == "buttonIsActive" }
-        assertThat(log.message).isEqualTo("<Connected devices> is active")
+        assertThat(log.message).isEqualTo("<Connected devices> button is active")
         assertThat(log.logType).isEqualTo(LogType.ok)
 
         // Act, Assert
         assertThatThrownBy {
             e.buttonIsNotActive()
         }.isInstanceOf(TestNGException::class.java)
-            .hasMessage("<Connected devices> is not active (actual=\"true\")")
+            .hasMessage("<Connected devices> button is not active (actual=\"true\")")
     }
 
     @Test

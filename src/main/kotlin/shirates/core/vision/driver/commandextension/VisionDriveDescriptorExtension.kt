@@ -169,9 +169,9 @@ fun VisionDrive.codeblock(
 }
 
 /**
- * cellOf
+ * onCellOf
  */
-fun VisionDrive.cellOf(
+fun VisionDrive.onCellOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,

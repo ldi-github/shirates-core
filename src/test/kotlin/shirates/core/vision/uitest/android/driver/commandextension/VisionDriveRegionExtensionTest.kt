@@ -85,7 +85,7 @@ class VisionDriveRegionExtensionTest : VisionTest() {
 
     @Test
     @Order(20)
-    fun cell_cellOf() {
+    fun cell_onCellOf() {
 
         scenario {
             case(1) {
@@ -108,11 +108,11 @@ class VisionDriveRegionExtensionTest : VisionTest() {
             }
             case(2) {
                 expectation {
-                    it.cellOf("8:30AM") {
+                    it.onCellOf("8:30AM") {
                         it.exist("Mon, Tue, Wed, Thu, Fri")
                         it.dontExist("Sun, Sat")
                     }
-                    it.cellOf("9:00AM") {
+                    it.onCellOf("9:00AM") {
                         it.dontExist("Mon, Tue, Wed, Thu, Fri")
                         it.exist("Sun, Sat")
                     }
