@@ -125,6 +125,18 @@ fun VisionDrive.onRegion(
 }
 
 /**
+ * onThisElementRegion
+ */
+fun VisionDrive.onThisElementRegion(
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val regionElement = this.getThisOrIt()
+    regionCore(regionElement = regionElement, func = func)
+    return regionElement
+}
+
+/**
  * onUpperHalfRegion
  */
 fun VisionDrive.onUpperHalfRegion(

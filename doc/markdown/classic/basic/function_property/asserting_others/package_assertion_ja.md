@@ -22,15 +22,15 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     it.packageIs("com.android.settings")
                 }
             }
-
             case(2) {
                 action {
-                    it.launchApp("Chrome")
+                    it.launchApp("[Chrome]")
+                        .wait(5)
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }
@@ -45,7 +45,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }

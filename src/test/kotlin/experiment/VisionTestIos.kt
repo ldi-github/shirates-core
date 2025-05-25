@@ -16,7 +16,7 @@ class VisionTestIos : VisionTest() {
                 condition {
                     it.screenIs("[iOS Settings Top Screen]")
                 }.expectation {
-                    it.cellOf("VPN") {
+                    it.onCellOf("VPN") {
                         exist(expression = "Sign in to your iPhone")    // OK
                         dontExist(expression = "Screen Time")   // OK
 //                        exist(expression = "Screen Time")   // NG

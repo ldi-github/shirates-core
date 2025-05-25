@@ -97,7 +97,7 @@ class VisionDriveAssertionExtensionTest1 : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Developer Screen]", waitSeconds = 0.5)
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Developer Screen] is displayed(expected=[Developer Screen], screenName: [iOS Settings Top Screen], isValid: true, recognizationMethod: screenRecognizedTextMatching)")
+                        .hasMessage("[Developer Screen] is displayed(screenName: [iOS Settings Top Screen], isValid: true, recognizationMethod: screenRecognizedTextMatching)")
                 }
             }
         }

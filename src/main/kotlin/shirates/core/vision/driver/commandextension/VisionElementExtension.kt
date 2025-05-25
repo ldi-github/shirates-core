@@ -19,7 +19,7 @@ fun VisionElement.clearInput(): VisionElement {
         val we = v.testElement!!.webElement!!
         we.clear()
         invalidateScreen()
-        screenshot()
+        screenshot(force = true)
         lastElement = getFocusedElement(throwsException = true)
     }
 

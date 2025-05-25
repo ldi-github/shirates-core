@@ -6,6 +6,7 @@ import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.HttpProxy
 import shirates.core.testcode.CodeExecutionContext
@@ -455,7 +456,8 @@ object VisionServerProxy {
             throw FileNotFoundException("Input file not found. (inputFile=$inputFile)")
         }
         if (classifierDirectory.exists().not()) {
-            throw FileNotFoundException("classifierDirectory file not found. (classifierDirectory=$classifierDirectory)")
+            val msg = message(id = "classifierDirectoryNotFound", subject = classifierName)
+            throw FileNotFoundException(msg)
         }
 
         val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +

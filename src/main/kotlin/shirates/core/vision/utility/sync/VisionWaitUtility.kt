@@ -1,5 +1,6 @@
 package shirates.core.vision.utility.sync
 
+import okio.FileNotFoundException
 import shirates.core.Const
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
@@ -64,6 +65,10 @@ object VisionWaitUtility {
                 } catch (t: Throwable) {
                     context.error = t
                     context.onError(context as T)
+
+                    if (t is FileNotFoundException) {
+                        throw t     // FileNotFoundException is not retryable
+                    }
 
                     val retry = context.retryOnError || t.isRerunRequiredError
                     retry.not()

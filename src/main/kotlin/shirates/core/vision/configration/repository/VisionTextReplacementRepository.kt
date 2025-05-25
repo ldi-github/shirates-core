@@ -70,6 +70,8 @@ object VisionTextReplacementRepository {
         "−" to "-",     // U+2212 to U+002D
         "【" to "[",    // U+3010 to U+005B
         "】" to "]",    // U+3011 to U+005D
+        "「" to "",     // U+300C to ""
+        "」" to "",     // U+300D to ""
     )
 
     val replaceMap = mutableMapOf<String, String>()

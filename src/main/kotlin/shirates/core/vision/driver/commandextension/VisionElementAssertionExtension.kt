@@ -208,6 +208,143 @@ fun VisionElement.buttonStateIs(
 }
 
 /**
+ * buttonIsActive
+ */
+fun VisionElement.buttonIsActive(
+    threshold: Double = 1.0,
+    classifierName: String = "ButtonStateClassifier",
+    expectedLabel: String = "[Active]",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "buttonIsActive"
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.buttonStateIs(
+            expectedLabel = expectedLabel,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            threshold = threshold
+        )
+    }
+    return this
+}
+
+/**
+ * buttonIsNotActive
+ */
+fun VisionElement.buttonIsNotActive(
+    threshold: Double = 1.0,
+    classifierName: String = "ButtonStateClassifier",
+    expectedLabel: String = "[NotActive]",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "buttonIsNotActive"
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.buttonStateIs(
+            expectedLabel = expectedLabel,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            threshold = threshold
+        )
+    }
+    return this
+}
+
+/**
+ * itemStateIs
+ */
+fun VisionElement.itemStateIs(
+    expectedLabel: String,
+    threshold: Double = 1.0,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    classifierName: String = "ItemStateClassifier",
+    message: String? = null,
+): VisionElement {
+
+    val command = "itemStateIs"
+    val assertMessage =
+        message ?: message(id = command, subject = subject, expected = expectedLabel, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.checkImageLabelContains(
+            containedText = expectedLabel,
+            message = assertMessage,
+            waitSeconds = waitSeconds,
+            classifierName = classifierName,
+            fullLabel = false,
+            threshold = threshold
+        )
+    }
+    return this
+}
+
+/**
+ * itemIsActive
+ */
+fun VisionElement.itemIsActive(
+    threshold: Double = 1.0,
+    classifierName: String = "ItemStateClassifier",
+    expectedLabel: String = "[Active]",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "itemIsActive"
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.itemStateIs(
+            expectedLabel = expectedLabel,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            threshold = threshold
+        )
+    }
+    return this
+}
+
+/**
+ * itemIsNotActive
+ */
+fun VisionElement.itemIsNotActive(
+    threshold: Double = 1.0,
+    classifierName: String = "ItemStateClassifier",
+    expectedLabel: String = "[NotActive]",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "itemIsNotActive"
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.itemStateIs(
+            expectedLabel = expectedLabel,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            threshold = threshold
+        )
+    }
+    return this
+}
+
+/**
  * existOnLine
  */
 fun VisionElement.existOnLine(

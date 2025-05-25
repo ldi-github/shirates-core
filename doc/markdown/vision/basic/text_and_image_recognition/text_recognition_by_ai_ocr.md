@@ -1,6 +1,6 @@
 # Text Recognition by AI-OCR (Vision)
 
-Shirates/Vision recognizes texts in the screen by AI-OCR feature of Vision Framework.
+**Shirates/Vision** recognizes texts in the screen by **AI-OCR** feature of Vision Framework.
 
 ### Pros.
 

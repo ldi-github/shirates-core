@@ -98,9 +98,13 @@ class Rectangle(
 
         val v = VisionElement(capture = true)
         val c = v.visionContext
-        c.localRegionX = this.left
-        c.localRegionY = this.top
-        c.rectOnLocalRegion = Rectangle(left = 0, top = 0, width = this.width, this.height)
+        val list = c.recognizeTextObservations.filter {
+            it.rectOnScreen!!.isIncludedIn(this)
+        }.toMutableList()
+        c.recognizeTextObservations = list
+        c.localRegionX = 0
+        c.localRegionY = 0
+        c.rectOnLocalRegion = this
         c.localRegionImage = c.screenshotImage?.cropImage(rect = this)
         c.localRegionFile = null
         c.resetImage()

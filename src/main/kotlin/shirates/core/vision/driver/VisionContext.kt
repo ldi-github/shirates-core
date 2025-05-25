@@ -66,12 +66,6 @@ class VisionContext(
      * recognizeTextObservations
      */
     var recognizeTextObservations = mutableListOf<RecognizeTextObservation>()
-        get() {
-            if (field.isEmpty()) {
-                return field
-            }
-            return field
-        }
 
     /**
      * rootElement
@@ -312,8 +306,7 @@ class VisionContext(
                 var list = rootVisionOcrContext.recognizeTextObservations.toList()
                 list = list.filter { it.rectOnScreen != null }
                 list = list.filter {
-                    val included = it.rectOnScreen!!.toBoundsWithRatio()
-                        .isCenterIncludedIn(thisRectOnScreen.toBoundsWithRatio())
+                    val included = it.rectOnScreen!!.isCenterIncludedIn(thisRectOnScreen)
                     included
                 }
                 this.recognizeTextObservations = list.toMutableList()

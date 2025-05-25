@@ -31,17 +31,16 @@ You can skip or abort test using these functions.
                         SKIP_CASE("case(1) skipped.")   // Skip execution of commands (log only)
                     }
                 }.action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("Network & internet")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.exist("Airplane mode")   // Skipped
                 }
             }
-
             case(2) {
                 action {
-                    it.tap("Settings")  // Executed
+                    it.tap("Network & internet")  // Executed
                 }.expectation {
-                    it.textIs("Settings")    // Executed
+                    it.exist("Airplane mode")   // Executed
                 }
             }
         }
@@ -51,6 +50,9 @@ You can skip or abort test using these functions.
 ### Spec-Report
 
 ![](_images/skip_case_spec_report.png)
+
+<br>
+<br>
 
 ```kotlin
     @Test
@@ -65,17 +67,16 @@ You can skip or abort test using these functions.
                         SKIP_SCENARIO()     // Skip execution of commands (log only)
                     }
                 }.action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("Network & internet")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.exist("Airplane mode")   // Skipped
                 }
             }
-
             case(2) {
                 action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("Internet")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.exist("AndroidWifi")   // Skipped
                 }
             }
         }
@@ -86,6 +87,9 @@ You can skip or abort test using these functions.
 
 ![](_images/skip_scenario_spec_report.png)
 
+<br>
+<br>
+
 ```kotlin
     @Test
     @Order(30)
@@ -94,27 +98,25 @@ You can skip or abort test using these functions.
         scenario {
             case(1) {
                 action {
-                    it.tap("Settings")  // Executed
+                    it.tap("Network & internet")  // Executed
                 }.expectation {
-                    it.textIs("Settings")    // Executed
+                    it.exist("Airplane mode")   // Executed
                 }
             }
-
             case(2) {
                 condition {
                     NOTIMPL()   // Abort this test
                 }.action {
-                    it.tap("Settings")  // Not reached
+                    it.tap("Internet")  // Not reached
                 }.expectation {
-                    it.textIs("Settings")   // Not reached
+                    it.exist("AndroidWifi")   // Not reached
                 }
             }
-
             case(3) {
                 action {
-                    it.tap("Settings")  // Not reached
+                    it.tap("AndroidWifi")  // Not reached
                 }.expectation {
-                    it.textIs("Settings")    // Not reached
+                    it.exist("Network details")    // Not reached
                     NOTIMPL("To be implement.")     // Not reached
                 }
             }
@@ -126,6 +128,9 @@ You can skip or abort test using these functions.
 
 ![](_images/notimpl_case_spec_report.png)
 
+<br>
+<br>
+
 ```kotlin
     @Test
     @Order(40)
@@ -134,19 +139,11 @@ You can skip or abort test using these functions.
         scenario {
             NOTIMPL()   // Abort this scenario
 
-            case(1) {   // Not reached
+            case(1) {
                 action {
-                    it.tap("Settings")
+                    it.tap("Network & internet")    // Not reached
                 }.expectation {
-                    it.textIs("Settings")
-                }
-            }
-
-            case(2) {   // Not reached
-                action {
-                    it.tap("Settings")
-                }.expectation {
-                    it.textIs("Settings")
+                    it.exist("Airplane mode")   // Not reached
                 }
             }
         }

@@ -32,7 +32,7 @@ You can assert package of current app using these functions.
             case(2) {
                 action {
                     it.launchApp("[Chrome]")
-                        .waitForDisplay("*Search*")
+                        .wait(5)
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }

@@ -56,7 +56,11 @@ internal fun VisionDrive.checkImageLabelContains(
         result
     }
 
-    v.saveImage("${TestLog.currentLineNo}_${v}")
+    var saveImageFileName = "${TestLog.currentLineNo}_${v}"
+    if (saveImageFileName.length > 200) {
+        saveImageFileName = saveImageFileName.substring(0, 200)
+    }
+    v.saveImage(saveImageFileName)
 
     result.thisIsTrue(message = message)
 
@@ -249,7 +253,7 @@ fun VisionDrive.screenIs(
                     TestLog.info("recognizeTexts: ${rootElement.visionContext.recognizeTextObservations.map { "\"${it.text}\"" }}")
                 }
 
-                val msg = "$assertMessage(expected=$screenName, ${TestDriver.lastRecognizeScreenResult})"
+                val msg = "$assertMessage(${TestDriver.lastRecognizeScreenResult})"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }

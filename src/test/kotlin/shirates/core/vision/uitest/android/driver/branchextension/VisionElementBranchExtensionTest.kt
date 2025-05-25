@@ -17,7 +17,6 @@ class VisionElementBranchExtensionTest : VisionTest() {
             case(1) {
                 condition {
                     it.macro("[Internet Screen]")
-                }.action {
                     it.detect("Wi-Fi").rightItem()
                         .ifCheckIsON {
                             describe("ifSwitchIsON")
@@ -26,12 +25,8 @@ class VisionElementBranchExtensionTest : VisionTest() {
                         .ifCheckIsOFF {
                             describe("Switch is OFF")
                         }
-                }.expectation {
                     it.checkIsOFF()
-                }
-            }
-            case(2) {
-                action {
+                }.action {
                     it.ifCheckIsON {
                         describe("Switch is ON")
                     }.ifCheckIsOFF {
@@ -40,6 +35,14 @@ class VisionElementBranchExtensionTest : VisionTest() {
                     }
                 }.expectation {
                     it.checkIsON()
+                }
+            }
+            case(2) {
+                action {
+                    it.tap()
+                        .joinedText
+                }.expectation {
+                    it.checkIsOFF()
                 }
             }
         }
