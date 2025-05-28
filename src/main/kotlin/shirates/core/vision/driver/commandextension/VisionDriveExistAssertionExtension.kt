@@ -138,7 +138,7 @@ fun VisionDrive.existWithoutScroll(
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = false,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -585,7 +585,7 @@ fun VisionDrive.existImageWithoutScroll(
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = false,
     message: String? = null,
 ): VisionElement {
 

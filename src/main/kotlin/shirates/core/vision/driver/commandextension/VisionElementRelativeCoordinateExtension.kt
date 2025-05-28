@@ -278,14 +278,18 @@ internal fun VisionElement.aboveBelowCore(
         return v
     }
 
+    val thisElement =
+        if (relative.isBelow) this.swipeToSafePosition(direction = ScrollDirection.Down)
+        else this.swipeToSafePosition(direction = ScrollDirection.Up)
+
     /**
      * split screenshot into segments
      */
     val thisSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = this.image,
-        containerX = this.rect.left,
-        containerY = this.rect.top,
+        containerImage = thisElement.image,
+        containerX = thisElement.rect.left,
+        containerY = thisElement.rect.top,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         binaryThreshold = binaryThreshold,
@@ -294,8 +298,8 @@ internal fun VisionElement.aboveBelowCore(
         .saveImages()
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumWidth <= it.rect.width }
     val baseElement =
-        if (relative.isAbove) visionElements.firstOrNull() ?: this
-        else visionElements.lastOrNull() ?: this
+        if (relative.isAbove) visionElements.firstOrNull() ?: thisElement
+        else visionElements.lastOrNull() ?: thisElement
 
     /**
      * filter items
@@ -360,7 +364,9 @@ fun VisionElement.belowLineItem(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
 ): VisionElement {
 
-    val belowItem = this.belowItem(
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Down)
+
+    val belowItem = thisElement.belowItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
@@ -532,7 +538,8 @@ fun VisionElement.aboveText(
     val v: VisionElement
     if (pos == 0) return this
     else if (pos < 0) {
-        v = this.belowText(pos = -pos)
+        val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Up)
+        v = thisElement.belowText(pos = -pos)
         v.selector = this.selector?.getChainedSelector(":aboveText($pos)")
         return v
     }
@@ -562,8 +569,9 @@ fun VisionElement.aboveText(
         return v
     }
 
-    val elements = getVerticalElements()
-        .filter { it.rect.bottom < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Up)
+    val elements = thisElement.getVerticalElements()
+        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
@@ -596,8 +604,9 @@ fun VisionElement.belowText(
         return v
     }
 
-    val elements = getVerticalElements()
-        .filter { this.rect.bottom < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Down)
+    val elements = thisElement.getVerticalElements()
+        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.top }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -622,8 +631,9 @@ fun VisionElement.belowText(
         return v
     }
 
-    val elements = getVerticalElements()
-        .filter { this.rect.bottom < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Down)
+    val elements = thisElement.getVerticalElements()
+        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = elements.firstOrNull() ?: VisionElement(capture = false)
@@ -779,7 +789,8 @@ fun VisionElement.aboveImage(
     }
 
     var imageElements: List<VisionElement> = mutableListOf()
-    onAbove {
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Down)
+    thisElement.onAbove {
         imageElements = findImages(
             label = label,
             threshold = threshold,
@@ -789,7 +800,7 @@ fun VisionElement.aboveImage(
             skinThickness = skinThickness,
         )
     }
-    imageElements = imageElements.filter { it.rect.top <= this.rect.top }
+    imageElements = imageElements.filter { it.rect.top <= thisElement.rect.top }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
@@ -824,7 +835,8 @@ fun VisionElement.belowImage(
     }
 
     var imageElements: List<VisionElement> = mutableListOf()
-    onBelow {
+    val thisElement = this.swipeToSafePosition(direction = ScrollDirection.Down)
+    thisElement.onBelow {
         imageElements = findImages(
             label = label,
             threshold = threshold,
@@ -834,7 +846,7 @@ fun VisionElement.belowImage(
             skinThickness = skinThickness,
         )
     }
-    imageElements = imageElements.filter { this.rect.top < it.rect.top }
+    imageElements = imageElements.filter { thisElement.rect.top < it.rect.top }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }

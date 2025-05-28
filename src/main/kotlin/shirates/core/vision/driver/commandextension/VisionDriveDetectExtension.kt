@@ -618,7 +618,7 @@ fun VisionDrive.detectWithoutScroll(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = false,
     waitSeconds: Double = 0.0,
     throwsException: Boolean = true,
 ): VisionElement {

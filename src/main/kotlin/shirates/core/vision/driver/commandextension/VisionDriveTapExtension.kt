@@ -32,7 +32,7 @@ fun VisionDrive.tap(
     last: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
 ): VisionElement {
@@ -105,7 +105,7 @@ fun VisionDrive.tapLast(
     autoImageFilter: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
 ): VisionElement {
@@ -384,7 +384,7 @@ fun VisionDrive.tapWithScrollDown(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -429,7 +429,7 @@ fun VisionDrive.tapWithScrollUp(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"

@@ -5,6 +5,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.driver.VisionDriveObject
+import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.commandextension.rootElement
 
 /**
@@ -28,6 +29,7 @@ val testDrive: TestDrive
  */
 val classic: TestDrive
     get() {
+        vision.invalidateScreen()
         return TestDriveObject
     }
 
