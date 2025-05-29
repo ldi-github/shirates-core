@@ -14,6 +14,17 @@ fun String?.ifStringIs(value: String?, onTrue: () -> Unit): VisionDriveTextCompa
 }
 
 /**
+ * ifStringIsNot
+ */
+fun String?.ifStringIsNot(value: String?, onTrue: () -> Unit): VisionDriveTextCompareResult {
+
+    val result = VisionDriveTextCompareResult(text = this)
+    result.ifStringIsNot(value = value, onTrue = onTrue)
+
+    return result
+}
+
+/**
  * ifStartsWith
  */
 fun String?.ifStartsWith(value: String?, onTrue: () -> Unit): VisionDriveTextCompareResult {

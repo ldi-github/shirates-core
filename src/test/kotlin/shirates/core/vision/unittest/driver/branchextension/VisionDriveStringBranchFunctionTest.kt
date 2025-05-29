@@ -39,6 +39,37 @@ class VisionDriveStringBranchFunctionTest {
     }
 
     @Test
+    fun ifStringIsNot_true() {
+
+        // Arrange
+        var onTrueCalled = false
+
+        // Act
+        "Fujiyama".ifStringIsNot("Fujiyama") {
+            onTrueCalled = false
+        }
+
+        // Assert
+        assertThat(onTrueCalled).isFalse()
+
+    }
+
+    @Test
+    fun ifStringIsNot_false() {
+
+        // Arrange
+        var onTrueCalled = false
+
+        // Act
+        "Fujuyama".ifStringIsNot("Sukiyaki") {
+            onTrueCalled = true
+        }
+
+        // Assert
+        assertThat(onTrueCalled).isTrue()
+    }
+
+    @Test
     fun ifStartsWith_true() {
 
         // Arrange

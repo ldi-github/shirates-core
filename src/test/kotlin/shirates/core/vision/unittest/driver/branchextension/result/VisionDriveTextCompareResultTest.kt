@@ -11,6 +11,7 @@ class VisionDriveTextCompareResultTest {
     fun ifSomething() {
 
         var ifStringIs = false
+        var ifStringIsNot = false
         var elseIfStringIs = false
         var ifStartsWith = false
         var elseIfStartsWith = false
@@ -25,6 +26,7 @@ class VisionDriveTextCompareResultTest {
         fun action(result: VisionDriveTextCompareResult, value: String?) {
 
             ifStringIs = false
+            ifStringIsNot = false
             elseIfStringIs = false
             ifStartsWith = false
             elseIfStartsWith = false
@@ -39,6 +41,9 @@ class VisionDriveTextCompareResultTest {
             result
                 .ifStringIs(value, onTrue = {
                     ifStringIs = true
+                })
+                .ifStringIsNot(value, onTrue = {
+                    ifStringIsNot = true
                 })
                 .elseIfStringIs(value, onTrue = {
                     elseIfStringIs = true
@@ -79,6 +84,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "The Internet")
             // Assert
             assertThat(ifStringIs).isTrue()
+            assertThat(ifStringIsNot).isFalse()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isTrue()
             assertThat(elseIfStartsWith).isFalse()
@@ -97,6 +103,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "The Inter")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isTrue()
             assertThat(elseIfStartsWith).isFalse()
@@ -115,6 +122,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "he Inter")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -133,6 +141,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "he Internet")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -151,6 +160,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "^The.*t$")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -169,6 +179,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "The Moon")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -178,7 +189,7 @@ class VisionDriveTextCompareResultTest {
             assertThat(elseIfEndsWith).isFalse()
             assertThat(ifMatches).isFalse()
             assertThat(elseIfMatches).isFalse()
-            assertThat(ifElse).isTrue()
+            assertThat(ifElse).isFalse()
         }
         run {
             // Arrange
@@ -187,6 +198,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = null)
             // Assert
             assertThat(ifStringIs).isTrue()
+            assertThat(ifStringIsNot).isFalse()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -206,6 +218,7 @@ class VisionDriveTextCompareResultTest {
             action(result, value = "hoge")
             // Assert
             assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIsNot).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -215,7 +228,7 @@ class VisionDriveTextCompareResultTest {
             assertThat(elseIfEndsWith).isFalse()
             assertThat(ifMatches).isFalse()
             assertThat(elseIfMatches).isFalse()
-            assertThat(ifElse).isTrue()
+            assertThat(ifElse).isFalse()
 
         }
     }
@@ -232,6 +245,29 @@ class VisionDriveTextCompareResultTest {
         })
         // Assert
         assertThat(called).isTrue()
+
+        // Arrange
+        called = false
+        // Act
+        result.ifStringIs("The Internet", onTrue = {
+            called = true
+        })
+        // Assert
+        assertThat(called).isTrue()
+    }
+
+    @Test
+    fun ifStringIsNot() {
+
+        // Arrange
+        var called = false
+        val result = VisionDriveTextCompareResult(text = "The Internet")
+        // Act
+        result.ifStringIsNot("The Internet", onTrue = {
+            called = true
+        })
+        // Assert
+        assertThat(called).isFalse()
 
         // Arrange
         called = false
