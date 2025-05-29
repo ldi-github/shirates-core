@@ -119,7 +119,9 @@ internal fun VisionDrive.existCore(
         }
     } else {
         TestDriver.visionRootElement.visionContext.printRecognizedTextInfo()
-        val error = TestNGException(message = message)
+        val selectorPart = if (selector.nickname != null) "(${selector.nickname}: \"${selector.expression}\")" else ""
+        val msg = message + selectorPart
+        val error = TestNGException(message = msg)
         v.lastError = error
         v.lastResult = LogType.NG
         throw error

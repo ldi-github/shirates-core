@@ -556,7 +556,6 @@ fun VisionElement.flickToLeft(
  */
 fun VisionElement.swipeToSafePosition(
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
-    refresh: Boolean = true
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -579,13 +578,6 @@ fun VisionElement.swipeToSafePosition(
         }
 
         else -> {}
-    }
-
-    if (refresh) {
-        val expression = this.selector?.expression ?: ""
-        v =
-            if (expression.isNotBlank()) detect(expression = expression)
-            else v
     }
 
     return v

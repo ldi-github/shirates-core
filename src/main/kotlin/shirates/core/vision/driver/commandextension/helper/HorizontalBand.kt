@@ -27,10 +27,11 @@ class HorizontalBand(
         if (members.isEmpty()) {
             return true
         }
-        if (element.getRectInfo().bottom <= this.top - margin) {
+        val elementRect = element.getRectInfo()
+        if (elementRect.bottom <= this.top - margin) {
             return false
         }
-        if (this.bottom + margin <= element.getRectInfo().top) {
+        if (this.bottom + margin <= elementRect.top) {
             return false
         }
         val s1 = element.toString()

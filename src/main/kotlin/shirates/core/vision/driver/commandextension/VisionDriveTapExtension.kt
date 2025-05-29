@@ -251,7 +251,8 @@ fun VisionDrive.tap(
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
 
         if (PropertiesManager.enableTapElementImageLog) {
-            val fileName = "${TestLog.nextLineNo}_tap_${tappedElement.subject}_${tappedElement.bounds}"
+            val subject = tappedElement.subject.take(100)
+            val fileName = "${TestLog.nextLineNo}_tap_${subject}_${tappedElement.bounds}"
             tappedElement.saveImage(fileName = fileName)
         }
         val sel = v.selector

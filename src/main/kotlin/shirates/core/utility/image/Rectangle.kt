@@ -102,6 +102,7 @@ class Rectangle(
             it.rectOnScreen!!.isIncludedIn(this)
         }.toMutableList()
         c.recognizeTextObservations = list
+        c.sortRecognizeTextObservations()
         c.localRegionX = 0
         c.localRegionY = 0
         c.rectOnLocalRegion = this

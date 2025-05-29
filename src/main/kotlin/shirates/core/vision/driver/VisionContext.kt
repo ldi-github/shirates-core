@@ -397,7 +397,7 @@ class VisionContext(
         return this
     }
 
-    private fun sortRecognizeTextObservations() {
+    internal fun sortRecognizeTextObservations() {
 
         val flowContainer = FlowContainer()
         for (t in recognizeTextObservations) {
