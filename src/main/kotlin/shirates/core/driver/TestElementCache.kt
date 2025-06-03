@@ -237,13 +237,12 @@ object TestElementCache {
 
             if (e.isEmpty) {
                 e.selector = selector
-                e.lastError = TestDriverException(
-                    message = message(
-                        id = "elementNotFound",
-                        subject = "$selector",
-                        arg1 = selector.getElementExpression()
-                    )
-                )
+                val msg = message(
+                    id = "elementNotFound",
+                    subject = "$selector",
+                    arg1 = selector.getElementExpression()
+                ).replace(", candidates=null", "")
+                e.lastError = TestDriverException(message = msg)
                 val elms = this.allElements
                 if (elms.any() { it.id == "android:id/aerr_close" } && elms.any() { it.id == "android:id/aerr_wait" }) {
                     val alert = elms.firstOrNull() { it.id == "android:id/alertTitle" } ?: TestElement.emptyElement

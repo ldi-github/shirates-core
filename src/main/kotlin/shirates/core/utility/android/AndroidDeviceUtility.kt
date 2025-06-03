@@ -97,8 +97,12 @@ object AndroidDeviceUtility {
     fun getAndroidDeviceInfoByAvdName(avdName: String): AndroidDeviceInfo? {
 
         val deviceList = getConnectedDeviceList()
-        val device =
-            deviceList.firstOrNull() { it.avdName.escapeAvdName().lowercase() == avdName.escapeAvdName().lowercase() }
+        val name1 = avdName.escapeAvdName()
+        val name2 = name1.trimEnd('_')
+        val device = deviceList.firstOrNull() {
+            val name = it.avdName.escapeAvdName().lowercase()
+            name == name1.lowercase() || name == name2.lowercase()
+        }
         return device
     }
 
@@ -136,7 +140,7 @@ object AndroidDeviceUtility {
         return getConnectedDeviceInfo(testProfile)
     }
 
-    private fun String.escapeAvdName(): String {
+    internal fun String.escapeAvdName(): String {
 
         var s = this.replace(" ", "_").replace("(", "_").replace(")", "_")
         for (i in 1..100) {
@@ -174,16 +178,35 @@ object AndroidDeviceUtility {
     /**
      * getEmulatorProfile
      */
+    fun getEmulatorProfile(
+        profileName: String,
+        avdName: String,
+        emulatorPort: Int? = null,
+        emulatorOptions: String? = null,
+    ): EmulatorProfile {
+
+        val emulatorProfile = EmulatorProfile(
+            profileName = profileName,
+            avdName = avdName,
+            emulatorOptions = (emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
+                .filter { it.isNotBlank() }.toMutableList(),
+            emulatorPort = emulatorPort
+        )
+        return emulatorProfile
+    }
+
+    /**
+     * getEmulatorProfile
+     */
     fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
         val profileName = testProfile.profileName
         val avdName = testProfile.capabilities.getCapabilityRelaxed("avd")
         val emulatorPort = testProfile.emulatorPort?.toIntOrNull()
-        val emulatorProfile = EmulatorProfile(
+        val emulatorProfile = getEmulatorProfile(
             profileName = profileName,
             avdName = avdName,
-            emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
-                .filter { it.isNotBlank() }.toMutableList(),
-            emulatorPort = emulatorPort
+            emulatorPort = emulatorPort,
+            emulatorOptions = testProfile.emulatorOptions,
         )
         return emulatorProfile
     }
@@ -367,6 +390,26 @@ object AndroidDeviceUtility {
             )
         }
         return androidDeviceInfo!!
+    }
+
+    /**
+     * startEmulatorAndWaitDeviceReady
+     */
+    fun startEmulatorAndWaitDeviceReady(
+        avdName: String,
+        timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+        waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
+    ): AndroidDeviceInfo {
+
+        val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(
+            profileName = avdName,
+            avdName = avdName,
+        )
+        return startEmulatorAndWaitDeviceReady(
+            emulatorProfile = emulatorProfile,
+            timeoutSeconds = timeoutSeconds,
+            waitSecondsAfterStartup = waitSecondsAfterStartup
+        )
     }
 
     private fun startEmulatorAndWaitDeviceReadyCore(
@@ -572,8 +615,7 @@ object AndroidDeviceUtility {
      */
     fun shutdownEmulatorByAvdName(avdName: String, waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS) {
 
-        val androidDeviceInfo =
-            getAndroidDeviceInfoByAvdName(avdName = avdName) ?: throw IllegalArgumentException("avdName")
+        val androidDeviceInfo = getAndroidDeviceInfoByAvdName(avdName = avdName) ?: return
         return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid, waitSeconds = waitSeconds)
     }
 

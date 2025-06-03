@@ -1,10 +1,12 @@
 package shirates.core.utility.android
 
+import shirates.core.utility.android.AndroidDeviceUtility.escapeAvdName
+
 class EmulatorProfile(
     val profileName: String,
     avdName: String? = null,
+    val emulatorPort: Int? = null,
     val emulatorOptions: MutableList<String> = mutableListOf(),
-    val emulatorPort: Int? = null
 ) {
     var avdName: String =
         if (avdName.isNullOrBlank()) AndroidDeviceUtility.getAvdName(profileName = profileName)
@@ -28,7 +30,7 @@ class EmulatorProfile(
 
         val args = mutableListOf<String>()
         args.add("emulator")
-        args.add("@$avdName")
+        args.add("@${avdName.escapeAvdName().trimEnd('_')}")
         if (emulatorPort != null) {
             args.add("-port")
             args.add("$emulatorPort")
