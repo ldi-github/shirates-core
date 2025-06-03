@@ -241,7 +241,7 @@ object TestElementCache {
                     id = "elementNotFound",
                     subject = "$selector",
                     arg1 = selector.getElementExpression()
-                ).replace(", candidates=null", "")
+                )
                 e.lastError = TestDriverException(message = msg)
                 val elms = this.allElements
                 if (elms.any() { it.id == "android:id/aerr_close" } && elms.any() { it.id == "android:id/aerr_wait" }) {
