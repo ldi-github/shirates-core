@@ -37,14 +37,9 @@ open class VisionElement(
      */
     var visionContext: VisionContext
 
-    /**
-     * visionOcrContext
-     */
-    var visionOcrContext: VisionContext
 
     init {
         visionContext = VisionContext(capture = capture)
-        visionOcrContext = visionContext
     }
 
     constructor(visionContext: VisionContext) : this(capture = false) {
@@ -52,6 +47,14 @@ open class VisionElement(
         this.visionContext = visionContext
     }
 
+    /**
+     * visionTextElements
+     */
+    val visionTextElements: List<VisionElement>
+        get() {
+            val list = visionContext.getVisionTextElements()
+            return list.filter { it.rect.isCenterIncludedIn(this.rect) }
+        }
 
     /**
      * selector
@@ -210,11 +213,6 @@ open class VisionElement(
      */
     val text: String
         get() {
-            visionContext.recognizeText()
-            if (mergedElements.isEmpty()) {
-                val t = recognizeTextObservation?.text ?: ""
-                return t
-            }
             return joinedText
         }
 
@@ -253,7 +251,12 @@ open class VisionElement(
      */
     val joinedText: String
         get() {
-            return visionContext.joinedText
+            if (visionContext.recognizeTextObservations.isEmpty()) {
+                visionContext.recognizeText()
+            }
+            val texts =
+                visionContext.recognizeTextObservations.filter { it.rectOnScreen!!.isCenterIncludedIn(this.rect) }
+            return texts.joinToString(" ") { it.text }
         }
 
     /**

@@ -1118,6 +1118,7 @@ class TestElement(
                 if (selector != null) {
                     if (canSelectCore(
                             selector = selector!!,
+                            allowScroll = false,
                             waitSeconds = 0.0,
                             safeElementOnly = false
                         )

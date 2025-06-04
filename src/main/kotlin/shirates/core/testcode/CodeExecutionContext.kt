@@ -389,6 +389,19 @@ object CodeExecutionContext {
     var lastLineSpacingRatio = Const.VISION_LINE_SPACING_RATIO
 
     /**
+     * lastCandidateElements
+     */
+    var lastCandidateElements = listOf<VisionElement>()
+
+    /**
+     * lastCandidateElementsString
+     */
+    val lastCandidateElementsString: String
+        get() {
+            return lastCandidateElements.joinToString(",") { it.text }
+        }
+
+    /**
      * clear
      */
     internal fun clear() {
@@ -413,7 +426,7 @@ object CodeExecutionContext {
         /**
          * With Scroll
          */
-        withScroll = false
+        withScroll = null
         scrollDirection = null
         scrollFrame = ""
         scrollableElement = null

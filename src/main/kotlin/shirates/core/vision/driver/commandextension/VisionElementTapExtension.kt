@@ -122,13 +122,15 @@ fun VisionElement.tapOffset(
 
     val rect = this.rect
     var x =
-        if (offsetX < 0) rect.left
+        if (offsetX == 0) rect.centerX
+        else if (offsetX < 0) rect.left
         else rect.right
     x += offsetX
     x = x / testContext.boundsToRectRatio
 
     var y =
-        if (offsetY < 0) rect.top
+        if (offsetY == 0) rect.centerY
+        else if (offsetY < 0) rect.top
         else rect.bottom
     y += offsetY
     y = y / testContext.boundsToRectRatio

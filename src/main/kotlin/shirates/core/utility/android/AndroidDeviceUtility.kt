@@ -140,7 +140,9 @@ object AndroidDeviceUtility {
         return getConnectedDeviceInfo(testProfile)
     }
 
-    internal fun String.escapeAvdName(): String {
+    internal fun String.escapeAvdName(
+        trim: Boolean = false
+    ): String {
 
         var s = this.replace(" ", "_").replace("(", "_").replace(")", "_")
         for (i in 1..100) {
@@ -149,6 +151,9 @@ object AndroidDeviceUtility {
             if (s == before) {
                 break
             }
+        }
+        if (trim) {
+            s.trimEnd('_')
         }
         return s
     }

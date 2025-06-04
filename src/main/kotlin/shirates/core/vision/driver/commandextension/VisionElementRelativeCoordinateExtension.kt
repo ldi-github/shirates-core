@@ -184,6 +184,15 @@ internal fun VisionElement.rightLeftCore(
     return v
 }
 
+internal fun VisionElement.getSafeElement(swipeToSafePosition: Boolean): VisionElement {
+
+    var v = this
+    if (swipeToSafePosition) {
+        v = this.swipeToSafePosition()
+    }
+    return v
+}
+
 /**
  * aboveItem
  */
@@ -195,9 +204,11 @@ fun VisionElement.aboveItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    return aboveBelowCore(
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+    return thisElement.aboveBelowCore(
         relative = RelativeDirection.above,
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
@@ -245,9 +256,11 @@ fun VisionElement.belowItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    return aboveBelowCore(
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+    return thisElement.aboveBelowCore(
         relative = RelativeDirection.below,
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
@@ -495,7 +508,7 @@ private fun VisionElement.getHorizontalElements(): List<VisionElement> {
     rootElement.visionContext.recognizeText()
 
     val horizontalBand = HorizontalBand(baseElement = this)
-    for (v in rootElement.visionContext.getVisionElements()) {
+    for (v in rootElement.visionTextElements) {
         horizontalBand.merge(element = v, margin = 0)
     }
     val elms = horizontalBand.getElements().map { it as VisionElement }
@@ -507,7 +520,7 @@ private fun VisionElement.getVerticalElements(): List<VisionElement> {
     rootElement.visionContext.recognizeText()
 
     val verticalBand = VerticalBand(baseElement = this)
-    for (v in rootElement.visionContext.getVisionElements()) {
+    for (v in rootElement.visionTextElements) {
         verticalBand.merge(element = v, margin = 0)
     }
     val elms = verticalBand.getElements().map { it as VisionElement }
@@ -520,9 +533,12 @@ private fun VisionElement.getVerticalElements(): List<VisionElement> {
  */
 fun VisionElement.aboveText(
     pos: Int = 1,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":rightText($pos)")
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+
+    val selector = thisElement.selector?.getChainedSelector(":rightText($pos)")
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
@@ -530,14 +546,14 @@ fun VisionElement.aboveText(
     }
 
     val v: VisionElement
-    if (pos == 0) return this
+    if (pos == 0) return thisElement
     else if (pos < 0) {
-        v = this.belowText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":aboveText($pos)")
+        v = thisElement.belowText(pos = -pos)
+        v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
         return v
     }
     val elements = getVerticalElements()
-        .filter { it.rect.bottom < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedByDescending { it.rect.top }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -553,17 +569,20 @@ fun VisionElement.aboveText(
  */
 fun VisionElement.aboveText(
     expression: String,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":aboveText($expression)")
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+
+    val selector = thisElement.selector?.getChainedSelector(":aboveText($expression)")
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
         return v
     }
 
-    val elements = this.getVerticalElements()
-        .filter { it.rect.bottom < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val elements = thisElement.getVerticalElements()
+        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
@@ -579,9 +598,12 @@ fun VisionElement.aboveText(
  */
 fun VisionElement.belowText(
     pos: Int = 1,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":belowText($pos)")
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+
+    val selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
@@ -589,20 +611,20 @@ fun VisionElement.belowText(
     }
 
     val v: VisionElement
-    if (pos == 0) return this
+    if (pos == 0) return thisElement
     else if (pos < 0) {
-        v = this.aboveText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":belowText($pos)")
+        v = thisElement.aboveText(pos = -pos)
+        v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
         return v
     }
 
-    val elements = this.getVerticalElements()
-        .filter { this.rect.bottom < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val elements = thisElement.getVerticalElements()
+        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.top }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
     else elements[pos - 1]
-    v.selector = this.selector?.getChainedSelector(":belowText($pos)")
+    v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
     lastElement = v
 
     return v
@@ -613,22 +635,25 @@ fun VisionElement.belowText(
  */
 fun VisionElement.belowText(
     expression: String,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":belowText($expression)")
+    val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
+
+    val selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
         return v
     }
 
-    val elements = this.getVerticalElements()
-        .filter { this.rect.bottom < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
+    val elements = thisElement.getVerticalElements()
+        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = elements.firstOrNull() ?: VisionElement(capture = false)
 
-    v.selector = this.selector?.getChainedSelector(":belowText($expression)")
+    v.selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
     lastElement = v
 
     return v

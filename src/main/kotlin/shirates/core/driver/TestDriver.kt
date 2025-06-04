@@ -1213,7 +1213,7 @@ object TestDriver {
      */
     fun select(
         expression: String,
-        allowScroll: Boolean = true,
+        allowScroll: Boolean? = CodeExecutionContext.withScroll,
         swipeToCenter: Boolean = false,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1243,7 +1243,7 @@ object TestDriver {
 
     internal fun findImageOrSelectCore(
         selector: Selector,
-        allowScroll: Boolean = true,
+        allowScroll: Boolean?,
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1257,6 +1257,7 @@ object TestDriver {
             if (selector.isImageSelector) {
                 val r = findImageCore(
                     selector = selector,
+                    allowScroll = allowScroll,
                     throwsException = throwsException,
                     useCache = useCache,
                 )
@@ -1299,7 +1300,7 @@ object TestDriver {
 
     private fun selectCore(
         selector: Selector,
-        allowScroll: Boolean,
+        allowScroll: Boolean?,
         selectContext: TestElement = classic.rootElement,
         frame: Bounds?,
         useCache: Boolean,
@@ -1365,7 +1366,7 @@ object TestDriver {
                         return lastElement
                     }
                 } else if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
-                    if (swipeToCenter && CodeExecutionContext.withScroll != false) {
+                    if (swipeToCenter && allowScroll != false) {
                         classic.silent {
                             selectedElement = selectedElement.swipeToCenter()
                         }
@@ -1379,7 +1380,7 @@ object TestDriver {
             }
 
             // Search in scroll
-            if (allowScroll && CodeExecutionContext.withScroll != false) {
+            if (allowScroll == true) {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
@@ -1632,6 +1633,7 @@ object TestDriver {
      */
     fun findImage(
         expression: String,
+        allowScroll: Boolean?,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
@@ -1640,6 +1642,7 @@ object TestDriver {
 
         return findImageCore(
             selector = sel,
+            allowScroll = allowScroll,
             throwsException = throwsException,
             useCache = useCache
         )
@@ -1648,7 +1651,7 @@ object TestDriver {
     internal fun findImageCore(
         selector: Selector,
         threshold: Double = PropertiesManager.imageMatchingThreshold,
-        allowScroll: Boolean = true,
+        allowScroll: Boolean?,
         direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
         scrollFrame: String = CodeExecutionContext.scrollFrame,
         scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
@@ -1688,7 +1691,7 @@ object TestDriver {
         if (r.result) {
             return r
         }
-        val scroll = allowScroll && CodeExecutionContext.withScroll != false
+        val scroll = (allowScroll == true)
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
             classic.suppressHandler {

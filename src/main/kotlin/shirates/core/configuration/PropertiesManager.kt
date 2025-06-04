@@ -1011,6 +1011,18 @@ object PropertiesManager {
         }
 
     /**
+     * visionOCRCustomWordsFile
+     */
+    var visionOCRCustomWordsFile: String
+        get() {
+            return getPropertyValue(propertyName = "visionOCRCustomWordsFile")
+                ?: Const.VISION_OCR_CUSTOM_WORDS_FILE
+        }
+        set(value) {
+            properties.setProperty("visionOCRCustomWordsFile", value)
+        }
+
+    /**
      * visionDirectory
      */
     val visionDirectory: String
@@ -1157,6 +1169,17 @@ object PropertiesManager {
             return getPropertyValue(propertyName = "visionLineSpacingRatio")?.toDoubleOrNull()
                 ?: Const.VISION_LINE_SPACING_RATIO
         }
+
+    /**
+     * visionRetryWithAutoImageFilter
+     */
+    val visionRetryWithAutoImageFilter: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionRetryWithAutoImageFilter")
+                ?: return Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER
+            return value == "true"
+        }
+
 
     // Custom --------------------------------------------------
 

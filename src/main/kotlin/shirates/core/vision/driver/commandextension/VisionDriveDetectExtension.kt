@@ -34,6 +34,28 @@ fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
 }
 
 /**
+ * detectElements
+ */
+fun VisionDrive.detectElements(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+): List<VisionElement> {
+
+    val sel = getSelector(expression = expression)
+    val list = rootElement.visionContext.detectElements(
+        selector = sel,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio
+    )
+    return list
+}
+
+/**
  * detect
  */
 fun VisionDrive.detect(
@@ -44,7 +66,7 @@ fun VisionDrive.detect(
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     last: Boolean = false,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     throwsException: Boolean = true,
@@ -84,7 +106,7 @@ fun VisionDrive.detectLast(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     throwsException: Boolean = true,
@@ -200,7 +222,7 @@ internal fun VisionDrive.detectCore(
             )
         }
         action()
-        if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
+        if (v.isFound && swipeToSafePosition && allowScroll != false) {
             silent {
                 v.swipeToSafePosition()
             }
@@ -243,7 +265,8 @@ private fun VisionDrive.detectCoreCore(
             message = message(
                 id = "elementNotFound",
                 subject = "$selector",
-                arg1 = selector.getElementExpression()
+                arg1 = selector.getElementExpression(),
+                arg2 = CodeExecutionContext.lastCandidateElementsString
             )
         )
         if (throwsException) {
@@ -259,7 +282,7 @@ private fun VisionDrive.detectCoreCore(
 
     doUntilTrue(
         waitSeconds =
-            if (CodeExecutionContext.withScroll == false) waitSeconds
+            if (allowScroll == false) waitSeconds
             else Math.min(testContext.waitSecondsForAnimationComplete, waitSeconds),
         intervalSeconds = 1.0,
         retryOnError = false,
@@ -269,7 +292,7 @@ private fun VisionDrive.detectCoreCore(
         }
     ) {
         fun action() {
-            v = rootElement.visionOcrContext.detect(
+            v = rootElement.visionContext.detect(
                 selector = selector,
                 language = language,
                 looseMatch = looseMatch,
@@ -279,7 +302,6 @@ private fun VisionDrive.detectCoreCore(
             )
         }
 
-        rootElement.visionOcrContext = rootElement.visionContext
         action()
 
         if (v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)) {
@@ -296,7 +318,7 @@ private fun VisionDrive.detectCoreCore(
             val filteredVisionContext = VisionContext(capture = true)
             filteredVisionContext.screenshotImage = filteredImage
             filteredVisionContext.screenshotFile = filteredFile
-            rootElement.visionOcrContext = filteredVisionContext
+            rootElement.visionContext = filteredVisionContext
             action()
         }
         v.isFound
@@ -305,7 +327,7 @@ private fun VisionDrive.detectCoreCore(
         return v
     }
 
-    if (allowScroll != false && CodeExecutionContext.withScroll == true && CodeExecutionContext.isScrolling.not()) {
+    if (allowScroll == true && CodeExecutionContext.isScrolling.not()) {
         /**
          * Try to detect with scroll
          */
@@ -329,7 +351,8 @@ private fun VisionDrive.detectCoreCore(
             message = message(
                 id = "elementNotFound",
                 subject = "$selector",
-                arg1 = selector.getElementExpression()
+                arg1 = selector.getElementExpression(),
+                arg2 = CodeExecutionContext.lastCandidateElementsString
             )
         )
         if (throwsException) {
@@ -407,6 +430,7 @@ internal fun VisionDrive.detectWithScrollCore(
                     id = "elementNotFound",
                     subject = selector.toString(),
                     arg1 = selector.expression,
+                    arg2 = CodeExecutionContext.lastCandidateElementsString
                 )
             )
     }
@@ -647,7 +671,7 @@ fun VisionDrive.canDetect(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -674,7 +698,7 @@ internal fun VisionDrive.canDetect(
     lineSpacingRatio: Double,
     autoImageFilter: Boolean = false,
     last: Boolean = false,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -950,7 +974,7 @@ fun VisionDrive.canDetectAll(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
 ): Boolean {
 
     val selectors = expressions.map { getSelector(expression = it) }

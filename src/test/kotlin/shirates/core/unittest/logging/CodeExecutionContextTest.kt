@@ -79,7 +79,7 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.isScrolling).isFalse()
         assertThat(context.lastCell.isEmpty).isTrue()
 
-        assertThat(context.withScroll).isFalse()
+        assertThat(context.withScroll).isNull()
         assertThat(context.scrollDirection).isNull()
         assertThat(context.scrollFrame).isEmpty()
         assertThat(context.scrollableElement).isNull()

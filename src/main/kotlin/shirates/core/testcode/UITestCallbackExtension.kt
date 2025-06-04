@@ -413,6 +413,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             TestLog.outputLogDetail(LogFileFormat.Text)
             TestLog.outputLogSimple(LogFileFormat.Text)
             TestLog.outputCommandList()
+            TestLog.outputTextReplaceList()
 
             // HTML report
             if (TestLog.enableTrace) {

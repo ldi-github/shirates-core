@@ -26,11 +26,14 @@ class EmulatorProfile(
     /**
      * getCommandArgs
      */
-    fun getCommandArgs(): List<String> {
+    fun getCommandArgs(
+        trim: Boolean = false
+    ): List<String> {
 
         val args = mutableListOf<String>()
         args.add("emulator")
-        args.add("@${avdName.escapeAvdName().trimEnd('_')}")
+        val avdPart = "@${avdName.escapeAvdName(trim = trim)}"
+        args.add(avdPart)
         if (emulatorPort != null) {
             args.add("-port")
             args.add("$emulatorPort")

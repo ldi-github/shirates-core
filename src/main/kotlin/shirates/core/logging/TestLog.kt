@@ -1664,6 +1664,20 @@ object TestLog {
     }
 
     /**
+     * outputTextReplaceList
+     */
+    fun outputTextReplaceList() {
+
+        val replaceList = lines.filter { it.message.contains(" is replaced to ") }
+        outputLogFile(
+            filterName = "textReplaceList",
+            logLines = replaceList,
+            format = LogFileFormat.Text,
+            commandList = true
+        )
+    }
+
+    /**
      * outputLogFile
      */
     fun outputLogFile(

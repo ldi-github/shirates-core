@@ -212,6 +212,7 @@ object VisionServerProxy {
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String? = PropertiesManager.visionOCRLanguage,
+        customWordsFile: String? = PropertiesManager.visionOCRCustomWordsFile,
     ): RecognizeTextResult {
 
         if (inputFile == null) {
@@ -241,6 +242,17 @@ object VisionServerProxy {
                 name = "language",
                 value = language
             )
+        }
+        if (customWordsFile.isNullOrBlank().not()) {
+            if (Files.exists(customWordsFile.toPath())) {
+                val path = customWordsFile.toPath().toString()
+                urlBuilder.addQueryParameter(
+                    name = "customWordsFile",
+                    value = path
+                )
+            } else {
+                TestLog.warn("customWordsFile not found. Check parameter visionOCRCustomWordsFile. (customWordsFile=$customWordsFile)")
+            }
         }
         val url = urlBuilder.build()
         val jsonString = getResponseBody(url)

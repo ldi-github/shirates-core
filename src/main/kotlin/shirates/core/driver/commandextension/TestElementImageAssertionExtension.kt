@@ -5,7 +5,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.saveImage
 
@@ -133,6 +132,7 @@ fun TestElement.imageContains(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
+        allowScroll = false,
         action = action
     )
 
@@ -170,6 +170,7 @@ fun TestElement.imageIs(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
+        allowScroll = false,
         action = action
     )
 
@@ -207,8 +208,9 @@ fun TestElement.imageIsNot(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
+        negation = true,
+        allowScroll = false,
         action = action,
-        negation = true
     )
 
     TestDriver.lastElement = refreshLastElement()
@@ -226,8 +228,9 @@ internal fun imageAssertionCore(
     testElement: TestElement,
     edgeSelector: String? = null,
     assertMessage: String,
+    negation: Boolean = false,
+    allowScroll: Boolean?,
     action: () -> ImageMatchResult,
-    negation: Boolean = false
 ) {
 
     imageAssertionCoreCore(
@@ -236,8 +239,9 @@ internal fun imageAssertionCore(
         testElement = testElement,
         edgeSelector = edgeSelector,
         assertMessage = assertMessage,
+        allowScroll = allowScroll,
+        negation = negation,
         action = action,
-        negation = negation
     )
 }
 
@@ -247,8 +251,9 @@ internal fun imageAssertionCore(
     testElement: TestElement,
     edgeSelector: String? = null,
     assertMessage: String,
+    negation: Boolean = false,
+    allowScroll: Boolean?,
     action: () -> ImageMatchResult,
-    negation: Boolean = false
 ) {
 
     var sel = TestDriver.screenInfo.getSelector(expression = expression)
@@ -261,8 +266,9 @@ internal fun imageAssertionCore(
         testElement = testElement,
         edgeSelector = edgeSelector,
         assertMessage = assertMessage,
+        allowScroll = allowScroll,
+        negation = negation,
         action = action,
-        negation = negation
     )
 }
 
@@ -273,6 +279,7 @@ internal fun imageAssertionCoreCore(
     edgeSelector: String?,
     assertMessage: String,
     negation: Boolean,
+    allowScroll: Boolean?,
     action: () -> ImageMatchResult,
 ) {
     val context = TestDriverCommandContext(testElement)
@@ -282,7 +289,7 @@ internal fun imageAssertionCoreCore(
         var r = matchResult.result
         testElement.imageMatchResult = matchResult
 
-        if (r.not() && CodeExecutionContext.withScroll == true) {
+        if (r.not() && allowScroll == true) {
             classic.doUntilScrollStop(
                 edgeSelector = edgeSelector,
             ) {

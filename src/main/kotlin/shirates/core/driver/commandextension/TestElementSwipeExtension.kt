@@ -25,6 +25,7 @@ fun TestElement.swipeTo(
         val e = TestDriver.findImageOrSelectCore(
             swipeToCenter = false,
             selector = sel,
+            allowScroll = false,
             useCache = useCache,
             safeElementOnly = false
         )

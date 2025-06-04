@@ -3,6 +3,7 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -177,8 +178,8 @@ fun VisionDrive.onCellOf(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    allowScroll: Boolean = true,
-    swipeToCenter: Boolean = true,
+    allowScroll: Boolean? = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     throwsException: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -191,13 +192,10 @@ fun VisionDrive.onCellOf(
         lineSpacingRatio = lineSpacingRatio,
         autoImageFilter = autoImageFilter,
         allowScroll = allowScroll,
-        swipeToSafePosition = false,
+        swipeToSafePosition = swipeToSafePosition,
         throwsException = throwsException,
     )
-    val baseElement =
-        if (swipeToCenter) v.swipeToCenter()
-        else v
-    val cell = baseElement.cell()
+    val cell = v.cell()
     cell.onThisElementRegion {
         func?.invoke(cell)
     }

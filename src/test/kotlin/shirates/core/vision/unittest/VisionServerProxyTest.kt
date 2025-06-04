@@ -73,6 +73,7 @@ class VisionServerProxyTest : UnitTest() {
 
         // Arrange
         VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
+        PropertiesManager.setPropertyValue("visionOCRCustomWordsFile", "")
 
         run {
             /**
@@ -153,6 +154,10 @@ class VisionServerProxyTest : UnitTest() {
             assertThat(result.candidates[1].toString()).isEqualTo("0.3, 口囚•, [265, 53, 408, 87](w=144, h=35)")
             assertThat(result.candidates[4].toString()).isEqualTo("0.5, Q設定 索, [98, 654, 457, 720](w=360, h=67)")
         }
+
+        // Arrange
+        PropertiesManager.setPropertyValue("visionOCRCustomWordsFile", "vision/texts/customWords.txt")
+
     }
 
     @Test

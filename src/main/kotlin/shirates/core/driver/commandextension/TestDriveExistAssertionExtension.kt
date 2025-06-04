@@ -19,7 +19,7 @@ import shirates.core.utility.time.StopWatch
  */
 fun TestDrive.exist(
     expression: String,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
@@ -70,8 +70,8 @@ fun TestDrive.exist(
 internal fun TestDrive.existCore(
     assertMessage: String,
     selector: Selector,
-    allowScroll: Boolean = true,
-    throwsException: Boolean = true,
+    allowScroll: Boolean?,
+    throwsException: Boolean,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     swipeToCenter: Boolean,
@@ -155,6 +155,7 @@ fun TestDrive.existWithoutScroll(
  */
 fun TestDrive.existImage(
     expression: String,
+    allowScroll: Boolean? = if (CodeExecutionContext.isInCell) false else CodeExecutionContext.withScroll,
     swipeToCenter: Boolean = false,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
@@ -193,7 +194,6 @@ fun TestDrive.existImage(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         val newSelectContext = if (CodeExecutionContext.isInCell) CodeExecutionContext.lastCell else selectContext
-        val allowScroll = if (CodeExecutionContext.isInCell) false else true
 
         e = existImageCore(
             sel = sel,
@@ -222,6 +222,7 @@ fun TestDrive.existImage(
  */
 fun TestDrive.dontExistImage(
     expression: String,
+    allowScroll: Boolean? = if (CodeExecutionContext.isInCell) false else CodeExecutionContext.withScroll,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -242,7 +243,6 @@ fun TestDrive.dontExistImage(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         val newSelectContext = if (CodeExecutionContext.isInCell) CodeExecutionContext.lastCell else selectContext
-        val allowScroll = if (CodeExecutionContext.isInCell) false else true
 
         e = existImageCore(
             sel = sel,
@@ -314,7 +314,7 @@ internal fun TestDrive.actionWithOnExistErrorHandler(
 
 internal fun TestDrive.existImageCore(
     sel: Selector,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     assertMessage: String,
     throwsException: Boolean,
@@ -405,7 +405,7 @@ private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
 
 private fun findImageAsElement(
     sel: Selector,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     useCache: Boolean,
@@ -435,7 +435,7 @@ private fun findImageAsElement(
 
 private fun selectElementAndCompareImage(
     sel: Selector,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     swipeToCenter: Boolean,
@@ -505,6 +505,7 @@ fun TestDrive.existWithScrollDown(
             e = existCore(
                 assertMessage = assertMessage,
                 selector = sel,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
@@ -557,6 +558,7 @@ fun TestDrive.existWithScrollUp(
             e = existCore(
                 assertMessage = assertMessage,
                 selector = sel,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
@@ -609,6 +611,7 @@ fun TestDrive.existWithScrollRight(
             e = existCore(
                 assertMessage = assertMessage,
                 selector = sel,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
@@ -661,6 +664,7 @@ fun TestDrive.existWithScrollLeft(
             e = existCore(
                 assertMessage = assertMessage,
                 selector = sel,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
@@ -784,6 +788,7 @@ fun TestDrive.existAllInScanResults(
 
 internal fun TestDrive.dontExist(
     selector: Selector,
+    allowScroll: Boolean? = if (CodeExecutionContext.isInCell) false else null,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
@@ -811,6 +816,7 @@ internal fun TestDrive.dontExist(
                 edgeSelector = null,
                 assertMessage = assertMessage,
                 negation = true,
+                allowScroll = allowScroll,
                 action = {
                     rootElement.isContainingImage(selector.image!!)
                 },
@@ -819,6 +825,7 @@ internal fun TestDrive.dontExist(
             e = dontExistCore(
                 message = assertMessage,
                 selector = selector,
+                allowScroll = allowScroll,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
@@ -834,6 +841,7 @@ internal fun TestDrive.dontExist(
 internal fun TestDrive.dontExistCore(
     message: String,
     selector: Selector,
+    allowScroll: Boolean?,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
@@ -845,6 +853,7 @@ internal fun TestDrive.dontExistCore(
 
     var e = TestDriver.findImageOrSelectCore(
         selector = selector,
+        allowScroll = allowScroll,
         swipeToCenter = false,
         waitSeconds = 0.0,
         throwsException = false,
@@ -852,7 +861,7 @@ internal fun TestDrive.dontExistCore(
         safeElementOnly = safeElementOnly
     )
 
-    if (waitSeconds > 0.0 && CodeExecutionContext.withScroll != true && e.isFound) {
+    if (waitSeconds > 0.0 && allowScroll != true && e.isFound) {
 
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds
@@ -888,6 +897,7 @@ internal fun TestDrive.dontExistCore(
  */
 fun TestDrive.dontExist(
     expression: String,
+    allowScroll: Boolean? = false,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
@@ -916,6 +926,7 @@ fun TestDrive.dontExist(
 
     val e = dontExist(
         selector = sel,
+        allowScroll = allowScroll,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
@@ -989,6 +1000,7 @@ fun TestDrive.dontExistWithScrollDown(
             e = dontExistCore(
                 message = assertMessage,
                 selector = selector,
+                allowScroll = true,
                 throwsException = throwsException,
                 useCache = useCache,
                 safeElementOnly = true,
@@ -1036,6 +1048,7 @@ fun TestDrive.dontExistWithScrollUp(
             e = dontExistCore(
                 message = assertMessage,
                 selector = selector,
+                allowScroll = true,
                 throwsException = throwsException,
                 useCache = useCache,
                 safeElementOnly = true,

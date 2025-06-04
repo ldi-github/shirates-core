@@ -558,7 +558,7 @@ fun VisionElement.swipeToSafePosition(
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
 ): VisionElement {
 
-    var v = VisionElement.emptyElement
+    var v = this
 
     when (direction) {
         ScrollDirection.Down -> if (screenBounds.centerY < this.bounds.top) {

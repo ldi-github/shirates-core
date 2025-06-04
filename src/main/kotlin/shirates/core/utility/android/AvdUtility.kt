@@ -7,7 +7,6 @@ import shirates.core.driver.testProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.utility.android.AndroidDeviceUtility.escapeAvdName
-import shirates.core.utility.exists
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
@@ -27,7 +26,6 @@ object AvdUtility {
         sourceAvdName: String,
         newAvdName: String,
         androidId: String? = null,
-        avdDir: String = getAvdDir(),
         overwrite: Boolean = false,
         timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
@@ -35,7 +33,6 @@ object AvdUtility {
         copy(
             sourceAvdName = sourceAvdName,
             newAvdName = newAvdName,
-            avdDir = avdDir,
             overwrite = overwrite
         )
         val androidDeviceInfo = AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(
@@ -60,11 +57,56 @@ object AvdUtility {
     }
 
     /**
-     * getAvdDir
+     * getAvdHome
      */
-    fun getAvdDir(): String {
+    fun getAvdHome(): String {
 
         return UserVar.userHome.resolve(".android/avd").toString()
+    }
+
+    /**
+     * getAvdIni
+     */
+    fun getAvdIni(
+        avdName: String
+    ): String {
+
+        val avdHome = getAvdHome()
+        var avdIni = avdHome.resolve(avdName.escapeAvdName()) + ".ini"
+        if (avdIni.exists()) {
+            return avdIni
+        }
+        avdIni = avdHome.resolve(avdName.escapeAvdName().trimEnd('_')) + ".ini"
+        return avdIni
+    }
+
+    /**
+     * getPropertyValue
+     */
+    fun getPropertyValue(file: String, key: String): String {
+
+        if (file.exists().not()) {
+            throw FileNotFoundException("File not found. (file=$file)")
+        }
+        val content = file.toFile().readText()
+        val value = content.split("\r\n", "\n").firstOrNull() { it.contains("$key=") }?.split("=")?.last()
+            ?: throw TestDriverException("key not found in $file")
+        return value
+    }
+
+    /**
+     * getAvdDir
+     */
+    fun getAvdDir(
+        avdName: String
+    ): String? {
+
+        val avdIni = getAvdIni(avdName = avdName)
+        if (avdIni.exists().not()) {
+            return null
+        }
+        val avdDir = getPropertyValue(file = avdIni, key = "path")
+        return avdDir
     }
 
     /**
@@ -75,12 +117,12 @@ object AvdUtility {
     ) {
         AndroidDeviceUtility.shutdownEmulatorByAvdName(avdName)
 
-        val avdFileBase = avdName.escapeAvdName().trimEnd('_')
-        val targetDir = getAvdDir().resolve("$avdFileBase.avd")
-        if (Files.exists(targetDir.toPath())) {
-            FileUtils.deleteDirectory(targetDir.toFile())
+        val targetAvdDir = getAvdDir(avdName)
+        if (targetAvdDir != null) {
+            FileUtils.deleteDirectory(targetAvdDir.toFile())
         }
-        val targetIniFile = getAvdDir().resolve("$avdFileBase.ini")
+
+        val targetIniFile = getAvdIni(avdName)
         Files.deleteIfExists(targetIniFile.toPath())
     }
 
@@ -90,34 +132,25 @@ object AvdUtility {
     fun copy(
         sourceAvdName: String,
         newAvdName: String,
-        avdDir: String = getAvdDir(),
         overwrite: Boolean = false
     ) {
         if (sourceAvdName == newAvdName) {
             throw IllegalArgumentException("newAvdName is the same as sourceAvdName: $newAvdName")
         }
-        if (avdDir.toPath().exists().not()) {
-            throw FileNotFoundException("avdDir: $avdDir")
-        }
 
-        var sourceAvdFileBase = avdDir.toPath().resolve(sourceAvdName).toString().escapeAvdName()
-        var sourceAvdDir = "$sourceAvdFileBase.avd"
-        var sourceIniFile = "$sourceAvdFileBase.ini"
-
-        if (sourceAvdDir.exists().not()) {
-            sourceAvdFileBase = sourceAvdFileBase.trimEnd('_')
-            sourceAvdDir = "$sourceAvdFileBase.avd"
-            sourceIniFile = "$sourceAvdFileBase.ini"
-            if (sourceAvdDir.exists().not()) {
-                throw FileNotFoundException("$sourceAvdDir not found in $avdDir")
-            }
-        }
+        val sourceIniFile = getAvdIni(avdName = sourceAvdName)
         if (sourceIniFile.exists().not()) {
-            throw FileNotFoundException("$sourceIniFile not found in $avdDir")
+            throw FileNotFoundException(".ini file not found. (avdName=$sourceAvdName)")
+        }
+        val sourceAvdDir = getAvdDir(avdName = sourceAvdName)!!
+        if (sourceAvdDir.exists().not()) {
+            throw FileNotFoundException(".avd directory not found. (avdName=$sourceAvdName)")
         }
 
-        val newAvdFileBase = avdDir.toPath().resolve(newAvdName).toString().escapeAvdName().trimEnd('_')
-        val newAvdDir = "$newAvdFileBase.avd"
+        val avdHome = getAvdHome()
+        val escapedAvdName = newAvdName.escapeAvdName().trimEnd('_')
+        val newIniFile = avdHome.resolve("${escapedAvdName}.ini")
+        val newAvdDir = avdHome.resolve("${escapedAvdName}.avd")
 
         if (sourceAvdDir == newAvdDir) {
             throw IllegalArgumentException("newAvdDir is the same as sourceAvdDir: $newAvdDir")
@@ -139,25 +172,23 @@ object AvdUtility {
         /**
          * Write .ini
          */
-        val originalAvd = sourceAvdFileBase.toPath().fileName.toString()
-        val newAvd = newAvdFileBase.toPath().fileName.toString()
         run {
-            val newIniFile = "$newAvdFileBase.ini"
+            val pathRel = getPropertyValue(file = sourceIniFile, key = "path.rel")
             val sourceIniContent = sourceIniFile.toFile().readText()
             val newIniContent = sourceIniContent
-                .replace(originalAvd, newAvd)
+                .replace(sourceAvdDir, newAvdDir)
+                .replace(pathRel, "avd/$escapedAvdName.avd")
             newIniFile.toFile().writeText(newIniContent)
         }
         /**
          * Rewrite config.ini
          */
         run {
-            val sourceIniFile = sourceAvdDir.resolve("config.ini")
-            val sourceIniContent = sourceIniFile.toFile().readText()
-            val newIniContent = sourceIniContent
-                .replace(originalAvd, newAvd)
-                .replace(sourceAvdName, newAvdName)
             val newIniFile = newAvdDir.resolve("config.ini")
+            var newIniContent = newIniFile.toFile().readText()
+            newIniContent = newIniContent
+                .replace(sourceAvdDir, newAvdDir)
+                .replace(sourceAvdName, newAvdName)
             newIniFile.toFile().writeText(newIniContent)
         }
     }
