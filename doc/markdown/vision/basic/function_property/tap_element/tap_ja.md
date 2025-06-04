@@ -4,22 +4,25 @@
 
 ## 関数
 
-| 関数                               | 説明                                                                  |
-|:---------------------------------|:--------------------------------------------------------------------|
-| tap(_expression_)                | _expression_ にマッチする最初の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します |
-| tapLast(_expression_)            | _expression_ にマッチする最後の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します |
-| tap(_x, y_)                      | (_x, y_)座標をタップします                                                   |
-| tapWithScrollDown(_expression_)  | _expression_ にマッチする最初の要素をタップします（下方向スクロールあり）                         |
-| tapWithScrollUp(_expression_)    | _expression_ にマッチする最初の要素をタップします（上方向スクロールあり）                         |
-| tapWithScrollRight(_expression_) | _expression_ にマッチする最初の要素をタップします（右方向スクロールあり）                         |
-| tapWithScrollLeft(_expression_)  | _expression_ にマッチする最初の要素をタップします（左方向スクロールあり）                         |
-| tapWithoutScroll(_expression_)   | _expression_ にマッチする最初の要素をタップします（スクロールなし）                            |
-| tapCenterOfScreen                | 画面の中心をタップします                                                        |
-| tapCenterOf(_expression_)        | 要素の中心をタップします                                                        |
-| tapItemUnder(_expression_)       | _expression_ にマッチする要素の下の要素をタップします                                   |
-| tapItemOver(_expression_)        | _expression_ にマッチする要素の上の要素をタップします                                   |
-| tapItemRightOf(_expression_)     | _expression_ にマッチする要素の右の要素をタップします                                   |
-| tapItemLeftOf(_expression_)      | _expression_ にマッチする要素の左の要素をタップします                                   |
+| 関数                               | 説明                                                                                  |
+|:---------------------------------|:------------------------------------------------------------------------------------|
+| tap(_expression_)                | _expression_ にマッチする最初の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します                 |
+| tapLast(_expression_)            | _expression_ にマッチする最後の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します                 |
+| tap(_x, y_)                      | (_x, y_)座標をタップします                                                                   |
+| tapWithScrollDown(_expression_)  | _expression_ にマッチする最初の要素をタップします（下方向スクロールあり）                                         |
+| tapWithScrollUp(_expression_)    | _expression_ にマッチする最初の要素をタップします（上方向スクロールあり）                                         |
+| tapWithScrollRight(_expression_) | _expression_ にマッチする最初の要素をタップします（右方向スクロールあり）                                         |
+| tapWithScrollLeft(_expression_)  | _expression_ にマッチする最初の要素をタップします（左方向スクロールあり）                                         |
+| tapWithoutScroll(_expression_)   | _expression_ にマッチする最初の要素をタップします（スクロールなし）                                            |
+| tapCenterOfScreen                | 画面の中心をタップします                                                                        |
+| tapCenterOf(_expression_)        | 要素の中心をタップします                                                                        |
+| tapItemUnder(_expression_)       | _expression_ にマッチする要素の下の要素をタップします                                                   |
+| tapItemOver(_expression_)        | _expression_ にマッチする要素の上の要素をタップします                                                   |
+| tapItemRightOf(_expression_)     | _expression_ にマッチする要素の右の要素をタップします                                                   |
+| tapItemLeftOf(_expression_)      | _expression_ にマッチする要素の左の要素をタップします                                                   |
+| tapOffset(offsetX, offsetY)      | 要素のエッジからのオフセット（ピクセル）をタップする                                                          |
+| tapOffsetX(offsetX)              | 要素のエッジからのオフセット（ピクセル）をタップする。offsetX > 0の場合はrightからのオフセット。offsetX < 0の場合はleftからのオフセット |
+| tapOffsetY(offsetY)              | 要素のエッジからのオフセット（ピクセル）をタップする。offsetY > 0の場合はbottomからのオフセット。offsetY < 0の場合はtopからのオフセット |
 
 ## 主要な引数
 

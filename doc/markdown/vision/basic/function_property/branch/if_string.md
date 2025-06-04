@@ -7,6 +7,7 @@ You can use branch functions for string.
 | function         | description                                                                                                                         |
 |:-----------------|:------------------------------------------------------------------------------------------------------------------------------------|
 | ifStringIs       | The code block is executed if specified string is value.                                                                            |
+| ifStringIsNot    | The code block is executed if specified string is not value.                                                                        |
 | ifStartsWith     | The code block is executed if specified string starts with value.                                                                   |
 | ifContains       | The code block is executed if specified string contains value.                                                                      |
 | ifEndsWith       | The code block is executed if specified string ends with value.                                                                     |
