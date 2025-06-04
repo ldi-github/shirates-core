@@ -97,13 +97,17 @@ object AndroidDeviceUtility {
     fun getAndroidDeviceInfoByAvdName(avdName: String): AndroidDeviceInfo? {
 
         val deviceList = getConnectedDeviceList()
-        val name1 = avdName.escapeAvdName()
-        val name2 = name1.trimEnd('_')
-        val device = deviceList.firstOrNull() {
-            val name = it.avdName.escapeAvdName().lowercase()
-            name == name1.lowercase() || name == name2.lowercase()
+        val device1 =
+            deviceList.firstOrNull { it.avdName.escapeAvdName(trim = false) == avdName.escapeAvdName(trim = false) }
+        if (device1 != null) {
+            return device1
         }
-        return device
+        val device2 =
+            deviceList.firstOrNull { it.avdName.escapeAvdName(trim = true) == avdName.escapeAvdName(trim = true) }
+        if (device2 != null) {
+            return device2
+        }
+        return null
     }
 
     /**
@@ -141,7 +145,7 @@ object AndroidDeviceUtility {
     }
 
     internal fun String.escapeAvdName(
-        trim: Boolean = false
+        trim: Boolean = true
     ): String {
 
         var s = this.replace(" ", "_").replace("(", "_").replace(")", "_")
@@ -153,7 +157,7 @@ object AndroidDeviceUtility {
             }
         }
         if (trim) {
-            s.trimEnd('_')
+            s = s.trimEnd('_')
         }
         return s
     }
