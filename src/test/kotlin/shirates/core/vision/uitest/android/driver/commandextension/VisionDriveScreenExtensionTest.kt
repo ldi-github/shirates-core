@@ -36,7 +36,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                     assertThatThrownBy {
                         it.screenIs("[Network & internet Screen]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Network & internet Screen] is displayed(screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: screenRecognizedTextMatching)")
+                        .hasMessageStartingWith("[Network & internet Screen] is displayed(screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: classification, confidence: ")
                 }
             }
             case(3) {
@@ -82,7 +82,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
                             exist("Connected devices")
                         }
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[System Screen] is displayed(screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: screenRecognizedTextMatching)")
+                        .hasMessageStartingWith("[System Screen] is displayed(screenName: [Android Settings Top Screen], isValid: true, recognizationMethod: classification, confidence: ")
                 }
             }
             case(4) {
