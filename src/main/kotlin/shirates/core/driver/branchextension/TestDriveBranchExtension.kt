@@ -25,6 +25,7 @@ fun TestDrive.ifImageExist(
         if (e.isFound) e.isImage(expression = expression)
         else findImage(
             expression = expression,
+            allowScroll = false,
             log = false
         )
     val matched = imageMatchResult.result
@@ -60,6 +61,7 @@ fun TestDrive.ifImageExistNot(
         if (e.isFound) e.isImage(expression = expression)
         else findImage(
             expression = expression,
+            allowScroll = false,
             log = false
         )
     val matched = imageMatchResult.result.not()

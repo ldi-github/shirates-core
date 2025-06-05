@@ -18,7 +18,9 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.syncScreen
 import shirates.core.vision.driver.wait
 
 /**
@@ -300,6 +302,7 @@ fun VisionElement.typeChars(
  * getFocusedElement
  */
 fun VisionDrive.getFocusedElement(
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = false
 ): VisionElement {
 
@@ -310,20 +313,48 @@ fun VisionDrive.getFocusedElement(
     screenshot()
 
     if (isAndroid) {
-        try {
-            val xpath = "//*[@focused='true']"
-            val sel = Selector(xpath)
-            val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
-            val e = focused.toTestElement(sel)
-            val v = e.toVisionElement()
-            return v
-        } catch (t: Throwable) {
-            if (throwsException) {
-                throw TestDriverException(message(id = "focusedElementNotFound"))
-            } else {
-                return VisionElement.emptyElement
+        val xpath = "//*[@focused='true']"
+        val sel = Selector(xpath)
+
+        fun getFocusedElementForAndroid(): VisionElement {
+            var e = TestElement.emptyElement
+            var v = VisionElement.emptyElement
+            doUntilTrue(
+                waitSeconds = waitSeconds,
+                throwOnFinally = false
+            ) {
+                e = try {
+                    val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
+                    focused.toTestElement(sel)
+                } catch (t: Throwable) {
+                    TestElement.emptyElement
+                }
+                val r = e.isFound
+                if (r) {
+                    syncScreen()
+                    v = e.toVisionElement()
+                }
+                r
             }
+            return v
         }
+
+        val last = getFocusedElementForAndroid()
+//        doUntilTrue(
+//            waitSeconds = waitSeconds,
+//            intervalSeconds = 1.0,
+//            throwOnFinally = false
+//        ) {
+//            val v = getFocusedElementForAndroid()
+//            val r = v.image.isSame(last.image)
+//            last = v
+//            r
+//        }
+
+        if (last.isEmpty) {
+            throw TestDriverException(message(id = "focusedElementNotFound"))
+        }
+        return last
     } else {
         val e = try {
             (TestDriver.appiumDriver.switchTo().activeElement() as WebElement).toTestElement()

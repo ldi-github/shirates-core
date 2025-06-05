@@ -19,8 +19,8 @@ class VisionElementExtensionTest : VisionTest() {
                     it.macro("[Android Settings Search Screen]")
                         .tap("Search settings")
                     focused.textIs("Search settings")
-                        .sendKeys("value1")
-                        .textIs("value1")
+                        .sendKeys("value")
+                        .textIs("value")
                 }.action {
                     it.clearInput()
                 }.expectation {

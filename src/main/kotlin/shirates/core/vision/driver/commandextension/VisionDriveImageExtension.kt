@@ -78,7 +78,7 @@ fun VisionDrive.findImage(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     throwsException: Boolean = true,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
@@ -110,8 +110,7 @@ fun VisionDrive.findImage(
     val swDetect = StopWatch("findImage")
 
     try {
-        if (allowScroll != false &&
-            CodeExecutionContext.withScroll == true && CodeExecutionContext.isScrolling.not()
+        if (allowScroll == true && CodeExecutionContext.isScrolling.not()
         ) {
             /**
              * Try to find image with scroll
@@ -126,7 +125,7 @@ fun VisionDrive.findImage(
              */
             v = action(waitSeconds = waitSeconds)
         }
-        if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
+        if (v.isFound && swipeToSafePosition && allowScroll != false) {
             silent {
                 v.swipeToSafePosition()
             }
@@ -493,7 +492,7 @@ fun VisionDrive.canFindImage(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): Boolean {
 

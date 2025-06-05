@@ -2,6 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
 import shirates.core.logging.Message.message
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.ImageMatchResult
 
 /**
@@ -9,6 +10,7 @@ import shirates.core.utility.image.ImageMatchResult
  */
 fun TestDrive.findImage(
     expression: String,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     throwsException: Boolean = false,
     useCache: Boolean = testContext.useCache,
     log: Boolean = true
@@ -19,6 +21,7 @@ fun TestDrive.findImage(
     return findImageCore(
         command = command,
         expression = expression,
+        allowScroll = allowScroll,
         throwsException = throwsException,
         useCache = useCache,
         log = log
@@ -28,6 +31,7 @@ fun TestDrive.findImage(
 internal fun TestDrive.findImageCore(
     command: String,
     expression: String,
+    allowScroll: Boolean?,
     throwsException: Boolean,
     useCache: Boolean,
     log: Boolean
@@ -44,6 +48,7 @@ internal fun TestDrive.findImageCore(
         context.execOperateCommand(command = command, message = message, subject = sel.toString()) {
             r = TestDriver.findImage(
                 expression = expression,
+                allowScroll = allowScroll,
                 throwsException = throwsException,
                 useCache = useCache
             )
@@ -93,6 +98,7 @@ fun TestDrive.findImageWithScrollDown(
         result = findImageCore(
             command = command,
             expression = expression,
+            allowScroll = true,
             throwsException = throwsException,
             useCache = useCache,
             log = log
@@ -133,6 +139,7 @@ fun TestDrive.findImageWithScrollUp(
         result = findImageCore(
             command = command,
             expression = expression,
+            allowScroll = true,
             throwsException = throwsException,
             useCache = useCache,
             log = log
@@ -173,6 +180,7 @@ fun TestDrive.findImageWithScrollRight(
         result = findImageCore(
             command = command,
             expression = expression,
+            allowScroll = true,
             throwsException = throwsException,
             useCache = useCache,
             log = log
@@ -213,6 +221,7 @@ fun TestDrive.findImageWithScrollLeft(
         result = findImageCore(
             command = command,
             expression = expression,
+            allowScroll = true,
             throwsException = throwsException,
             useCache = useCache,
             log = log

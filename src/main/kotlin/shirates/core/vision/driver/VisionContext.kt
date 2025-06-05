@@ -73,9 +73,9 @@ class VisionContext(
     var rootElement: VisionElement? = null
 
     /**
-     * getVisionElements
+     * getVisionTextElements
      */
-    fun getVisionElements(): MutableList<VisionElement> {
+    fun getVisionTextElements(): MutableList<VisionElement> {
 
         val workingRegionRect = CodeExecutionContext.workingRegionElement.rect
         var list = mutableListOf<VisionElement>()
@@ -273,23 +273,20 @@ class VisionContext(
         if (rootElement!!.visionContext.screenshotFile == null) {
             return this
         }
-        if (rootElement!!.visionOcrContext.screenshotFile == null) {
-            rootElement!!.visionOcrContext = rootElement!!.visionContext
-        }
-        val rootVisionOcrContext = rootElement!!.visionOcrContext
-        val recognizedFile = rootVisionOcrContext.screenshotFile.toPath().toFile()
+        val rootVisionContext = rootElement!!.visionContext
+        val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
         if (recognizedFile.exists() && recognizedFile.isFile.not()) {
             /**
              * Check screenshotFile exists
              */
             return this
         }
-        if (rootVisionOcrContext.recognizeTextObservations.isEmpty()) {
+        if (rootVisionContext.recognizeTextObservations.isEmpty()) {
             /**
              * Recognize screenshotFile
              */
             recognizeTextAndSaveRectangleImage(
-                inputFile = rootVisionOcrContext.screenshotFile!!,
+                inputFile = rootVisionContext.screenshotFile!!,
                 language = language,
             )
             CodeExecutionContext.lastRecognizedFileName = recognizedFile.name
@@ -303,7 +300,7 @@ class VisionContext(
              */
             val thisRectOnScreen = this.rectOnScreen
             if (thisRectOnScreen != null) {
-                var list = rootVisionOcrContext.recognizeTextObservations.toList()
+                var list = rootVisionContext.recognizeTextObservations.toList()
                 list = list.filter { it.rectOnScreen != null }
                 list = list.filter {
                     val included = it.rectOnScreen!!.isCenterIncludedIn(thisRectOnScreen)
@@ -397,7 +394,7 @@ class VisionContext(
         return this
     }
 
-    private fun sortRecognizeTextObservations() {
+    internal fun sortRecognizeTextObservations() {
 
         val flowContainer = FlowContainer()
         for (t in recognizeTextObservations) {
@@ -407,10 +404,7 @@ class VisionContext(
             flowContainer.getElements().map { it as RecognizeTextObservation }.toMutableList()
     }
 
-    /**
-     * detect
-     */
-    fun detectCore(
+    internal fun detectCore(
         selector: Selector,
         language: String = this.language,
         last: Boolean,
@@ -423,6 +417,31 @@ class VisionContext(
             return VisionElement.emptyElement
         }
 
+        val candidates = detectElements(
+            selector = selector,
+            language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+        )
+        CodeExecutionContext.lastCandidateElements = candidates
+        val v =
+            (if (last) candidates.lastOrNull()
+            else candidates.firstOrNull())
+                ?: VisionElement.emptyElement
+        return v
+    }
+
+    /**
+     * detectElements
+     */
+    fun detectElements(
+        selector: Selector,
+        language: String = this.language,
+        looseMatch: Boolean,
+        mergeBoundingBox: Boolean,
+        lineSpacingRatio: Double,
+    ): List<VisionElement> {
 
         CodeExecutionContext.lastLooseMatch = looseMatch
         CodeExecutionContext.lastMergeBoundingBox = mergeBoundingBox
@@ -444,11 +463,7 @@ class VisionContext(
                 )
             candidates.addAll(list)
         }
-        val v =
-            (if (last) candidates.lastOrNull()
-            else candidates.firstOrNull())
-                ?: VisionElement.emptyElement
-        return v
+        return candidates
     }
 
     /**
@@ -516,7 +531,7 @@ class VisionContext(
         lineSpacingRatio: Double,
     ): List<VisionElement> {
 
-        val list = getVisionElements()
+        val list = getVisionTextElements()
 
         /**
          * Search in single line
@@ -749,7 +764,8 @@ class VisionContext(
     internal fun printRecognizedTextInfo() {
 
         if (CodeExecutionContext.lastRecognizedTsvFile != null) {
-            val texts = TestDriver.visionRootElement.visionContext.getVisionElements().joinToString("\n") { it.text }
+            val texts =
+                TestDriver.visionRootElement.visionTextElements.joinToString("\n") { it.text }
             TestLog.info(message = "Recognized text: $texts")
             val tsvFile = TestLog.directoryForLog.resolve(CodeExecutionContext.lastRecognizedTsvFile!!).toString()
             val codec = URLCodec("UTF-8")

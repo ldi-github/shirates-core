@@ -557,11 +557,8 @@ fun VisionElement.flickToLeft(
 fun VisionElement.swipeToSafePosition(
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
 ): VisionElement {
-    if (CodeExecutionContext.withScroll == false) {
-        return this
-    }
 
-    var v = VisionElement.emptyElement
+    var v = this
 
     when (direction) {
         ScrollDirection.Down -> if (screenBounds.centerY < this.bounds.top) {
@@ -582,5 +579,6 @@ fun VisionElement.swipeToSafePosition(
 
         else -> {}
     }
+
     return v
 }

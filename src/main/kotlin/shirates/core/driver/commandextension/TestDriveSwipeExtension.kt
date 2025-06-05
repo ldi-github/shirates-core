@@ -1017,6 +1017,7 @@ fun TestDrive.swipeElementToElement(
         TestDriver.syncCache(force = true)
         TestDriver.findImageOrSelectCore(
             selector = startElement.selector!!,
+            allowScroll = false,
             swipeToCenter = false,
             safeElementOnly = false
         )

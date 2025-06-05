@@ -97,9 +97,17 @@ object AndroidDeviceUtility {
     fun getAndroidDeviceInfoByAvdName(avdName: String): AndroidDeviceInfo? {
 
         val deviceList = getConnectedDeviceList()
-        val device =
-            deviceList.firstOrNull() { it.avdName.escapeAvdName().lowercase() == avdName.escapeAvdName().lowercase() }
-        return device
+        val device1 =
+            deviceList.firstOrNull { it.avdName.escapeAvdName(trim = false) == avdName.escapeAvdName(trim = false) }
+        if (device1 != null) {
+            return device1
+        }
+        val device2 =
+            deviceList.firstOrNull { it.avdName.escapeAvdName(trim = true) == avdName.escapeAvdName(trim = true) }
+        if (device2 != null) {
+            return device2
+        }
+        return null
     }
 
     /**
@@ -136,7 +144,9 @@ object AndroidDeviceUtility {
         return getConnectedDeviceInfo(testProfile)
     }
 
-    private fun String.escapeAvdName(): String {
+    internal fun String.escapeAvdName(
+        trim: Boolean = true
+    ): String {
 
         var s = this.replace(" ", "_").replace("(", "_").replace(")", "_")
         for (i in 1..100) {
@@ -145,6 +155,9 @@ object AndroidDeviceUtility {
             if (s == before) {
                 break
             }
+        }
+        if (trim) {
+            s = s.trimEnd('_')
         }
         return s
     }
@@ -174,16 +187,35 @@ object AndroidDeviceUtility {
     /**
      * getEmulatorProfile
      */
+    fun getEmulatorProfile(
+        profileName: String,
+        avdName: String,
+        emulatorPort: Int? = null,
+        emulatorOptions: String? = null,
+    ): EmulatorProfile {
+
+        val emulatorProfile = EmulatorProfile(
+            profileName = profileName,
+            avdName = avdName,
+            emulatorOptions = (emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
+                .filter { it.isNotBlank() }.toMutableList(),
+            emulatorPort = emulatorPort
+        )
+        return emulatorProfile
+    }
+
+    /**
+     * getEmulatorProfile
+     */
     fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
         val profileName = testProfile.profileName
         val avdName = testProfile.capabilities.getCapabilityRelaxed("avd")
         val emulatorPort = testProfile.emulatorPort?.toIntOrNull()
-        val emulatorProfile = EmulatorProfile(
+        val emulatorProfile = getEmulatorProfile(
             profileName = profileName,
             avdName = avdName,
-            emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
-                .filter { it.isNotBlank() }.toMutableList(),
-            emulatorPort = emulatorPort
+            emulatorPort = emulatorPort,
+            emulatorOptions = testProfile.emulatorOptions,
         )
         return emulatorProfile
     }
@@ -367,6 +399,26 @@ object AndroidDeviceUtility {
             )
         }
         return androidDeviceInfo!!
+    }
+
+    /**
+     * startEmulatorAndWaitDeviceReady
+     */
+    fun startEmulatorAndWaitDeviceReady(
+        avdName: String,
+        timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+        waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
+    ): AndroidDeviceInfo {
+
+        val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(
+            profileName = avdName,
+            avdName = avdName,
+        )
+        return startEmulatorAndWaitDeviceReady(
+            emulatorProfile = emulatorProfile,
+            timeoutSeconds = timeoutSeconds,
+            waitSecondsAfterStartup = waitSecondsAfterStartup
+        )
     }
 
     private fun startEmulatorAndWaitDeviceReadyCore(
@@ -572,8 +624,7 @@ object AndroidDeviceUtility {
      */
     fun shutdownEmulatorByAvdName(avdName: String, waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS) {
 
-        val androidDeviceInfo =
-            getAndroidDeviceInfoByAvdName(avdName = avdName) ?: throw IllegalArgumentException("avdName")
+        val androidDeviceInfo = getAndroidDeviceInfoByAvdName(avdName = avdName) ?: return
         return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid, waitSeconds = waitSeconds)
     }
 

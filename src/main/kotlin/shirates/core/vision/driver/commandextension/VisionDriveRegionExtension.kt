@@ -1,6 +1,7 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -16,6 +17,7 @@ fun VisionDrive.onLineOf(
     lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
     lineHeight: Int? = null,
     verticalOffset: Int = 0,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
@@ -24,6 +26,7 @@ fun VisionDrive.onLineOf(
         language = language,
         looseMatch = looseMatch,
         autoImageFilter = autoImageFilter,
+        swipeToSafePosition = swipeToSafePosition,
     )
     val lh = lineHeight ?: (v.rect.height * lineHeightRatio).toInt()
     return v.onLine(

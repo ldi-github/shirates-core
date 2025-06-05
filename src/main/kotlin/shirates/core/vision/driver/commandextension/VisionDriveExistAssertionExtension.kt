@@ -29,9 +29,10 @@ fun VisionDrive.exist(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
@@ -56,6 +57,7 @@ fun VisionDrive.exist(
             autoImageFilter = autoImageFilter,
             last = last,
             waitSeconds = waitSeconds,
+            allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
         )
     }
@@ -76,6 +78,7 @@ internal fun VisionDrive.existCore(
     autoImageFilter: Boolean,
     last: Boolean,
     waitSeconds: Double,
+    allowScroll: Boolean?,
     swipeToSafePosition: Boolean,
 ): VisionElement {
 
@@ -89,7 +92,7 @@ internal fun VisionDrive.existCore(
             lineSpacingRatio = lineSpacingRatio,
             autoImageFilter = autoImageFilter,
             last = last,
-            allowScroll = null,
+            allowScroll = allowScroll,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = false,
@@ -119,7 +122,9 @@ internal fun VisionDrive.existCore(
         }
     } else {
         TestDriver.visionRootElement.visionContext.printRecognizedTextInfo()
-        val error = TestNGException(message = message)
+        val selectorPart = if (selector.nickname != null) "(${selector.nickname}: \"${selector.expression}\")" else ""
+        val msg = message + selectorPart
+        val error = TestNGException(message = msg)
         v.lastError = error
         v.lastResult = LogType.NG
         throw error
@@ -136,9 +141,9 @@ fun VisionDrive.existWithoutScroll(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = false,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -166,7 +171,7 @@ fun VisionDrive.existWithoutScroll(
  */
 fun VisionDrive.existAll(
     vararg expressions: String,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
 ): VisionElement {
 
     for (expression in expressions) {
@@ -183,7 +188,7 @@ fun VisionDrive.existAll(
  */
 fun VisionDrive.dontExistAll(
     vararg expressions: String,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
 ): VisionElement {
 
     for (expression in expressions) {
@@ -240,6 +245,7 @@ fun VisionDrive.existWithScrollDown(
                 autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
+                allowScroll = true,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -296,6 +302,7 @@ fun VisionDrive.existWithScrollUp(
                 autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
+                allowScroll = true,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -352,6 +359,7 @@ fun VisionDrive.existWithScrollRight(
                 autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
+                allowScroll = true,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -408,6 +416,7 @@ fun VisionDrive.existWithScrollLeft(
                 autoImageFilter = autoImageFilter,
                 last = false,
                 waitSeconds = 0.0,
+                allowScroll = true,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -431,6 +440,7 @@ fun VisionDrive.dontExist(
     autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -453,7 +463,7 @@ fun VisionDrive.dontExist(
             lineSpacingRatio = lineSpacingRatio,
             autoImageFilter = autoImageFilter,
             last = false,
-            allowScroll = null,
+            allowScroll = allowScroll,
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
@@ -494,19 +504,18 @@ fun VisionDrive.dontExistWithoutScroll(
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
-    withoutScroll {
-        dontExist(
-            expression = expression,
-            language = language,
-            looseMatch = looseMatch,
-            mergeBoundingBox = mergeBoundingBox,
-            lineSpacingRatio = lineSpacingRatio,
-            autoImageFilter = autoImageFilter,
-            waitSeconds = waitSeconds,
-            message = message,
-            func = func
-        )
-    }
+    dontExist(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        waitSeconds = waitSeconds,
+        message = message,
+        allowScroll = false,
+        func = func,
+    )
     return lastElement
 }
 
@@ -532,6 +541,7 @@ fun VisionDrive.existImage(
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {
@@ -552,6 +562,7 @@ fun VisionDrive.existImage(
             binaryThreshold = binaryThreshold,
             aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
+            allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = false,
         )
@@ -585,25 +596,24 @@ fun VisionDrive.existImageWithoutScroll(
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = false,
     message: String? = null,
 ): VisionElement {
 
-    withoutScroll {
-        existImage(
-            label = label,
-            threshold = threshold,
-            skinThickness = skinThickness,
-            binaryThreshold = binaryThreshold,
-            aspectRatioTolerance = aspectRatioTolerance,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            mergeIncluded = mergeIncluded,
-            waitSeconds = waitSeconds,
-            swipeToSafePosition = swipeToSafePosition,
-            message = message,
-        )
-    }
+    existImage(
+        label = label,
+        threshold = threshold,
+        skinThickness = skinThickness,
+        binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        mergeIncluded = mergeIncluded,
+        waitSeconds = waitSeconds,
+        swipeToSafePosition = swipeToSafePosition,
+        message = message,
+        allowScroll = false,
+    )
 
     return lastElement
 }
@@ -622,6 +632,7 @@ fun VisionDrive.dontExistImage(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    allowScroll: Boolean? = false,
 ): VisionElement {
 
     val command = "dontExistImage"
@@ -640,6 +651,7 @@ fun VisionDrive.dontExistImage(
             binaryThreshold = binaryThreshold,
             aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
+            allowScroll = allowScroll,
             swipeToSafePosition = false,
             throwsException = false,
         )
@@ -674,18 +686,17 @@ fun VisionDrive.dontExistImageWithoutScroll(
     message: String? = null,
 ): VisionElement {
 
-    withoutScroll {
-        dontExistImage(
-            label = label,
-            threshold = threshold,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            mergeIncluded = mergeIncluded,
-            skinThickness = skinThickness,
-            waitSeconds = waitSeconds,
-            message = message,
-        )
-    }
+    dontExistImage(
+        label = label,
+        threshold = threshold,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        mergeIncluded = mergeIncluded,
+        skinThickness = skinThickness,
+        waitSeconds = waitSeconds,
+        message = message,
+        allowScroll = false,
+    )
 
     return lastElement
 }
@@ -714,6 +725,7 @@ fun VisionDrive.existImageWithScrollDown(
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             waitSeconds = waitSeconds,
+            allowScroll = true,
             swipeToSafePosition = swipeToSafePosition,
             message = message,
         )
@@ -746,6 +758,7 @@ fun VisionDrive.existImageWithScrollUp(
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             waitSeconds = waitSeconds,
+            allowScroll = true,
             swipeToSafePosition = swipeToSafePosition,
             message = message,
         )

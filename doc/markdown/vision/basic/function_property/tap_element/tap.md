@@ -4,24 +4,27 @@ You can tap an element on the screen using these functions.
 
 ## Functions
 
-| function                         | description                                                                                           |
-|:---------------------------------|:------------------------------------------------------------------------------------------------------|
-| tap(_expression_)                | Tap the first element that matches the _expression_. Scrolling occurs within **withScroll** function. |
-| tapLast(_expression_)            | Tap the last element that matches the _expression_. Scrolling occurs within **withScroll** function.  |
-| tap(_x, y_)                      | Tap the coordinates (x, y).                                                                           |
-| tapWithScrollDown(_expression_)  | Tap the first element that matches the _expression_ with scrolling down.                              |
-| tapWithScrollUp(_expression_)    | Tap the first element that matches the _expression_ with scrolling up.                                |
-| tapWithScrollRight(_expression_) | Tap the first element that matches the _expression_ with scrolling right.                             |
-| tapWithScrollLeft(_expression_)  | Tap the first element that matches the _expression_ with scrolling left.                              |
-| tapWithoutScroll(_expression_)   | Tap the first element that matches the _expression_ **without** scrolling.                            |
-| tapCenterOfScreen                | Tap the center of the screen.                                                                         |
-| tapCenterOf(_expression_)        | Tap the center of the element.                                                                        |
-| tapItemUnder(_expression_)       | Tap the element below of the element of _expression_.                                                 |
-| tapItemOver(_expression_)        | Tap the element above of the element of _expression_.                                                 |
-| tapItemRightOf(_expression_)     | Tap the element right of the element of _expression_.                                                 |
-| tapItemLeftOf(_expression_)      | Tap the element left of the element of _expression_.                                                  |
-| tapTextUnder(_expression_)       | Tap the text element below of the element of _expression_.                                            |
-| tapTextOver(_expression_)        | Tap the text element above of the element of _expression_.                                            |
+| function                         | description                                                                                                                |
+|:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
+| tap(_expression_)                | Tap the first element that matches the _expression_. Scrolling occurs within **withScroll** function.                      |
+| tapLast(_expression_)            | Tap the last element that matches the _expression_. Scrolling occurs within **withScroll** function.                       |
+| tap(_x, y_)                      | Tap the coordinates (x, y).                                                                                                |
+| tapWithScrollDown(_expression_)  | Tap the first element that matches the _expression_ with scrolling down.                                                   |
+| tapWithScrollUp(_expression_)    | Tap the first element that matches the _expression_ with scrolling up.                                                     |
+| tapWithScrollRight(_expression_) | Tap the first element that matches the _expression_ with scrolling right.                                                  |
+| tapWithScrollLeft(_expression_)  | Tap the first element that matches the _expression_ with scrolling left.                                                   |
+| tapWithoutScroll(_expression_)   | Tap the first element that matches the _expression_ **without** scrolling.                                                 |
+| tapCenterOfScreen                | Tap the center of the screen.                                                                                              |
+| tapCenterOf(_expression_)        | Tap the center of the element.                                                                                             |
+| tapItemUnder(_expression_)       | Tap the element below of the element of _expression_.                                                                      |
+| tapItemOver(_expression_)        | Tap the element above of the element of _expression_.                                                                      |
+| tapItemRightOf(_expression_)     | Tap the element right of the element of _expression_.                                                                      |
+| tapItemLeftOf(_expression_)      | Tap the element left of the element of _expression_.                                                                       |
+| tapTextUnder(_expression_)       | Tap the text element below of the element of _expression_.                                                                 |
+| tapTextOver(_expression_)        | Tap the text element above of the element of _expression_.                                                                 |
+| tapOffset(offsetX, offsetY)      | Tap the offset (in pixels) from the edge of the element.                                                                   |
+| tapOffsetX(offsetX)              | Tap the offset (in pixels) from the edge of the element. Offset from right if offsetX > 0; Offset from left if offsetX < 0 |
+| tapOffsetY(offsetY)              | Tap the offset (in pixels) from the edge of the element. Offset from bottom if offsetY > 0; Offset from top if offsetY < 0 |
 
 ## Key arguments
 

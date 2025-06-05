@@ -356,6 +356,7 @@ fun VisionElement.existOnLine(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -385,6 +386,7 @@ fun VisionElement.existOnLine(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -408,6 +410,7 @@ fun VisionElement.existOnColumn(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -437,6 +440,7 @@ fun VisionElement.existOnColumn(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -460,6 +464,7 @@ fun VisionElement.existOnRight(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -489,6 +494,7 @@ fun VisionElement.existOnRight(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -512,6 +518,7 @@ fun VisionElement.existOnLeft(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -541,6 +548,7 @@ fun VisionElement.existOnLeft(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -564,6 +572,7 @@ fun VisionElement.existOnAbove(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -593,6 +602,7 @@ fun VisionElement.existOnAbove(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -616,6 +626,7 @@ fun VisionElement.existOnBelow(
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
@@ -645,6 +656,7 @@ fun VisionElement.existOnBelow(
                 autoImageFilter = autoImageFilter,
                 last = last,
                 waitSeconds = waitSeconds,
+                allowScroll = allowScroll,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -1059,11 +1071,12 @@ fun VisionElement.aboveTextIs(
     joinText: Boolean = false,
     digitOnly: Boolean = false,
     message: String? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
     val command = "aboveTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
-    val v = aboveText()
+    val v = aboveText(swipeToSafePosition = swipeToSafePosition)
     v.textIsCore(
         command = command,
         expected = expected,
@@ -1082,11 +1095,12 @@ fun VisionElement.belowTextIs(
     joinText: Boolean = false,
     digitOnly: Boolean = false,
     message: String? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
 
     val command = "belowTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
-    val v = belowText()
+    val v = belowText(swipeToSafePosition = swipeToSafePosition)
     v.textIsCore(
         command = command,
         expected = expected,

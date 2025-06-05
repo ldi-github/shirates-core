@@ -178,13 +178,13 @@ fun VisionDrive.onCellOf(
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
-    allowScroll: Boolean = true,
-    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: true,
+    allowScroll: Boolean? = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     throwsException: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
-    val baseElement = detect(
+    val v = detect(
         expression = expression,
         language = language,
         looseMatch = looseMatch,
@@ -195,8 +195,56 @@ fun VisionDrive.onCellOf(
         swipeToSafePosition = swipeToSafePosition,
         throwsException = throwsException,
     )
+    val cell = v.cell()
+    cell.onThisElementRegion {
+        func?.invoke(cell)
+    }
+    return lastElement
+}
 
+/**
+ * onCellOfWithScrollDown
+ */
+fun VisionDrive.onCellOfWithScrollDown(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
+    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
+    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    autoImageFilter: Boolean = false,
+    swipeToCenter: Boolean = true,
+    throwsException: Boolean = true,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val v = detectWithScrollDown(
+        expression = expression,
+        language = language,
+        looseMatch = looseMatch,
+        mergeBoundingBox = mergeBoundingBox,
+        lineSpacingRatio = lineSpacingRatio,
+        autoImageFilter = autoImageFilter,
+        throwsException = throwsException,
+    )
+    val baseElement =
+        if (swipeToCenter) v.swipeToCenter()
+        else v
     val cell = baseElement.cell()
+    cell.onThisElementRegion {
+        func?.invoke(cell)
+    }
+    return lastElement
+}
+
+/**
+ * onCell
+ */
+fun VisionDrive.onCell(
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val thisElement = getThisOrIt()
+    val cell = thisElement.cell()
     cell.onThisElementRegion {
         func?.invoke(cell)
     }

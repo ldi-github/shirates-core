@@ -9,6 +9,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.android.AndroidDeviceUtility
+import shirates.core.utility.android.AndroidDeviceUtility.escapeAvdName
 import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceUtilityTest : UnitTest() {
@@ -30,7 +31,7 @@ class AndroidDeviceUtilityTest : UnitTest() {
             // Act
             val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 8(Android 14)")
             // Assert
-            assertThat(actual).isEqualTo("Pixel_8_Android_14_")
+            assertThat(actual).isEqualTo("Pixel_8_Android_14")
         }
         run {
             // Act
@@ -84,7 +85,8 @@ class AndroidDeviceUtilityTest : UnitTest() {
         // Act
         val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByAvdName(avdName = avd1)
         // Assert
-        assertThat(deviceInfo?.avdName).isEqualTo(avd1)
+        val expected = avd1.escapeAvdName(trim = true)
+        assertThat(deviceInfo?.avdName).isEqualTo(expected)
     }
 
     @Test
@@ -97,7 +99,8 @@ class AndroidDeviceUtilityTest : UnitTest() {
         val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByUdid(udid = udid)!!
         // Assert
         assertThat(deviceInfo.udid).isEqualTo(udid)
-        assertThat(deviceInfo.avdName).isEqualTo(avd1)
+        val expected = avd1.escapeAvdName(trim = true)
+        assertThat(deviceInfo.avdName).isEqualTo(expected)
     }
 
     @Test
@@ -132,7 +135,8 @@ class AndroidDeviceUtilityTest : UnitTest() {
             // Act
             val deviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(TestProfile(profileName = avd1))
             // Assert
-            assertThat(deviceInfo.avdName).isEqualTo(avd1)
+            val expected = avd1.escapeAvdName(trim = true)
+            assertThat(deviceInfo.avdName).isEqualTo(expected)
         }
         /**
          * Get device
@@ -141,7 +145,8 @@ class AndroidDeviceUtilityTest : UnitTest() {
             // Act
             val deviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(TestProfile(profileName = avd1))
             // Assert
-            assertThat(deviceInfo.avdName).isEqualTo(avd1)
+            val expected = avd1.escapeAvdName(trim = true)
+            assertThat(deviceInfo.avdName).isEqualTo(expected)
         }
     }
 

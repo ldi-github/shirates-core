@@ -1790,6 +1790,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionOCRCustomWordsFile() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRCustomWordsFile).isEqualTo(Const.VISION_OCR_CUSTOM_WORDS_FILE)
+        }
+        run {
+            // Arrange
+            val value = "vision/text/customWords2.tsv"
+            PropertiesManager.setPropertyValue("visionOCRCustomWordsFile", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRCustomWordsFile).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionDirectory() {
 
         run {
@@ -2074,6 +2092,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("visionLineSpacingRatio", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionLineSpacingRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionRetryWithAutoImageFilter() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionRetryWithAutoImageFilter).isEqualTo(Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER.not()
+            PropertiesManager.setPropertyValue("visionRetryWithAutoImageFilter", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionRetryWithAutoImageFilter).isEqualTo(value)
         }
     }
 

@@ -118,7 +118,7 @@ fun VisionElement.onBelowScreen(
  */
 fun VisionElement.belowRegionElement(
     height: Int? = null,
-    columnWidth: Int?,
+    columnWidth: Int? = null,
     horizontalOffset: Int = 0,
 ): VisionElement {
 

@@ -28,11 +28,12 @@ fun VisionDrive.tap(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
 ): VisionElement {
@@ -67,7 +68,7 @@ fun VisionDrive.tap(
             lineSpacingRatio = lineSpacingRatio,
             autoImageFilter = autoImageFilter,
             last = last,
-            allowScroll = null,
+            allowScroll = allowScroll,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = true,
@@ -102,10 +103,11 @@ fun VisionDrive.tapLast(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     holdSeconds: Double = testContext.tapHoldSeconds,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
 ): VisionElement {
@@ -120,6 +122,7 @@ fun VisionDrive.tapLast(
         last = true,
         holdSeconds = holdSeconds,
         waitSeconds = waitSeconds,
+        allowScroll = allowScroll,
         swipeToSafePosition = swipeToSafePosition,
         waitForElementFocused = waitForElementFocused,
         directAccess = directAccess,
@@ -251,7 +254,8 @@ fun VisionDrive.tap(
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
 
         if (PropertiesManager.enableTapElementImageLog) {
-            val fileName = "${TestLog.nextLineNo}_tap_${tappedElement.subject}_${tappedElement.bounds}"
+            val subject = tappedElement.subject.take(100)
+            val fileName = "${TestLog.nextLineNo}_tap_${subject}_${tappedElement.bounds}"
             tappedElement.saveImage(fileName = fileName)
         }
         val sel = v.selector
@@ -335,6 +339,7 @@ fun VisionDrive.tapImage(
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -357,6 +362,7 @@ fun VisionDrive.tapImage(
             binaryThreshold = binaryThreshold,
             aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
+            allowScroll = allowScroll,
             throwsException = throwsException,
         )
 
@@ -384,7 +390,7 @@ fun VisionDrive.tapWithScrollDown(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -429,7 +435,7 @@ fun VisionDrive.tapWithScrollUp(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -602,7 +608,7 @@ fun VisionDrive.tapCenterOf(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
@@ -641,13 +647,13 @@ fun VisionDrive.tapItemUnder(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -701,10 +707,10 @@ fun VisionDrive.tapTextUnder(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
-    allowScroll: Boolean? = null,
+    autoImageFilter: Boolean = true,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -754,13 +760,13 @@ fun VisionDrive.tapItemOver(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -813,11 +819,11 @@ fun VisionDrive.tapTextOver(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -867,13 +873,13 @@ fun VisionDrive.tapItemRightOf(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -926,13 +932,13 @@ fun VisionDrive.tapItemLeftOf(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
     lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    autoImageFilter: Boolean = false,
+    autoImageFilter: Boolean = true,
     last: Boolean = false,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
-    allowScroll: Boolean? = null,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)

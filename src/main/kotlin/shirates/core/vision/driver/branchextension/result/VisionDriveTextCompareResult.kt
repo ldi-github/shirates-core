@@ -50,6 +50,26 @@ class VisionDriveTextCompareResult(val text: String?) : CompareResult(), VisionD
     }
 
     /**
+     * ifStringIsNot
+     */
+    fun ifStringIsNot(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): VisionDriveTextCompareResult {
+
+        val command = "ifStringIsNot"
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
+
+        val matched = (v != t)
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
+    }
+
+    /**
      * ifStartsWith
      */
     fun ifStartsWith(

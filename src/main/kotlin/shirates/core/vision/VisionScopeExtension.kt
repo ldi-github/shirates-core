@@ -3,6 +3,7 @@ package shirates.core.vision
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.syncCache
 import shirates.core.vision.driver.VisionDriveObject
+import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -52,6 +53,7 @@ fun VisionDrive.classicScope(
     useCache: Boolean = true,
     func: (TestDrive) -> Unit
 ): VisionElement {
+    vision.invalidateScreen()
     classic.syncCache(force = true)
     val originalEnableCache = testContext.enableCache
     val originalIsVisionTest = TestMode.isVisionTest

@@ -12,7 +12,7 @@ import shirates.core.testcode.CodeExecutionContext
  */
 fun TestDrive.select(
     expression: String,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -152,6 +152,7 @@ fun TestDrive.selectWithScrollDown(
         ) {
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException
@@ -202,6 +203,7 @@ fun TestDrive.selectWithScrollUp(
         ) {
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException
@@ -252,6 +254,7 @@ fun TestDrive.selectWithScrollRight(
         ) {
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException
@@ -302,6 +305,7 @@ fun TestDrive.selectWithScrollLeft(
         ) {
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
+                allowScroll = true,
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException
@@ -355,7 +359,7 @@ fun TestDrive.selectInScanResults(
 
 internal fun TestDrive.canSelectCore(
     selector: Selector,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
     waitSeconds: Double,
     safeElementOnly: Boolean,
     frame: Bounds? = null
@@ -380,7 +384,7 @@ internal fun TestDrive.canSelectCore(
 fun TestDrive.canSelect(
     expression: String,
     screenName: String = TestDriver.currentScreen,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     waitSeconds: Double = 0.0,
     safeElementOnly: Boolean = false,
 ): Boolean {
@@ -457,6 +461,7 @@ fun TestDrive.canSelectWithScrollDown(
         ) {
             found = canSelectCore(
                 selector = sel,
+                allowScroll = true,
                 waitSeconds = 0.0,
                 safeElementOnly = true
             )
@@ -500,6 +505,7 @@ fun TestDrive.canSelectWithScrollUp(
         ) {
             found = canSelectCore(
                 selector = sel,
+                allowScroll = true,
                 waitSeconds = 0.0,
                 safeElementOnly = true
             )
@@ -543,6 +549,7 @@ fun TestDrive.canSelectWithScrollRight(
         ) {
             found = canSelectCore(
                 selector = sel,
+                allowScroll = true,
                 waitSeconds = 0.0,
                 safeElementOnly = true
             )
@@ -586,6 +593,7 @@ fun TestDrive.canSelectWithScrollLeft(
         ) {
             found = canSelectCore(
                 selector = sel,
+                allowScroll = true,
                 waitSeconds = 0.0,
                 safeElementOnly = true
             )
@@ -654,7 +662,7 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
-    allowScroll: Boolean = true,
+    allowScroll: Boolean?,
     frame: Bounds?,
     safeElementOnly: Boolean,
     log: Boolean = false
@@ -689,6 +697,7 @@ internal fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAll(
     vararg expressions: String,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     frame: Bounds? = null,
     safeElementOnly: Boolean = true,
     log: Boolean = false
@@ -703,6 +712,7 @@ fun TestDrive.canSelectAll(
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
         foundAll = canSelectAll(
             selectors = selectors,
+            allowScroll = allowScroll,
             frame = frame,
             safeElementOnly = safeElementOnly
         )

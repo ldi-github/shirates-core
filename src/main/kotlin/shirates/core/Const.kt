@@ -140,8 +140,8 @@ object Const {
     const val SWIPE_INTERVAL_SECONDS = 0.1
     const val FLICK_INTERVAL_SECONDS = 0.3
     const val SWIPE_MARGIN_RATIO = 0.0
-    const val SCROLL_VERTICAL_START_MARGIN_RATIO = 0.15
-    const val SCROLL_VERTICAL_END_MARGIN_RATIO = 0.1
+    const val SCROLL_VERTICAL_START_MARGIN_RATIO = 0.2
+    const val SCROLL_VERTICAL_END_MARGIN_RATIO = 0.2
     const val SCROLL_HORIZONTAL_START_MARGIN_RATIO = 0.2
     const val SCROLL_HORIZONTAL_END_MARGIN_RATIO = 0.1
     const val SCROLL_TO_EDGE_BOOST = 1
@@ -158,6 +158,7 @@ object Const {
 
     // Vision
     const val VISION_OCR_LANGUAGE = ""
+    const val VISION_OCR_CUSTOM_WORDS_FILE = ""
     const val VISION_DIRECTORY = "vision"
     const val VISION_BUILD_DIRECTORY = "build"
     const val VISION_ENABLE_LEARNING_ON_STARTUP = true
@@ -174,6 +175,7 @@ object Const {
     const val VISION_LOOSE_MATCH = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
+    const val VISION_RETRY_WITH_AUTO_IMAGE_FILTER = true
 
     /**
      * internal
