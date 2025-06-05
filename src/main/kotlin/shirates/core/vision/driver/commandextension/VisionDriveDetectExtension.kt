@@ -282,8 +282,8 @@ private fun VisionDrive.detectCoreCore(
 
     doUntilTrue(
         waitSeconds =
-            if (allowScroll == false) waitSeconds
-            else Math.min(testContext.waitSecondsForAnimationComplete, waitSeconds),
+            if (allowScroll == true) Math.min(testContext.waitSecondsForAnimationComplete, waitSeconds)
+            else waitSeconds,
         intervalSeconds = 1.0,
         retryOnError = false,
         throwOnFinally = false,
