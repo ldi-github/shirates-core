@@ -503,43 +503,43 @@ internal fun VisionDrive.doUntilScrollStopCore(
             }
         }
 
-//        var oldScreenshotImage: BufferedImage?
-        var oldScrollVisionElement: VisionElement
+        if (CodeExecutionContext.scrollVisionElement != null) {
+            val ms = Measure("doUntilScrollStop-loop")
+            try {
+                var oldScrollVisionElement: VisionElement
+                for (i in 1..maxLoopCount) {
 
-        val ms = Measure("doUntilScrollStop-loop")
-        try {
-            for (i in 1..maxLoopCount) {
+                    oldScrollVisionElement = CodeExecutionContext.scrollVisionElement!!
 
-                oldScrollVisionElement =
-                    CodeExecutionContext.scrollVisionElement?.rect?.toVisionElement() ?: VisionElement(capture = true)
+                    scroll()
+                    screenshot()
+                    CodeExecutionContext.workingRegionElement =
+                        CodeExecutionContext.workingRegionElement.newVisionElement()
 
-                scroll()
-                screenshot()
-                CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
+                    val newScrollVisionElement = oldScrollVisionElement.newVisionElement()
+                    val endOfScroll = newScrollVisionElement.isScrollStopped(oldScrollVisionElement)
+                    TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
+                    if (endOfScroll) {
+                        CodeExecutionContext.lastScreenshotImage?.saveImage(
+                            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_at_end_of_scroll.png").toString()
+                        )
+                        break
+                    }
 
-                val newScrollVisionElement = oldScrollVisionElement.newVisionElement()
-                val endOfScroll = newScrollVisionElement.isScrollStopped(oldScrollVisionElement)
-                TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
-                if (endOfScroll) {
-                    CodeExecutionContext.lastScreenshotImage?.saveImage(
-                        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_at_end_of_scroll.png").toString()
-                    )
-                    break
-                }
+                    if (actionFunc != null) {
+                        val result = actionFunc()
+                        if (result) {
+                            return lastElement
+                        }
+                    }
 
-                if (actionFunc != null) {
-                    val result = actionFunc()
-                    if (result) {
-                        return lastElement
+                    if (i < maxLoopCount && scrollIntervalSeconds > 0.0) {
+                        Thread.sleep((scrollIntervalSeconds * 1000).toLong())
                     }
                 }
-
-                if (i < maxLoopCount && scrollIntervalSeconds > 0.0) {
-                    Thread.sleep((scrollIntervalSeconds * 1000).toLong())
-                }
+            } finally {
+                ms.end()
             }
-        } finally {
-            ms.end()
         }
     }
 
