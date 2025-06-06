@@ -2060,6 +2060,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionRemoveVoicingMarks() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionRemoveVoicingMarks).isEqualTo(Const.VISION_REMOVE_VOICING_MARKS)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_REMOVE_VOICING_MARKS.not()
+            PropertiesManager.setPropertyValue("visionRemoveVoicingMarks", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionRemoveVoicingMarks).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionMergeBoundingBox() {
 
         run {

@@ -2,6 +2,7 @@ package shirates.core.unittest.utility.string
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
@@ -56,6 +57,25 @@ class StringExtensionTest : UnitTest() {
             // Act
             val actual = "〜～｜二−".forVisionComparison()
             assertThat(actual).isEqualTo("~~iﾆ-")
+        }
+        // Arrange
+        PropertiesManager.setPropertyValue("visionRemoveVoicingMarks", "true")
+        run {
+            // Act
+            val actual = "がぎぐげご".forVisionComparison()
+            assertThat(actual).isEqualTo("かきくけこ")
+        }
+        run {
+            // Act
+            val actual = "ｸｰﾎﾟﾝ".forVisionComparison()
+            assertThat(actual).isEqualTo("ｸｰﾎﾝ")
+        }
+        // Arrange
+        PropertiesManager.setPropertyValue("visionRemoveVoicingMarks", "false")
+        run {
+            // Act
+            val actual = "がぎぐげご".forVisionComparison()
+            assertThat(actual).isEqualTo("がぎぐげご")
         }
     }
 

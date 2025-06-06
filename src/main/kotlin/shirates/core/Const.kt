@@ -173,6 +173,7 @@ object Const {
     const val VISION_TEXT_INDEX_TRIM_CHARS_FOR_JA = " '・■▪️◾️◎、,-」"
     const val VISION_CLASSIFIER_SHARD_NODE_COUNT = "DefaultClassifier=1:ScreenClassifier=1"
     const val VISION_LOOSE_MATCH = true
+    const val VISION_REMOVE_VOICING_MARKS = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
     const val VISION_RETRY_WITH_AUTO_IMAGE_FILTER = true

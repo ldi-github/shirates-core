@@ -77,6 +77,16 @@ internal fun String?.forVisionComparisonDefault(ignoreCase: Boolean, ignoreFullW
         compressWhitespaceCharacters = true,
         trimString = true,
     )
+    if (PropertiesManager.visionRemoveVoicingMarks) {
+        var t = s.normalize(Normalizer.Form.NFD)
+        t = t.replace("\u3099", "")     // COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
+        t = t.replace("\u309A", "")      // COMBINING KATAKANA-HIRAGANA SEMIVOICED SOUND MARK
+        t = t.replace("\u309B", "")      // KATAKANA-HIRAGANA VOICED SOUND MARK
+        t = t.replace("\u309C", "")      // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+        t = t.replace("\uFF9E", "")
+        t = t.replace("\uFF9F", "")
+        s = t
+    }
     s = s.normalize(Normalizer.Form.NFC)
     return s
 }

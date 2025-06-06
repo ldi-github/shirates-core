@@ -1152,6 +1152,16 @@ object PropertiesManager {
         }
 
     /**
+     * visionRemoveVoicingMarks
+     */
+    val visionRemoveVoicingMarks: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionRemoveVoicingMarks")
+                ?: return Const.VISION_REMOVE_VOICING_MARKS
+            return value == "true"
+        }
+
+    /**
      * visionMergeBoundingBox
      */
     val visionMergeBoundingBox: Boolean
