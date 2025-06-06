@@ -237,6 +237,48 @@ internal fun VisionDrive.detectCore(
     return v
 }
 
+private fun detectInVisionContext(
+    selector: Selector,
+    language: String,
+    looseMatch: Boolean,
+    mergeBoundingBox: Boolean,
+    lineSpacingRatio: Double,
+    last: Boolean,
+    autoImageFilter: Boolean,
+): VisionElement {
+
+    var v = VisionElement.emptyElement
+
+    fun action() {
+        v = vision.rootElement.visionContext.detect(
+            selector = selector,
+            language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            last = last,
+        )
+    }
+    action()
+    if (v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)) {
+
+        var imageFilterContext = CodeExecutionContext.visionImageFilterContext
+        if (imageFilterContext.hasFilter.not()) {
+            imageFilterContext = VisionImageFilterContext().enhanceFaintAreas()
+        }
+        val filteredImage =
+            imageFilterContext.processFilter(bufferedImage = CodeExecutionContext.lastScreenshotImage!!)
+        val fileName = "${TestLog.currentLineNo}_filtered.png"
+        val filteredFile = TestLog.directoryForLog.resolve(fileName).toString()
+        filteredImage.saveImage(filteredFile)
+        val filteredVisionContext = VisionContext(capture = true)
+        filteredVisionContext.screenshotImage = filteredImage
+        filteredVisionContext.screenshotFile = filteredFile
+        vision.rootElement.visionContext = filteredVisionContext
+    }
+    return v
+}
+
 private fun VisionDrive.detectCoreCore(
     selector: Selector,
     language: String,
@@ -275,9 +317,6 @@ private fun VisionDrive.detectCoreCore(
         return v
     }
 
-    /**
-     * Try to detect in the current context
-     */
     var v = VisionElement.emptyElement
 
     doUntilTrue(
@@ -291,36 +330,15 @@ private fun VisionDrive.detectCoreCore(
             screenshot(force = true)
         }
     ) {
-        fun action() {
-            v = rootElement.visionContext.detect(
-                selector = selector,
-                language = language,
-                looseMatch = looseMatch,
-                mergeBoundingBox = mergeBoundingBox,
-                lineSpacingRatio = lineSpacingRatio,
-                last = last,
-            )
-        }
-
-        action()
-
-        if (v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)) {
-
-            var imageFilterContext = CodeExecutionContext.visionImageFilterContext
-            if (imageFilterContext.hasFilter.not()) {
-                imageFilterContext = VisionImageFilterContext().enhanceFaintAreas()
-            }
-            val filteredImage =
-                imageFilterContext.processFilter(bufferedImage = CodeExecutionContext.lastScreenshotImage!!)
-            val fileName = "${TestLog.currentLineNo}_filtered.png"
-            val filteredFile = TestLog.directoryForLog.resolve(fileName).toString()
-            filteredImage.saveImage(filteredFile)
-            val filteredVisionContext = VisionContext(capture = true)
-            filteredVisionContext.screenshotImage = filteredImage
-            filteredVisionContext.screenshotFile = filteredFile
-            rootElement.visionContext = filteredVisionContext
-            action()
-        }
+        v = detectInVisionContext(
+            selector = selector,
+            language = language,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+            last = last,
+            autoImageFilter = autoImageFilter,
+        )
         v.isFound
     }
     if (v.isFound) {
@@ -384,18 +402,14 @@ internal fun VisionDrive.detectWithScrollCore(
     var v = VisionElement.emptyElement
 
     val actionFunc = {
-        v = detectCore(
+        v = detectInVisionContext(
             selector = selector,
             language = language,
             looseMatch = looseMatch,
             mergeBoundingBox = mergeBoundingBox,
             lineSpacingRatio = lineSpacingRatio,
-            autoImageFilter = autoImageFilter,
             last = last,
-            allowScroll = false,
-            waitSeconds = 0.0,
-            swipeToSafePosition = swipeToSafePosition,
-            throwsException = false,
+            autoImageFilter = autoImageFilter,
         )
         val stopScroll = v.isFound
         stopScroll
@@ -403,25 +417,24 @@ internal fun VisionDrive.detectWithScrollCore(
     actionFunc()
 
     if (v.isFound.not() && CodeExecutionContext.isScrolling.not()) {
-        CodeExecutionContext.isScrolling = true
-        try {
-            /**
-             * detect with scroll
-             */
-            doUntilScrollStop(
-                maxLoopCount = scrollMaxCount,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollIntervalSeconds = scrollIntervalSeconds,
-                startMarginRatio = startMarginRatio,
-                endMarginRatio = endMarginRatio,
-                repeat = 1,
-                actionFunc = actionFunc
-            )
-        } finally {
-            CodeExecutionContext.isScrolling = false
-        }
+        /**
+         * detect with scroll
+         */
+        doUntilScrollStop(
+            maxLoopCount = scrollMaxCount,
+            direction = direction,
+            scrollDurationSeconds = scrollDurationSeconds,
+            scrollIntervalSeconds = scrollIntervalSeconds,
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
+            repeat = 1,
+            actionFunc = actionFunc
+        )
     }
+    if (swipeToSafePosition) {
+        v.swipeToSafePosition()
+    }
+
     lastElement = v
     if (v.isEmpty) {
         v.lastError =

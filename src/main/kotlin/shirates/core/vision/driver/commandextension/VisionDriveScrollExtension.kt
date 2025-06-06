@@ -496,50 +496,38 @@ internal fun VisionDrive.doUntilScrollStopCore(
             hideKeyboard()
         }
 
-        if (actionFunc != null) {
-            val result = actionFunc()
-            if (result) {
-                return lastElement
-            }
-        }
+        val ms = Measure("doUntilScrollStop-loop")
+        try {
+            val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: rootElement
+            for (i in 1..maxLoopCount) {
 
-        if (CodeExecutionContext.scrollVisionElement != null) {
-            val ms = Measure("doUntilScrollStop-loop")
-            try {
-                var oldScrollVisionElement: VisionElement
-                for (i in 1..maxLoopCount) {
+                val beforeVisionElement = scrollVisionElement.newVisionElement()
+                scroll()
+                screenshot()
+                CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
+                val afterVisionElement = scrollVisionElement.newVisionElement()
+                val endOfScroll = afterVisionElement.isScrollStopped(beforeVisionElement)
+                TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
+                if (endOfScroll) {
+                    CodeExecutionContext.lastScreenshotImage?.saveImage(
+                        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_at_end_of_scroll.png").toString()
+                    )
+                    break
+                }
 
-                    oldScrollVisionElement = CodeExecutionContext.scrollVisionElement!!
-
-                    scroll()
-                    screenshot()
-                    CodeExecutionContext.workingRegionElement =
-                        CodeExecutionContext.workingRegionElement.newVisionElement()
-
-                    val newScrollVisionElement = oldScrollVisionElement.newVisionElement()
-                    val endOfScroll = newScrollVisionElement.isScrollStopped(oldScrollVisionElement)
-                    TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
-                    if (endOfScroll) {
-                        CodeExecutionContext.lastScreenshotImage?.saveImage(
-                            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_at_end_of_scroll.png").toString()
-                        )
-                        break
-                    }
-
-                    if (actionFunc != null) {
-                        val result = actionFunc()
-                        if (result) {
-                            return lastElement
-                        }
-                    }
-
-                    if (i < maxLoopCount && scrollIntervalSeconds > 0.0) {
-                        Thread.sleep((scrollIntervalSeconds * 1000).toLong())
+                if (actionFunc != null) {
+                    val result = actionFunc()
+                    if (result) {
+                        return lastElement
                     }
                 }
-            } finally {
-                ms.end()
+
+                if (i < maxLoopCount && scrollIntervalSeconds > 0.0) {
+                    Thread.sleep((scrollIntervalSeconds * 1000).toLong())
+                }
             }
+        } finally {
+            ms.end()
         }
     }
 
