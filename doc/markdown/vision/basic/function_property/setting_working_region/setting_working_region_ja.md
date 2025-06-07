@@ -147,6 +147,55 @@
 164	[00:00:33]	2025/02/15 00:10:09.328	{measureTime-3}	0	-	[info]	+0	!	()	onBottomRegion:    0.453 sec
 ```
 
+<br>
+<hr>
+
+### SettingWorkingRegion2.kt
+
+(`src/test/kotlin/tutorial/basic/SettingWorkingRegion2.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun cellOf_onCellOf() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[アラーム画面]")
+                }.expectation {
+                    it.detect("8:30")
+                        .cell()
+                        .onThisElementRegion {
+                            it.exist("月、火、水、木、金")
+                            it.dontExist("日、土")
+                        }
+                    it.detect("9:00")
+                        .cell()
+                        .onThisElementRegion {
+                            it.dontExist("月、火、水、木、金")
+                            it.exist("日、土")
+                        }
+                }
+            }
+            case(2) {
+                expectation {
+                    it.onCellOf("8:30") {
+                        it.exist("月、火、水、木、金")
+                        it.dontExist("日、土")
+                    }
+                    it.onCellOf("9:00") {
+                        it.dontExist("月、火、水、木、金")
+                        it.exist("日、土")
+                    }
+                }
+            }
+        }
+    }
+```
+
+![](_images/cell_of_ja.png)
+
 ### Link
 
 - [index](../../../../index_ja.md)

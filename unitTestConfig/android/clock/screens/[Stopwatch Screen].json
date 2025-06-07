@@ -1,0 +1,16 @@
+{
+  "key": "[Stopwatch Screen]",
+
+  "include": [
+    "[Clock(shared)]"
+  ],
+
+  "identity": "[Title]",
+
+  "selectors": {
+
+    "[Title]": "Stopwatch&&#action_bar_title",
+    "[stopwatch_circle]": "#stopwatch_circle"
+  }
+
+}

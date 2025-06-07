@@ -21,6 +21,7 @@
   "screens": {
     "import": [
       "testConfig/android/calculator/screens",
+      "testConfig/android/clock/screens",
       "testConfig/android/misc/screens",
       "testConfig/android/playStore/screen"
     ]

@@ -1,0 +1,32 @@
+{
+  "key": "[Clock(shared)]",
+
+  "selectors": {
+    "[Alarm]": "Alarm&&!#action_bar_title",
+    "[Alarm Tab]": "@Alarm",
+    "[Alarm Image]": "Alarm.png",
+    "[Alarm Image(selected)]": "Alarm(selected).png",
+
+    "[Clock]": "Clock&&!#action_bar_title",
+    "[Clock Tab]": "@Clock",
+    "[Clock Image]": "Clock.png",
+    "[Clock Image(selected)]": "Clock(selected).png",
+
+    "[Timer]": "Timer&&!#action_bar_title",
+    "[Timer Tab]": "@Timer",
+    "[Timer Image]": "Timer.png",
+    "[Timer Image(selected)]": "Timer(selected).png",
+
+    "[Stopwatch]": "Stopwatch&&!#action_bar_title",
+    "[Stopwatch Tab]": "@Stopwatch",
+    "[Stopwatch Image]": "Stopwatch.png",
+    "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
+
+    "[Bedtime]": "Bedtime&&!#action_bar_title",
+    "[Bedtime Tab]": "@Bedtime",
+    "[Bedtime Image]": "Bedtime.png",
+    "[Bedtime Image(selected)]": "Bedtime(selected).png"
+
+  }
+
+}
