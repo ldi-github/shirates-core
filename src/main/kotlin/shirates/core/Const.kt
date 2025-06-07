@@ -176,7 +176,9 @@ object Const {
     const val VISION_REMOVE_VOICING_MARKS = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
-    const val VISION_RETRY_WITH_AUTO_IMAGE_FILTER = true
+    const val VISION_SAFE_AREA_TOP_RATIO = 0.2
+    const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
+    const val VISION_SAFE_POSITION_VERTICAL = 0.4
 
     /**
      * internal

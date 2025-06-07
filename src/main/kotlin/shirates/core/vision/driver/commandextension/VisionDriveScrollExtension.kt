@@ -496,6 +496,13 @@ internal fun VisionDrive.doUntilScrollStopCore(
             hideKeyboard()
         }
 
+        if (actionFunc != null) {
+            val result = actionFunc()
+            if (result) {
+                return lastElement
+            }
+        }
+
         val ms = Measure("doUntilScrollStop-loop")
         try {
             val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: rootElement

@@ -224,9 +224,8 @@ internal fun VisionDrive.detectCore(
         action()
         if (v.isFound && swipeToSafePosition && allowScroll != false) {
             silent {
-                v.swipeToSafePosition()
+                v.swipeToSafePosition(action = action)
             }
-            action()
         }
     }
     if (TestMode.isNoLoadRun) {
@@ -275,6 +274,7 @@ private fun detectInVisionContext(
         filteredVisionContext.screenshotImage = filteredImage
         filteredVisionContext.screenshotFile = filteredFile
         vision.rootElement.visionContext = filteredVisionContext
+        action()
     }
     return v
 }
@@ -342,7 +342,9 @@ private fun VisionDrive.detectCoreCore(
         v.isFound
     }
     if (v.isFound) {
-        return v
+        if (swipeToSafePosition.not() || swipeToSafePosition && v.isSafePosition()) {
+            return v
+        }
     }
 
     if (allowScroll == true && CodeExecutionContext.isScrolling.not()) {
@@ -399,6 +401,8 @@ internal fun VisionDrive.detectWithScrollCore(
     throwsException: Boolean,
 ): VisionElement {
 
+    hideKeyboard()
+
     var v = VisionElement.emptyElement
 
     val actionFunc = {
@@ -416,6 +420,12 @@ internal fun VisionDrive.detectWithScrollCore(
     }
     actionFunc()
 
+    if (v.isFound && swipeToSafePosition) {
+        v.swipeToSafePosition(direction = direction, action = {
+            actionFunc()
+        })
+    }
+
     if (v.isFound.not() && CodeExecutionContext.isScrolling.not()) {
         /**
          * detect with scroll
@@ -430,9 +440,11 @@ internal fun VisionDrive.detectWithScrollCore(
             repeat = 1,
             actionFunc = actionFunc
         )
-    }
-    if (swipeToSafePosition) {
-        v.swipeToSafePosition()
+        if (v.isFound && swipeToSafePosition) {
+            v.swipeToSafePosition(action = {
+                actionFunc()
+            })
+        }
     }
 
     lastElement = v
