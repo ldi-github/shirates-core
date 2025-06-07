@@ -1,0 +1,19 @@
+{
+  "key": "[Clock Screen]",
+
+  "include": [
+    "[Clock(shared)]"
+  ],
+
+  "identity": "[Title]",
+
+  "selectors": {
+    "[Toolbar]": "#toolbar",
+    "[Title]": "Clock&&#action_bar_title",
+    "[More options]": "@More options",
+
+    "[digital_clock]": "#digital_clock"
+
+  }
+
+}

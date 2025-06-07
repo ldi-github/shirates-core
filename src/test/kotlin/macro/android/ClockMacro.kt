@@ -7,6 +7,7 @@ import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.vision.driver.commandextension.isScreen
 import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.driver.commandextension.tapLast
 import shirates.core.vision.driver.isApp
 import shirates.core.vision.visionScope
@@ -48,13 +49,25 @@ object ClockMacro : TestDrive {
     @Macro("[Timer Screen]")
     fun timerScreen() {
 
-        if (isApp("[Clock]").not()) {
-            restartClock()
+        if (TestMode.isClassicTest) {
+            if (it.isApp("[Clock]").not()) {
+                restartClock()
+            }
+            if (it.isScreen("[Timer Screen]").not()) {
+                it.tap("[Timer Tab]")
+            }
+            it.screenIs("[Timer Screen]")
+        } else {
+            visionScope {
+                if (it.isApp("[Clock]").not()) {
+                    restartClock()
+                }
+                if (it.isScreen("[Timer Screen]").not()) {
+                    it.tap("[Timer Tab]")
+                }
+                it.screenIs("[Timer Screen]")
+            }
         }
-        if (isScreen("[Timer Screen]").not()) {
-            it.tap("[Timer Tab]")
-        }
-        it.screenIs("[Timer Screen]")
     }
 
 }

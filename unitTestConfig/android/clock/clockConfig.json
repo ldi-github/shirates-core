@@ -1,0 +1,22 @@
+{
+  "testConfigName": "clockConfig",
+
+  "appIconName": "Clock",
+
+  "packageOrBundleId": "com.google.android.deskclock",
+
+  "startupPackageOrBundleId": "com.google.android.deskclock",
+  "startupActivity": "com.android.deskclock.HandleUris",
+
+  "dataset": {
+    "apps": "unitTestConfig/android/clock/dataset/apps.json"
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+  ]
+}
