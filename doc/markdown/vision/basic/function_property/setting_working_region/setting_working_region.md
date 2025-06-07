@@ -147,6 +147,55 @@ Also, by setting a work area, you can verify whether the text/image exists withi
 158	[00:00:25]	2025/02/15 00:05:26.138	{measureTime-3}	0	-	[info]	+0	!	()	onBottomRegion:    0.31 sec
 ```
 
+<br>
+<hr>
+
+### SettingWorkingRegion2.kt
+
+(`src/test/kotlin/tutorial/basic/SettingWorkingRegion2.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun cellOf_onCellOf() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    it.detect("8:30AM")
+                        .cell()
+                        .onThisElementRegion {
+                            it.exist("Mon, Tue, Wed, Thu, Fri")
+                            it.dontExist("Sun, Sat")
+                        }
+                    it.detect("9:00AM")
+                        .cell()
+                        .onThisElementRegion {
+                            it.dontExist("Mon, Tue, Wed, Thu, Fri")
+                            it.exist("Sun, Sat")
+                        }
+                }
+            }
+            case(2) {
+                expectation {
+                    it.onCellOf("8:30AM") {
+                        it.exist("Mon, Tue, Wed, Thu, Fri")
+                        it.dontExist("Sun, Sat")
+                    }
+                    it.onCellOf("9:00AM") {
+                        it.dontExist("Mon, Tue, Wed, Thu, Fri")
+                        it.exist("Sun, Sat")
+                    }
+                }
+            }
+        }
+    }
+```
+
+![](_images/cell_Of.png)
+
 ### Link
 
 - [index](../../../../index.md)

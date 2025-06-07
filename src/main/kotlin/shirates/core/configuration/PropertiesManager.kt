@@ -1152,6 +1152,16 @@ object PropertiesManager {
         }
 
     /**
+     * visionRemoveVoicingMarks
+     */
+    val visionRemoveVoicingMarks: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionRemoveVoicingMarks")
+                ?: return Const.VISION_REMOVE_VOICING_MARKS
+            return value == "true"
+        }
+
+    /**
      * visionMergeBoundingBox
      */
     val visionMergeBoundingBox: Boolean
@@ -1171,15 +1181,31 @@ object PropertiesManager {
         }
 
     /**
-     * visionRetryWithAutoImageFilter
+     * visionSafeAreaTopRatio
      */
-    val visionRetryWithAutoImageFilter: Boolean
+    val visionSafeAreaTopRatio: Double
         get() {
-            val value = getPropertyValue(propertyName = "visionRetryWithAutoImageFilter")
-                ?: return Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER
-            return value == "true"
+            return getPropertyValue(propertyName = "visionSafeAreaTopRatio")?.toDoubleOrNull()
+                ?: Const.VISION_SAFE_AREA_TOP_RATIO
         }
 
+    /**
+     * visionSafeAreaBottomRatio
+     */
+    val visionSafeAreaBottomRatio: Double
+        get() {
+            return getPropertyValue(propertyName = "visionSafeAreaBottomRatio")?.toDoubleOrNull()
+                ?: Const.VISION_SAFE_AREA_BOTTOM_RATIO
+        }
+
+    /**
+     * visionSafePositionVertical
+     */
+    val visionSafePositionVertical: Double
+        get() {
+            return getPropertyValue(propertyName = "visionSafePositionVertical")?.toDoubleOrNull()
+                ?: Const.VISION_SAFE_POSITION_VERTICAL
+        }
 
     // Custom --------------------------------------------------
 

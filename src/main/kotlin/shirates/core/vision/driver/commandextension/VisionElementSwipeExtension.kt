@@ -9,6 +9,7 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.lastElement
 import kotlin.math.abs
 
 /**
@@ -552,33 +553,55 @@ fun VisionElement.flickToLeft(
 }
 
 /**
+ * isSafePosition
+ */
+fun VisionElement.isSafePosition(
+    direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down
+): Boolean {
+
+    if (this.isEmpty) {
+        return true
+    }
+
+    val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: vision.rootElement
+    val scrollBounds = scrollVisionElement.bounds
+
+    if (direction.isVertical) {
+        if (this.bounds.top < scrollBounds.height * PropertiesManager.visionSafeAreaTopRatio) {
+            return false
+        }
+        if (scrollBounds.height * PropertiesManager.visionSafeAreaBottomRatio < this.bounds.bottom) {
+            return false
+        }
+    }
+    return true
+}
+
+/**
  * swipeToSafePosition
  */
 fun VisionElement.swipeToSafePosition(
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+    action: (() -> Unit)? = null
 ): VisionElement {
 
-    var v = this
-
-    when (direction) {
-        ScrollDirection.Down -> if (screenBounds.centerY < this.bounds.top) {
-            v = this.swipeVerticalTo((screenBounds.height * 0.2).toInt())
-        }
-
-        ScrollDirection.Up -> if (this.bounds.bottom < screenBounds.height * 0.2) {
-            v = this.swipeVerticalTo((screenBounds.height * 0.8).toInt())
-        }
-
-        ScrollDirection.Left -> if (screenBounds.width * 0.8 < this.bounds.right) {
-            v = this.swipeHorizontalTo((screenBounds.width * 0.2).toInt())
-        }
-
-        ScrollDirection.Right -> if (this.bounds.left < screenBounds.width * 0.2) {
-            v = this.swipeHorizontalTo((screenBounds.width * 0.8).toInt())
-        }
-
-        else -> {}
+    if (this.isEmpty) {
+        return this
+    }
+    if (this.isSafePosition(direction = direction)) {
+        return this
     }
 
-    return v
+    this.swipeVerticalTo((screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt())
+
+    if (action != null) {
+        action()
+        return lastElement
+    }
+    if (this.selector?.expression != null) {
+        val v = detect(this.selector!!.expression!!)
+        return v
+    }
+
+    return VisionElement.emptyElement
 }

@@ -206,12 +206,14 @@ object VisionServerProxy {
 //        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
 //    }
 
+    internal var lastRecognizeTextResult: RecognizeTextResult? = null
+
     /**
      * recognizeText
      */
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
-        language: String? = PropertiesManager.visionOCRLanguage,
+        language: String = PropertiesManager.visionOCRLanguage,
         customWordsFile: String? = PropertiesManager.visionOCRCustomWordsFile,
     ): RecognizeTextResult {
 
@@ -223,6 +225,10 @@ object VisionServerProxy {
         }
         if (inputFile.toFile().isFile.not()) {
             throw IllegalArgumentException("file not found: $inputFile.")
+        }
+
+        if (lastRecognizeTextResult?.inputFile == inputFile && lastRecognizeTextResult?.language == language) {
+            return lastRecognizeTextResult!!
         }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
@@ -237,7 +243,7 @@ object VisionServerProxy {
             name = "language",
             value = language
         )
-        if (language.isNullOrBlank().not()) {
+        if (language.isBlank().not()) {
             urlBuilder.addQueryParameter(
                 name = "language",
                 value = language
@@ -257,7 +263,11 @@ object VisionServerProxy {
         val url = urlBuilder.build()
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
-        val result = RecognizeTextResult(jsonString)
+        val result = RecognizeTextResult(
+            inputFile = inputFile,
+            language = language,
+            jsonString = jsonString
+        )
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
@@ -275,6 +285,7 @@ object VisionServerProxy {
             tsvFile.toFile().writeText(tsvString)
         }
         sw.stop()
+        lastRecognizeTextResult = result
         return result
     }
 

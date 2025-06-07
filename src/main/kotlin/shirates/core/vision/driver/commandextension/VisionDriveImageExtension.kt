@@ -127,9 +127,10 @@ fun VisionDrive.findImage(
         }
         if (v.isFound && swipeToSafePosition && allowScroll != false) {
             silent {
-                v.swipeToSafePosition()
+                v.swipeToSafePosition(action = {
+                    v = action(waitSeconds = 0.0)
+                })
             }
-            v = action(waitSeconds = 0.0)
         }
         lastElement = v
         if (v.isEmpty) {

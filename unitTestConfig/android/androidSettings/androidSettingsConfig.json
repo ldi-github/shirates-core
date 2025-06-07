@@ -22,6 +22,7 @@
     "import": [
       "testConfig/android/androidSettings/screens",
       "testConfig/android/calculator/screens",
+      "testConfig/android/clock/screens",
       "testConfig/android/maps/screens",
       "testConfig/android/misc/screens",
       "testConfig/android/playStore/screen"

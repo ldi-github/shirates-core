@@ -2060,6 +2060,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionRemoveVoicingMarks() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionRemoveVoicingMarks).isEqualTo(Const.VISION_REMOVE_VOICING_MARKS)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_REMOVE_VOICING_MARKS.not()
+            PropertiesManager.setPropertyValue("visionRemoveVoicingMarks", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionRemoveVoicingMarks).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionMergeBoundingBox() {
 
         run {
@@ -2096,20 +2114,56 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionRetryWithAutoImageFilter() {
+    fun visionSafeAreaTopRatio() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionRetryWithAutoImageFilter).isEqualTo(Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER)
+            assertThat(PropertiesManager.visionSafeAreaTopRatio).isEqualTo(Const.VISION_SAFE_AREA_TOP_RATIO)
         }
         run {
             // Arrange
-            val value = Const.VISION_RETRY_WITH_AUTO_IMAGE_FILTER.not()
-            PropertiesManager.setPropertyValue("visionRetryWithAutoImageFilter", value.toString())
+            val value = 0.15
+            PropertiesManager.setPropertyValue("visionSafeAreaTopRatio", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionRetryWithAutoImageFilter).isEqualTo(value)
+            assertThat(PropertiesManager.visionSafeAreaTopRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionSafeAreaBottomRatio() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionSafeAreaBottomRatio).isEqualTo(Const.VISION_SAFE_AREA_BOTTOM_RATIO)
+        }
+        run {
+            // Arrange
+            val value = 0.75
+            PropertiesManager.setPropertyValue("visionSafeAreaBottomRatio", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionSafeAreaBottomRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionSafePositionVertical() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionSafePositionVertical).isEqualTo(Const.VISION_SAFE_POSITION_VERTICAL)
+        }
+        run {
+            // Arrange
+            val value = 0.75
+            PropertiesManager.setPropertyValue("visionSafePositionVertical", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionSafePositionVertical).isEqualTo(value)
         }
     }
 

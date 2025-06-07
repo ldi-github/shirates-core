@@ -503,22 +503,17 @@ internal fun VisionDrive.doUntilScrollStopCore(
             }
         }
 
-//        var oldScreenshotImage: BufferedImage?
-        var oldScrollVisionElement: VisionElement
-
         val ms = Measure("doUntilScrollStop-loop")
         try {
+            val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: rootElement
             for (i in 1..maxLoopCount) {
 
-                oldScrollVisionElement =
-                    CodeExecutionContext.scrollVisionElement?.rect?.toVisionElement() ?: VisionElement(capture = true)
-
+                val beforeVisionElement = scrollVisionElement.newVisionElement()
                 scroll()
                 screenshot()
                 CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
-
-                val newScrollVisionElement = oldScrollVisionElement.newVisionElement()
-                val endOfScroll = newScrollVisionElement.isScrollStopped(oldScrollVisionElement)
+                val afterVisionElement = scrollVisionElement.newVisionElement()
+                val endOfScroll = afterVisionElement.isScrollStopped(beforeVisionElement)
                 TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
                 if (endOfScroll) {
                     CodeExecutionContext.lastScreenshotImage?.saveImage(

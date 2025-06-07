@@ -186,10 +186,10 @@ internal fun VisionElement.rightLeftCore(
 
 internal fun VisionElement.getSafeElement(swipeToSafePosition: Boolean): VisionElement {
 
-    var v = this
-    if (swipeToSafePosition) {
-        v = this.swipeToSafePosition()
+    if (this.isEmpty || swipeToSafePosition.not()) {
+        return this
     }
+    val v = this.swipeToSafePosition()
     return v
 }
 
