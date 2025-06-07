@@ -192,4 +192,25 @@ class VisionTestAndroid : VisionTest() {
             }
         }
     }
+
+    @Test
+    fun many_exist() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    withScrollDown {
+                        it.exist("Network & internet")
+                        it.exist("Connected devices")
+                        it.exist("Apps")
+                        it.exist("Notifications")
+                        it.exist("Battery")
+                        it.exist("Storage")
+                        it.exist("Sound & vibration")
+                    }
+                }
+            }
+        }
+    }
+
 }

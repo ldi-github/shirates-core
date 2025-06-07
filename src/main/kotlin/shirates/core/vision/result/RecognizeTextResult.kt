@@ -6,7 +6,9 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.string.replaceWithRegisteredWord
 
 class RecognizeTextResult(
-    val jsonString: String
+    var inputFile: String,
+    var language: String,
+    val jsonString: String,
 ) {
     var input: String? = null
     var candidates = listOf<Candidate>()
