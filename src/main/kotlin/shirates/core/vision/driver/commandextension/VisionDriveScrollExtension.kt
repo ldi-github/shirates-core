@@ -12,6 +12,7 @@ import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.silent
 
 
 private fun VisionDrive.scrollCommand(
@@ -493,7 +494,9 @@ internal fun VisionDrive.doUntilScrollStopCore(
 
     if (TestDriver.isInitialized) {
         if (isKeyboardShown) {
-            hideKeyboard()
+            silent {
+                hideKeyboard()
+            }
         }
 
         if (actionFunc != null) {

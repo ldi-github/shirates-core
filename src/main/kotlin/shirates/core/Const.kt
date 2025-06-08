@@ -179,6 +179,7 @@ object Const {
     const val VISION_SAFE_AREA_TOP_RATIO = 0.2
     const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
+    const val VISION_ROW_THRESHOLD = 0.7
 
     /**
      * internal

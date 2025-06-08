@@ -10,6 +10,7 @@ import shirates.core.utility.image.rect
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.silent
 import kotlin.math.abs
 
 /**
@@ -604,7 +605,9 @@ fun VisionElement.swipeToSafePosition(
         return this
     }
 
-    this.swipeVerticalTo((screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt())
+    silent {
+        this.swipeVerticalTo((screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt())
+    }
 
     if (action != null) {
         action()
