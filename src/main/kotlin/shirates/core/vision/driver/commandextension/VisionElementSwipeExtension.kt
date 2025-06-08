@@ -97,8 +97,14 @@ fun VisionElement.swipeToAdjust(
 fun VisionElement.swipeVerticalTo(
     endY: Int,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    avoidTapping: Boolean = true,
 ): VisionElement {
+
+    val b = bounds
+    if (avoidTapping && abs(b.centerY - endY) < 10) {
+        return this
+    }
 
     val command = "swipeVerticalTo"
     val message = message(id = command, subject = subject, to = "$endY")
@@ -106,7 +112,6 @@ fun VisionElement.swipeVerticalTo(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = "$endY") {
-        val b = bounds
         v = swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY,
@@ -125,8 +130,14 @@ fun VisionElement.swipeVerticalTo(
 fun VisionElement.swipeHorizontalTo(
     endX: Int,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    avoidTapping: Boolean = true,
 ): VisionElement {
+
+    val b = bounds
+    if (avoidTapping && abs(b.x1 - endX) < 10) {
+        return this
+    }
 
     val command = "swipeHorizontalTo"
     val message = message(id = command, subject = subject, to = "$endX")
@@ -134,7 +145,6 @@ fun VisionElement.swipeHorizontalTo(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = "$endX") {
-        val b = bounds
         v = swipePointToPoint(
             startX = b.x1,
             startY = b.centerY,
@@ -350,7 +360,7 @@ fun VisionElement.swipeToCenter(
     ofScreen: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
-    avoidTapping: Boolean = false
+    avoidTapping: Boolean = true,
 ): VisionElement {
 
     val frame =
@@ -389,12 +399,14 @@ fun VisionElement.swipeToCenter(
 fun VisionElement.swipeToCenterOfScreen(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    avoidTapping: Boolean = true,
 ): VisionElement {
 
     return swipeToCenter(
         ofScreen = true,
         durationSeconds = durationSeconds,
         repeat = repeat,
+        avoidTapping = avoidTapping,
     )
 }
 

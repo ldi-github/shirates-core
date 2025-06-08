@@ -152,48 +152,6 @@ internal fun VisionDrive.waitForElementFocused(
     return v
 }
 
-internal fun VisionDrive.detectWithAdjustingPosition(
-    selector: Selector,
-    language: String,
-    looseMatch: Boolean,
-    mergeBoundingBox: Boolean,
-    lineSpacingRatio: Double,
-    autoImageFilter: Boolean,
-    last: Boolean,
-    waitSeconds: Double,
-    throwsException: Boolean,
-): VisionElement {
-
-    fun getElement(): VisionElement {
-        return detectCore(
-            selector = selector,
-            language = language,
-            looseMatch = looseMatch,
-            mergeBoundingBox = mergeBoundingBox,
-            lineSpacingRatio = lineSpacingRatio,
-            autoImageFilter = autoImageFilter,
-            last = last,
-            allowScroll = null,
-            waitSeconds = waitSeconds,
-            throwsException = throwsException,
-            swipeToSafePosition = true,
-        )
-    }
-
-    var v = getElement()
-
-    if (CodeExecutionContext.withScroll == true && CodeExecutionContext.scrollDirection == ScrollDirection.Down &&
-        screenRect.bottom * 0.8 < v.rect.top
-    ) {
-        silent {
-            v.swipeVerticalTo(endY = (screenRect.toBoundsWithRatio().height * 0.2).toInt())
-        }
-        v = getElement()
-    }
-
-    return v
-}
-
 /**
  * tap
  */
