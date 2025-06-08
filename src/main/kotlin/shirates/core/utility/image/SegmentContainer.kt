@@ -42,6 +42,8 @@ class SegmentContainer(
     var minimumHeight: Int = 5,
     var outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     var croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+
+    var drawnImage: BufferedImage? = null,
 ) {
     val segments = mutableListOf<Segment>()
     val originalSegments = mutableListOf<Segment>()
@@ -447,8 +449,8 @@ class SegmentContainer(
         }
 
         if (segmentationPng) {
-            val drawImage = draw()
-            drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
+            drawnImage = draw()
+            drawnImage!!.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
         }
 
         sw.stop()
@@ -541,12 +543,7 @@ class SegmentContainer(
         /**
          * draw original segments
          */
-        g2d.color = Color.LIGHT_GRAY
-        for (seg in originalSegments) {
-            val rect = seg.toRect()
-            g2d.fillRect(rect.left, rect.top, rect.width, rect.height)
-            image.drawRect(rect = rect, color = g2d.color, stroke = 1f)
-        }
+        drawOriginalSegments(image = image)
         /**
          * draw segments
          */
@@ -555,6 +552,27 @@ class SegmentContainer(
             image.drawRect(rect = rect, stroke = 1f)
         }
 
+        return image
+    }
+
+    /**
+     * drawOriginalSegments
+     */
+    fun drawOriginalSegments(
+        image: BufferedImage = BufferedImage(
+            containerImage!!.width,
+            containerImage!!.height,
+            BufferedImage.TYPE_INT_ARGB
+        ),
+        color: Color = Color.LIGHT_GRAY,
+    ): BufferedImage {
+        val g2d = image.createGraphics()
+        g2d.color = color
+        for (seg in originalSegments) {
+            val rect = seg.toRect()
+            g2d.fillRect(rect.left, rect.top, rect.width, rect.height)
+            image.drawRect(rect = rect, color = g2d.color, stroke = 1f)
+        }
         return image
     }
 }

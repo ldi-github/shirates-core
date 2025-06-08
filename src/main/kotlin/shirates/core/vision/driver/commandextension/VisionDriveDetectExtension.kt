@@ -401,7 +401,9 @@ internal fun VisionDrive.detectWithScrollCore(
     throwsException: Boolean,
 ): VisionElement {
 
-    hideKeyboard()
+    silent {
+        hideKeyboard()
+    }
 
     var v = VisionElement.emptyElement
 

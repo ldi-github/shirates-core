@@ -1207,6 +1207,15 @@ object PropertiesManager {
                 ?: Const.VISION_SAFE_POSITION_VERTICAL
         }
 
+    /**
+     * visionRowThreshold
+     */
+    val visionRowThreshold: Double
+        get() {
+            return getPropertyValue(propertyName = "visionRowThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_ROW_THRESHOLD
+        }
+
     // Custom --------------------------------------------------
 
     /**

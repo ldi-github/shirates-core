@@ -9,6 +9,8 @@ Also, by setting a work area, you can verify whether the text/image exists withi
 | onThisElementRegion    | Set it as working region.                                                                    |
 | onCellOf               | Get the rectangle that includes the text and set it as a working region.                     |
 | onCellOfWithScrollDown | Get the rectangle that includes the text with scrolling down and set it as a working region. |
+| onRowOf                | Get the row that includes the text and set it as a working region.                           |
+| onRowOfWithScrollDown  | Get the row that includes the text with scrolling down and set it as a working region.       |
 | onTopRegion            | Cut the screen image of top region and set it as a working region.                           |
 | onBottomRegion         | Cut the screen image of bottom region and set it as a working region.                        |
 | onMiddleRegion         | Cut the screen image of middle region and set it as a working region.                        |
@@ -195,6 +197,55 @@ Also, by setting a work area, you can verify whether the text/image exists withi
 ```
 
 ![](_images/cell_Of.png)
+
+<br>
+<hr>
+
+### SettingWorkingRegion3Ios.kt
+
+(`src/test/kotlin/tutorial/basic/SettingWorkingRegion3Ios.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun row_onRowOf() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                }.expectation {
+                    it.detect("Apple Account")
+                        .row()
+                        .onThisElementRegion {
+                            it.exist("Sign in to access*")
+                            it.dontExist("General")
+                        }
+                    it.detect("General")
+                        .row()
+                        .onThisElementRegion {
+                            it.dontExist("Sign in to access*")
+                            it.exist("General")
+                        }
+                }
+            }
+            case(2) {
+                expectation {
+                    it.onRowOf("Apple Account") {
+                        it.exist("Sign in to access*")
+                        it.dontExist("General")
+                    }
+                    it.onRowOf("General") {
+                        it.dontExist("Sign in to access*")
+                        it.exist("General")
+                    }
+                }
+            }
+        }
+    }
+```
+
+![](_images/row_of.png)
 
 ### Link
 

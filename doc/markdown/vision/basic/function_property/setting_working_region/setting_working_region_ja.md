@@ -9,6 +9,8 @@
 | onThisElementRegion    | 指定した要素を作業領域として設定します。                           |
 | onCellOf               | 指定したテキストを含む矩形領域を取得し、これを作業領域として設定します。           |
 | onCellOfWithScrollDown | 指定したテキストを含む矩形領域を取得し（下スクロールあり）、これを作業領域として設定します。 |
+| onRowOf                | 指定したテキストを含む行を取得し、これを作業領域として設定します。              |
+| onRowOfWithScrollDown  | 指定したテキストを含む行を取得し（下スクロールあり）、これを作業領域として設定します。    |
 | onTopRegion            | 画面イメージの上部領域を切り取り、これを作業領域として設定します。              |
 | onBottomRegion         | 画面イメージの下部領域を切り取り、これを作業領域として設定します。              |
 | onMiddleRegion         | 画面イメージの中間領域を切り取り、これを作業領域として設定します。              |
@@ -195,6 +197,55 @@
 ```
 
 ![](_images/cell_of_ja.png)
+
+<br>
+<hr>
+
+### SettingWorkingRegion3Ios.kt
+
+(`src/test/kotlin/tutorial/basic/SettingWorkingRegion3Ios.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun row_onRowOf() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS設定トップ画面]")
+                }.expectation {
+                    it.detect("Apple Account")
+                        .row()
+                        .onThisElementRegion {
+                            it.exist("*サインインします。")
+                            it.dontExist("一般")
+                        }
+                    it.detect("一般")
+                        .row()
+                        .onThisElementRegion {
+                            it.dontExist("*サインインします。")
+                            it.exist("一般")
+                        }
+                }
+            }
+            case(2) {
+                expectation {
+                    it.onRowOf("Apple Account") {
+                        it.exist("*サインインします。")
+                        it.dontExist("一般")
+                    }
+                    it.onRowOf("一般") {
+                        it.dontExist("*サインインします。")
+                        it.exist("一般")
+                    }
+                }
+            }
+        }
+    }
+```
+
+![](_images/row_of_ja.png)
 
 ### Link
 

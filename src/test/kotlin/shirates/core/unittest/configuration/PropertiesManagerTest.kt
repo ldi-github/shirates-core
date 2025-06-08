@@ -2168,6 +2168,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionRowThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(Const.VISION_ROW_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 0.8
+            PropertiesManager.setPropertyValue("visionRowThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {
