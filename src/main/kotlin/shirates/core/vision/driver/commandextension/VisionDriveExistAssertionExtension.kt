@@ -440,7 +440,7 @@ fun VisionDrive.dontExist(
     autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,
-    allowScroll: Boolean? = false,
+    allowScroll: Boolean? = CodeExecutionContext.withScroll,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
