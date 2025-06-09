@@ -254,6 +254,9 @@ open class VisionElement(
             if (visionContext.recognizeTextObservations.isEmpty()) {
                 visionContext.recognizeText()
             }
+            if (mergedElements.any()) {
+                return mergedElements.joinToString(" ") { it.text }
+            }
             val texts =
                 visionContext.recognizeTextObservations.filter { it.rectOnScreen!!.isCenterIncludedIn(this.rect) }
             return texts.joinToString(" ") { it.text }
