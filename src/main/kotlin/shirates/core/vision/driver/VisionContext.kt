@@ -526,7 +526,7 @@ class VisionContext(
      */
     fun detectCandidates(
         selector: Selector,
-        looseMatch: Boolean?,
+        looseMatch: Boolean,
         mergeBoundingBox: Boolean,
         lineSpacingRatio: Double,
     ): List<VisionElement> {
@@ -537,16 +537,15 @@ class VisionContext(
          * Search in single line
          */
         var elements = listOf<VisionElement>()
-        if (looseMatch != null) {
-            elements = list.filter { selector.evaluateText(it, looseMatch = looseMatch) }
+        elements = list.filter { selector.evaluateText(it, looseMatch = false) }
+        if (elements.isEmpty() && looseMatch) {
+            elements = list.filter { selector.evaluateText(it, looseMatch = true) }
         }
-        if (elements.isEmpty()) {
-            elements = list.filter { selector.evaluateText(it, looseMatch = false) }
-        } else {
+        if (elements.any()) {
             elements = elements.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.right })
             return elements
         }
-        if (mergeBoundingBox.not()) {
+        if (mergeBoundingBox.not() || selector.text?.length == 1) {
             return listOf()
         }
 
@@ -560,11 +559,9 @@ class VisionContext(
             searchElements = list
         )
 
-        if (looseMatch != null) {
-            elements = multilineElements.filter { selector.evaluateText(it, looseMatch = looseMatch) }
-            if (elements.any()) {
-                return elements
-            }
+        elements = multilineElements.filter { selector.evaluateText(it, looseMatch = false) }
+        if (elements.isEmpty() && looseMatch) {
+            elements = multilineElements.filter { selector.evaluateText(it, looseMatch = true) }
         }
 
         return elements
@@ -672,9 +669,11 @@ class VisionContext(
                     var v = group[0]
                     for (i in 1 until group.count()) {
                         val v2 = group[i]
-                        v = v.mergeWith(v2)
-                        if (selector.evaluateText(v, looseMatch = false)) {
-                            break
+                        if (v != v2) {
+                            v = v.mergeWith(v2)
+                            if (selector.evaluateText(v, looseMatch = false)) {
+                                break
+                            }
                         }
                     }
                     confirmedElements.add(v)
