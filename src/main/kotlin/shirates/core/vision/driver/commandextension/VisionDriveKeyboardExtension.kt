@@ -16,11 +16,11 @@ import shirates.core.driver.commandextension.pressKeys
 import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
-import shirates.core.vision.driver.syncScreen
 import shirates.core.vision.driver.wait
 
 /**
@@ -33,7 +33,7 @@ val VisionDrive.isKeyboardShown: Boolean
         }
 
         if (isAndroid) {
-            return TestDriver.androidDriver.isKeyboardShown
+            return androidDriver.isKeyboardShown
         } else {
             return TestDriver.iosDriver.isKeyboardShown
         }
@@ -87,7 +87,7 @@ fun VisionDrive.pressBack(
             if (platformMajorVersion <= 9) {
                 androidDriver.navigate().back()
             } else {
-                TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
+                androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
             }
             TestDriver.invalidateCache()
         } else {
@@ -111,39 +111,38 @@ fun VisionDrive.pressHome(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, fireEvent = false) {
         if (isAndroid) {
-            TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.HOME))
+            androidDriver.pressKey(KeyEvent(AndroidKey.HOME))
         } else {
             TestDriver.appiumDriver.executeScript("mobile: pressButton", ImmutableMap.of("name", "home"))
         }
         invalidateScreen()
         wait(waitSeconds = waitSeconds)
     }
-
     return lastElement
 }
 
-///**
-// * pressEnter
-// */
-//fun VisionDrive.pressEnter(
-//    waitSeconds: Double = testContext.shortWaitSeconds
-//): VisionElement {
-//
-//    val command = "pressEnter"
-//    val message = message(id = command)
-//
-//    val context = TestDriverCommandContext(null)
-//    context.execOperateCommand(command = command, message = message) {
-//        if (isAndroid) {
-//            TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.ENTER))
-//        } else {
-//            tapSoftwareKey("#Return||#Go||#Search||#Done")  // Keys.ENTER never works. So tap software key.
-//        }
-//        invalidateScreenshot()
-//        wait(waitSeconds = waitSeconds)
-//    }
-//    return lastElement
-//}
+/**
+ * pressEnter
+ */
+fun VisionDrive.pressEnter(
+    waitSeconds: Double = testContext.shortWaitSeconds
+): VisionElement {
+
+    val command = "pressEnter"
+    val message = message(id = command)
+
+    val context = TestDriverCommandContext(null)
+    context.execOperateCommand(command = command, message = message) {
+        if (isAndroid) {
+            androidDriver.pressKey(KeyEvent(AndroidKey.ENTER))
+        } else {
+            sendKeys("\n")
+        }
+        invalidateScreen()
+        wait(waitSeconds = waitSeconds)
+    }
+    return lastElement
+}
 
 ///**
 // * pressSearch
@@ -185,7 +184,7 @@ fun VisionDrive.pressTab(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
-            TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.TAB))
+            androidDriver.pressKey(KeyEvent(AndroidKey.TAB))
         } else {
             tap("#Next")
         }
@@ -215,7 +214,7 @@ fun VisionDrive.pressAndroid(
         if (isAndroid.not())
             throw UnsupportedOperationException("pressAndroid function is for Android.")
 
-        TestDriver.androidDriver.pressKey(KeyEvent(key))
+        androidDriver.pressKey(KeyEvent(key))
         invalidateScreen()
         wait(waitSeconds = waitSeconds)
     }
@@ -272,6 +271,7 @@ fun VisionDrive.sendKeys(
 
         invalidateScreen()
         lastElement = getFocusedElement()
+        invalidateScreen()
     }
 
     return lastElement
@@ -310,62 +310,43 @@ fun VisionDrive.getFocusedElement(
         return lastElement
     }
 
-    screenshot()
+    var e = TestElement.emptyElement
+    var v: VisionElement
 
     if (isAndroid) {
         val xpath = "//*[@focused='true']"
         val sel = Selector(xpath)
 
-        fun getFocusedElementForAndroid(): VisionElement {
-            var e = TestElement.emptyElement
-            var v = VisionElement.emptyElement
-            doUntilTrue(
-                waitSeconds = waitSeconds,
-                throwOnFinally = false
-            ) {
-                e = try {
-                    val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
-                    focused.toTestElement(sel)
-                } catch (t: Throwable) {
-                    TestElement.emptyElement
-                }
-                val r = e.isFound
-                if (r) {
-                    syncScreen()
-                    v = e.toVisionElement()
-                }
-                r
+        doUntilTrue(
+            waitSeconds = waitSeconds,
+            throwOnFinally = false
+        ) {
+            e = try {
+                val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
+                focused.toTestElement(sel)
+            } catch (t: Throwable) {
+                TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
+                TestElement.emptyElement
             }
-            return v
+            e.isFound
         }
-
-        val last = getFocusedElementForAndroid()
-//        doUntilTrue(
-//            waitSeconds = waitSeconds,
-//            intervalSeconds = 1.0,
-//            throwOnFinally = false
-//        ) {
-//            val v = getFocusedElementForAndroid()
-//            val r = v.image.isSame(last.image)
-//            last = v
-//            r
-//        }
-
-        if (last.isEmpty) {
-            throw TestDriverException(message(id = "focusedElementNotFound"))
-        }
-        return last
     } else {
-        val e = try {
+        e = try {
             (TestDriver.appiumDriver.switchTo().activeElement() as WebElement).toTestElement()
         } catch (t: Throwable) {
-            if (throwsException) {
-                throw TestDriverException(message(id = "focusedElementNotFound"))
-            } else {
-                return VisionElement.emptyElement
-            }
+            TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
+            TestElement.emptyElement
         }
-        val v = e.toVisionElement()
-        return v
     }
+    if (e.isEmpty) {
+        if (throwsException) {
+            throw TestDriverException(message(id = "focusedElementNotFound"))
+        } else {
+            return VisionElement.emptyElement
+        }
+    }
+    v = e.toVisionElement()
+    screenshot(force = true)
+    v = v.newVisionElement()
+    return v
 }
