@@ -1,25 +1,19 @@
 package shirates.core.vision.driver.commandextension
 
 import com.google.common.collect.ImmutableMap
+import ifCanDetect
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
-import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.androidDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.getWebElement
-import shirates.core.driver.commandextension.hideKeyboard
-import shirates.core.driver.commandextension.pressKeys
-import shirates.core.driver.commandextension.toVisionElement
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.wait
 
@@ -76,6 +70,7 @@ fun VisionDrive.hideKeyboard(
  * pressBack
  */
 fun VisionDrive.pressBack(
+    expression: String? = null,
     waitSeconds: Double = testContext.shortWaitSeconds
 ): VisionElement {
 
@@ -91,7 +86,38 @@ fun VisionDrive.pressBack(
             }
             TestDriver.invalidateCache()
         } else {
-            tap(x = 50, y = 10)
+            if (expression != null) {
+                if (classic.canSelect(expression)) {
+                    classic.it.tap()
+                } else {
+                    onTopRegion {
+                        ifCanDetect(expression) {
+                            it.tap()
+                        }
+                    }
+                }
+            } else {
+                fun pressBackIos() {
+
+                    val backButton = classic.select("#BackButton", throwsException = false, waitSeconds = 0.0)
+                    if (backButton.isFound) {
+                        backButton.tap()
+                        return
+                    }
+                    val anyButton = classic.select(".XCUIElementTypeButton", throwsException = false, waitSeconds = 0.0)
+                    if (anyButton.isFound) {
+                        val v = anyButton.toVisionElement()
+                        val topRegion = getTopRegion()
+                        if (v.rect.isIncludedIn(topRegion.rect)) {
+                            v.tap()
+                            return
+                        }
+                    }
+
+                    tap(x = 50, y = 10)
+                }
+                pressBackIos()
+            }
         }
         invalidateScreen()
         wait(waitSeconds = waitSeconds)
@@ -310,34 +336,7 @@ fun VisionDrive.getFocusedElement(
         return lastElement
     }
 
-    var e = TestElement.emptyElement
-    var v: VisionElement
-
-    if (isAndroid) {
-        val xpath = "//*[@focused='true']"
-        val sel = Selector(xpath)
-
-        doUntilTrue(
-            waitSeconds = waitSeconds,
-            throwOnFinally = false
-        ) {
-            e = try {
-                val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
-                focused.toTestElement(sel)
-            } catch (t: Throwable) {
-                TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
-                TestElement.emptyElement
-            }
-            e.isFound
-        }
-    } else {
-        e = try {
-            (TestDriver.appiumDriver.switchTo().activeElement() as WebElement).toTestElement()
-        } catch (t: Throwable) {
-            TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
-            TestElement.emptyElement
-        }
-    }
+    val e = TestDriver.getFocusedElement(waitSeconds = waitSeconds, throwsException = throwsException)
     if (e.isEmpty) {
         if (throwsException) {
             throw TestDriverException(message(id = "focusedElementNotFound"))
@@ -345,8 +344,9 @@ fun VisionDrive.getFocusedElement(
             return VisionElement.emptyElement
         }
     }
-    v = e.toVisionElement()
+    var v = e.toVisionElement()
     screenshot(force = true)
     v = v.newVisionElement()
+    v.testElement = e
     return v
 }

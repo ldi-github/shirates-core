@@ -60,11 +60,11 @@ class VisionDriveRowExtensionTest : VisionTest() {
                 expectation {
                     it.onRowOfWithScrollDown("iCloud") {
                         it.exist("iCloud")
-                        it.dontExist("Wallet")
+                        it.dontExist("Game Center")
                     }
-                    it.onRowOfWithScrollDown("Wallet") {
+                    it.onRowOfWithScrollDown("Game Center") {
                         it.dontExist("iCloud")
-                        it.exist("Wallet")
+                        it.exist("Game Center")
                     }
                 }
             }

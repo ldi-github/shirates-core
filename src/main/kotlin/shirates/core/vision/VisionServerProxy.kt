@@ -541,35 +541,34 @@ object VisionServerProxy {
         return DistanceResult(jsonString = result)
     }
 
-//    /**
-//     * detectRectangles
-//     */
-//    @Deprecated("This function is not used in framework currently.")
-//    fun detectRectangles(
-//        inputFile: String,
-//        log: Boolean = false,
-//    ): String {
-//
-//        if (Files.exists(inputFile.toPath()).not()) {
-//            throw IllegalArgumentException("file not found: $inputFile.")
-//        }
-//
-//        val sw = StopWatch("RectangleDetector/detectRectangles")
-//
-//        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
-//                "/RectangleDetector/detectRectangles").toHttpUrlOrNull()!!.newBuilder()
-//        urlBuilder.addQueryParameter(
-//            name = "input",
-//            value = inputFile.toPath().toString()
-//        )
-//        val url = urlBuilder.build()
-//        val jsonString = getResponseBody(url)
-//        lastJsonString = jsonString
-//
-//        sw.stop()
-//        return jsonString
-//    }
-//
+    /**
+     * detectRectangles
+     */
+    fun detectRectangles(
+        inputFile: String,
+        log: Boolean = false,
+    ): DetectRectanglesResult {
+
+        if (Files.exists(inputFile.toPath()).not()) {
+            throw IllegalArgumentException("file not found: $inputFile.")
+        }
+
+        val sw = StopWatch("RectangleDetector/detectRectangles")
+
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/RectangleDetector/detectRectangles").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "input",
+            value = inputFile.toPath().toString()
+        )
+        val url = urlBuilder.build()
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
+
+        sw.stop()
+        return DetectRectanglesResult(inputFile = inputFile, jsonString = jsonString)
+    }
+
 //    /**
 //     * detectRectanglesIncludingRect
 //     */

@@ -268,36 +268,4 @@ class TestDriverTest : UITest() {
         }
     }
 
-    @Test
-    @Order(60)
-    fun getFocusedWebElement() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.restartApp()
-                        .tap("#search_action_bar")
-                }.expectation {
-                    val r = TestDriver.getFocusedElement()
-                    assertThat(r.id).isEqualTo("com.google.android.settings.intelligence:id/open_search_view_edit_text")
-                }
-            }
-            case(2) {
-                condition {
-                    it.restartApp()
-                }.expectation {
-                    assertThatThrownBy {
-                        TestDriver.getFocusedWebElement()
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessageStartingWith("Active element not found. ")
-                }
-            }
-            case(3) {
-                expectation {
-                    val r = TestDriver.getFocusedElement(throwsException = false)
-                    assertThat(r.isEmpty).isEqualTo(true)
-                }
-            }
-        }
-    }
 }

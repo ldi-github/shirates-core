@@ -22,12 +22,12 @@ class VisionElementSwipeExtensionTest : VisionTest() {
                     it.macro("[iOS Settings Top Screen]")
                     target = it.detect("General")
                 }.action {
-                    from = it.detect("Privacy & Security")
+                    from = it.detect("StandBy")
 
                     from.swipeTo("General")
 
                 }.expectation {
-                    val current = it.detect("Privacy & Security")
+                    val current = it.detect("StandBy")
                     val diffY = target.bounds.top - from.bounds.top
                     val diffY2 = target.bounds.top - current.bounds.top
                     output("diffY2=${diffY2}, diffY=${diffY}")
@@ -38,7 +38,7 @@ class VisionElementSwipeExtensionTest : VisionTest() {
             case(2) {
                 action {
                     from = it.detect("Camera")
-                    target = it.detect("Privacy & Security")
+                    target = it.detect("StandBy")
                     it.swipeElementToElement(startElement = from, endElement = target)
                 }.expectation {
                     val current = it.detect("Camera")

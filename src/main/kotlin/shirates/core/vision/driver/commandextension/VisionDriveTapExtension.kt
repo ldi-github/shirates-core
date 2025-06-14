@@ -601,6 +601,7 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapItemUnder(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -637,6 +638,7 @@ fun VisionDrive.tapItemUnder(
             throwsException = true,
         )
         v = labelElement.belowItem(
+            pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
         )
@@ -714,6 +716,7 @@ fun VisionDrive.tapTextUnder(
  */
 fun VisionDrive.tapItemOver(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -750,6 +753,7 @@ fun VisionDrive.tapItemOver(
             throwsException = true,
         )
         v = labelElement.aboveItem(
+            pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
         )
@@ -827,6 +831,7 @@ fun VisionDrive.tapTextOver(
  */
 fun VisionDrive.tapItemRightOf(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -863,6 +868,7 @@ fun VisionDrive.tapItemRightOf(
             throwsException = true,
         )
         v = labelElement.rightItem(
+            pos = pos,
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )
@@ -886,6 +892,7 @@ fun VisionDrive.tapItemRightOf(
  */
 fun VisionDrive.tapItemLeftOf(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -922,6 +929,7 @@ fun VisionDrive.tapItemLeftOf(
             throwsException = true,
         )
         v = labelElement.leftItem(
+            pos = pos,
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )

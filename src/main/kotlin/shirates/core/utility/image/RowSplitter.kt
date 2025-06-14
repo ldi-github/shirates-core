@@ -1,6 +1,5 @@
 package shirates.core.utility.image
 
-import boofcv.struct.image.GrayU8
 import okio.FileNotFoundException
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
@@ -17,50 +16,10 @@ class RowSplitter(
     val segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     val segmentMarginVertical: Int = testContext.segmentMarginVertical,
     var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    val rowThreshold: Double = PropertiesManager.visionRowThreshold,
+    val lineThreshold: Double = PropertiesManager.visionLineThreshold,
 ) {
     val containerImage: BufferedImage
     val containerImageFile: String
-
-    class Line(
-        val image: BufferedImage,
-        val binary: GrayU8,
-        val y: Int,
-    ) {
-        val width: Int
-            get() {
-                return image.width
-            }
-
-        var trueCount = 0
-        var falseCount = 0
-
-        val trueRate: Double
-            get() {
-                if (width == 0) {
-                    return 0.0
-                }
-                return trueCount / width.toDouble()
-            }
-        val falseRate: Double
-            get() {
-                if (width == 0) {
-                    return 0.0
-                }
-                return falseCount / width.toDouble()
-            }
-
-        init {
-            for (x in 0 until binary.width) {
-                val value = binary.get(x, y)
-                if (value == 0) {
-                    falseCount++
-                } else {
-                    trueCount++
-                }
-            }
-        }
-    }
 
     class Row(
         val containerImage: BufferedImage,
@@ -107,8 +66,6 @@ class RowSplitter(
         }
     }
 
-    val lines = mutableListOf<Line>()
-
     init {
         var image: BufferedImage? = null
         var file: String? = null
@@ -128,7 +85,7 @@ class RowSplitter(
         this.containerImage = image!!
         this.containerImageFile = file!!
 
-        if (rowThreshold <= 0.0 || 1.0 < rowThreshold) {
+        if (lineThreshold <= 0.0 || 1.0 < lineThreshold) {
             throw IllegalArgumentException("rowThreshold must be between 0.0 and 1.0")
         }
     }
@@ -159,33 +116,23 @@ class RowSplitter(
         outputPng: Boolean = true,
     ): RowSplitter {
 
-        val segmentContainer = SegmentContainer(
+        val lineSeparator = HorizontalLineSeparator(
             containerImage = containerImage,
-            segmentMarginHorizontal = PropertiesManager.segmentMarginHorizontal,
-            segmentMarginVertical = PropertiesManager.segmentMarginVertical,
-        ).split(splitUnit = 1, segmentationPng = false)
+            lineThreshold = lineThreshold,
+        ).split(inverse = inverse)
 
-        val segmentationImage = segmentContainer.drawOriginalSegments()
-
-        for (y in 0 until segmentationImage.height) {
-            val line = Line(image = segmentationImage, binary = segmentContainer.binary!!, y = y)
-            lines.add(line)
-        }
-
-        val lines2 =
-            if (inverse) lines.filter { this.rowThreshold <= it.falseRate }
-            else lines.filter { this.rowThreshold <= it.trueRate }
-        if (lines2.isEmpty()) {
+        val lines = lineSeparator.horizontalLines
+        if (lines.isEmpty()) {
             return this
         }
-        var separator = Row(containerImage = segmentationImage, top = -2, bottom = -2)
-        for (i in 0 until lines2.size) {
-            val line = lines2[i]
+        var separator = Row(containerImage = containerImage, top = -2, bottom = -2)
+        for (i in 0 until lines.size) {
+            val line = lines[i]
             if (separator.bottom + 1 == line.y) {
                 separator.bottom = line.y
             } else {
                 separator = Row(
-                    containerImage = segmentationImage,
+                    containerImage = containerImage,
                     left = 0,
                     top = line.y,
                     right = containerImage.right,
@@ -196,25 +143,27 @@ class RowSplitter(
         }
         separators = separators.filter { it.height > 1 }.toMutableList()
 
-        var lastSeparator = Row(containerImage = segmentationImage, bottom = -1)
+        var lastSeparator = Row(containerImage = containerImage, bottom = -1)
         for (s in separators) {
-            val top = lastSeparator.bottom + 1
-            val bottom = s.top - 1
-            val row = Row(
-                containerImage = segmentationImage,
-                left = s.left,
-                top = top,
-                right = s.right,
-                bottom = bottom,
-            )
-            rows.add(row)
-            lastSeparator = s
+            if (s.top != 0) {
+                val top = lastSeparator.bottom + 1
+                val bottom = s.top - 1
+                val row = Row(
+                    containerImage = containerImage,
+                    left = s.left,
+                    top = top,
+                    right = s.right,
+                    bottom = bottom,
+                )
+                rows.add(row)
+                lastSeparator = s
+            }
         }
-        if (lastSeparator.bottom < segmentationImage.height - 1) {
+        if (lastSeparator.bottom < containerImage.height - 1) {
             val top = lastSeparator.bottom + 1
-            val bottom = segmentationImage.height - 1
+            val bottom = containerImage.height - 1
             val row = Row(
-                containerImage = segmentationImage,
+                containerImage = containerImage,
                 left = lastSeparator.left,
                 top = top,
                 right = lastSeparator.right,
@@ -223,7 +172,7 @@ class RowSplitter(
             rows.add(row)
         }
 
-        val drawImage = draw(image = segmentationImage, grid = false)
+        val drawImage = draw(image = containerImage, grid = false)
         if (outputPng) {
             val file = TestLog.directoryForLog.resolve("rows.png").toString()
             drawImage.saveImage(file = file, log = false)
@@ -247,13 +196,7 @@ class RowSplitter(
          * draw grid
          */
         if (grid) {
-            g2d.color = gridColor
-            for (x in 0 until image.width step gridWidth) {
-                g2d.drawLine(x, 0, x, image.rect.bottom)
-            }
-            for (y in 0 until image.height step gridWidth) {
-                g2d.drawLine(0, y, image.rect.right, y)
-            }
+            image.drawGrid(gridWidth = gridWidth, gridColor = gridColor)
         }
         /**
          * draw separators

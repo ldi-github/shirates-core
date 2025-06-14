@@ -2114,6 +2114,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionTextToLineHeightRatio() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextToLineHeightRatio).isEqualTo(Const.VISION_TEXT_TO_LINE_HEIGHT_RATIO)
+        }
+        run {
+            // Arrange
+            val value = 1.0
+            PropertiesManager.setPropertyValue("visionTextToLineHeightRatio", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextToLineHeightRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionSafeAreaTopRatio() {
 
         run {
@@ -2168,20 +2186,20 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionRowThreshold() {
+    fun visionLineThreshold() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(Const.VISION_ROW_THRESHOLD)
+            assertThat(PropertiesManager.visionLineThreshold).isEqualTo(Const.VISION_LINE_THRESHOLD)
         }
         run {
             // Arrange
             val value = 0.8
-            PropertiesManager.setPropertyValue("visionRowThreshold", value.toString())
+            PropertiesManager.setPropertyValue("visionLineThreshold", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(value)
+            assertThat(PropertiesManager.visionLineThreshold).isEqualTo(value)
         }
     }
 

@@ -1,5 +1,6 @@
 package shirates.core.utility.image
 
+import boofcv.factory.filter.blur.FactoryBlurFilter
 import boofcv.io.image.ConvertBufferedImage
 import boofcv.struct.image.GrayF32
 import boofcv.struct.image.GrayU8
@@ -11,10 +12,12 @@ import java.awt.Color
 import java.awt.Image
 import java.awt.geom.Path2D
 import java.awt.image.BufferedImage
+import java.awt.image.IndexColorModel
 import java.io.File
 import java.nio.file.Files
 import javax.imageio.ImageIO
 import javax.imageio.ImageWriter
+
 
 /**
  * left
@@ -421,4 +424,92 @@ fun BufferedImage.isInBorder(): Boolean {
         }
     }
     return true
+}
+
+/**
+ * drawGrid
+ */
+fun BufferedImage.drawGrid(
+    gridWidth: Int = 10,
+    gridColor: Color = Color.GRAY,
+): BufferedImage {
+    val g2d = this.createGraphics()
+
+    g2d.color = gridColor
+    for (x in 0 until this.width step gridWidth) {
+        g2d.drawLine(x, 0, x, this.rect.bottom)
+    }
+    for (y in 0 until this.height step gridWidth) {
+        g2d.drawLine(0, y, this.rect.right, y)
+    }
+    return this
+}
+
+/**
+ * medianFiltered
+ */
+fun BufferedImage.medianFiltered(
+    radius: Int = 2,
+): BufferedImage {
+    val grayImage = this.toGrayU8()
+
+    val denoised = GrayU8(this.width, this.height)
+    val filter = FactoryBlurFilter.median(GrayU8::class.java, radius)
+    filter.process(grayImage, denoised)
+    val result = denoised.toBufferedImage()!!
+    return result
+}
+
+/**
+ * horizontalLineRemoved
+ */
+fun BufferedImage.horizontalLineRemoved(
+    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    stroke: Float = 2f,
+): BufferedImage {
+
+    val ls = HorizontalLineSeparator(
+        containerImage = this,
+        lineThreshold = lineThreshold,
+    ).split()
+        .draw(color = Color.BLACK, stroke = stroke)
+
+    return this
+}
+
+/**
+ * verticalLineRemoved
+ */
+fun BufferedImage.verticalLineRemoved(
+    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    stroke: Float = 2f,
+): BufferedImage {
+
+    VerticalLineSeparator(
+        containerImage = this,
+        lineThreshold = lineThreshold,
+    ).split()
+        .draw(color = Color.BLACK, stroke = stroke)
+
+    return this
+}
+
+/**
+ * convertColorModel
+ */
+fun BufferedImage.convertColorModel(
+    numColors: Int
+): BufferedImage {
+
+    val r = ByteArray(numColors) { (it * 17).toByte() }
+    val g = ByteArray(numColors) { (it * 17).toByte() }
+    val b = ByteArray(numColors) { (it * 17).toByte() }
+    val cm = IndexColorModel(4, numColors, r, g, b)
+
+    val destImage = BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY, cm)
+    val g2d = destImage.createGraphics()
+    g2d.drawImage(this, 0, 0, null)
+    g2d.dispose()
+
+    return destImage
 }

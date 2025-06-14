@@ -55,13 +55,15 @@
     "[Apps]": "",
 
     "[Developer Icon]": "[Developer]:leftImage",
-    "[Developer]": ""
+    "[Developer]": "",
+
+    "[SearchField]": ".XCUIElementTypeSearchField"
   },
 
   "scroll": {
     "header-elements": "[NavigationBar]",
     "footer-elements": "",
-    "overlay-elements": "",
+    "overlay-elements": "[SearchField]",
     "start-elements": "[Profile Icon]",
     "end-elements": ""
   }

@@ -37,26 +37,26 @@ class RowSplitterTest {
         run {
             // Arrange
             assertThatThrownBy {
-                RowSplitter(containerImageFile = file, rowThreshold = 0.0)
+                RowSplitter(containerImageFile = file, lineThreshold = 0.0)
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("rowThreshold must be between 0.0 and 1.0")
         }
         run {
             // Act
-            val rs = RowSplitter(containerImageFile = file, rowThreshold = 0.1)
+            val rs = RowSplitter(containerImageFile = file, lineThreshold = 0.1)
             // Assert
-            assertThat(rs.rowThreshold).isEqualTo(0.1)
+            assertThat(rs.lineThreshold).isEqualTo(0.1)
         }
         run {
             // Act
-            val rs = RowSplitter(containerImageFile = file, rowThreshold = 1.0)
+            val rs = RowSplitter(containerImageFile = file, lineThreshold = 1.0)
             // Assert
-            assertThat(rs.rowThreshold).isEqualTo(1.0)
+            assertThat(rs.lineThreshold).isEqualTo(1.0)
         }
         run {
             // Arrange
             assertThatThrownBy {
-                RowSplitter(containerImageFile = file, rowThreshold = 1.1)
+                RowSplitter(containerImageFile = file, lineThreshold = 1.1)
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("rowThreshold must be between 0.0 and 1.0")
         }

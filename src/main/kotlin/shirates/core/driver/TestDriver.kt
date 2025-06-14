@@ -2638,44 +2638,47 @@ object TestDriver {
         return this
     }
 
-    /**
-     * getFocusedWebElement
-     */
-    fun getFocusedWebElement(): TestElement {
-
-        return try {
-            classic.implicitWaitMilliseconds((testContext.shortWaitSeconds * 1000).toInt()) {
-                lastElement = (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
-            }
-            lastElement
-        } catch (t: Throwable) {
-            throw TestDriverException(message(id = "activeElementNotFound", submessage = "$t"), cause = t)
-        }
-    }
-
-    private fun getFocusedElementCore(
+    internal fun getFocusedElementCore(
+        waitSeconds: Double = shirates.core.driver.testContext.waitSecondsOnIsScreen,
         throwsException: Boolean = false
     ): TestElement {
 
+        var e = TestElement.emptyElement
         if (isAndroid) {
-            val focused =
-                select(expression = "xpath=//*[@focused='true']", allowScroll = false, throwsException = false)
-            return focused
-        } else {
-            val e = try {
-                (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
-            } catch (t: Throwable) {
-                if (throwsException) throw t
-                return TestElement.emptyElement
+            val xpath = "//*[@focused='true']"
+            val sel = Selector(xpath)
+
+            WaitUtility.doUntilTrue(
+                waitSeconds = waitSeconds,
+                throwOnFinally = false
+            ) {
+                e = try {
+                    val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
+                    focused.toTestElement(sel)
+                } catch (t: Throwable) {
+                    TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
+                    if (throwsException) throw t
+                    TestElement.emptyElement
+                }
+                e.isFound
             }
-            return e
+        } else {
+            e = try {
+                (TestDriver.appiumDriver.switchTo().activeElement() as WebElement).toTestElement()
+            } catch (t: Throwable) {
+                TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
+                if (throwsException) throw t
+                TestElement.emptyElement
+            }
         }
+        return e
     }
 
     /**
      * getFocusedElement
      */
     fun getFocusedElement(
+        waitSeconds: Double = shirates.core.driver.testContext.waitSecondsOnIsScreen,
         throwsException: Boolean = false
     ): TestElement {
 
@@ -2685,7 +2688,10 @@ object TestDriver {
 
         refreshCache()
 
-        val element = getFocusedElementCore(throwsException = throwsException)
+        val element = getFocusedElementCore(
+            waitSeconds = waitSeconds,
+            throwsException = false
+        )
 
         if (element.isEmpty && throwsException) {
             throw TestDriverException(message(id = "focusedElementNotFound"))

@@ -526,19 +526,12 @@ class SegmentContainer(
             throw IllegalArgumentException("containerImage is null")
         }
         val image = BufferedImage(containerImage!!.width, containerImage!!.height, BufferedImage.TYPE_INT_ARGB)
-        val g2d = image.createGraphics()
 
         /**
          * draw grid
          */
         if (grid) {
-            g2d.color = gridColor
-            for (x in 0 until image.width step gridWidth) {
-                g2d.drawLine(x, 0, x, image.rect.bottom)
-            }
-            for (y in 0 until image.height step gridWidth) {
-                g2d.drawLine(0, y, image.rect.right, y)
-            }
+            image.drawGrid(gridWidth = gridWidth, gridColor = gridColor)
         }
         /**
          * draw original segments

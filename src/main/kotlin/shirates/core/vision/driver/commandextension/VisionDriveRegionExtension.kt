@@ -15,7 +15,6 @@ fun VisionDrive.onLineOf(
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     autoImageFilter: Boolean = false,
     lineHeightRatio: Double = PropertiesManager.visionLineSpacingRatio,
-    lineHeight: Int? = null,
     verticalOffset: Int = 0,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)
@@ -28,13 +27,28 @@ fun VisionDrive.onLineOf(
         autoImageFilter = autoImageFilter,
         swipeToSafePosition = swipeToSafePosition,
     )
-    val lh = lineHeight ?: (v.rect.height * lineHeightRatio).toInt()
     return v.onLine(
         lineHeightRatio = lineHeightRatio,
-        lineHeight = lh,
         verticalOffset = verticalOffset,
         func = func
     )
+}
+
+/**
+ * getTopRegion
+ */
+fun VisionDrive.getTopRegion(
+    topRate: Double = 0.2,
+): VisionElement {
+
+    if (topRate < 0.0 || topRate > 1.0) {
+        throw IllegalArgumentException("bottomRate must be between 0.0 and 1.0")
+    }
+
+    val r = rootElement.rect
+    val regionElement = Rectangle(left = 0, top = 0, width = r.width, height = (r.height * topRate).toInt())
+        .toVisionElement()
+    return regionElement
 }
 
 /**
@@ -45,23 +59,16 @@ fun VisionDrive.onTopRegion(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    if (topRate < 0.0 || topRate > 1.0) {
-        throw IllegalArgumentException("bottomRate must be between 0.0 and 1.0")
-    }
-
-    val r = rootElement.rect
-    val regionElement = Rectangle(left = 0, top = 0, width = r.width, height = (r.height * topRate).toInt())
-        .toVisionElement()
+    val regionElement = getTopRegion(topRate = topRate)
     regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * onBottomRegion
+ * getBottomRegion
  */
-fun VisionDrive.onBottomRegion(
+fun VisionDrive.getBottomRegion(
     bottomRate: Double = 0.2,
-    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     if (bottomRate < 0.0 || bottomRate > 1.0) {
@@ -75,17 +82,28 @@ fun VisionDrive.onBottomRegion(
         width = r.width,
         height = (r.height * bottomRate).toInt()
     ).toVisionElement()
+    return regionElement
+}
+
+/**
+ * onBottomRegion
+ */
+fun VisionDrive.onBottomRegion(
+    bottomRate: Double = 0.2,
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val regionElement = getBottomRegion(bottomRate = bottomRate)
     regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * onMiddleRegion
+ * getMiddleRegion
  */
-fun VisionDrive.onMiddleRegion(
+fun VisionDrive.getMiddleRegion(
     upperRate: Double = 0.2,
     lowerRate: Double = 0.2,
-    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     if (upperRate < 0.0 || upperRate > 1.0) {
@@ -102,6 +120,19 @@ fun VisionDrive.onMiddleRegion(
         right = r.right,
         bottom = r.centerY + (r.height * lowerRate).toInt()
     ).toVisionElement()
+    return regionElement
+}
+
+/**
+ * onMiddleRegion
+ */
+fun VisionDrive.onMiddleRegion(
+    upperRate: Double = 0.2,
+    lowerRate: Double = 0.2,
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val regionElement = getMiddleRegion(upperRate = upperRate, lowerRate = lowerRate)
     regionCore(regionElement = regionElement, func = func)
     return regionElement
 }

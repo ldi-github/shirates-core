@@ -3,10 +3,12 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.flickCenterToTop
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.tapWithScrollUp
 import shirates.core.testcode.Want
 import shirates.core.vision.classicScope
-import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -17,21 +19,20 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
     @Order(10)
     fun tapWithScrollUp_textContains() {
 
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
-                }.action {
-                    it.tapWithScrollUp("*enera*")
-                }.expectation {
-                    it.screenIs("[General Screen]")
+        classicScope {
+            scenario {
+                case(1) {
+                    condition {
+                        it.macro("[iOS Settings Top Screen]")
+                            .flickCenterToTop()
+                    }.action {
+                        it.tapWithScrollUp("*enera*")
+                    }.expectation {
+                        it.screenIs("[General Screen]")
+                    }
                 }
             }
         }
-
-        it.tap("Settings")
-            .flickTopToBottom()
     }
 
     @Test
@@ -43,7 +44,7 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                 case(1) {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
+                            .flickCenterToTop()
                     }.action {
                         it.tapWithScrollUp("*eneral")
                     }.expectation {
@@ -51,9 +52,6 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                     }
                 }
             }
-
-            it.tap("[<Settings]")
-                .flickTopToBottom()
         }
     }
 
@@ -61,21 +59,20 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
     @Order(30)
     fun tapWithScrollUp_textMatches() {
 
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
-                }.action {
-                    it.tapWithScrollUp("textMatches=^Gen.*al$")
-                }.expectation {
-                    it.screenIs("[General Screen]")
+        classicScope {
+            scenario {
+                case(1) {
+                    condition {
+                        it.macro("[iOS Settings Top Screen]")
+                            .flickCenterToTop()
+                    }.action {
+                        it.tapWithScrollUp("textMatches=^Gen.*al$")
+                    }.expectation {
+                        it.screenIs("[General Screen]")
+                    }
                 }
             }
         }
-
-        it.tap("Settings")
-            .flickTopToBottom()
     }
 
     @Test
@@ -87,7 +84,7 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                 case(1) {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
+                            .flickCenterToTop()
                     }.action {
                         it.tapWithScrollUp("#General")
                     }.expectation {
@@ -95,9 +92,6 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                     }
                 }
             }
-
-            it.tap("[<Settings]")
-                .flickTopToBottom()
         }
     }
 
@@ -122,7 +116,7 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                 case(1) {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
+                            .flickCenterToTop()
                     }.action {
                         it.tapWithScrollUp("xpath=//*[@label='General' and @visible='true']")
                     }.expectation {
@@ -130,8 +124,6 @@ class VisionDriveTapExtensionTest5 : VisionTest() {
                     }
                 }
             }
-
-            it.pressBack()
         }
     }
 

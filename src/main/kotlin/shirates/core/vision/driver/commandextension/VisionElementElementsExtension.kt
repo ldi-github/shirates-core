@@ -1,23 +1,18 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.*
 import shirates.core.vision.VisionElement
-import java.awt.image.BufferedImage
 
 /**
  * ancestors
  */
 fun VisionElement.ancestors(
     mergeIncluded: Boolean = false,
-    containerImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    containerImageFile: String? = null,
-    containerX: Int = 0,
-    containerY: Int = 0,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
@@ -28,14 +23,20 @@ fun VisionElement.ancestors(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
 ): List<VisionElement> {
+
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val binary = BinarizationUtility.getBinaryAsGrayU8(
+        image = image,
+        invert = false,
+//        skinThickness = skinThickness,
+        threshold = binaryThreshold
+    ).toBufferedImage()!!
 
     val sc = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = containerImage,
-        containerImageFile = containerImageFile,
-        containerX = containerX,
-        containerY = containerY,
+        containerImage = binary,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         skinThickness = skinThickness,
@@ -63,10 +64,6 @@ fun VisionElement.ancestors(
 fun VisionElement.ancestorsContains(
     rect: Rectangle,
     mergeIncluded: Boolean = false,
-    containerImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    containerImageFile: String? = null,
-    containerX: Int = 0,
-    containerY: Int = 0,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
@@ -77,14 +74,20 @@ fun VisionElement.ancestorsContains(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
 ): List<VisionElement> {
+
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val binary = BinarizationUtility.getBinaryAsGrayU8(
+        image = image,
+        invert = false,
+//        skinThickness = skinThickness,
+        threshold = binaryThreshold
+    ).toBufferedImage()!!
 
     val sc = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = containerImage,
-        containerImageFile = containerImageFile,
-        containerX = containerX,
-        containerY = containerY,
+        containerImage = binary,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         skinThickness = skinThickness,
@@ -101,6 +104,7 @@ fun VisionElement.ancestorsContains(
     if (filter != null) {
         ancestors = ancestors.filter { filter.invoke(it) }
     }
+    ancestors = ancestors.filter { it.rect.x1 != 0 && it.rect.y1 != 0 }
     ancestors = ancestors.sortedByDescending { it.rect.area }
 
     return ancestors
@@ -112,10 +116,6 @@ fun VisionElement.ancestorsContains(
 fun VisionElement.ancestorsContains(
     visionElement: VisionElement,
     mergeIncluded: Boolean = false,
-    containerImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    containerImageFile: String? = null,
-    containerX: Int = 0,
-    containerY: Int = 0,
     segmentMarginHorizontal: Int = 5,
     segmentMarginVertical: Int = 5,
     skinThickness: Int = 2,
@@ -126,14 +126,20 @@ fun VisionElement.ancestorsContains(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
 ): List<VisionElement> {
+
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val binary = BinarizationUtility.getBinaryAsGrayU8(
+        image = image,
+        invert = false,
+//        skinThickness = skinThickness,
+        threshold = binaryThreshold
+    ).toBufferedImage()!!
 
     val sc = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = containerImage,
-        containerImageFile = containerImageFile,
-        containerX = containerX,
-        containerY = containerY,
+        containerImage = binary,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         skinThickness = skinThickness,

@@ -39,9 +39,8 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
         // Assert
         it.exist("Cache Buster")
 
-
         // Arrange
-        it.tap("Developer")
+        it.pressBack()
             .flickAndGoDown()
         // Act
         it.doUntilScrollStop(
@@ -60,7 +59,9 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
     fun scanElements() {
 
         // Arrange
-        it.macro("[Developer Screen]")
+        it.macro("[iOS Settings Top Screen]")
+        it.flickAndGoDown()
+            .tap("Privacy & Security")
         TestElementCache.scanResults.clear()
         assertThat(TestElementCache.scanResults.count() == 0).isTrue()
         classicScope {
@@ -68,9 +69,9 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
             it.scanElements()
             // Assert
             assertThat(TestElementCache.scanResults.count() > 0).isTrue()
-            assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Dark Appearance" })
+            assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Location Services" })
                 .isTrue()
-            assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Enable MIDI-CI" })
+            assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Apple Advertising" })
                 .isTrue()
         }
     }
