@@ -6,27 +6,24 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.RowSplitter
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
-import java.awt.image.BufferedImage
 
 /**
  * row
  */
 fun VisionElement.row(
-    containerImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    containerImageFile: String? = null,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    rowThreshold: Double = PropertiesManager.visionRowThreshold,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
 ): VisionElement {
 
     val rs = RowSplitter(
-        containerImage = containerImage,
-        containerImageFile = containerImageFile,
+        containerImage = CodeExecutionContext.lastScreenshotImage,
+        containerImageFile = CodeExecutionContext.lastScreenshotFile,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         binaryThreshold = binaryThreshold,
-        rowThreshold = rowThreshold,
+        horizontalLineThreshold = horizontalLineThreshold,
     ).split()
 
     val v = this

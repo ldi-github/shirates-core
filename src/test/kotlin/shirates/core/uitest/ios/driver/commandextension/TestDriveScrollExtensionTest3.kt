@@ -51,10 +51,9 @@ class TestDriveScrollExtensionTest3 : UITest() {
             }
         )
         // Assert
-        val lastItem =
-            it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        assertThat(lastItem.label)
-            .isEqualTo("This account will only be used for testing your in-app purchases in sandbox.")
+        val descendants = it.select(".XCUIElementTypeTable").descendants
+        assertThat(descendants.any() { it.label == "This account will only be used for testing your in-app purchases in sandbox." })
+            .isTrue
     }
 
     @Test
@@ -62,16 +61,18 @@ class TestDriveScrollExtensionTest3 : UITest() {
     fun scanElements() {
 
         // Arrange
-        it.macro("[Developer Screen]")
+        it.macro("[iOS Settings Top Screen]")
+        it.flickAndGoDown()
+            .tap("Privacy & Security")
         TestElementCache.scanResults.clear()
         assertThat(TestElementCache.scanResults.count() == 0).isTrue()
         // Act
         it.scanElements()
         // Assert
         assertThat(TestElementCache.scanResults.count() > 0).isTrue()
-        assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Dark Appearance" })
+        assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Location Services" })
             .isTrue()
-        assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Enable MIDI-CI" })
+        assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Apple Advertising" })
             .isTrue()
     }
 

@@ -172,7 +172,7 @@ class VisionDriveSwipeExtensionTest : VisionTest() {
                 condition {
                     it.screenIs("[iOS Settings Top Screen]")
                 }.action {
-                    it.detect("Screen Time")
+                    it.detect("StandBy")
                         .swipeToCenterOfScreen()
                 }.expectation {
                     val b = it.bounds

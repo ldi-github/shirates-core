@@ -4,18 +4,20 @@ You can press key using these functions.
 
 ## functions (Android)
 
-| function  |
-|:----------|
-| pressBack |
-| pressHome |
-| pressTab  |
+| function   |
+|:-----------|
+| pressBack  |
+| pressHome  |
+| pressEnter |
+| pressTab   |
 
 ## functions (iOS)
 
-| function  |
-|:----------|
-| pressBack |
-| pressHome |
+| function   |
+|:-----------|
+| pressBack  |
+| pressHome  |
+| pressEnter |
 
 ## Sample code
 

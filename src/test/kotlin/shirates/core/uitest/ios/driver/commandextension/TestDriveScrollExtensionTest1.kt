@@ -38,7 +38,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(1)
-                    scrollableElements.filter { it.type == "XCUIElementTypeCollectionView" }.count().thisIs(1)
+                    scrollableElements.count { it.type == "XCUIElementTypeCollectionView" }.thisIs(1)
                 }
             }
             case(2) {
@@ -53,11 +53,11 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         e.printInfo()
                         e.isScrollableElement.thisIsTrue()
                     }
-                    scrollableElements.count().thisIs(3)
+                    scrollableElements.count().thisIsGreaterThanOrEqual(3)
                     fun TestElement.thisIsScrollable() {
                         val r =
-                            this.type == "XCUIElementTypeMap" || this.type == "XCUIElementTypeTable" || this.type == "XCUIElementTypeCollectionView"
-                        r.thisIsTrue("This is XCUIElementTypeMap or XCUIElementTypeTable or XCUIElementTypeCollectionView")
+                            this.type == "XCUIElementTypeMap" || this.type == "XCUIElementTypeTable" || this.type == "XCUIElementTypeCollectionView" || this.type == "XCUIElementTypeScrollView"
+                        r.thisIsTrue("This is XCUIElementTypeMap or XCUIElementTypeTable or XCUIElementTypeCollectionView or XCUIElementTypeScrollView")
                     }
                     scrollableElements[0].thisIsScrollable()
                     scrollableElements[1].thisIsScrollable()

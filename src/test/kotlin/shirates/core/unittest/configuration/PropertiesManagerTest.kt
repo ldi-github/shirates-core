@@ -2114,6 +2114,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionTextToLineHeightRatio() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextToLineHeightRatio).isEqualTo(Const.VISION_TEXT_TO_LINE_HEIGHT_RATIO)
+        }
+        run {
+            // Arrange
+            val value = 1.0
+            PropertiesManager.setPropertyValue("visionTextToLineHeightRatio", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextToLineHeightRatio).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionSafeAreaTopRatio() {
 
         run {
@@ -2168,20 +2186,38 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionRowThreshold() {
+    fun visionHorizontalLineThreshold() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(Const.VISION_ROW_THRESHOLD)
+            assertThat(PropertiesManager.visionHorizontalLineThreshold).isEqualTo(Const.VISION_HORIZONTAL_LINE_THRESHOLD)
         }
         run {
             // Arrange
             val value = 0.8
-            PropertiesManager.setPropertyValue("visionRowThreshold", value.toString())
+            PropertiesManager.setPropertyValue("visionHorizontalLineThreshold", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionRowThreshold).isEqualTo(value)
+            assertThat(PropertiesManager.visionHorizontalLineThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionVerticalLineThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionVerticalLineThreshold).isEqualTo(Const.VISION_VERTICAL_LINE_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 0.8
+            PropertiesManager.setPropertyValue("visionVerticalLineThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionVerticalLineThreshold).isEqualTo(value)
         }
     }
 

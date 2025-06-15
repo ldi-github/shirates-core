@@ -168,7 +168,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    it.select("[Screen Time]")
+                    it.select("[StandBy]")
                         .swipeToCenterOfScreen()
                 }.expectation {
                     val b = it.bounds

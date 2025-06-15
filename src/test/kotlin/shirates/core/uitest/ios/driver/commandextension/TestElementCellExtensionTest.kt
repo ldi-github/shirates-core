@@ -15,7 +15,7 @@ class TestElementCellExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                        .tap("Screen Time")
+                        .tapWithScrollDown("Screen Time")
                 }.expectation {
                     it.cellOf("Screen Distance") {
                         exist("Reduce eye strain")

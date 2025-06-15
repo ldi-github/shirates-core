@@ -21,12 +21,12 @@ class TestElementSwipeExtensionTest : UITest() {
                     it.macro("[iOS Settings Top Screen]")
                     target = it.select("General")
                 }.action {
-                    from = it.select("Privacy & Security")
+                    from = it.select("StandBy")
 
                     from.swipeTo("General")
 
                 }.expectation {
-                    val current = it.select("Privacy & Security")
+                    val current = it.select("StandBy")
                     val diffY = target.bounds.top - from.bounds.top
                     val diffY2 = target.bounds.top - current.bounds.top
                     output("diffY2=${diffY2}, diffY=${diffY}")
@@ -37,7 +37,7 @@ class TestElementSwipeExtensionTest : UITest() {
             case(2) {
                 action {
                     from = it.select("Camera")
-                    target = it.select("Privacy & Security")
+                    target = it.select("StandBy")
                     it.swipeElementToElement(startElement = from, endElement = target)
                 }.expectation {
                     val current = it.select("Camera")

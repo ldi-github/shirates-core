@@ -20,7 +20,7 @@ class VisionDriveKeyboardExtensionTest2 : VisionTest() {
                         .sendKeys("appium")
                         .keyboardIsShown()
                 }.action {
-                    it.tap("search")
+                    it.pressEnter()
                 }.expectation {
                     it.keyboardIsNotShown()
                 }

@@ -25,11 +25,11 @@ class TestElementStorageExtensionTest : UITest() {
             }
             case(2) {
                 action {
-                    it.select("Privacy & Security")
+                    it.select("StandBy")
                         .memoTextAs("key2")
                 }.expectation {
                     it.readMemo("key2")
-                        .thisIs("Privacy & Security")
+                        .thisIs("StandBy")
                 }
             }
             case(3) {
@@ -40,7 +40,7 @@ class TestElementStorageExtensionTest : UITest() {
                     it.readMemo("key1")
                         .thisIs("Camera")
                     it.readMemo("key2")
-                        .thisIs("Privacy & Security")
+                        .thisIs("StandBy")
                 }
             }
         }

@@ -89,7 +89,7 @@ class VisionDriveKeyboardExtensionTest : VisionTest() {
                     it.macro("[Network & internet Screen]")
                         .pressTab()
                 }.action {
-                    classic.pressEnter()
+                    it.pressEnter()
                 }.expectation {
                     it.screenIs("[Internet Screen]")
                 }

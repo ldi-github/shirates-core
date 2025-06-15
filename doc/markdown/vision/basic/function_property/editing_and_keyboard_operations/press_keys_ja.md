@@ -1,15 +1,15 @@
-# Press keys
+# Press keys (Vision)
 
 これらの関数を使用するとキーを押下することができます。
 
 ## 関数 (Android)
 
-| 関数          |
-|:------------|
-| pressBack   |
-| pressHome   |
-| pressSearch |
-| pressTab    |
+| 関数         |
+|:-----------|
+| pressBack  |
+| pressHome  |
+| pressEnter |
+| pressTab   |
 
 ## 関数 (iOS)
 

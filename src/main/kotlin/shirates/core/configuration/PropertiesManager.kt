@@ -1181,6 +1181,15 @@ object PropertiesManager {
         }
 
     /**
+     * visionTextToLineHeightRatio
+     */
+    val visionTextToLineHeightRatio: Double
+        get() {
+            return getPropertyValue(propertyName = "visionTextToLineHeightRatio")?.toDoubleOrNull()
+                ?: Const.VISION_TEXT_TO_LINE_HEIGHT_RATIO
+        }
+
+    /**
      * visionSafeAreaTopRatio
      */
     val visionSafeAreaTopRatio: Double
@@ -1208,12 +1217,21 @@ object PropertiesManager {
         }
 
     /**
-     * visionRowThreshold
+     * visionHorizontalLineThreshold
      */
-    val visionRowThreshold: Double
+    val visionHorizontalLineThreshold: Double
         get() {
-            return getPropertyValue(propertyName = "visionRowThreshold")?.toDoubleOrNull()
-                ?: Const.VISION_ROW_THRESHOLD
+            return getPropertyValue(propertyName = "visionHorizontalLineThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_HORIZONTAL_LINE_THRESHOLD
+        }
+
+    /**
+     * visionVerticalLineThreshold
+     */
+    val visionVerticalLineThreshold: Double
+        get() {
+            return getPropertyValue(propertyName = "visionVerticalLineThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_VERTICAL_LINE_THRESHOLD
         }
 
     // Custom --------------------------------------------------

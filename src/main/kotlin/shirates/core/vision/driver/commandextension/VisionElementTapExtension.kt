@@ -11,10 +11,8 @@ fun VisionElement.tapBelow(
     pos: Int = 1,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
 ): VisionElement {
 
@@ -22,10 +20,8 @@ fun VisionElement.tapBelow(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
-        segmentMinimumWidth = segmentMinimumWidth,
         include = include,
         binaryThreshold = binaryThreshold,
-        aspectRatioTolerance = aspectRatioTolerance,
     )
     v = v.tap(holdSeconds = holdSeconds)
     return v
@@ -38,10 +34,8 @@ fun VisionElement.tapAbove(
     pos: Int = 1,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
 ): VisionElement {
 
@@ -49,10 +43,8 @@ fun VisionElement.tapAbove(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
-        segmentMinimumWidth = segmentMinimumWidth,
         include = include,
         binaryThreshold = binaryThreshold,
-        aspectRatioTolerance = aspectRatioTolerance,
     )
     v = v.tap(holdSeconds = holdSeconds)
     return v

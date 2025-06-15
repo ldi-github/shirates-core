@@ -23,6 +23,9 @@ object AppleMapsMacro : TestDrive {
         if (TestMode.isClassicTest) {
             launchApp("Maps")
             wait(5)
+            ifCanSelect("Allow While Using App") {
+                it.tap()
+            }
             ifCanSelect("Close") {
                 it.tap()
             }
@@ -34,6 +37,9 @@ object AppleMapsMacro : TestDrive {
             it.visionScope {
                 launchApp("Maps")
                 wait(5)
+                it.ifCanDetect("Allow While Using App") {
+                    it.tap()
+                }
                 it.ifCanDetect("Close") {
                     it.tap()
                 }

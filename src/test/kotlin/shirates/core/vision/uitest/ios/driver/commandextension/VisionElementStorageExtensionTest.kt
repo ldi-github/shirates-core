@@ -29,11 +29,11 @@ class VisionElementStorageExtensionTest : VisionTest() {
             }
             case(2) {
                 action {
-                    it.detect("Privacy & Security")
+                    it.detect("StandBy")
                         .memoTextAs("key2")
                 }.expectation {
                     it.readMemo("key2")
-                        .thisIs("Privacy & Security")
+                        .thisIs("StandBy")
                 }
             }
             case(3) {
@@ -44,7 +44,7 @@ class VisionElementStorageExtensionTest : VisionTest() {
                     it.readMemo("key1")
                         .thisIs("Camera")
                     it.readMemo("key2")
-                        .thisIs("Privacy & Security")
+                        .thisIs("StandBy")
                 }
             }
         }

@@ -1,13 +1,16 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.image.BinarizationUtility
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.convertColorModel
+import shirates.core.utility.image.toBufferedImage
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
-import java.awt.image.BufferedImage
 
 /**
  * cell
@@ -15,10 +18,6 @@ import java.awt.image.BufferedImage
 fun VisionElement.cell(
     index: Int = 0,
     mergeIncluded: Boolean = false,
-    containerImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    containerImageFile: String? = null,
-    containerX: Int = 0,
-    containerY: Int = 0,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
@@ -28,14 +27,20 @@ fun VisionElement.cell(
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
 ): VisionElement {
+
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val binary = BinarizationUtility.getBinaryAsGrayU8(
+        image = image,
+        invert = false,
+//        skinThickness = skinThickness,
+        threshold = binaryThreshold
+    ).toBufferedImage()!!
 
     val sc = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = containerImage,
-        containerImageFile = containerImageFile,
-        containerX = containerX,
-        containerY = containerY,
+        containerImage = binary,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         skinThickness = skinThickness,
@@ -75,4 +80,3 @@ fun VisionElement.onCell(
     }
     return lastElement
 }
-

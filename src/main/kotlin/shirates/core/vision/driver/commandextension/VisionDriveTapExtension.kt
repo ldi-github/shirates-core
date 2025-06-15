@@ -601,6 +601,7 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapItemUnder(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -612,6 +613,10 @@ fun VisionDrive.tapItemUnder(
     allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = true,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -637,8 +642,13 @@ fun VisionDrive.tapItemUnder(
             throwsException = true,
         )
         v = labelElement.belowItem(
+            pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
+            removeHorizontalLine = removeHorizontalLine,
+            horizontalLineThreshold = horizontalLineThreshold,
+            removeVerticalLine = removeVerticalLine,
+            verticalLineThreshold = verticalLineThreshold,
         )
         val tapFunc = {
             silent {
@@ -714,6 +724,7 @@ fun VisionDrive.tapTextUnder(
  */
 fun VisionDrive.tapItemOver(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -725,6 +736,10 @@ fun VisionDrive.tapItemOver(
     allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = false,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -750,8 +765,13 @@ fun VisionDrive.tapItemOver(
             throwsException = true,
         )
         v = labelElement.aboveItem(
+            pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
+            removeHorizontalLine = removeHorizontalLine,
+            horizontalLineThreshold = horizontalLineThreshold,
+            removeVerticalLine = removeVerticalLine,
+            verticalLineThreshold = verticalLineThreshold,
         )
         val tapFunc = {
             silent {
@@ -827,6 +847,7 @@ fun VisionDrive.tapTextOver(
  */
 fun VisionDrive.tapItemRightOf(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -863,6 +884,7 @@ fun VisionDrive.tapItemRightOf(
             throwsException = true,
         )
         v = labelElement.rightItem(
+            pos = pos,
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )
@@ -886,6 +908,7 @@ fun VisionDrive.tapItemRightOf(
  */
 fun VisionDrive.tapItemLeftOf(
     expression: String,
+    pos: Int = 1,
     language: String = testContext.visionOCRLanguage,
     looseMatch: Boolean = PropertiesManager.visionLooseMatch,
     mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
@@ -922,6 +945,7 @@ fun VisionDrive.tapItemLeftOf(
             throwsException = true,
         )
         v = labelElement.leftItem(
+            pos = pos,
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )

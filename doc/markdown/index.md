@@ -101,7 +101,7 @@
     - [Determining scrollable area(onLine, onLineOf, onColumn, onColumnOf)](vision/basic/function_property/swipe_screen/determining_scrollable_area.md)
 - Getting image/text relatively
     - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
-    - [Relative image (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image.md)
+    - [Relative image (leftItem, rightItem, belowItem, aboveItem, belowLineItem, aboveLineItem, belowRow, aboveRow)](vision/basic/function_property/getting_image/relative_image.md)
 - Asserting text
     - [Text assertion (textIs)](vision/basic/function_property/asserting_text/text_assertion.md)
 - Asserting image

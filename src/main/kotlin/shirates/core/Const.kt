@@ -176,10 +176,14 @@ object Const {
     const val VISION_REMOVE_VOICING_MARKS = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
+    const val VISION_TEXT_TO_LINE_HEIGHT_RATIO = 3.0
     const val VISION_SAFE_AREA_TOP_RATIO = 0.2
     const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
-    const val VISION_ROW_THRESHOLD = 0.7
+    const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
+    const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
+    const val VISION_NUMBER_OF_COLORS_12 = 12   // cell disappears on iOS Settings App
+    const val VISION_NUMBER_OF_COLORS_16 = 16   // cell appears on iOS Settings App
 
     /**
      * internal

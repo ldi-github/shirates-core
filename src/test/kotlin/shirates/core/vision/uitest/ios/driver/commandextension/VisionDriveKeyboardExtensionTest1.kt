@@ -47,4 +47,20 @@ class VisionDriveKeyboardExtensionTest1 : VisionTest() {
         }
     }
 
+    @Test
+    @Order(30)
+    fun pressEnter() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Search Screen]")
+                }.action {
+                    it.sendKeys("fitness")
+                        .pressEnter()
+                }
+            }
+        }
+    }
+
 }

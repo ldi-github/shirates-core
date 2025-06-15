@@ -4,12 +4,16 @@ You can find an image relatively using these functions.
 
 ## Functions
 
-| function  | description                         |
-|:----------|:------------------------------------|
-| rightItem | Finds an item right of the element. |
-| leftItem  | Finds an item left of the element.  |
-| belowItem | Finds an item below of the element. |
-| aboveItem | Finds an item above of the element. |
+| function      | description                             |
+|:--------------|:----------------------------------------|
+| rightItem     | Gets an item right of the element.      |
+| leftItem      | Gets an item left of the element.       |
+| belowItem     | Gets an item below of the element.      |
+| aboveItem     | Gets an item above of the element.      |
+| belowLineItem | Gets an line item below of the element. |
+| aboveLineItem | Gets an line item above of the element. |
+| belowRow      | Gets an row below of the element.       |
+| aboveRow      | Gets an row above of the element.       |
 
 ## Sample code
 
