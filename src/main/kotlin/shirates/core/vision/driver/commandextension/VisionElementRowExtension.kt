@@ -14,7 +14,7 @@ fun VisionElement.row(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
 ): VisionElement {
 
     val rs = RowSplitter(
@@ -23,7 +23,7 @@ fun VisionElement.row(
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         binaryThreshold = binaryThreshold,
-        lineThreshold = lineThreshold,
+        horizontalLineThreshold = horizontalLineThreshold,
     ).split()
 
     val v = this

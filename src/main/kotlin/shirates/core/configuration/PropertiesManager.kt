@@ -1217,12 +1217,21 @@ object PropertiesManager {
         }
 
     /**
-     * visionLineThreshold
+     * visionHorizontalLineThreshold
      */
-    val visionLineThreshold: Double
+    val visionHorizontalLineThreshold: Double
         get() {
-            return getPropertyValue(propertyName = "visionLineThreshold")?.toDoubleOrNull()
-                ?: Const.VISION_LINE_THRESHOLD
+            return getPropertyValue(propertyName = "visionHorizontalLineThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_HORIZONTAL_LINE_THRESHOLD
+        }
+
+    /**
+     * visionVerticalLineThreshold
+     */
+    val visionVerticalLineThreshold: Double
+        get() {
+            return getPropertyValue(propertyName = "visionVerticalLineThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_VERTICAL_LINE_THRESHOLD
         }
 
     // Custom --------------------------------------------------

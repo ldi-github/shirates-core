@@ -16,7 +16,7 @@ class RowSplitter(
     val segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     val segmentMarginVertical: Int = testContext.segmentMarginVertical,
     var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    val lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    val horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
 ) {
     val containerImage: BufferedImage
     val containerImageFile: String
@@ -85,8 +85,8 @@ class RowSplitter(
         this.containerImage = image!!
         this.containerImageFile = file!!
 
-        if (lineThreshold <= 0.0 || 1.0 < lineThreshold) {
-            throw IllegalArgumentException("rowThreshold must be between 0.0 and 1.0")
+        if (horizontalLineThreshold <= 0.0 || 1.0 < horizontalLineThreshold) {
+            throw IllegalArgumentException("horizontalLineThreshold must be between 0.0 and 1.0")
         }
     }
 
@@ -118,7 +118,7 @@ class RowSplitter(
 
         val lineSeparator = HorizontalLineSeparator(
             containerImage = containerImage,
-            lineThreshold = lineThreshold,
+            horizontalLineThreshold = horizontalLineThreshold,
         ).split(inverse = inverse)
 
         val lines = lineSeparator.horizontalLines

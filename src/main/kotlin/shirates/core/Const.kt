@@ -180,7 +180,8 @@ object Const {
     const val VISION_SAFE_AREA_TOP_RATIO = 0.2
     const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
-    const val VISION_LINE_THRESHOLD = 0.7
+    const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
+    const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
     const val VISION_NUMBER_OF_COLORS_12 = 12   // cell disappears on iOS Settings App
     const val VISION_NUMBER_OF_COLORS_16 = 16   // cell appears on iOS Settings App
 

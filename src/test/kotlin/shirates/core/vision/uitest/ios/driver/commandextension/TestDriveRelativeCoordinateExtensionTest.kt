@@ -142,6 +142,15 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v2.joinedText.thisStartsWith("Model Name iPhone ")
                 }
             }
+            case(2) {
+                action {
+                    v1 = it.detect("iOS Version").aboveLineItem()
+                    v2 = it.detect("iOS Version").belowLineItem()
+                }.expectation {
+                    v1.joinedText.thisIs("Name iPhone")
+                    v2.joinedText.thisStartsWith("Model Name iPhone ")
+                }
+            }
         }
     }
 

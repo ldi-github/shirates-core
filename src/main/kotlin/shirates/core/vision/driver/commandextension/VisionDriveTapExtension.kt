@@ -613,6 +613,10 @@ fun VisionDrive.tapItemUnder(
     allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = true,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -641,6 +645,10 @@ fun VisionDrive.tapItemUnder(
             pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
+            removeHorizontalLine = removeHorizontalLine,
+            horizontalLineThreshold = horizontalLineThreshold,
+            removeVerticalLine = removeVerticalLine,
+            verticalLineThreshold = verticalLineThreshold,
         )
         val tapFunc = {
             silent {
@@ -728,6 +736,10 @@ fun VisionDrive.tapItemOver(
     allowScroll: Boolean? = CodeExecutionContext.withScroll,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = false,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -756,6 +768,10 @@ fun VisionDrive.tapItemOver(
             pos = pos,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
+            removeHorizontalLine = removeHorizontalLine,
+            horizontalLineThreshold = horizontalLineThreshold,
+            removeVerticalLine = removeVerticalLine,
+            verticalLineThreshold = verticalLineThreshold,
         )
         val tapFunc = {
             silent {

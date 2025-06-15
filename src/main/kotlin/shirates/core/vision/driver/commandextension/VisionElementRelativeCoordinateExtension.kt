@@ -240,7 +240,10 @@ fun VisionElement.aboveItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    removeEdgeLine: Boolean = false,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = false,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
@@ -252,51 +255,11 @@ fun VisionElement.aboveItem(
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
         numberOfColors = numberOfColors,
-        removeEdgeLine = removeEdgeLine,
+        removeHorizontalLine = removeHorizontalLine,
+        horizontalLineThreshold = horizontalLineThreshold,
+        removeVerticalLine = removeVerticalLine,
+        verticalLineThreshold = verticalLineThreshold,
     )
-}
-
-/**
- * aboveLineItem
- */
-fun VisionElement.aboveRow(
-    pos: Int = 1,
-    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
-    segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    lineThreshold: Double = PropertiesManager.visionLineThreshold,
-): VisionElement {
-
-    val rs = RowSplitter(
-        containerImage = CodeExecutionContext.lastScreenshotImage,
-        containerImageFile = CodeExecutionContext.lastScreenshotFile,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
-        binaryThreshold = binaryThreshold,
-        lineThreshold = lineThreshold,
-    ).split()
-
-    if (pos == 0) {
-        return VisionElement.emptyElement
-    }
-    if (pos < 0) {
-        return belowRow(
-            pos = -pos,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            binaryThreshold = binaryThreshold,
-            numberOfColors = numberOfColors,
-            lineThreshold = lineThreshold,
-        )
-    }
-    val aboveRows = rs.rows.filter { it.rect.bottom < this.rect.top }.sortedByDescending { it.rect.top }
-
-    if (pos <= aboveRows.count()) {
-        val v = aboveRows[pos - 1].rect.toVisionElement()
-        return v
-    }
-    return VisionElement.emptyElement
 }
 
 /**
@@ -310,6 +273,10 @@ fun VisionElement.belowItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    removeHorizontalLine: Boolean = false,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = false,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
@@ -321,6 +288,10 @@ fun VisionElement.belowItem(
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
         numberOfColors = numberOfColors,
+        removeHorizontalLine = removeHorizontalLine,
+        horizontalLineThreshold = horizontalLineThreshold,
+        removeVerticalLine = removeVerticalLine,
+        verticalLineThreshold = verticalLineThreshold,
     )
 }
 
@@ -332,7 +303,10 @@ internal fun VisionElement.aboveBelowCore(
     mergeIncluded: Boolean,
     binaryThreshold: Int,
     numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    removeEdgeLine: Boolean = false,
+    removeHorizontalLine: Boolean,
+    horizontalLineThreshold: Double,
+    removeVerticalLine: Boolean,
+    verticalLineThreshold: Double,
 ): VisionElement {
 
     val relativeExpression = if (relative.isAbove) ":aboveItem($pos)" else ":belowItem($pos)"
@@ -351,15 +325,18 @@ internal fun VisionElement.aboveBelowCore(
      * split screenshot into segments
      */
     val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
-    val binary = BinarizationUtility.getBinaryAsGrayU8(
+    val binaryImage = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
 //        skinThickness = skinThickness,
         threshold = binaryThreshold
     ).toBufferedImage()!!
-    var containerImage = binary
-    if (removeEdgeLine) {
-        containerImage = containerImage.horizontalLineRemoved().verticalLineRemoved()
+    var containerImage = binaryImage
+    if (removeHorizontalLine) {
+        containerImage = containerImage.horizontalLineRemoved(horizontalLineThreshold = horizontalLineThreshold)
+    }
+    if (removeVerticalLine) {
+        containerImage = containerImage.verticalLineRemoved(verticalLineThreshold = verticalLineThreshold)
     }
 
     val name = selector?.toString()?.escapeFileName() ?: CodeExecutionContext.lastScreenshotFile!!.toFile().name
@@ -425,46 +402,69 @@ internal fun VisionElement.aboveBelowCore(
 }
 
 /**
- * belowRow
+ * aboveLineItem
  */
-fun VisionElement.belowRow(
+fun VisionElement.aboveLineItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    removeHorizontalLine: Boolean = true,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = true,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
-    val rs = RowSplitter(
-        containerImage = CodeExecutionContext.lastScreenshotImage,
-        containerImageFile = CodeExecutionContext.lastScreenshotFile,
+    val aboveItem = this.aboveItem(
+        pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        include = include,
         binaryThreshold = binaryThreshold,
-        lineThreshold = lineThreshold,
-    ).split()
+        swipeToSafePosition = swipeToSafePosition,
+        numberOfColors = numberOfColors,
+        removeHorizontalLine = removeHorizontalLine,
+        horizontalLineThreshold = horizontalLineThreshold,
+        removeVerticalLine = removeVerticalLine,
+        verticalLineThreshold = verticalLineThreshold,
+    )
+    return aboveItem.lineRegionElement()
+}
 
-    if (pos == 0) {
-        return VisionElement.emptyElement
-    }
-    if (pos < 0) {
-        return aboveRow(
-            pos = -pos,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            binaryThreshold = binaryThreshold,
-            numberOfColors = numberOfColors,
-            lineThreshold = lineThreshold,
-        )
-    }
-    val belowRows = rs.rows.filter { this.rect.bottom < it.rect.top }
+/**
+ * belowLineItem
+ */
+fun VisionElement.belowLineItem(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    include: Boolean = false,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    removeHorizontalLine: Boolean = true,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    removeVerticalLine: Boolean = true,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
+): VisionElement {
 
-    if (pos <= belowRows.count()) {
-        val v = belowRows[pos - 1].rect.toVisionElement()
-        return v
-    }
-    return VisionElement.emptyElement
+    val belowItem = this.belowItem(
+        pos = pos,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        include = include,
+        binaryThreshold = binaryThreshold,
+        swipeToSafePosition = swipeToSafePosition,
+        numberOfColors = numberOfColors,
+        removeHorizontalLine = removeHorizontalLine,
+        horizontalLineThreshold = horizontalLineThreshold,
+        removeVerticalLine = removeVerticalLine,
+        verticalLineThreshold = verticalLineThreshold,
+    )
+    return belowItem.lineRegionElement()
 }
 
 /**
@@ -741,36 +741,6 @@ fun VisionElement.belowText(
     return v
 }
 
-//internal fun VisionElement.aboveBelowTextCore(
-//    relative: RelativeDirection,
-//    pos: Int,
-//): VisionElement {
-//
-//    rootElement.visionContext.recognizeText()
-//
-//    val verticalBand = VerticalBand(baseElement = this)
-//    for (v in rootElement.visionContext.getVisionElements()) {
-//        verticalBand.merge(element = v, margin = 0)
-//    }
-//    val elms = verticalBand.getElements().map { it as VisionElement }
-//    val sortedElements =
-//        if (relative.isAbove)
-//            elms.filter { it.rect.bottom < this.rect.top }
-//                .sortedByDescending { it.rect.top }
-//        else
-//            elms.filter { this.rect.bottom < it.rect.top }
-//                .sortedBy { it.rect.top }
-//    val v =
-//        if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
-//        else sortedElements[pos - 1]
-//
-//    val relativeExpression = if (relative.isAbove) ":aboveText($pos)" else ":belowText($pos)"
-//    v.selector = this.selector?.getChainedSelector(relativeExpression)
-//    lastElement = v
-//
-//    return v
-//}
-
 /**
  * leftImage
  */
@@ -994,4 +964,90 @@ fun VisionElement.leftRadioButton(
     val v = imageElements[pos - 1]
     v.selector = selector
     return v
+}
+
+/**
+ * aboveRow
+ */
+fun VisionElement.aboveRow(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+): VisionElement {
+
+    val rs = RowSplitter(
+        containerImage = CodeExecutionContext.lastScreenshotImage,
+        containerImageFile = CodeExecutionContext.lastScreenshotFile,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
+        horizontalLineThreshold = horizontalLineThreshold,
+    ).split()
+
+    if (pos == 0) {
+        return VisionElement.emptyElement
+    }
+    if (pos < 0) {
+        return belowRow(
+            pos = -pos,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            binaryThreshold = binaryThreshold,
+            numberOfColors = numberOfColors,
+            horizontalLineThreshold = horizontalLineThreshold,
+        )
+    }
+    val aboveRows = rs.rows.filter { it.rect.bottom < this.rect.top }.sortedByDescending { it.rect.top }
+
+    if (pos <= aboveRows.count()) {
+        val v = aboveRows[pos - 1].rect.toVisionElement()
+        return v
+    }
+    return VisionElement.emptyElement
+}
+
+/**
+ * belowRow
+ */
+fun VisionElement.belowRow(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+): VisionElement {
+
+    val rs = RowSplitter(
+        containerImage = CodeExecutionContext.lastScreenshotImage,
+        containerImageFile = CodeExecutionContext.lastScreenshotFile,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
+        horizontalLineThreshold = horizontalLineThreshold,
+    ).split()
+
+    if (pos == 0) {
+        return VisionElement.emptyElement
+    }
+    if (pos < 0) {
+        return aboveRow(
+            pos = -pos,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            binaryThreshold = binaryThreshold,
+            numberOfColors = numberOfColors,
+            horizontalLineThreshold = horizontalLineThreshold,
+        )
+    }
+    val belowRows = rs.rows.filter { this.rect.bottom < it.rect.top }
+
+    if (pos <= belowRows.count()) {
+        val v = belowRows[pos - 1].rect.toVisionElement()
+        return v
+    }
+    return VisionElement.emptyElement
 }

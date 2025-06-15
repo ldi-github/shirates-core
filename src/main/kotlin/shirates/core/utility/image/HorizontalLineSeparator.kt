@@ -2,12 +2,13 @@ package shirates.core.utility.image
 
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
+import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.image.BufferedImage
 
 class HorizontalLineSeparator(
     val containerImage: BufferedImage,
-    val lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    val horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
 ) {
     val horizontalLines = mutableListOf<HorizontalLine>()
 
@@ -49,6 +50,10 @@ class HorizontalLineSeparator(
                 }
             }
         }
+
+        override fun toString(): String {
+            return "y=$y, trueRate=$trueRate, falseRate=$falseRate, trueCount=$trueCount, falseCount=$falseCount, width=$width"
+        }
     }
 
     /**
@@ -66,14 +71,15 @@ class HorizontalLineSeparator(
 
         segmentContainer.drawOriginalSegments()
 
+        val horizontalLines = mutableListOf<HorizontalLine>()
         for (y in 0 until containerImage.height) {
             val line = HorizontalLine(image = containerImage, binary = segmentContainer.binary!!, y = y)
             horizontalLines.add(line)
         }
 
         val lines =
-            if (inverse) horizontalLines.filter { this.lineThreshold <= it.falseRate }
-            else horizontalLines.filter { this.lineThreshold <= it.trueRate }
+            if (inverse) horizontalLines.filter { this.horizontalLineThreshold <= it.falseRate }
+            else horizontalLines.filter { this.horizontalLineThreshold <= it.trueRate }
         this.horizontalLines.clear()
         this.horizontalLines.addAll(lines)
 
@@ -88,9 +94,12 @@ class HorizontalLineSeparator(
         stroke: Float = 1f,
     ): HorizontalLineSeparator {
 
+        val g2d = containerImage.createGraphics()
+        g2d.color = color
+        g2d.stroke = BasicStroke(stroke)
+
         for (line in horizontalLines) {
-            val rect = Rectangle(left = 0, top = line.y, width = line.width, height = 1)
-            containerImage.drawRect(rect = rect, color = color, stroke = stroke)
+            g2d.drawLine(0, line.y, containerImage.right, line.y)
         }
         return this
     }

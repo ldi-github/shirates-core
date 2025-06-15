@@ -464,15 +464,16 @@ fun BufferedImage.medianFiltered(
  * horizontalLineRemoved
  */
 fun BufferedImage.horizontalLineRemoved(
-    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     stroke: Float = 2f,
+    color: Color = Color.BLACK,
 ): BufferedImage {
 
-    val ls = HorizontalLineSeparator(
+    val hls = HorizontalLineSeparator(
         containerImage = this,
-        lineThreshold = lineThreshold,
+        horizontalLineThreshold = horizontalLineThreshold,
     ).split()
-        .draw(color = Color.BLACK, stroke = stroke)
+        .draw(stroke = stroke, color = color)
 
     return this
 }
@@ -481,15 +482,16 @@ fun BufferedImage.horizontalLineRemoved(
  * verticalLineRemoved
  */
 fun BufferedImage.verticalLineRemoved(
-    lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
     stroke: Float = 2f,
+    color: Color = Color.BLACK,
 ): BufferedImage {
 
-    VerticalLineSeparator(
+    val vls = VerticalLineSeparator(
         containerImage = this,
-        lineThreshold = lineThreshold,
+        verticalLineThreshold = verticalLineThreshold,
     ).split()
-        .draw(color = Color.BLACK, stroke = stroke)
+        .draw(stroke = stroke, color = color)
 
     return this
 }

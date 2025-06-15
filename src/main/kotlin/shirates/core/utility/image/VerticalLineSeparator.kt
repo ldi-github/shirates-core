@@ -2,12 +2,13 @@ package shirates.core.utility.image
 
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
+import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.image.BufferedImage
 
 class VerticalLineSeparator(
     val containerImage: BufferedImage,
-    val lineThreshold: Double = PropertiesManager.visionLineThreshold,
+    val verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ) {
     val verticalLines = mutableListOf<VerticalLine>()
 
@@ -49,6 +50,10 @@ class VerticalLineSeparator(
                 }
             }
         }
+
+        override fun toString(): String {
+            return "x=$x, trueRate=$trueRate, falseRate=$falseRate, trueCount=$trueCount, falseCount=$falseCount, height=$height"
+        }
     }
 
     /**
@@ -66,14 +71,15 @@ class VerticalLineSeparator(
 
         segmentContainer.drawOriginalSegments()
 
+        val verticalLines = mutableListOf<VerticalLine>()
         for (x in 0 until containerImage.width) {
             val verticalLine = VerticalLine(image = containerImage, binary = segmentContainer.binary!!, x = x)
             verticalLines.add(verticalLine)
         }
 
         val lines =
-            if (inverse) verticalLines.filter { this.lineThreshold <= it.falseRate }
-            else verticalLines.filter { this.lineThreshold <= it.trueRate }
+            if (inverse) verticalLines.filter { this.verticalLineThreshold <= it.falseRate }
+            else verticalLines.filter { this.verticalLineThreshold <= it.trueRate }
         this.verticalLines.clear()
         this.verticalLines.addAll(lines)
 
@@ -85,12 +91,16 @@ class VerticalLineSeparator(
      */
     fun draw(
         color: Color = Color.BLACK,
-        stroke: Float = 1f,
+        stroke: Float = 3f,
     ): VerticalLineSeparator {
 
+        val g2d = containerImage.createGraphics()
+        g2d.color = color
+        g2d.stroke = BasicStroke(stroke)
+
         for (line in verticalLines) {
-            val rect = Rectangle(left = line.x + 1, top = 0, width = 1, height = line.height)
-            containerImage.drawRect(rect = rect, color = color, stroke = stroke)
+            val offset = 1
+            g2d.drawLine(line.x + offset, 0, line.x + offset, containerImage.bottom)
         }
         return this
     }
