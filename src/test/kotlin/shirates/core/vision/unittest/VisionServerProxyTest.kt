@@ -436,7 +436,7 @@ class VisionServerProxyTest : UnitTest() {
                 // Act
                 val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = true)
                 // Assert
-                assertThat(v.text).endsWith("男性")    // • 男性
+                assertThat(v.text).isEqualTo("男性")    // • 男性
                 TestLog.info("v.text=${v.text}")
             }
             run {
@@ -467,7 +467,7 @@ class VisionServerProxyTest : UnitTest() {
                 val v =
                     context.detect(selector = Selector("Airplane mode"), language = "", last = false, looseMatch = true)
                 // Assert
-                assertThat(v.text).endsWith("Airplane mode")    // # Airplane mode
+                assertThat(v.text).isEqualTo("Airplane mode")    // # Airplane mode
                 TestLog.info("v.text=${v.text}")
             }
             run {

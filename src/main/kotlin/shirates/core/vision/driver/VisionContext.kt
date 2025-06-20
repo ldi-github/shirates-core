@@ -477,8 +477,8 @@ class VisionContext(
         if (v.isEmpty) {
             return v
         }
-        if (selector.evaluateText(element = v, looseMatch = looseMatch)) {
-            return v
+        if (selector.evaluateText(element = v, looseMatch = false)) {
+            return v    // strictly matched
         }
 
         /**
