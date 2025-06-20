@@ -1,6 +1,5 @@
 package shirates.core.vision.driver
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
@@ -89,13 +88,13 @@ fun VisionDrive.wait(): VisionElement {
  */
 fun VisionDrive.waitForClose(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    throwsException: Boolean = true
+    throwsException: Boolean = true,
 ): VisionElement {
 
     val sel = getSelector(expression = expression)
@@ -143,10 +142,10 @@ fun VisionDrive.waitForClose(
  */
 fun VisionDrive.waitForDisplay(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true,

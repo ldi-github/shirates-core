@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.RowSplitter
@@ -13,8 +12,8 @@ import shirates.core.vision.driver.lastElement
 fun VisionElement.row(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ): VisionElement {
 
     val rs = RowSplitter(

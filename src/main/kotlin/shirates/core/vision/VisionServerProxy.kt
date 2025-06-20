@@ -4,6 +4,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.Message.message
@@ -14,7 +15,7 @@ import shirates.core.utility.file.copyFileTo
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
-import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.*
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.configration.repository.VisionClassifierRepository
@@ -22,6 +23,7 @@ import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
 import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
 
 object VisionServerProxy {
 
@@ -212,8 +214,9 @@ object VisionServerProxy {
      * recognizeText
      */
     fun recognizeText(
-        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
+        inputFile: String? = CodeExecutionContext.lastScreenshotGrayFile,
         language: String = PropertiesManager.visionOCRLanguage,
+        colorPalette: ColorPalette? = null,
         customWordsFile: String? = PropertiesManager.visionOCRCustomWordsFile,
     ): RecognizeTextResult {
 
@@ -227,7 +230,20 @@ object VisionServerProxy {
             throw IllegalArgumentException("file not found: $inputFile.")
         }
 
-        if (lastRecognizeTextResult?.inputFile == inputFile && lastRecognizeTextResult?.language == language) {
+        var inputFile2 = inputFile
+        if (colorPalette != null) {
+            val grayImage = BufferedImageUtility.getBufferedImage(filePath = inputFile)
+                .convertColorModel(colorPalette = colorPalette)
+            inputFile2 =
+                inputFile.toPath().parent.resolve("${inputFile.toPath().nameWithoutExtension}_${colorPalette}.png")
+                    .toString()
+            grayImage.saveImage(file = inputFile2)
+        }
+
+        if (lastRecognizeTextResult?.inputFile == inputFile2 &&
+            lastRecognizeTextResult?.language == language &&
+            lastRecognizeTextResult?.colorPalette == colorPalette
+        ) {
             return lastRecognizeTextResult!!
         }
 
@@ -237,7 +253,7 @@ object VisionServerProxy {
                 "/TextRecognizer/recognizeText").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
-            value = inputFile.toPath().toString()
+            value = inputFile2.toPath().toString()
         )
         urlBuilder.addQueryParameter(
             name = "language",
@@ -264,17 +280,18 @@ object VisionServerProxy {
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
         val result = RecognizeTextResult(
-            inputFile = inputFile,
+            inputFile = inputFile2,
             language = language,
-            jsonString = jsonString
+            jsonString = jsonString,
+            colorPalette = colorPalette,
         )
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
-        val baseFile = inputFile.toPath().toFile().name
+        val baseFile = inputFile2.toPath().toFile().name
         CodeExecutionContext.lastRecognizedTsvFile = "${TestLog.currentLineNo}_[$baseFile]_recognizeText.txt"
-        if (CodeExecutionContext.lastRecognizedFileName != baseFile) {
+        if (CodeExecutionContext.lastRecognizedFile != baseFile) {
             val sb = StringBuilder()
             sb.append("x\ty\twidth\theight\tconfidence\ttext\n")
             for (c in result.candidates) {
@@ -361,8 +378,8 @@ object VisionServerProxy {
         segmentMarginHorizontal: Int,
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
-        binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-        aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+        binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+        aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
         log: Boolean = false,
     ): FindImagesWithTemplateResult {
 
@@ -387,7 +404,7 @@ object VisionServerProxy {
             binaryThreshold = binaryThreshold,
             aspectRatioTolerance = aspectRatioTolerance,
         ).split()
-            .saveImages()
+        segmentContainer.saveImages()
         if (segmentContainer.segments.isEmpty()) {
             val r = FindImagesWithTemplateResult("")
             r.error = TestDriverException("No segment found.")

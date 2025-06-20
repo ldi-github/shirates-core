@@ -74,15 +74,6 @@ data class Bounds(
     }
 
     /**
-     * isEmpty
-     */
-    val isEmpty: Boolean
-        get() {
-            return (this == empty)
-        }
-
-
-    /**
      * isAlmostIncludedIn
      */
     fun isAlmostIncludedIn(bounds: Bounds, margin: Int = 5): Boolean {

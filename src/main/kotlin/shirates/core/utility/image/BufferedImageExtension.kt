@@ -5,6 +5,7 @@ import boofcv.io.image.ConvertBufferedImage
 import boofcv.struct.image.GrayF32
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import java.awt.BasicStroke
@@ -464,7 +465,7 @@ fun BufferedImage.medianFiltered(
  * horizontalLineRemoved
  */
 fun BufferedImage.horizontalLineRemoved(
-    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
     stroke: Float = 2f,
     color: Color = Color.BLACK,
 ): BufferedImage {
@@ -482,7 +483,7 @@ fun BufferedImage.horizontalLineRemoved(
  * verticalLineRemoved
  */
 fun BufferedImage.verticalLineRemoved(
-    verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
+    verticalLineThreshold: Double = testContext.visionVerticalLineThreshold,
     stroke: Float = 2f,
     color: Color = Color.BLACK,
 ): BufferedImage {
@@ -496,22 +497,137 @@ fun BufferedImage.verticalLineRemoved(
     return this
 }
 
+private val colorPaletteMap = mutableMapOf<ColorPalette, IndexColorModel>()
+
+private fun getIndexColorModel(
+    colorPalette: ColorPalette
+): IndexColorModel {
+
+    if (colorPaletteMap.containsKey(colorPalette)) {
+        return colorPaletteMap[colorPalette]!!
+    }
+
+    val numColors: Int
+    val bits: Int
+    when (colorPalette) {
+
+        ColorPalette.BINARY -> {
+            numColors = 2
+            bits = 1
+        }
+
+        ColorPalette.GRAY_8 -> {
+            numColors = 8
+            bits = 3
+        }
+
+        ColorPalette.GRAY_16 -> {
+            numColors = 16
+            bits = 4
+        }
+
+        ColorPalette.GRAY_32 -> {
+            numColors = 32
+            bits = 5
+        }
+
+        ColorPalette.GRAY_64 -> {
+            numColors = 64
+            bits = 6
+        }
+
+        ColorPalette.GRAY_128 -> {
+            numColors = 128
+            bits = 7
+        }
+
+        ColorPalette.GRAY_256 -> {
+            numColors = 256
+            bits = 6
+        }
+    }
+
+    val r = ByteArray(numColors) { (it * (numColors + 1)).toByte() }
+    val g = ByteArray(numColors) { (it * (numColors + 1)).toByte() }
+    val b = ByteArray(numColors) { (it * (numColors + 1)).toByte() }
+    val indexColorModel = IndexColorModel(bits, numColors, r, g, b)
+    colorPaletteMap[colorPalette] = indexColorModel
+    return indexColorModel
+}
+
 /**
  * convertColorModel
  */
 fun BufferedImage.convertColorModel(
-    numColors: Int
+    colorPalette: ColorPalette,
+    imageType: Int = BufferedImage.TYPE_BYTE_INDEXED,
 ): BufferedImage {
 
-    val r = ByteArray(numColors) { (it * 17).toByte() }
-    val g = ByteArray(numColors) { (it * 17).toByte() }
-    val b = ByteArray(numColors) { (it * 17).toByte() }
-    val cm = IndexColorModel(4, numColors, r, g, b)
-
-    val destImage = BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY, cm)
-    val g2d = destImage.createGraphics()
+    val cm = getIndexColorModel(colorPalette = colorPalette)
+    val image = BufferedImage(width, height, imageType, cm)
+    val g2d = image.createGraphics()
     g2d.drawImage(this, 0, 0, null)
     g2d.dispose()
 
-    return destImage
+    return image
+}
+
+/**
+ * maskAboveBelow
+ */
+fun BufferedImage.maskAboveBelow(
+    rect: Rectangle,
+): BufferedImage {
+
+    val g2d = this.createGraphics()
+    g2d.color = Color.BLACK
+    g2d.fillRect(0, 0, rect.width, rect.top)
+    if (rect.bottom < this.bottom) {
+        g2d.fillRect(0, rect.bottom + 1, rect.width, this.bottom - rect.bottom)
+    }
+    return this
+}
+
+/**
+ * maskLeftRight
+ */
+fun BufferedImage.maskLeftRight(
+    rect: Rectangle,
+): BufferedImage {
+
+    val g2d = this.createGraphics()
+    g2d.color = Color.BLACK
+    g2d.fillRect(0, 0, rect.left, this.height)
+    if (rect.right < this.right) {
+        g2d.fillRect(rect.right + 1, 0, this.right - rect.right, this.height)
+    }
+    return this
+}
+
+/**
+ * copy
+ */
+fun BufferedImage.copy(): BufferedImage {
+
+    val image = BufferedImage(this.width, this.height, this.type)
+    val g = image.createGraphics()
+    g.drawImage(this, 0, 0, null)
+    g.dispose()
+    return image
+}
+
+/**
+ * hasAnyDot
+ */
+fun BufferedImage.hasAnyDot(rect: Rectangle, zeroValue: Int = -16777216): Boolean {
+
+    for (y in 0..rect.bottom) {
+        for (x in 0..rect.right) {
+            val value = this.getRGB(x, y)
+            if (value != zeroValue) {
+                return true
+            }
+        }
+    }
+    return false
 }

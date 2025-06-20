@@ -1508,39 +1508,58 @@ class Selector(
         return evaluateTextCore(text = text, looseMatch = looseMatch)
     }
 
+    /**
+     * evaluateText
+     */
+    fun evaluateText(text: String, looseMatch: Boolean): Boolean {
+
+        return evaluateTextCore(text = text.forVisionComparison(), looseMatch = looseMatch)
+    }
+
     internal fun evaluateTextCore(text: String, looseMatch: Boolean): Boolean {
 
-        fun eval(text: String): Boolean {
+        fun eval(selectors: List<Selector>, text: String): Boolean {
             if (text.isBlank()) {
                 return false
             }
-            if (this.text != null) {
-                val r = (text == this.text!!.forVisionComparison())
-                return r
+
+            fun evalCore(sel: Selector, text: String): Boolean {
+                if (sel.text != null) {
+                    val r = (text == sel.text!!.forVisionComparison())
+                    return r
+                }
+                if (sel.textStartsWith != null) {
+                    val r = text.startsWith(sel.textStartsWith!!.forVisionComparison())
+                    if (r.not()) {
+                        return false
+                    }
+                }
+                if (sel.textContains != null) {
+                    val r = text.contains(sel.textContains!!.forVisionComparison())
+                    if (r.not()) {
+                        return false
+                    }
+                }
+                if (sel.textEndsWith != null) {
+                    val r = text.endsWith(sel.textEndsWith!!.forVisionComparison())
+                    if (r.not()) {
+                        return false
+                    }
+                }
+                return true
             }
 
-            if (this.textStartsWith != null) {
-                val r = text.startsWith(this.textStartsWith!!.forVisionComparison())
-                if (r.not()) {
-                    return false
+            for (sel in selectors) {
+                if (evalCore(sel = sel, text = text)) {
+                    return true
                 }
             }
-            if (this.textContains != null) {
-                val r = text.contains(this.textContains!!.forVisionComparison())
-                if (r.not()) {
-                    return false
-                }
-            }
-            if (this.textEndsWith != null) {
-                val r = text.endsWith(this.textEndsWith!!.forVisionComparison())
-                if (r.not()) {
-                    return false
-                }
-            }
-            return true
+            return false
         }
 
-        if (eval(text = text)) {
+        val selectors = mutableListOf(this)
+        selectors.addAll(this.orSelectors)
+        if (eval(selectors = selectors, text = text)) {
             return true
         }
 
@@ -1558,7 +1577,7 @@ class Selector(
                         val x = s + e < text.length
                         if (x) {
                             val t = text.substring(s, text.length - e).trim()
-                            val r = eval(text = t)
+                            val r = eval(selectors = selectors, text = t)
                             if (r) {
                                 return true
                             }
@@ -1576,7 +1595,7 @@ class Selector(
         for (noise in VisionTextRecognitionNoiseRepository.noiseList) {
             t = t.removePrefix(noise).removeSuffix(noise).trim()
         }
-        return eval(text = t)
+        return eval(selectors = selectors, text = t)
     }
 
     /**

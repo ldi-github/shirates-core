@@ -74,7 +74,7 @@ fun VisionDrive.swipePointToPoint(
             looseMatch = CodeExecutionContext.lastLooseMatch,
             mergeBoundingBox = CodeExecutionContext.lastMergeBoundingBox,
             lineSpacingRatio = CodeExecutionContext.lastLineSpacingRatio,
-            throwsException = false
+            throwsException = false,
         )
         lastElement = v
     }
@@ -694,7 +694,9 @@ fun VisionDrive.flickAndGoRight(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         val originalOnScrolling = testContext.onScrolling
-        val scrollVisionElement = getScrollLineElement(expression = null)
+        val scrollVisionElement = getScrollLineElement(
+            expression = null,
+        )
         val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
         try {
             testContext.onScrolling = false
@@ -733,8 +735,13 @@ fun VisionDrive.flickAndGoLeft(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         val originalOnScrolling = testContext.onScrolling
+        val scrollVisionElement = getScrollLineElement(
+            expression = null,
+        )
+        val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
         try {
             testContext.onScrolling = false
+            CodeExecutionContext.scrollVisionElement = scrollVisionElement
             scrollLeft(
                 scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
@@ -744,6 +751,7 @@ fun VisionDrive.flickAndGoLeft(
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
+            CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
         }
     }
     sw.stop()

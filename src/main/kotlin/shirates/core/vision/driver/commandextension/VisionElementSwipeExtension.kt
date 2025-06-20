@@ -18,10 +18,10 @@ import kotlin.math.abs
  */
 fun VisionElement.swipeTo(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
@@ -70,10 +70,10 @@ fun VisionElement.swipeTo(
  */
 fun VisionElement.swipeToAdjust(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
@@ -614,7 +614,7 @@ fun VisionElement.swipeToSafePosition(
         return lastElement
     }
     if (this.selector?.expression != null) {
-        val v = detect(this.selector!!.expression!!)
+        val v = detect(expression = this.selector!!.expression!!)
         return v
     }
 

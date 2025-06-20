@@ -11,6 +11,7 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.file.exists
+import shirates.core.utility.image.ColorPalette
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
@@ -1232,6 +1233,15 @@ object PropertiesManager {
         get() {
             return getPropertyValue(propertyName = "visionVerticalLineThreshold")?.toDoubleOrNull()
                 ?: Const.VISION_VERTICAL_LINE_THRESHOLD
+        }
+
+    /**
+     * visionColorPalette
+     */
+    val visionColorPalette: ColorPalette
+        get() {
+            val p = getPropertyValue(propertyName = "visionColorPalette") ?: return Const.VISION_COLOR_PALETTE
+            return ColorPalette.valueOf(p)
         }
 
     // Custom --------------------------------------------------

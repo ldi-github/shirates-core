@@ -1,7 +1,7 @@
 package shirates.core.vision.driver
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.image.saveImage
@@ -16,7 +16,7 @@ import shirates.core.vision.utility.label.LabelUtility
  */
 fun VisionElement.classifyFull(
     classifierName: String = "DefaultClassifier",
-    threshold: Double = PropertiesManager.visionFindImageThreshold
+    threshold: Double = testContext.visionFindImageThreshold
 ): String {
 
     if (TestMode.isNoLoadRun) {
@@ -85,7 +85,7 @@ private class LabelDistance(
  */
 fun VisionElement.classify(
     classifierName: String = "DefaultClassifier",
-    threshold: Double = PropertiesManager.visionFindImageThreshold
+    threshold: Double = testContext.visionFindImageThreshold
 ): String {
 
     if (TestMode.isNoLoadRun) {

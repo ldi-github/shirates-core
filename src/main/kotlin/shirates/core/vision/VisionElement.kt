@@ -254,9 +254,6 @@ open class VisionElement(
             if (visionContext.recognizeTextObservations.isEmpty()) {
                 visionContext.recognizeText()
             }
-            if (mergedElements.any()) {
-                return mergedElements.joinToString(" ") { it.text }
-            }
             val texts =
                 visionContext.recognizeTextObservations.filter { it.rectOnScreen!!.isCenterIncludedIn(this.rect) }
             return texts.joinToString(" ") { it.text }
@@ -350,6 +347,25 @@ open class VisionElement(
         val v = newRect.toVisionElement()
         v.mergedElements.add(this)
         v.mergedElements.add(other)
+
+        val v1 = this
+        val v2 = other
+        val list = mutableListOf<VisionElement>()
+
+        if (v1.rect.bottom <= v2.rect.top || v1.rect.right <= v2.rect.left) {
+            list.add(v1)
+            list.add(v2)
+        } else if (v2.rect.bottom <= v1.rect.top || v2.rect.right <= v1.rect.left) {
+            list.add(v2)
+            list.add(v1)
+        } else {
+            list.add(v1)
+            list.add(v2)
+        }
+
+        val observations = list.map { it.visionContext.recognizeTextObservations }.flatten().toMutableList()
+        v.visionContext.recognizeTextObservations = observations
+
         return v
     }
 

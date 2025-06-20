@@ -11,6 +11,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionImageFilterContext
 import shirates.core.vision.driver.commandextension.screenRect
+import shirates.core.vision.result.RecognizeTextResult
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.util.*
@@ -300,15 +301,56 @@ object CodeExecutionContext {
         }
 
     /**
+     * lastScreenshotGrayName
+     */
+    var lastScreenshotGrayName: String? = null
+
+    /**
+     * lastScreenshotGrayFile
+     */
+    val lastScreenshotGrayFile: String?
+        get() {
+            if (lastScreenshotGrayName.isNullOrBlank()) {
+                return null
+            }
+            return TestLog.directoryForLog.resolve(lastScreenshotGrayName!!).toString()
+        }
+
+    /**
+     * lastScreenshotGrayImage
+     */
+    var lastScreenshotGrayImage: BufferedImage? = null
+        get() {
+            if (field == null && lastScreenshotGrayName.isNullOrBlank().not()) {
+                if (Files.exists(lastScreenshotGrayFile!!.toPath())) {
+                    field = BufferedImageUtility.getBufferedImage(lastScreenshotGrayFile!!)
+                }
+            }
+            return field
+        }
+        internal set
+
+
+    /**
      * lastScreenshotTime
      */
     var lastScreenshotTime: Date? = null
         internal set
 
     /**
-     * lastRecognizedFileName
+     * lastRecognizedFile
      */
-    var lastRecognizedFileName: String? = null
+    var lastRecognizedFile: String? = null
+
+    /**
+     * lastRecognizeLanguage
+     */
+    var lastRecognizeLanguage: String? = null
+
+    /**
+     * lastRecognizeTextResult
+     */
+    var lastRecognizeTextResult: RecognizeTextResult? = null
 
     /**
      * lastRecognizedTsvFile

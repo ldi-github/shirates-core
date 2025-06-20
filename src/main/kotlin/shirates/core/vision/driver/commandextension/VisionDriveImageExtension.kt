@@ -301,13 +301,13 @@ internal fun VisionDrive.getElementWithScroll(
  */
 fun VisionDrive.findImageWithScrollDown(
     label: String,
-    threshold: Double = PropertiesManager.visionFindImageThreshold,
+    threshold: Double = testContext.visionFindImageThreshold,
     segmentMarginHorizontal: Int = 0,
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,

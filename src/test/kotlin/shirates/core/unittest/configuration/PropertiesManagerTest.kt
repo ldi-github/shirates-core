@@ -12,6 +12,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.file.PropertiesUtility
+import shirates.core.utility.image.ColorPalette
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.toPath
 import java.io.FileNotFoundException
@@ -2218,6 +2219,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("visionVerticalLineThreshold", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionVerticalLineThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionColorPalette() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionColorPalette).isEqualTo(Const.VISION_COLOR_PALETTE)
+        }
+        run {
+            // Arrange
+            val value = ColorPalette.GRAY_256
+            PropertiesManager.setPropertyValue("visionColorPalette", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionColorPalette).isEqualTo(value)
         }
     }
 

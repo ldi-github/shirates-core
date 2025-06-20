@@ -8,6 +8,7 @@ import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.testcode.UITestCallbackExtension
+import shirates.core.utility.image.ColorPalette
 import shirates.core.utility.misc.UrlUtility
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import kotlin.reflect.KMutableProperty
@@ -295,6 +296,27 @@ class TestContext(
 
     @SaveTarget
     var visionFindImageAspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance
+
+    @SaveTarget
+    var visionLooseMatch: Boolean = PropertiesManager.visionLooseMatch
+
+    @SaveTarget
+    var visionMergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox
+
+    @SaveTarget
+    var visionLineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio
+
+    @SaveTarget
+    var visionTextToLineHeightRatio: Double = PropertiesManager.visionTextToLineHeightRatio
+
+    @SaveTarget
+    var visionColorPalette: ColorPalette = PropertiesManager.visionColorPalette
+
+    @SaveTarget
+    var visionHorizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold
+
+    @SaveTarget
+    var visionVerticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {

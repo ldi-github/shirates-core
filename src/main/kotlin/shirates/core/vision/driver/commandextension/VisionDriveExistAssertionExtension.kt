@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriver.lastVisionElement
@@ -25,10 +24,10 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.exist(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = true,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
@@ -137,10 +136,10 @@ internal fun VisionDrive.existCore(
  */
 fun VisionDrive.existWithoutScroll(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = false,
@@ -205,10 +204,10 @@ fun VisionDrive.dontExistAll(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -262,10 +261,10 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -319,10 +318,10 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -376,10 +375,10 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -433,10 +432,10 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -494,10 +493,10 @@ fun VisionDrive.dontExist(
  */
 fun VisionDrive.dontExistWithoutScroll(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     waitSeconds: Double = 0.0,
     message: String? = null,

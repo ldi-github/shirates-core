@@ -1,7 +1,6 @@
 package shirates.core.utility.image
 
 import okio.FileNotFoundException
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -15,8 +14,8 @@ class RowSplitter(
     containerImageFile: String? = CodeExecutionContext.lastScreenshotFile,
     val segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     val segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    val horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    var binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    val horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ) {
     val containerImage: BufferedImage
     val containerImageFile: String

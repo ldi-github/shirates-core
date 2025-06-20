@@ -1,5 +1,7 @@
 package shirates.core
 
+import shirates.core.utility.image.ColorPalette
+
 /**
  * Const
  */
@@ -163,7 +165,7 @@ object Const {
     const val VISION_BUILD_DIRECTORY = "build"
     const val VISION_ENABLE_LEARNING_ON_STARTUP = true
     const val VISION_SERVER_URL = "http://127.0.0.1:8081"
-    const val VISION_SEGMENT_MARGIN_HORIZONTAL = 20
+    const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_CROPPING_MARGIN = 5
     const val VISION_FIND_IMAGE_THRESHOLD = 0.15
@@ -176,14 +178,13 @@ object Const {
     const val VISION_REMOVE_VOICING_MARKS = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
-    const val VISION_TEXT_TO_LINE_HEIGHT_RATIO = 3.0
+    const val VISION_TEXT_TO_LINE_HEIGHT_RATIO = 2.0
     const val VISION_SAFE_AREA_TOP_RATIO = 0.2
     const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
     const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
     const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
-    const val VISION_NUMBER_OF_COLORS_12 = 12   // cell disappears on iOS Settings App
-    const val VISION_NUMBER_OF_COLORS_16 = 16   // cell appears on iOS Settings App
+    val VISION_COLOR_PALETTE = ColorPalette.GRAY_16
 
     /**
      * internal

@@ -1,7 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.Const
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -16,17 +14,17 @@ fun VisionElement.ancestors(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = 0.0,
     minimumWidth: Int = 5,
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorPalette: ColorPalette = testContext.visionColorPalette,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorPalette = colorPalette)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
@@ -67,17 +65,17 @@ fun VisionElement.ancestorsContains(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = 0.0,
     minimumWidth: Int = 5,
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorPalette: ColorPalette = testContext.visionColorPalette,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorPalette = colorPalette)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
@@ -119,17 +117,17 @@ fun VisionElement.ancestorsContains(
     segmentMarginHorizontal: Int = 5,
     segmentMarginVertical: Int = 5,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = 0.0,
     minimumWidth: Int = 5,
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorPalette: ColorPalette = testContext.visionColorPalette,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorPalette = colorPalette)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,

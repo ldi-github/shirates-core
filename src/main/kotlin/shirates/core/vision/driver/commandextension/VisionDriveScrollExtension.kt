@@ -310,7 +310,7 @@ internal fun VisionDrive.getScrollColumnElement(
     if (expression != null) {
         return detect(
             expression = expression,
-            throwsException = true
+            throwsException = true,
         ).columnRegionElement()
     }
     val thisElement = getThisOrIt()
@@ -326,7 +326,7 @@ internal fun VisionDrive.getScrollLineElement(
     if (expression != null) {
         return detect(
             expression = expression,
-            throwsException = true
+            throwsException = true,
         ).lineRegionElement()
     }
     val thisElement = getThisOrIt()
@@ -350,7 +350,9 @@ fun VisionDrive.scrollToRightEdge(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
-    val scrollVisionElement = getScrollLineElement(expression = expression)
+    val scrollVisionElement = getScrollLineElement(
+        expression = expression,
+    )
     scrollToEdgeCommand(
         command = "scrollToRightEdge",
         scrollVisionElement = scrollVisionElement,
@@ -381,7 +383,9 @@ fun VisionDrive.scrollToLeftEdge(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
-    val scrollVisionElement = getScrollLineElement(expression = expression)
+    val scrollVisionElement = getScrollLineElement(
+        expression = expression,
+    )
     scrollToEdgeCommand(
         command = "scrollToLeftEdge",
         scrollVisionElement = scrollVisionElement,
@@ -553,7 +557,7 @@ internal fun VisionDrive.edgeElementFound(
             detect(
                 expression = expression,
                 allowScroll = false,
-                throwsException = false
+                throwsException = false,
             )
         if (v.isFound) {
             TestLog.info("edge element found. ($expression)")
@@ -686,7 +690,9 @@ fun VisionDrive.withScrollRight(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollVisionElement = getScrollLineElement(expression = expression)
+    val scrollVisionElement = getScrollLineElement(
+        expression = expression,
+    )
     if (scrollVisionElement.isEmpty) {
         throw TestDriverException("Could not find scroll element.")
     }
@@ -719,7 +725,9 @@ fun VisionDrive.withScrollLeft(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollVisionElement = getScrollLineElement(expression = expression)
+    val scrollVisionElement = getScrollLineElement(
+        expression = expression,
+    )
     if (scrollVisionElement.isEmpty) {
         throw TestDriverException("Could not find scroll element.")
     }

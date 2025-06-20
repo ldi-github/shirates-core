@@ -213,4 +213,30 @@ class VisionTestAndroid : VisionTest() {
         }
     }
 
+    @Test
+    fun recoverMissRecognized() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.tap("Network & internet")
+                }.action {
+                    it.detect("Airplane mode")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun withScrollDown() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.detectWithScrollDown("System")
+                }
+            }
+        }
+    }
+
 }

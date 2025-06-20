@@ -1,14 +1,9 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.Const
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.image.BinarizationUtility
-import shirates.core.utility.image.SegmentContainer
-import shirates.core.utility.image.convertColorModel
-import shirates.core.utility.image.toBufferedImage
+import shirates.core.utility.image.*
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
 
@@ -21,16 +16,16 @@ fun VisionElement.cell(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = 0.0,
     minimumWidth: Int = 5,
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    croppingMargin: Int = testContext.segmentCroppingMargin,
+    colorPalette: ColorPalette = testContext.visionColorPalette,
 ): VisionElement {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorPalette = colorPalette)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,

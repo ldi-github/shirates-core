@@ -12,6 +12,7 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -288,12 +289,16 @@ fun VisionDrive.sendKeys(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val testElement = TestDriver.getFocusedElement()
-        if (testElement.isEmpty) {
-            throw TestDriverException("Focused element not found.")
+
+        var we = TestDriver.getFocusedWebElement(throwsException = true)
+        try {
+            we!!.sendKeys(keysToSend)
+        } catch (t: Throwable) {
+            TestLog.warn("Retrying sendKeys($keysToSend). cause=$t")
+            // Retry once
+            we = TestDriver.getFocusedWebElement(throwsException = true)
+            we!!.sendKeys(keysToSend)
         }
-        val we = testElement.webElement ?: testElement.getWebElement()
-        we.sendKeys(keysToSend)
 
         invalidateScreen()
         lastElement = getFocusedElement()
