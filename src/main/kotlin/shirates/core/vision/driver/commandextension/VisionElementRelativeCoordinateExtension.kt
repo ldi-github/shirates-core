@@ -93,7 +93,9 @@ internal fun VisionElement.rightLeftCore(
     val sw = StopWatch("rightLeftCore")
 
     var baseElement = this
-    if (selector?.expression != null && selector.evaluateText(this, looseMatch = false).not()) {
+    if (selector?.expression != null && selector.relativeSelectors.isEmpty() &&     // relativeSelectors not supported
+        selector.evaluateText(this, looseMatch = false).not()
+    ) {
         baseElement = detect(selector.expression!!, looseMatch = false)
     }
     val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
