@@ -41,6 +41,10 @@ fun VisionDrive.hideKeyboard(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): VisionElement {
 
+    if (isKeyboardShown.not()) {
+        return lastElement
+    }
+
     val command = "hideKeyboard"
     val message = message(id = command)
     val context = TestDriverCommandContext(null)

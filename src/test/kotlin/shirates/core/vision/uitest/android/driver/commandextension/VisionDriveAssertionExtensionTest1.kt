@@ -263,5 +263,32 @@ class VisionDriveAssertionExtensionTest1 : VisionTest() {
         }
     }
 
+    @Test
+    fun withScrollDown_exist() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    withScrollDown {
+                        exist("Storage")
+                        exist("Sound & vibration")
+                        exist("Display")
+                        exist("Wallpaper & style")
+                        exist("Accessibility")
+                        exist("Security & privacy")
+                        exist("Location")
+                        exist("Safety & emergency")
+                        exist("Passwords & accounts")
+                        exist("System")
+                        exist("About emulated device")
+                        exist("Tips & support")
+                    }
+                }
+            }
+        }
+    }
+
 
 }

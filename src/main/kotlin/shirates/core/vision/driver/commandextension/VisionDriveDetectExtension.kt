@@ -10,6 +10,8 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.toFile
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.image.saveImage
@@ -245,7 +247,8 @@ private fun detectInVisionContext(
     autoImageFilter: Boolean,
 ): VisionElement {
 
-    var v = vision.rootElement.visionContext.detect(
+    val rootVisionContext = vision.rootElement.visionContext
+    var v = rootVisionContext.detect(
         selector = selector,
         language = language,
         looseMatch = looseMatch,
@@ -261,12 +264,17 @@ private fun detectInVisionContext(
         if (imageFilterContext.hasFilter.not()) {
             imageFilterContext = VisionImageFilterContext().enhanceFaintAreas()
         }
-        val filteredImage =
-            imageFilterContext.processFilter(bufferedImage = CodeExecutionContext.lastScreenshotImage!!)
-        val fileName = "${TestLog.currentLineNo}_filtered.png"
+
+
+        val fileName = CodeExecutionContext.lastScreenshotFile!!.toFile().nameWithoutExtension + "_filtered.png"
         val filteredFile = TestLog.directoryForLog.resolve(fileName).toString()
-        filteredImage.saveImage(filteredFile)
-        v = vision.rootElement.visionContext.detect(
+        if (filteredFile.exists().not()) {
+            val filteredImage =
+                imageFilterContext.processFilter(bufferedImage = CodeExecutionContext.lastScreenshotImage!!)
+            filteredImage.saveImage(filteredFile)
+        }
+
+        v = rootVisionContext.detect(
             inputFile = filteredFile,
             selector = selector,
             language = language,

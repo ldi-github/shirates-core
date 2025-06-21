@@ -358,25 +358,17 @@ class VisionContext(
         inputFile: String,
         language: String,
         colorPalette: ColorPalette? = null,
+        useCache: Boolean = true
     ): RecognizeTextResult {
 
-        this.screenshotFile
+        this.language = language
 
-        val lastFound = inputFile == CodeExecutionContext.lastRecognizedFile &&
-                language == CodeExecutionContext.lastRecognizeLanguage &&
-                CodeExecutionContext.lastRecognizeTextResult != null &&
-                CodeExecutionContext.lastRecognizeTextResult!!.candidates.any()
-
-        val recognizeTextResult =
-            if (lastFound) {
-                CodeExecutionContext.lastRecognizeTextResult!!
-            } else {
-                VisionServerProxy.recognizeText(
-                    inputFile = inputFile,
-                    language = language,
-                    colorPalette = colorPalette,
-                )
-            }
+        val recognizeTextResult = VisionServerProxy.recognizeText(
+            inputFile = inputFile,
+            language = language,
+            colorPalette = colorPalette,
+            useCache = useCache,
+        )
 
         this.recognizeTextObservations.clear()
 
@@ -385,11 +377,10 @@ class VisionContext(
             recognizeTextResult = recognizeTextResult,
         )
 
-        if (lastFound) {
+        if (recognizeTextResult.fromCache) {
             return recognizeTextResult
         }
 
-        this.language = language
         /**
          * Save screenshotImageWithBoundingBox
          */
@@ -477,8 +468,8 @@ class VisionContext(
         if (v.isEmpty) {
             return v
         }
-        if (selector.evaluateText(element = v, looseMatch = false)) {
-            return v    // strictly matched
+        if (selector.evaluateText(element = v, looseMatch = looseMatch)) {
+            return v
         }
 
         /**

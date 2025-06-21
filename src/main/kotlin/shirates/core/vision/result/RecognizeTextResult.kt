@@ -12,6 +12,8 @@ class RecognizeTextResult(
     val colorPalette: ColorPalette?,
     val jsonString: String,
 ) {
+    var fromCache = false
+
     var input: String? = null
     var candidates = listOf<Candidate>()
 

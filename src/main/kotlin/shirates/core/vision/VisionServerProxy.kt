@@ -208,7 +208,7 @@ object VisionServerProxy {
 //        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
 //    }
 
-    internal var lastRecognizeTextResult: RecognizeTextResult? = null
+    internal val recognizeTextResultMap = mutableMapOf<String, RecognizeTextResult>()
 
     /**
      * recognizeText
@@ -217,6 +217,7 @@ object VisionServerProxy {
         inputFile: String? = CodeExecutionContext.lastScreenshotGrayFile,
         language: String = PropertiesManager.visionOCRLanguage,
         colorPalette: ColorPalette? = null,
+        useCache: Boolean = true,
         customWordsFile: String? = PropertiesManager.visionOCRCustomWordsFile,
     ): RecognizeTextResult {
 
@@ -240,11 +241,11 @@ object VisionServerProxy {
             grayImage.saveImage(file = inputFile2)
         }
 
-        if (lastRecognizeTextResult?.inputFile == inputFile2 &&
-            lastRecognizeTextResult?.language == language &&
-            lastRecognizeTextResult?.colorPalette == colorPalette
-        ) {
-            return lastRecognizeTextResult!!
+        val key = "${inputFile2}&&${language}&&${colorPalette}"
+        if (useCache && recognizeTextResultMap.containsKey(key)) {
+            val result = recognizeTextResultMap[key]!!
+            result.fromCache = true
+            return result
         }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
@@ -302,7 +303,7 @@ object VisionServerProxy {
             tsvFile.toFile().writeText(tsvString)
         }
         sw.stop()
-        lastRecognizeTextResult = result
+        recognizeTextResultMap[key] = result
         return result
     }
 
