@@ -92,7 +92,10 @@ internal fun VisionElement.rightLeftCore(
 
     val sw = StopWatch("rightLeftCore")
 
-    val baseElement = this
+    var baseElement = this
+    if (selector?.expression != null && selector.evaluateText(this, looseMatch = false).not()) {
+        baseElement = detect(selector.expression!!, looseMatch = false)
+    }
     val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
     val grayImage = lastScreenshot.convertColorModel(colorPalette = colorPalette)
     val lineHeight = (textToLineHeightRatio * baseElement.rect.height).toInt()

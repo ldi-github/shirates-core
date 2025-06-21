@@ -2252,7 +2252,7 @@ class PropertiesManagerTest : UnitTest() {
         run {
             // Arrange
             val value = Const.VISION_EXPERT_MODE.not()
-            PropertiesManager.setPropertyValue("visionUnsafeMode", value.toString())
+            PropertiesManager.setPropertyValue("visionExpertMode", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionExpertMode).isEqualTo(value)
         }
