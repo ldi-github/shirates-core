@@ -162,7 +162,7 @@ object Const {
     const val VISION_OCR_CUSTOM_WORDS_FILE = ""
     const val VISION_DIRECTORY = "vision"
     const val VISION_BUILD_DIRECTORY = "build"
-    const val VISION_ENABLE_LEARNING_ON_STARTUP = true
+    const val VISION_FORCE_LEARNING_ON_STARTUP = false
     const val VISION_SERVER_URL = "http://127.0.0.1:8081"
     const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
@@ -183,7 +183,7 @@ object Const {
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
     const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
     const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
-    val VISION_COLOR_PALETTE = ColorPalette.GRAY_16
+    val VISION_COLOR_PALETTE = ColorPalette.GRAY_32
     const val VISION_EXPERT_MODE = false
 
     /**

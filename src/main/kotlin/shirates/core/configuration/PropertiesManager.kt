@@ -1042,12 +1042,12 @@ object PropertiesManager {
         }
 
     /**
-     * visionEnableLearningOnStartup
+     * visionForceLearningOnStartup
      */
-    val visionEnableLearningOnStartup: Boolean
+    val visionForceLearningOnStartup: Boolean
         get() {
-            val value = getPropertyValue(propertyName = "visionEnableLearningOnStartup")
-                ?: return Const.VISION_ENABLE_LEARNING_ON_STARTUP
+            val value = getPropertyValue(propertyName = "visionForceLearningOnStartup")
+                ?: return Const.VISION_FORCE_LEARNING_ON_STARTUP
             return value == "true"
         }
 

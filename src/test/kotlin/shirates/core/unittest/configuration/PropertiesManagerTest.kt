@@ -1845,20 +1845,20 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionEnableLearningOnStartup() {
+    fun visionForceLearningOnStartup() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(Const.VISION_ENABLE_LEARNING_ON_STARTUP)
+            assertThat(PropertiesManager.visionForceLearningOnStartup).isEqualTo(Const.VISION_FORCE_LEARNING_ON_STARTUP)
         }
         run {
             // Arrange
-            val value = Const.VISION_ENABLE_LEARNING_ON_STARTUP.not()
-            PropertiesManager.setPropertyValue("visionEnableLearningOnStartup", value.toString())
+            val value = Const.VISION_FORCE_LEARNING_ON_STARTUP.not()
+            PropertiesManager.setPropertyValue("visionForceLearningOnStartup", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(value)
+            assertThat(PropertiesManager.visionForceLearningOnStartup).isEqualTo(value)
         }
     }
 

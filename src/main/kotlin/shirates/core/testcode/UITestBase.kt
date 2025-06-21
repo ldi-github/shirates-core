@@ -371,7 +371,9 @@ abstract class UITestBase : Drive {
 
                 if (isRunningOnMacOS && TestMode.isVisionTest) {
                     // run learning
-                    CreateMLUtility.runLearning()
+                    CreateMLUtility.runLearning(
+                        force = PropertiesManager.visionForceLearningOnStartup
+                    )
 
                     // setup textReplacement repository
                     VisionTextReplacementRepository.setup()
