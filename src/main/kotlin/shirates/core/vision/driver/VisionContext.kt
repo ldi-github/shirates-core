@@ -546,8 +546,8 @@ class VisionContext(
         val tempList = mutableListOf<Segment>()
         for (seg in candidateSegments) {
             if (selector.evaluateText(text = seg.text, looseMatch = false)) {
-                val vt = seg.rectOnScreen.offsetRect(workRect.left, workRect.top).toVisionElement()
-                vt.visionContext.recognizeTextObservations = mutableListOf(seg.recognizeTextObservation!!)
+                val o = seg.recognizeTextObservation!!
+                val vt = o.toVisionElement()
                 return vt
             }
 
