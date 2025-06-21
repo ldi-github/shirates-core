@@ -471,6 +471,9 @@ class VisionContext(
         if (selector.evaluateText(element = v, looseMatch = looseMatch)) {
             return v
         }
+        if (testContext.visionExpertMode) {
+            return v
+        }
 
         /**
          * Re-recognize text

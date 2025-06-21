@@ -318,6 +318,10 @@ class TestContext(
     @SaveTarget
     var visionVerticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold
 
+    @SaveTarget
+    var visionExpertMode: Boolean = PropertiesManager.visionExpertMode
+
+
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {
             it.visibility == KVisibility.PUBLIC

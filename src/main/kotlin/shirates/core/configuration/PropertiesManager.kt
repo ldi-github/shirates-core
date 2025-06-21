@@ -1244,6 +1244,16 @@ object PropertiesManager {
             return ColorPalette.valueOf(p)
         }
 
+    /**
+     * visionExpertMode
+     */
+    val visionExpertMode: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionExpertMode")
+                ?: return Const.VISION_EXPERT_MODE
+            return value == "true"
+        }
+
     // Custom --------------------------------------------------
 
     /**

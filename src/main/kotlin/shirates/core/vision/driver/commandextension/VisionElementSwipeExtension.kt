@@ -576,16 +576,10 @@ fun VisionElement.isSafePosition(
         return true
     }
 
-    val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: vision.rootElement
-    val scrollBounds = scrollVisionElement.bounds
-
     if (direction.isVertical) {
-        if (this.bounds.top < scrollBounds.height * PropertiesManager.visionSafeAreaTopRatio) {
-            return false
-        }
-        if (scrollBounds.height * PropertiesManager.visionSafeAreaBottomRatio < this.bounds.bottom) {
-            return false
-        }
+        val safeArea = getSafeArea()
+        val isInSafeArea = this.rect.isIncludedIn(safeArea.rect)
+        return isInSafeArea
     }
     return true
 }
@@ -594,6 +588,7 @@ fun VisionElement.isSafePosition(
  * swipeToSafePosition
  */
 fun VisionElement.swipeToSafePosition(
+    durationSeconds: Double = testContext.swipeDurationSeconds / 2,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     action: (() -> Unit)? = null
 ): VisionElement {
@@ -606,7 +601,10 @@ fun VisionElement.swipeToSafePosition(
     }
 
     silent {
-        this.swipeVerticalTo((screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt())
+        this.swipeVerticalTo(
+            endY = (screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt(),
+            durationSeconds = durationSeconds,
+        )
     }
 
     if (action != null) {

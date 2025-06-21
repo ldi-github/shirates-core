@@ -256,7 +256,8 @@ private fun detectInVisionContext(
         lineSpacingRatio = lineSpacingRatio,
         last = last,
     )
-    if (v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)) {
+    val retry = v.isEmpty && (autoImageFilter || CodeExecutionContext.visionImageFilterContext.hasFilter)
+    if (retry && testContext.visionExpertMode.not()) {
         /**
          * Retry with filtered image
          */

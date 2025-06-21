@@ -2241,6 +2241,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionUnsafeMode() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionExpertMode).isEqualTo(Const.VISION_EXPERT_MODE)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_EXPERT_MODE.not()
+            PropertiesManager.setPropertyValue("visionUnsafeMode", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionExpertMode).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {

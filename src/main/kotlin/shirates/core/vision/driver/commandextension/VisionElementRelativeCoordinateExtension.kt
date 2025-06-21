@@ -98,7 +98,7 @@ internal fun VisionElement.rightLeftCore(
     val lineHeight = (textToLineHeightRatio * baseElement.rect.height).toInt()
     val rect = Rectangle(0, baseElement.rect.centerY - lineHeight / 2, grayImage.width, lineHeight)
     val binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = grayImage, threshold = binaryThreshold)
-        .toBufferedImage()!!.maskAboveBelow(rect).horizontalLineRemoved().verticalLineRemoved()
+        .toBufferedImage()!!.maskAboveBelow(rect)
 
     /**
      * split to vision elements
@@ -126,6 +126,9 @@ internal fun VisionElement.rightLeftCore(
     }
     if (mergeIncluded.not()) {
         elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
+    }
+    if (elms.isEmpty()) {
+        return VisionElement.emptyElement
     }
 
     /**
@@ -185,7 +188,7 @@ fun VisionElement.aboveItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     colorPalette: ColorPalette = testContext.visionColorPalette,
-    removeHorizontalLine: Boolean = true,
+    removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
     verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
@@ -218,7 +221,7 @@ fun VisionElement.belowItem(
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
     colorPalette: ColorPalette = testContext.visionColorPalette,
-    removeHorizontalLine: Boolean = true,
+    removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
     verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,

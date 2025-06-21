@@ -132,13 +132,12 @@ object Const {
     const val RETRY_TIMEOUT_SECONDS: Double = 15.0
     const val RETRY_INTERVAL_SECONDS: Double = 2.0
     const val SHORT_WAIT_SECONDS = 1.5
-    const val WAIT_SECONDS_FOR_EXIST = 0.5
     const val WAIT_SECONDS_FOR_LAUNCH_APP_COMPLETE = 15.0
     const val WAIT_SECONDS_FOR_ANIMATION_COMPLETE = 0.5
     const val WAIT_SECONDS_ON_ISSCREEN = 15.0
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
-    const val SWIPE_DURATION_SECONDS = 3.0
-    const val FLICK_DURATION_SECONDS = 0.3
+    const val SWIPE_DURATION_SECONDS = 1.5
+    const val FLICK_DURATION_SECONDS = 0.25
     const val SWIPE_INTERVAL_SECONDS = 0.1
     const val FLICK_INTERVAL_SECONDS = 0.3
     const val SWIPE_MARGIN_RATIO = 0.0
@@ -185,6 +184,7 @@ object Const {
     const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
     const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
     val VISION_COLOR_PALETTE = ColorPalette.GRAY_16
+    const val VISION_EXPERT_MODE = false
 
     /**
      * internal
