@@ -2,14 +2,14 @@ package shirates.core.vision.result
 
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
-import shirates.core.utility.image.ColorModel
+import shirates.core.utility.image.ColorScale
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.string.replaceWithRegisteredWord
 
 class RecognizeTextResult(
     var inputFile: String,
     var language: String,
-    val colorModel: ColorModel?,
+    val colorScale: ColorScale?,
     val jsonString: String,
 ) {
     var fromCache = false

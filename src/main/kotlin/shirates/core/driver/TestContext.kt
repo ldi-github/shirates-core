@@ -8,7 +8,7 @@ import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.testcode.UITestCallbackExtension
-import shirates.core.utility.image.ColorModel
+import shirates.core.utility.image.ColorScale
 import shirates.core.utility.misc.UrlUtility
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import kotlin.reflect.KMutableProperty
@@ -310,7 +310,7 @@ class TestContext(
     var visionTextToLineHeightRatio: Double = PropertiesManager.visionTextToLineHeightRatio
 
     @SaveTarget
-    var visionColorModel: ColorModel = PropertiesManager.visionColorModel
+    var visionColorScale: ColorScale = PropertiesManager.visionColorScale
 
     @SaveTarget
     var visionHorizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold

@@ -27,7 +27,7 @@ fun VisionElement.rightItem(
     textToLineHeightRatio: Double = testContext.visionTextToLineHeightRatio,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     filterMargin: Int = 5,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): VisionElement {
 
     return rightLeftCore(
@@ -39,7 +39,7 @@ fun VisionElement.rightItem(
         textToLineHeightRatio = textToLineHeightRatio,
         binaryThreshold = binaryThreshold,
         filterMargin = filterMargin,
-        colorModel = colorModel,
+        colorScale = colorScale,
     )
 }
 
@@ -54,7 +54,7 @@ fun VisionElement.leftItem(
     textToLineHeightRatio: Double = testContext.visionTextToLineHeightRatio,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     filterMargin: Int = 5,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): VisionElement {
 
     return rightLeftCore(
@@ -66,7 +66,7 @@ fun VisionElement.leftItem(
         textToLineHeightRatio = textToLineHeightRatio,
         binaryThreshold = binaryThreshold,
         filterMargin = filterMargin,
-        colorModel = colorModel,
+        colorScale = colorScale,
     )
 }
 
@@ -79,7 +79,7 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
     binaryThreshold: Int,
     filterMargin: Int,
-    colorModel: ColorModel,
+    colorScale: ColorScale,
 ): VisionElement {
 
     val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
@@ -98,7 +98,7 @@ internal fun VisionElement.rightLeftCore(
         baseElement = detect(selector.expression!!, looseMatch = false)
     }
     val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
-    val grayImage = lastScreenshot.convertColorModel(colorModel = colorModel)
+    val grayImage = lastScreenshot.convertColorScale(colorScale = colorScale)
     val lineHeight = (textToLineHeightRatio * baseElement.rect.height).toInt()
     val rect = Rectangle(0, baseElement.rect.centerY - lineHeight / 2, grayImage.width, lineHeight)
     val binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = grayImage, threshold = binaryThreshold)
@@ -191,7 +191,7 @@ fun VisionElement.aboveItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -206,7 +206,7 @@ fun VisionElement.aboveItem(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
-        colorModel = colorModel,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -224,7 +224,7 @@ fun VisionElement.belowItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -239,7 +239,7 @@ fun VisionElement.belowItem(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
-        colorModel = colorModel,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -254,7 +254,7 @@ internal fun VisionElement.aboveBelowCore(
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
     binaryThreshold: Int,
-    colorModel: ColorModel,
+    colorScale: ColorScale,
     removeHorizontalLine: Boolean,
     horizontalLineThreshold: Double,
     removeVerticalLine: Boolean,
@@ -277,7 +277,7 @@ internal fun VisionElement.aboveBelowCore(
      * masking image
      */
     val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
-    val grayImage = lastScreenshot.convertColorModel(colorModel = colorModel)
+    val grayImage = lastScreenshot.convertColorScale(colorScale = colorScale)
     var binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = grayImage, threshold = binaryThreshold)
         .toBufferedImage()!!
     if (removeHorizontalLine) {
@@ -371,7 +371,7 @@ fun VisionElement.aboveLineItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = true,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -385,7 +385,7 @@ fun VisionElement.aboveLineItem(
         include = include,
         binaryThreshold = binaryThreshold,
         swipeToSafePosition = swipeToSafePosition,
-        colorModel = colorModel,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -404,7 +404,7 @@ fun VisionElement.belowLineItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = true,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -418,7 +418,7 @@ fun VisionElement.belowLineItem(
         include = include,
         binaryThreshold = binaryThreshold,
         swipeToSafePosition = swipeToSafePosition,
-        colorModel = colorModel,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -555,7 +555,7 @@ fun VisionElement.leftText(
 private fun VisionElement.splitTextElements(): List<VisionElement> {
 
     val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_split_text.png").toString()
-    val subImage = this.image!!.convertColorModel(colorModel = testContext.visionColorModel)
+    val subImage = this.image!!.convertColorScale(colorScale = testContext.visionColorScale)
     subImage.saveImage(file = file)
 
     val r = VisionServerProxy.recognizeText(inputFile = file, language = visionContext.language)
@@ -941,7 +941,7 @@ fun VisionElement.aboveRow(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ): VisionElement {
 
@@ -963,7 +963,7 @@ fun VisionElement.aboveRow(
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             binaryThreshold = binaryThreshold,
-            colorModel = colorModel,
+            colorScale = colorScale,
             horizontalLineThreshold = horizontalLineThreshold,
         )
     }
@@ -984,7 +984,7 @@ fun VisionElement.belowRow(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
     horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ): VisionElement {
 
@@ -1006,7 +1006,7 @@ fun VisionElement.belowRow(
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             binaryThreshold = binaryThreshold,
-            colorModel = colorModel,
+            colorScale = colorScale,
             horizontalLineThreshold = horizontalLineThreshold,
         )
     }

@@ -22,10 +22,10 @@ fun VisionElement.cell(
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = testContext.segmentCroppingMargin,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): VisionElement {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorModel = colorModel)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorScale(colorScale = colorScale)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,

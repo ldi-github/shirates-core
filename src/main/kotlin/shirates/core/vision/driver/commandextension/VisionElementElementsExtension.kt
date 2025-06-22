@@ -21,10 +21,10 @@ fun VisionElement.ancestors(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorModel = colorModel)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorScale(colorScale = colorScale)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
@@ -72,10 +72,10 @@ fun VisionElement.ancestorsContains(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorModel = colorModel)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorScale(colorScale = colorScale)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
@@ -124,10 +124,10 @@ fun VisionElement.ancestorsContains(
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     croppingMargin: Int = testContext.segmentCroppingMargin,
     filter: ((VisionElement) -> Boolean)? = null,
-    colorModel: ColorModel = testContext.visionColorModel,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): List<VisionElement> {
 
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(colorModel = colorModel)
+    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorScale(colorScale = colorScale)
     val binary = BinarizationUtility.getBinaryAsGrayU8(
         image = image,
         invert = false,
