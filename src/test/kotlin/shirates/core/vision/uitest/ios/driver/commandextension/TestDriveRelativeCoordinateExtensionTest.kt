@@ -6,7 +6,7 @@ import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.thisStartsWith
 import shirates.core.testcode.Want
-import shirates.core.utility.image.ColorModel
+import shirates.core.utility.image.ColorScale
 import shirates.core.vision.driver.classify
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
@@ -23,7 +23,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                 condition {
                     it.screenIs("[iOS Settings Top Screen]")
                     v1 = it.detect("General").leftItem()
-                    v2 = it.detect("StandBy").leftItem(colorModel = ColorModel.GRAY_16)
+                    v2 = it.detect("StandBy").leftItem(colorScale = ColorScale.GRAY_16)
                 }.expectation {
                     v1.classify().thisIs("[General Icon]")
                     v2.classify().thisIs("[StandBy Icon]")

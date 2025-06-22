@@ -1,6 +1,6 @@
 package shirates.core.utility.image
 
-enum class ColorModel {
+enum class ColorScale {
     BINARY,
     GRAY_8,
     GRAY_16,

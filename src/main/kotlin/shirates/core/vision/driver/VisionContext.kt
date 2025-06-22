@@ -379,7 +379,7 @@ class VisionContext(
     private fun recognizeTextAndSaveRectangleImage(
         inputFile: String,
         language: String,
-        colorModel: ColorModel? = null,
+        colorScale: ColorScale? = null,
         useCache: Boolean = true
     ): RecognizeTextResult {
 
@@ -388,7 +388,7 @@ class VisionContext(
         val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
             language = language,
-            colorModel = colorModel,
+            colorScale = colorScale,
             useCache = useCache,
         )
 

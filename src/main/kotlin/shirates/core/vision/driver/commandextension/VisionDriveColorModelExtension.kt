@@ -1,42 +1,42 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.testContext
-import shirates.core.utility.image.ColorModel
+import shirates.core.utility.image.ColorScale
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 
 /**
- * colorModel
+ * colorScale
  */
-fun VisionDrive.colorModel(colorModel: ColorModel): VisionElement {
+fun VisionDrive.colorScale(colorScale: ColorScale): VisionElement {
 
-    testContext.visionColorModel = colorModel
+    testContext.visionColorScale = colorScale
     return getThisOrIt()
 }
 
 /**
- * colorModelBinary
+ * colorScaleBinary
  */
-fun VisionDrive.colorModelBinary(): VisionElement {
+fun VisionDrive.colorScaleBinary(): VisionElement {
 
-    testContext.visionColorModel = ColorModel.BINARY
+    testContext.visionColorScale = ColorScale.BINARY
     return getThisOrIt()
 }
 
 /**
- * colorModelGray16
+ * colorScaleGray16
  */
-fun VisionDrive.colorModelGray16(): VisionElement {
+fun VisionDrive.colorScaleGray16(): VisionElement {
 
-    testContext.visionColorModel = ColorModel.GRAY_16
+    testContext.visionColorScale = ColorScale.GRAY_16
     return getThisOrIt()
 }
 
 /**
- * colorModelGray32
+ * colorScaleGray32
  */
-fun VisionDrive.colorModelGray32(): VisionElement {
+fun VisionDrive.colorScaleGray32(): VisionElement {
 
-    testContext.visionColorModel = ColorModel.GRAY_32
+    testContext.visionColorScale = ColorScale.GRAY_32
     return getThisOrIt()
 }

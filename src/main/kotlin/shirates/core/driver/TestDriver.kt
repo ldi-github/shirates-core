@@ -2142,7 +2142,7 @@ object TestDriver {
              */
             val screenshotGrayName = screenshotFileName.removeSuffix(".png") + "_gray.png"
             val screenshotGrayFile = TestLog.directoryForLog.resolve(screenshotGrayName).toString()
-            val screenshotGrayImage = screenshotImage.copy().convertColorModel(ColorModel.GRAY_16)
+            val screenshotGrayImage = screenshotImage.copy().convertColorScale(ColorScale.GRAY_16)
             screenshotGrayImage.saveImage(file = screenshotGrayFile)
             CodeExecutionContext.lastScreenshotGrayName = screenshotGrayName
             CodeExecutionContext.lastScreenshotGrayImage = screenshotGrayImage
