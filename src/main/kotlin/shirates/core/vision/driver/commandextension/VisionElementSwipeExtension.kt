@@ -600,11 +600,28 @@ fun VisionElement.swipeToSafePosition(
         return this
     }
 
+    val safeArea = getSafeArea()
+
     silent {
-        this.swipeVerticalTo(
-            endY = (screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt(),
-            durationSeconds = durationSeconds,
-        )
+        if (direction.isVertical) {
+            val verticalMovement = this.bounds.centerY - safeArea.bounds.centerY
+            swipePointToPoint(
+                startX = screenBounds.centerX,
+                startY = screenBounds.centerY,
+                endX = screenBounds.centerX,
+                endY = this.bounds.centerY - verticalMovement,
+                durationSeconds = durationSeconds,
+            )
+        } else {
+            val horizontalMovement = this.bounds.centerX - safeArea.bounds.centerX
+            swipePointToPoint(
+                startX = screenBounds.centerX,
+                startY = screenBounds.centerY,
+                endX = this.bounds.centerX - screenBounds.centerX,
+                endY = screenBounds.centerY - horizontalMovement,
+                durationSeconds = durationSeconds,
+            )
+        }
     }
 
     if (action != null) {
