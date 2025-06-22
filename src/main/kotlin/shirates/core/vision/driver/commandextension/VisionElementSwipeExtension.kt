@@ -604,21 +604,21 @@ fun VisionElement.swipeToSafePosition(
 
     silent {
         if (direction.isVertical) {
-            val verticalMovement = this.bounds.centerY - safeArea.bounds.centerY
+            val verticalMovement = safeArea.bounds.centerY - this.bounds.centerY
             swipePointToPoint(
                 startX = screenBounds.centerX,
                 startY = screenBounds.centerY,
                 endX = screenBounds.centerX,
-                endY = this.bounds.centerY - verticalMovement,
+                endY = screenBounds.centerY + verticalMovement,
                 durationSeconds = durationSeconds,
             )
         } else {
-            val horizontalMovement = this.bounds.centerX - safeArea.bounds.centerX
+            val horizontalMovement = safeArea.bounds.centerX - this.bounds.centerX
             swipePointToPoint(
                 startX = screenBounds.centerX,
                 startY = screenBounds.centerY,
-                endX = this.bounds.centerX - screenBounds.centerX,
-                endY = screenBounds.centerY - horizontalMovement,
+                endX = screenBounds.centerX + horizontalMovement,
+                endY = screenBounds.centerY,
                 durationSeconds = durationSeconds,
             )
         }
