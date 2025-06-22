@@ -497,51 +497,51 @@ fun BufferedImage.verticalLineRemoved(
     return this
 }
 
-private val colorPaletteMap = mutableMapOf<ColorPalette, IndexColorModel>()
+private val colorModelMap = mutableMapOf<ColorModel, IndexColorModel>()
 
 private fun getIndexColorModel(
-    colorPalette: ColorPalette
+    colorModel: ColorModel
 ): IndexColorModel {
 
-    if (colorPaletteMap.containsKey(colorPalette)) {
-        return colorPaletteMap[colorPalette]!!
+    if (colorModelMap.containsKey(colorModel)) {
+        return colorModelMap[colorModel]!!
     }
 
     val numColors: Int
     val bits: Int
-    when (colorPalette) {
+    when (colorModel) {
 
-        ColorPalette.BINARY -> {
+        ColorModel.BINARY -> {
             numColors = 2
             bits = 1
         }
 
-        ColorPalette.GRAY_8 -> {
+        ColorModel.GRAY_8 -> {
             numColors = 8
             bits = 3
         }
 
-        ColorPalette.GRAY_16 -> {
+        ColorModel.GRAY_16 -> {
             numColors = 16
             bits = 4
         }
 
-        ColorPalette.GRAY_32 -> {
+        ColorModel.GRAY_32 -> {
             numColors = 32
             bits = 5
         }
 
-        ColorPalette.GRAY_64 -> {
+        ColorModel.GRAY_64 -> {
             numColors = 64
             bits = 6
         }
 
-        ColorPalette.GRAY_128 -> {
+        ColorModel.GRAY_128 -> {
             numColors = 128
             bits = 7
         }
 
-        ColorPalette.GRAY_256 -> {
+        ColorModel.GRAY_256 -> {
             numColors = 256
             bits = 6
         }
@@ -551,7 +551,7 @@ private fun getIndexColorModel(
     val g = ByteArray(numColors) { (it * (numColors + 1)).toByte() }
     val b = ByteArray(numColors) { (it * (numColors + 1)).toByte() }
     val indexColorModel = IndexColorModel(bits, numColors, r, g, b)
-    colorPaletteMap[colorPalette] = indexColorModel
+    colorModelMap[colorModel] = indexColorModel
     return indexColorModel
 }
 
@@ -559,11 +559,11 @@ private fun getIndexColorModel(
  * convertColorModel
  */
 fun BufferedImage.convertColorModel(
-    colorPalette: ColorPalette,
+    colorModel: ColorModel,
     imageType: Int = BufferedImage.TYPE_BYTE_INDEXED,
 ): BufferedImage {
 
-    val cm = getIndexColorModel(colorPalette = colorPalette)
+    val cm = getIndexColorModel(colorModel = colorModel)
     val image = BufferedImage(width, height, imageType, cm)
     val g2d = image.createGraphics()
     g2d.drawImage(this, 0, 0, null)

@@ -11,7 +11,7 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.file.exists
-import shirates.core.utility.image.ColorPalette
+import shirates.core.utility.image.ColorModel
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
@@ -1236,12 +1236,12 @@ object PropertiesManager {
         }
 
     /**
-     * visionColorPalette
+     * visionColorModel
      */
-    val visionColorPalette: ColorPalette
+    val visionColorModel: ColorModel
         get() {
-            val p = getPropertyValue(propertyName = "visionColorPalette") ?: return Const.VISION_COLOR_PALETTE
-            return ColorPalette.valueOf(p)
+            val p = getPropertyValue(propertyName = "visionColorModel") ?: return Const.VISION_COLOR_MODEL
+            return ColorModel.valueOf(p)
         }
 
     /**

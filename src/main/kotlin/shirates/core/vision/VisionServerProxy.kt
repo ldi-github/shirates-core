@@ -216,7 +216,7 @@ object VisionServerProxy {
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotGrayFile,
         language: String = PropertiesManager.visionOCRLanguage,
-        colorPalette: ColorPalette? = null,
+        colorModel: ColorModel? = null,
         useCache: Boolean = true,
         customWordsFile: String? = PropertiesManager.visionOCRCustomWordsFile,
     ): RecognizeTextResult {
@@ -232,16 +232,16 @@ object VisionServerProxy {
         }
 
         var inputFile2 = inputFile
-        if (colorPalette != null) {
+        if (colorModel != null) {
             val grayImage = BufferedImageUtility.getBufferedImage(filePath = inputFile)
-                .convertColorModel(colorPalette = colorPalette)
+                .convertColorModel(colorModel = colorModel)
             inputFile2 =
-                inputFile.toPath().parent.resolve("${inputFile.toPath().nameWithoutExtension}_${colorPalette}.png")
+                inputFile.toPath().parent.resolve("${inputFile.toPath().nameWithoutExtension}_${colorModel}.png")
                     .toString()
             grayImage.saveImage(file = inputFile2)
         }
 
-        val key = "${inputFile2}&&${language}&&${colorPalette}"
+        val key = "${inputFile2}&&${language}&&${colorModel}"
         if (useCache && recognizeTextResultMap.containsKey(key)) {
             val result = recognizeTextResultMap[key]!!
             result.fromCache = true
@@ -284,7 +284,7 @@ object VisionServerProxy {
             inputFile = inputFile2,
             language = language,
             jsonString = jsonString,
-            colorPalette = colorPalette,
+            colorModel = colorModel,
         )
 
         if (Files.exists(TestLog.directoryForLog).not()) {

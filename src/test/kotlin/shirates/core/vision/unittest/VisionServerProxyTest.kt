@@ -12,7 +12,7 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
-import shirates.core.utility.image.ColorPalette
+import shirates.core.utility.image.ColorModel
 import shirates.core.utility.image.convertColorModel
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.toPath
@@ -425,7 +425,7 @@ class VisionServerProxyTest : UnitTest() {
             CodeExecutionContext.lastScreenshotImage = image
             image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
 
-            val grayImage = image.convertColorModel(ColorPalette.GRAY_16)
+            val grayImage = image.convertColorModel(ColorModel.GRAY_16)
             CodeExecutionContext.lastScreenshotGrayName = "${TestLog.currentLineNo}_gray_image.png"
             grayImage.saveImage(file = CodeExecutionContext.lastScreenshotGrayFile!!)
             CodeExecutionContext.lastScreenshotGrayImage = grayImage
@@ -455,7 +455,7 @@ class VisionServerProxyTest : UnitTest() {
             CodeExecutionContext.lastScreenshotImage = image
             image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
 
-            val grayImage = image.convertColorModel(ColorPalette.GRAY_16)
+            val grayImage = image.convertColorModel(ColorModel.GRAY_16)
             CodeExecutionContext.lastScreenshotGrayName = "${TestLog.currentLineNo}_gray_image.png"
             grayImage.saveImage(file = CodeExecutionContext.lastScreenshotGrayFile!!)
             CodeExecutionContext.lastScreenshotGrayImage = grayImage

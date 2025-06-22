@@ -304,6 +304,18 @@ open class VisionElement(
             return s
         }
 
+    /**
+     * strictMatched
+     */
+    val strictMatched: Boolean
+        get() {
+            if (selector != null) {
+                val strictMatched = selector!!.evaluateText(this, looseMatch = false)
+                return strictMatched
+            }
+            return false
+        }
+
     override fun getRectInfo(): Rectangle {
         return rect
     }

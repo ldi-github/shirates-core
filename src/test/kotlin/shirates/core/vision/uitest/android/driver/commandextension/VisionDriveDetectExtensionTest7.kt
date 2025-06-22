@@ -57,16 +57,16 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
         assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)
-        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)    // filtered.png reused
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = false)
-        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)    // filtered.png reused
 
         it.detect("not exist", throwsException = false, waitSeconds = 0.0)
-        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(2)
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)
 
-        it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)
-        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(3)
+        it.detect("not exist", throwsException = false, waitSeconds = 0.0, autoImageFilter = true)// filtered.png reused
+        assertThat(TestLog.lines.count { it.message.endsWith("filtered.png") }).isEqualTo(1)
     }
 
 }

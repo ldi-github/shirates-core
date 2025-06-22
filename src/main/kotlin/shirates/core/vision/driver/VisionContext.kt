@@ -184,6 +184,28 @@ class VisionContext(
             c.rectOnLocalRegion = c.screenshotImage?.rect
             return c
         }
+
+        internal fun getObservation(
+            text: String,
+            r: RecognizeTextResult,
+            rect: Rectangle,
+            screenshotFile: String? = null,
+            screenshotImage: BufferedImage? = null,
+        ): RecognizeTextObservation {
+            return RecognizeTextObservation(
+                text = text,
+                confidence = 1.0f,
+                jsonString = r.jsonString,
+                language = r.language,
+                screenshotFile = screenshotFile,
+                screenshotImage = screenshotImage,
+                localRegionFile = null,
+                localRegionImage = null,
+                localRegionX = 0,
+                localRegionY = 0,
+                rectOnLocalRegion = rect
+            )
+        }
     }
 
 
@@ -357,7 +379,7 @@ class VisionContext(
     private fun recognizeTextAndSaveRectangleImage(
         inputFile: String,
         language: String,
-        colorPalette: ColorPalette? = null,
+        colorModel: ColorModel? = null,
         useCache: Boolean = true
     ): RecognizeTextResult {
 
@@ -366,7 +388,7 @@ class VisionContext(
         val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
             language = language,
-            colorPalette = colorPalette,
+            colorModel = colorModel,
             useCache = useCache,
         )
 
@@ -481,43 +503,21 @@ class VisionContext(
         val lastScreenshot = CodeExecutionContext.lastScreenshotGrayImage!!
         val lineHeight = (v.rect.height * 1.1).toInt()
         val workRect = Rectangle(0, v.rect.centerY - lineHeight / 2, lastScreenshot.width, lineHeight)
-        val subimage = lastScreenshot.getSubimage(workRect.left, workRect.top, workRect.width, workRect.height)
+        val subImage = lastScreenshot.getSubimage(workRect.left, workRect.top, workRect.width, workRect.height)
         val lineItemFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_re_recognize_text.png").toString()
-        subimage.saveImage(file = lineItemFile)
+        subImage.saveImage(file = lineItemFile)
 
         val sc = SegmentContainer(
             mergeIncluded = true,
-            containerImage = subimage,
+            containerImage = subImage,
             segmentMarginHorizontal = testContext.segmentMarginHorizontal,
             segmentMarginVertical = testContext.segmentMarginVertical,
         ).split()
         sc.saveImages()
 
-        if (sc.segments.count() == 1 && sc.segments[0].toRect().toString() == subimage.rect.toString()) {
+        if (sc.segments.count() == 1 && sc.segments[0].toRect().toString() == subImage.rect.toString()) {
             // Clipped highlights
             return v
-        }
-
-        fun getObservation(
-            text: String,
-            r: RecognizeTextResult,
-            rect: Rectangle,
-            screenshotFile: String? = null,
-            screenshotImage: BufferedImage? = null,
-        ): RecognizeTextObservation {
-            return RecognizeTextObservation(
-                text = text,
-                confidence = 1.0f,
-                jsonString = r.jsonString,
-                language = r.language,
-                screenshotFile = screenshotFile,
-                screenshotImage = screenshotImage,
-                localRegionFile = null,
-                localRegionImage = null,
-                localRegionX = 0,
-                localRegionY = 0,
-                rectOnLocalRegion = rect
-            )
         }
 
         /**
@@ -555,7 +555,7 @@ class VisionContext(
             val rectangles = tempList.map { it.rectOnScreen.offsetRect(workRect.left, workRect.top) }
             val rect = Rectangle.merge(rectangles)!!
             val vt = rect.toVisionElement()
-            val observations = tempList.map { it.recognizeTextObservation!! }
+            val observations = tempList.map { it.recognizeTextObservation!! }.sortedBy { it.rectOnScreen!!.left }
 
             vt.visionContext.recognizeTextObservations = observations.toMutableList()
             if (selector.evaluateText(text = vt.text, looseMatch = false)) {

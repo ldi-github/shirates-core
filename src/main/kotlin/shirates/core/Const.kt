@@ -1,6 +1,6 @@
 package shirates.core
 
-import shirates.core.utility.image.ColorPalette
+import shirates.core.utility.image.ColorModel
 
 /**
  * Const
@@ -183,7 +183,7 @@ object Const {
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
     const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
     const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
-    val VISION_COLOR_PALETTE = ColorPalette.GRAY_32
+    val VISION_COLOR_MODEL = ColorModel.GRAY_32
     const val VISION_EXPERT_MODE = false
 
     /**

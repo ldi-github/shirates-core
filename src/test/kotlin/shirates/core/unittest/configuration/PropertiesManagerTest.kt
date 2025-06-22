@@ -12,7 +12,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.file.PropertiesUtility
-import shirates.core.utility.image.ColorPalette
+import shirates.core.utility.image.ColorModel
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.toPath
 import java.io.FileNotFoundException
@@ -2229,14 +2229,14 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionColorPalette).isEqualTo(Const.VISION_COLOR_PALETTE)
+            assertThat(PropertiesManager.visionColorModel).isEqualTo(Const.VISION_COLOR_MODEL)
         }
         run {
             // Arrange
-            val value = ColorPalette.GRAY_256
-            PropertiesManager.setPropertyValue("visionColorPalette", value.toString())
+            val value = ColorModel.GRAY_256
+            PropertiesManager.setPropertyValue("visionColorModel", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionColorPalette).isEqualTo(value)
+            assertThat(PropertiesManager.visionColorModel).isEqualTo(value)
         }
     }
 
