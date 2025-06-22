@@ -65,6 +65,8 @@ class VisionElementElementsExtensionTest : VisionTest() {
     @Order(30)
     fun ancestorsContains_rect() {
 
+        colorModelGray16()
+
         scenario {
             case(1) {
                 condition {
