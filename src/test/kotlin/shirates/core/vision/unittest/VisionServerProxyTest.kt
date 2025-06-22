@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.testContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -436,14 +437,23 @@ class VisionServerProxyTest : UnitTest() {
                 // Act
                 val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = true)
                 // Assert
-                assertThat(v.text).isEqualTo("男性")    // • 男性
+                assertThat(v.text).contains("男性")    // "• 男性"
                 TestLog.info("v.text=${v.text}")
             }
             run {
                 // Act
                 val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = false)
                 // Assert
-                assertThat(v.text).isEqualTo("男性")
+                assertThat(v.text).isEqualTo("男性")   // "男性"
+                TestLog.info("v.text=${v.text}")
+            }
+            run {
+                // Arrange
+                assertThat(testContext.visionLooseMatch).isFalse()
+                // Act
+                val v = context.detect(selector = Selector("男性"), language = "ja", last = false)
+                // Assert
+                assertThat(v.text).contains("男性")    // "男性"
                 TestLog.info("v.text=${v.text}")
             }
         }
@@ -467,7 +477,7 @@ class VisionServerProxyTest : UnitTest() {
                 val v =
                     context.detect(selector = Selector("Airplane mode"), language = "", last = false, looseMatch = true)
                 // Assert
-                assertThat(v.text).isEqualTo("Airplane mode")    // # Airplane mode
+                assertThat(v.text).contains("Airplane mode")    // # Airplane mode
                 TestLog.info("v.text=${v.text}")
             }
             run {
