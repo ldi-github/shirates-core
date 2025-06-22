@@ -155,4 +155,43 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
         }
     }
 
+    @Test
+    fun relative3() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Language & Region Screen]")
+                }.expectation {
+                    v1 = it.detect("Metric").aboveText()
+                    v1.textIs("°C")
+
+                    v2 = it.detect("Metric").aboveText(2)
+                    v2.textIs("Gregorian")
+
+                    v3 = it.detect("Metric").aboveText("world")
+                    v3.leftTextIs("Region")
+
+                    v4 = it.detect("Metric").aboveText("*orl*")
+                    v4.leftTextIs("Region")
+                }
+            }
+            case(2) {
+                expectation {
+                    v1 = it.detect("Metric").belowText()
+                    v1.textIs("Monday")
+
+                    v2 = it.detect("Metric").belowText(3)
+                    v2.textIs("1234567.89")
+
+                    v3 = it.detect("Metric").belowText("Monday")
+                    v3.leftTextIs("First Day of Week")
+
+                    v4 = it.detect("Metric").belowText("*onda*")
+                    v4.leftTextIs("First Day of Week")
+                }
+            }
+        }
+    }
+
 }

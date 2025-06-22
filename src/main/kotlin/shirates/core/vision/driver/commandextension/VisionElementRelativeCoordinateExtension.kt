@@ -13,6 +13,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.commandextension.helper.VerticalBand
 import shirates.core.vision.driver.lastElement
 import java.awt.Color
 
@@ -577,6 +578,18 @@ private fun VisionElement.splitTextElements(): List<VisionElement> {
     return textElements
 }
 
+private fun VisionElement.getVerticalElements(): List<VisionElement> {
+    rootElement.visionContext.recognizeText()
+
+    val verticalBand = VerticalBand(baseElement = this)
+    for (v in rootElement.visionTextElements) {
+        verticalBand.merge(element = v, margin = 0)
+    }
+    val elms = verticalBand.getElements().map { it as VisionElement }
+    val sortedElements = elms.sortedByDescending { it.rect.top }
+    return sortedElements
+}
+
 /**
  * aboveText
  */
@@ -601,7 +614,8 @@ fun VisionElement.aboveText(
         v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
         return v
     }
-    val textElements = this.aboveRegionElement(columnWidth = screenRect.width).splitTextElements()
+
+    val textElements = this.getVerticalElements()
         .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedByDescending { it.rect.top }
     v = if (textElements.isEmpty() || textElements.count() < pos)
@@ -630,9 +644,9 @@ fun VisionElement.aboveText(
         return v
     }
 
-    val textElements = this.aboveRegionElement(columnWidth = screenRect.width).splitTextElements()
+    val textElements = this.getVerticalElements()
         .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = textElements.lastOrNull() ?: VisionElement(capture = false)
 
@@ -667,7 +681,7 @@ fun VisionElement.belowText(
         return v
     }
 
-    val textElements = this.belowRegionElement(columnWidth = screenRect.width).splitTextElements()
+    val textElements = this.getVerticalElements()
         .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.top }
     v = if (textElements.isEmpty() || textElements.count() < pos)
@@ -696,9 +710,9 @@ fun VisionElement.belowText(
         return v
     }
 
-    val textElements = this.belowRegionElement(columnWidth = screenRect.width).splitTextElements()
+    val textElements = this.getVerticalElements()
         .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = textElements.firstOrNull() ?: VisionElement(capture = false)
 
