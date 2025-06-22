@@ -22,13 +22,13 @@
     {
       "profileName": "profile1",
       "capabilities": {
-        "avd": "Pixel_3a_Android_12_"
+        "avd": "Pixel 8(Android 14)"
       }
     },
     {
       "profileName": "profile2",
       "capabilities": {
-        "avd": "Pixel_3a_Android_12_"
+        "avd": "Pixel 8(Android 14)"
       }
     }
   ]
