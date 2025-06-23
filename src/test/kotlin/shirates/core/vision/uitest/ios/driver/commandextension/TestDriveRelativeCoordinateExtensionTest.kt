@@ -16,6 +16,75 @@ import shirates.core.vision.testcode.VisionTest
 class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
 
     @Test
+    fun relative0() {
+
+        scenario {
+            case(1, "rightText, rightTextIs") {
+                condition {
+                    it.macro("[Language & Region Screen]")
+                }.expectation {
+                    it.detect("Region").rightText()
+                    it.textIs("world*")
+
+                    it.detect("Region")
+                    it.rightTextIs("world*")
+
+                    it.detect("Preferred Languages").rightText()
+                    it.textIs("")
+
+                    it.detect("Preferred Languages")
+                    it.rightTextIs("")
+                }
+            }
+            case(2, "leftText, leftTextIs") {
+                expectation {
+                    it.detect("world").leftText()
+                    it.textIs("Region")
+
+                    it.detect("world")
+                    it.leftTextIs("Region")
+
+                    it.detect("Region").leftText()
+                    it.textIs("")
+
+                    it.detect("Region")
+                    it.leftTextIs("")
+                }
+            }
+            case(3, "belowText, belowTextIs") {
+                expectation {
+                    it.detect("English").belowText()
+                    it.textIs("iPhone Language")
+
+                    it.detect("English")
+                    it.belowTextIs("iPhone Language")
+
+                    it.detect("Select text in *").belowText()
+                    it.textIs("")
+
+                    it.detect("Select text in *")
+                    it.belowTextIs("")
+                }
+            }
+            case(4, "aboveText, aboveTextIs") {
+                expectation {
+                    it.detect("iPhone Language").aboveText()
+                    it.textIs("English")
+
+                    it.detect("iPhone Language")
+                    it.aboveTextIs("English")
+
+                    it.detect("Language & Region").aboveText()
+                    it.textIs("")
+
+                    it.detect("Language & Region")
+                    it.aboveTextIs("")
+                }
+            }
+        }
+    }
+
+    @Test
     fun relative1() {
 
         scenario {

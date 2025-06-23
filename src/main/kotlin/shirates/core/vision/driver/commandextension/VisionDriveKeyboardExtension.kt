@@ -13,6 +13,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -27,33 +28,32 @@ val VisionDrive.isKeyboardShown: Boolean
             return true
         }
 
-        if (isAndroid) {
-            return androidDriver.isKeyboardShown
-        } else {
-            return TestDriver.iosDriver.isKeyboardShown
+        val sw = StopWatch("isKeyboardShown")
+        try {
+            return testDrive.isKeyboardShown
+        } finally {
+            sw.stop()
         }
     }
 
 /**
  * hideKeyboard
  */
-fun VisionDrive.hideKeyboard(
-    waitSeconds: Double = testContext.shortWaitSeconds
-): VisionElement {
+fun VisionDrive.hideKeyboard(): VisionElement {
 
-    if (isKeyboardShown.not()) {
-        return lastElement
-    }
+    val sw = StopWatch("hideKeyboard")
 
     val command = "hideKeyboard"
     val message = message(id = command)
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
+
         if (isiOS) {
-            // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
-            val selector = Selector(".XCUIElementTypeKeyboard")
+            val selector = Selector(".XCUIElementTypeKeyboard||#UIKeyboardLayoutStar Preview")
             val e = TestDriver.selectDirectByIosClassChain(selector, frame = null)
             if (e.isFound) {
+                // Workaround
+                // appiumDriver.hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
                 swipePointToPoint(
                     startX = 10,
                     startY = viewBounds.centerY,
@@ -61,13 +61,16 @@ fun VisionDrive.hideKeyboard(
                     endY = viewBounds.centerY - 10,
                     durationSeconds = 1.0
                 )
+                invalidateScreen()
             }
         } else {
-            TestDriver.appiumDriver.hideKeyboard()
+            if (isKeyboardShown) {
+                TestDriver.appiumDriver.hideKeyboard()
+                invalidateScreen()
+            }
         }
-        invalidateScreen()
-        wait(waitSeconds = waitSeconds)
     }
+    sw.stop()
     return lastElement
 }
 

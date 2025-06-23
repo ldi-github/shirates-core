@@ -14,6 +14,7 @@ import shirates.core.utility.file.exists
 import shirates.core.utility.file.toFile
 import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
@@ -500,69 +501,14 @@ class VisionContext(
         /**
          * Re-recognize text
          */
+        val sw = StopWatch("re-recognize text")
         val lastScreenshot = CodeExecutionContext.lastScreenshotGrayImage!!
         val lineHeight = (v.rect.height * 1.1).toInt()
         val workRect = Rectangle(0, v.rect.centerY - lineHeight / 2, lastScreenshot.width, lineHeight)
-        val subImage = lastScreenshot.getSubimage(workRect.left, workRect.top, workRect.width, workRect.height)
-        val lineItemFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_re_recognize_text.png").toString()
-        subImage.saveImage(file = lineItemFile)
-
-        val sc = SegmentContainer(
-            mergeIncluded = true,
-            containerImage = subImage,
-            segmentMarginHorizontal = testContext.segmentMarginHorizontal,
-            segmentMarginVertical = testContext.segmentMarginVertical,
-        ).split()
-        sc.saveImages()
-
-        if (sc.segments.count() == 1 && sc.segments[0].toRect().toString() == subImage.rect.toString()) {
-            // Clipped highlights
-            return v
-        }
-
-        /**
-         * recognize texts in segments
-         */
-        val sortedSegments = sc.segments.sortedByDescending { it.rectOnScreen.left }
-        for (seg in sortedSegments) {
-            val r = VisionServerProxy.recognizeText(inputFile = seg.segmentImageFile, language = language)
-            val c = r.candidates.firstOrNull()
-            if (c != null) {
-                val rect = c.rect.offsetRect(workRect.left + seg.left, workRect.top + seg.top)
-                seg.recognizeTextObservation = getObservation(
-                    text = c.text,
-                    r = r,
-                    screenshotFile = seg.screenshotFile,
-                    screenshotImage = seg.screenshotImage,
-                    rect = rect
-                )
-            }
-        }
-        /**
-         * Join texts in segments
-         */
-        val candidateSegments =
-            sortedSegments.filter { it.text.isNotBlank() }.sortedByDescending { it.text.length }
-        val tempList = mutableListOf<Segment>()
-        for (seg in candidateSegments) {
-            if (selector.evaluateText(text = seg.text, looseMatch = false)) {
-                val o = seg.recognizeTextObservation!!
-                val vt = o.toVisionElement()
-                return vt
-            }
-
-            tempList.add(seg)
-            val rectangles = tempList.map { it.rectOnScreen.offsetRect(workRect.left, workRect.top) }
-            val rect = Rectangle.merge(rectangles)!!
-            val vt = rect.toVisionElement()
-            val observations = tempList.map { it.recognizeTextObservation!! }.sortedBy { it.rectOnScreen!!.left }
-
-            vt.visionContext.recognizeTextObservations = observations.toMutableList()
-            if (selector.evaluateText(text = vt.text, looseMatch = false)) {
-                return vt
-            }
-        }
-        return v
+        val workElement = workRect.toVisionElement()
+        val shapedText = workElement.shapeText(selector = selector, language = language)
+        sw.stop()
+        return shapedText
     }
 
     /**

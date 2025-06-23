@@ -7,13 +7,14 @@ import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.testContext
 import shirates.core.logging.LogType
+import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.Segment
-import shirates.core.utility.image.getMatchRate
+import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.VisionContext.Companion.getObservation
 import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
 import java.rmi.AccessException
@@ -449,4 +450,80 @@ open class VisionElement(
         }
         return true
     }
+
+    /**
+     * shapeText
+     */
+    fun shapeText(
+        selector: Selector = this.selector ?: throw IllegalArgumentException("selector"),
+        language: String = this.visionContext.language,
+    ): VisionElement {
+
+        val lastScreenshot = visionContext.screenshotImage
+        if (lastScreenshot == null) {
+            return this
+        }
+        val workRect = this.rect
+        val subImage = lastScreenshot.getSubimage(workRect.left, workRect.top, workRect.width, workRect.height)
+        val lineItemFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_re_recognize_text.png").toString()
+        subImage.saveImage(file = lineItemFile)
+
+        val sc = SegmentContainer(
+            mergeIncluded = true,
+            containerImage = subImage,
+            segmentMarginHorizontal = testContext.segmentMarginHorizontal,
+            segmentMarginVertical = testContext.segmentMarginVertical,
+        ).split()
+        sc.saveImages()
+
+        if (sc.segments.count() == 1 && sc.segments[0].toRect().toString() == subImage.rect.toString()) {
+            // Clipped highlights
+            return this
+        }
+
+        /**
+         * recognize texts in segments
+         */
+        val sortedSegments = sc.segments.sortedByDescending { it.rectOnScreen.left }
+        for (seg in sortedSegments) {
+            val r = VisionServerProxy.recognizeText(inputFile = seg.segmentImageFile, language = language)
+            val c = r.candidates.firstOrNull()
+            if (c != null) {
+                val rect = c.rect.offsetRect(workRect.left + seg.left, workRect.top + seg.top)
+                seg.recognizeTextObservation = getObservation(
+                    text = c.text,
+                    r = r,
+                    screenshotFile = seg.screenshotFile,
+                    screenshotImage = seg.screenshotImage,
+                    rect = rect
+                )
+            }
+        }
+        /**
+         * Join texts in segments
+         */
+        val candidateSegments =
+            sortedSegments.filter { it.text.isNotBlank() }.sortedByDescending { it.text.length }
+        val tempList = mutableListOf<Segment>()
+        for (seg in candidateSegments) {
+            if (selector.evaluateText(text = seg.text, looseMatch = false)) {
+                val o = seg.recognizeTextObservation!!
+                val vt = o.toVisionElement()
+                return vt
+            }
+
+            tempList.add(seg)
+            val rectangles = tempList.map { it.rectOnScreen.offsetRect(workRect.left, workRect.top) }
+            val rect = Rectangle.merge(rectangles)!!
+            val vt = rect.toVisionElement()
+            val observations = tempList.map { it.recognizeTextObservation!! }.sortedBy { it.rectOnScreen!!.left }
+
+            vt.visionContext.recognizeTextObservations = observations.toMutableList()
+            if (selector.evaluateText(text = vt.text, looseMatch = false)) {
+                return vt
+            }
+        }
+        return this
+    }
+
 }

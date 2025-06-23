@@ -455,31 +455,35 @@ fun VisionElement.rightText(
     pos: Int? = null,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":rightText($pos)")
-    var v = VisionElement.emptyElement
-    v.selector = selector
-    if (TestMode.isNoLoadRun) {
-        return v
+    fun getRightText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return this
+        }
+        if (pos != null && pos < 0) {
+            val v = this.leftText(pos = -pos)
+            return v
+        }
+        val textElements = this.rightTexts()
+        if (pos == null) {
+            val v = textElements.last()
+            return v
+        }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    if (pos == 0) return this
-    else if (pos != null && pos < 0) {
-        v = this.leftText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
-        return v
+    var v = getRightText()
+    if (v.text == "") {
+        v = VisionElement.emptyElement
     }
-
-    val textElements = this.rightTexts()
-    if (pos == null) {
-        return textElements.last()
-    }
-    v = if (textElements.count() < pos)
-        VisionElement.emptyElement
-    else textElements[pos - 1]
-
-    v.selector = selector
+    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -491,23 +495,23 @@ fun VisionElement.rightText(
 ): VisionElement {
 
     val selector = this.selector?.getChainedSelector(":rightText($containedText)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        lastElement = v
-        return v
-    }
 
-    val textElements = this.rightTexts()
-    for (v in textElements) {
-        if (v.textForComparison.contains(containedText.forVisionComparison())) {
-            v.selector = selector
-            lastElement = v
+    fun getRightText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            val v = VisionElement.emptyElement
             return v
         }
+
+        val textElements = this.rightTexts()
+        for (v in textElements) {
+            if (v.textForComparison.contains(containedText.forVisionComparison())) {
+                return v
+            }
+        }
+        return VisionElement.emptyElement
     }
 
-    val v = VisionElement.emptyElement
+    val v = getRightText()
     v.selector = selector
     lastElement = v
     return v
@@ -520,31 +524,35 @@ fun VisionElement.leftText(
     pos: Int? = null,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":leftText($pos)")
-    var v = VisionElement.emptyElement
-    if (TestMode.isNoLoadRun) {
-        v.selector = selector
-        return v
+    fun getLeftText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return this
+        }
+        if (pos != null && pos < 0) {
+            val v = this.rightText(pos = -pos)
+            return v
+        }
+        val textElements = this.leftTexts()
+        if (pos == null) {
+            val v = textElements.last()
+            return v
+        }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[textElements.count() - pos]
     }
 
-    if (pos == 0) return this
-    else if (pos != null && pos < 0) {
-        v = this.rightText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
-        return v
+    var v = getLeftText()
+    if (v.text == "") {
+        v = VisionElement.emptyElement
     }
-
-    val textElements = this.leftTexts()
-    if (pos == null) {
-        return textElements.last()
-    }
-    v = if (textElements.count() < pos)
-        VisionElement.emptyElement
-    else textElements[textElements.count() - pos]
-
-    v.selector = selector
+    v.selector = this.selector?.getChainedSelector(":leftText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -625,30 +633,31 @@ fun VisionElement.aboveText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":rightText($pos)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    fun getAboveText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return thisElement
+        }
+        if (pos < 0) {
+            val v = thisElement.belowText(pos = -pos)
+            return v
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .sortedByDescending { it.rect.top }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    val v: VisionElement
-    if (pos == 0) return thisElement
-    else if (pos < 0) {
-        v = thisElement.belowText(pos = -pos)
-        v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
-        return v
-    }
-
-    val textElements = this.getVerticalElements()
-        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedByDescending { it.rect.top }
-    v = if (textElements.isEmpty() || textElements.count() < pos)
-        VisionElement(capture = false)
-    else textElements[pos - 1]
-    v.selector = selector
+    val v = getAboveText()
+    v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -662,22 +671,22 @@ fun VisionElement.aboveText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":aboveText($expression)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
+    fun getAboveText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
+            .sortedBy { it.rect.top }
+        val v = textElements.lastOrNull() ?: VisionElement.emptyElement
         return v
     }
 
-    val textElements = this.getVerticalElements()
-        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
-        .sortedBy { it.rect.top }
-    val v = textElements.lastOrNull() ?: VisionElement(capture = false)
-
-    v.selector = selector
+    val v = getAboveText()
+    v.selector = thisElement.selector?.getChainedSelector(":aboveText($expression)")
     lastElement = v
-
     return v
 }
 
@@ -691,30 +700,31 @@ fun VisionElement.belowText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    fun getBelowText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return thisElement
+        }
+        if (pos < 0) {
+            val v = thisElement.aboveText(pos = -pos)
+            return v
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .sortedBy { it.rect.top }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    val v: VisionElement
-    if (pos == 0) return thisElement
-    else if (pos < 0) {
-        v = thisElement.aboveText(pos = -pos)
-        v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
-        return v
-    }
-
-    val textElements = this.getVerticalElements()
-        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.top }
-    v = if (textElements.isEmpty() || textElements.count() < pos)
-        VisionElement(capture = false)
-    else textElements[pos - 1]
+    val v = getBelowText()
     v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -728,22 +738,22 @@ fun VisionElement.belowText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
+    fun getBelowText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
+            .sortedBy { it.rect.top }
+        val v = textElements.firstOrNull() ?: VisionElement.emptyElement
         return v
     }
 
-    val textElements = this.getVerticalElements()
-        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
-        .sortedBy { it.rect.top }
-    val v = textElements.firstOrNull() ?: VisionElement(capture = false)
-
+    val v = getBelowText()
     v.selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
     lastElement = v
-
     return v
 }
 

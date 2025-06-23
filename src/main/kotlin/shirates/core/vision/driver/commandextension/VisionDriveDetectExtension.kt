@@ -432,10 +432,6 @@ internal fun VisionDrive.detectWithScrollCore(
     throwsException: Boolean,
 ): VisionElement {
 
-    silent {
-        hideKeyboard()
-    }
-
     var v = VisionElement.emptyElement
 
     val actionFunc = {
@@ -460,6 +456,9 @@ internal fun VisionDrive.detectWithScrollCore(
     }
 
     if (v.isFound.not() && CodeExecutionContext.isScrolling.not()) {
+        silent {
+            hideKeyboard()
+        }
         /**
          * detect with scroll
          */

@@ -6,7 +6,6 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.thisContains
-import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
@@ -28,40 +27,31 @@ private fun String.process(digitOnly: Boolean): String {
 
 /**
  * textIs
- * (textContains)
  */
 fun VisionElement.textIs(
-    containedText: String,
-    joinText: Boolean = false,
-    digitOnly: Boolean = false,
+    expected: String,
     message: String? = null,
 ): VisionElement {
 
-    visionContext.recognizeText()
-
     val command = "textIs"
-
     val assertMessage =
-        message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
+        message ?: message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
+    val v = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = containedText) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
 
-        val expectedForCompare = containedText.process(digitOnly = digitOnly)
-        val actual = if (joinText) {
-            if (digitOnly) joinedDigit else this.joinedText
+        val result = v.textForComparison.contains(expected.forVisionComparison())
+        if (result) {
+            TestLog.ok(message = assertMessage)
         } else {
-            if (digitOnly) digit else text
-        }
-        val actualForCompare = actual.process(digitOnly = digitOnly)
-
-        if (containedText.isBlank()) {
-            actualForCompare.thisIs(expected = containedText, message = assertMessage, strict = false)
-        } else {
-            actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
+            val errorMessage = "$assertMessage (actual=${v.text})"
+            TestDriver.lastElement.lastError = TestNGException(errorMessage)
+            throw TestDriver.lastElement.lastError!!
         }
     }
-    return this
+    return v
 }
 
 /**
@@ -1042,36 +1032,11 @@ fun VisionElement.existImageOnBelow(
     return lastElement
 }
 
-internal fun VisionElement.textIsCore(
-    command: String,
-    expected: String,
-    joinText: Boolean,
-    digitOnly: Boolean,
-    assertMessage: String,
-): VisionElement {
-
-    val context = TestDriverCommandContext(null)
-
-    var v = this
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        v = v.textIs(
-            containedText = expected,
-            joinText = joinText,
-            digitOnly = digitOnly,
-            message = assertMessage,
-        )
-    }
-    lastElement = v
-    return v
-}
-
 /**
  * aboveTextIs
  */
 fun VisionElement.aboveTextIs(
     expected: String,
-    joinText: Boolean = false,
-    digitOnly: Boolean = false,
     message: String? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
@@ -1079,13 +1044,7 @@ fun VisionElement.aboveTextIs(
     val command = "aboveTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = aboveText(swipeToSafePosition = swipeToSafePosition)
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        joinText = joinText,
-        digitOnly = digitOnly,
-        assertMessage = assertMessage,
-    )
+    v.textForComparison.thisContains(expected.forVisionComparison(), message = assertMessage)
     return v
 }
 
@@ -1094,8 +1053,6 @@ fun VisionElement.aboveTextIs(
  */
 fun VisionElement.belowTextIs(
     expected: String,
-    joinText: Boolean = false,
-    digitOnly: Boolean = false,
     message: String? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
@@ -1103,13 +1060,7 @@ fun VisionElement.belowTextIs(
     val command = "belowTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = belowText(swipeToSafePosition = swipeToSafePosition)
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        joinText = joinText,
-        digitOnly = digitOnly,
-        assertMessage = assertMessage,
-    )
+    v.textForComparison.thisContains(expected.forVisionComparison(), message = assertMessage)
     return v
 }
 
@@ -1131,6 +1082,10 @@ fun VisionElement.rightTextIs(
     context.execCheckCommand(command = command, message = assertMessage) {
 
         v = rightText(1)
+        if (expected.isEmpty() && v.text == "") {
+            TestLog.ok(message = assertMessage)
+            return@execCheckCommand
+        }
         if (sel.evaluateText(text = v.text, looseMatch = false)) {
             TestLog.ok(message = assertMessage)
             return@execCheckCommand
@@ -1167,6 +1122,10 @@ fun VisionElement.leftTextIs(
     context.execCheckCommand(command = command, message = assertMessage) {
 
         v = leftText(1)
+        if (expected.isEmpty() && v.text == "") {
+            TestLog.ok(message = assertMessage)
+            return@execCheckCommand
+        }
         if (sel.evaluateText(text = v.text, looseMatch = false)) {
             TestLog.ok(message = assertMessage)
             return@execCheckCommand
