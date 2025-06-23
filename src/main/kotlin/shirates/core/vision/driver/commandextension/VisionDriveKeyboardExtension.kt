@@ -62,11 +62,13 @@ fun VisionDrive.hideKeyboard(): VisionElement {
                     durationSeconds = 1.0
                 )
                 invalidateScreen()
+                screenshot()
             }
         } else {
             if (isKeyboardShown) {
                 TestDriver.appiumDriver.hideKeyboard()
                 invalidateScreen()
+                screenshot()
             }
         }
     }
