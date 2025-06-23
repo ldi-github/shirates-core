@@ -2,6 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.thisContains
@@ -1117,21 +1118,34 @@ fun VisionElement.belowTextIs(
  */
 fun VisionElement.rightTextIs(
     expected: String,
-    joinText: Boolean = false,
-    digitOnly: Boolean = false,
     message: String? = null,
 ): VisionElement {
 
     val command = "rightTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
-    val v = rightText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        joinText = joinText,
-        digitOnly = digitOnly,
-        assertMessage = assertMessage,
-    )
+
+    val sel = Selector(expression = expected)
+    var v = VisionElement.emptyElement
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage) {
+
+        v = rightText(1)
+        if (sel.evaluateText(text = v.text, looseMatch = false)) {
+            TestLog.ok(message = assertMessage)
+            return@execCheckCommand
+        }
+
+        v = rightText()
+        val result = sel.evaluateText(text = v.text, looseMatch = false)
+        if (result) {
+            TestLog.ok(message = assertMessage)
+        } else {
+            val errorMessage = "$assertMessage (actual=${v.text})"
+            TestDriver.lastElement.lastError = TestNGException(errorMessage)
+            throw TestDriver.lastElement.lastError!!
+        }
+    }
     return v
 }
 
@@ -1140,20 +1154,33 @@ fun VisionElement.rightTextIs(
  */
 fun VisionElement.leftTextIs(
     expected: String,
-    joinText: Boolean = false,
-    digitOnly: Boolean = false,
     message: String? = null,
 ): VisionElement {
 
     val command = "leftTextIs"
     val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
-    val v = leftText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        joinText = joinText,
-        digitOnly = digitOnly,
-        assertMessage = assertMessage,
-    )
+
+    val sel = Selector(expression = expected)
+    var v = VisionElement.emptyElement
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage) {
+
+        v = leftText(1)
+        if (sel.evaluateText(text = v.text, looseMatch = false)) {
+            TestLog.ok(message = assertMessage)
+            return@execCheckCommand
+        }
+
+        v = leftText()
+        val result = sel.evaluateText(text = v.text, looseMatch = false)
+        if (result) {
+            TestLog.ok(message = assertMessage)
+        } else {
+            val errorMessage = "$assertMessage (actual=${v.text})"
+            TestDriver.lastElement.lastError = TestNGException(errorMessage)
+            throw TestDriver.lastElement.lastError!!
+        }
+    }
     return v
 }

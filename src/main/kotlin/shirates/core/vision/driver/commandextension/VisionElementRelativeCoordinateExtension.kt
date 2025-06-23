@@ -428,11 +428,31 @@ fun VisionElement.belowLineItem(
     return belowItem.lineRegionElement()
 }
 
+internal fun VisionElement.rightTexts(): List<VisionElement> {
+
+    val rightRegionElement = this.rightRegionElement(lineHeight = this.rect.height)
+    val textElements = rightRegionElement.splitTextElements()
+        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
+        .sortedBy { it.rect.left }.toMutableList()
+    textElements.add(rightRegionElement)
+    return textElements
+}
+
+internal fun VisionElement.leftTexts(): List<VisionElement> {
+
+    val leftRegionElement = this.leftRegionElement(lineHeight = this.rect.height)
+    val textElements = leftRegionElement.splitTextElements()
+        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
+        .sortedBy { it.rect.left }.toMutableList()
+    textElements.add(leftRegionElement)
+    return textElements
+}
+
 /**
  * rightText
  */
 fun VisionElement.rightText(
-    pos: Int = 1,
+    pos: Int? = null,
 ): VisionElement {
 
     val selector = this.selector?.getChainedSelector(":rightText($pos)")
@@ -443,17 +463,18 @@ fun VisionElement.rightText(
     }
 
     if (pos == 0) return this
-    else if (pos < 0) {
+    else if (pos != null && pos < 0) {
         v = this.leftText(pos = -pos)
         v.selector = this.selector?.getChainedSelector(":leftText($pos)")
         return v
     }
-    val rightRegionElement = this.rightRegionElement(lineHeight = this.rect.height)
-    val textElements = rightRegionElement.splitTextElements()
-        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.left }
-    v = if (textElements.isEmpty() || textElements.count() < pos)
-        VisionElement(capture = false)
+
+    val textElements = this.rightTexts()
+    if (pos == null) {
+        return textElements.last()
+    }
+    v = if (textElements.count() < pos)
+        VisionElement.emptyElement
     else textElements[pos - 1]
 
     v.selector = selector
@@ -466,27 +487,29 @@ fun VisionElement.rightText(
  * rightText
  */
 fun VisionElement.rightText(
-    expression: String,
+    containedText: String,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":rightText($expression)")
+    val selector = this.selector?.getChainedSelector(":rightText($containedText)")
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
+        lastElement = v
         return v
     }
 
-    val rightRegionElement = this.rightRegionElement(lineHeight = this.rect.height)
-    var textElements = rightRegionElement.splitTextElements()
-    textElements = textElements
-        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.left }
-    val v = textElements.firstOrNull() ?: VisionElement(capture = false)
+    val textElements = this.rightTexts()
+    for (v in textElements) {
+        if (v.textForComparison.contains(containedText.forVisionComparison())) {
+            v.selector = selector
+            lastElement = v
+            return v
+        }
+    }
 
+    val v = VisionElement.emptyElement
     v.selector = selector
     lastElement = v
-
     return v
 }
 
@@ -494,30 +517,29 @@ fun VisionElement.rightText(
  * leftText
  */
 fun VisionElement.leftText(
-    pos: Int = 1,
+    pos: Int? = null,
 ): VisionElement {
 
     val selector = this.selector?.getChainedSelector(":leftText($pos)")
+    var v = VisionElement.emptyElement
     if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
         v.selector = selector
         return v
     }
 
-    val v: VisionElement
     if (pos == 0) return this
-    else if (pos < 0) {
+    else if (pos != null && pos < 0) {
         v = this.rightText(pos = -pos)
         v.selector = this.selector?.getChainedSelector(":leftText($pos)")
         return v
     }
 
-    val leftRegionElement = this.leftRegionElement(lineHeight = this.rect.height)
-    val textElements = leftRegionElement.splitTextElements()
-        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.left }
-    v = if (textElements.isEmpty() || textElements.count() < pos)
-        VisionElement(capture = false)
+    val textElements = this.leftTexts()
+    if (pos == null) {
+        return textElements.last()
+    }
+    v = if (textElements.count() < pos)
+        VisionElement.emptyElement
     else textElements[textElements.count() - pos]
 
     v.selector = selector
@@ -530,26 +552,29 @@ fun VisionElement.leftText(
  * leftText
  */
 fun VisionElement.leftText(
-    expression: String,
+    containedText: String,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":leftText($expression)")
+    val selector = this.selector?.getChainedSelector(":leftText(${containedText})")!!
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
+        lastElement = v
         return v
     }
 
-    val leftRectionElement = this.leftRegionElement(lineHeight = this.rect.height)
-    val textElements = leftRectionElement.splitTextElements()
-        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.left }
-    val v = textElements.lastOrNull() ?: VisionElement(capture = false)
+    val textElements = this.leftTexts()
+    for (v in textElements) {
+        if (v.textForComparison.contains(containedText.forVisionComparison())) {
+            v.selector = selector
+            lastElement = v
+            return v
+        }
+    }
 
+    val v = VisionElement.emptyElement
     v.selector = selector
     lastElement = v
-
     return v
 }
 
