@@ -11,6 +11,7 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.file.exists
+import shirates.core.utility.image.ColorScale
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
@@ -1041,12 +1042,12 @@ object PropertiesManager {
         }
 
     /**
-     * visionEnableLearningOnStartup
+     * visionForceLearningOnStartup
      */
-    val visionEnableLearningOnStartup: Boolean
+    val visionForceLearningOnStartup: Boolean
         get() {
-            val value = getPropertyValue(propertyName = "visionEnableLearningOnStartup")
-                ?: return Const.VISION_ENABLE_LEARNING_ON_STARTUP
+            val value = getPropertyValue(propertyName = "visionForceLearningOnStartup")
+                ?: return Const.VISION_FORCE_LEARNING_ON_STARTUP
             return value == "true"
         }
 
@@ -1057,6 +1058,24 @@ object PropertiesManager {
         get() {
             return getPropertyValue(propertyName = "visionServerUrl")
                 ?: Const.VISION_SERVER_URL
+        }
+
+    /**
+     * textMarginHorizontal
+     */
+    val textMarginHorizontal: Int
+        get() {
+            return getPropertyValue(propertyName = "textMarginHorizontal")?.toIntOrNull()
+                ?: Const.VISION_TEXT_MARGIN_HORIZONTAL
+        }
+
+    /**
+     * textMarginVertical
+     */
+    val textMarginVertical: Int
+        get() {
+            return getPropertyValue(propertyName = "textMarginVertical")?.toIntOrNull()
+                ?: Const.VISION_TEXT_MARGIN_VERTICAL
         }
 
     /**
@@ -1232,6 +1251,25 @@ object PropertiesManager {
         get() {
             return getPropertyValue(propertyName = "visionVerticalLineThreshold")?.toDoubleOrNull()
                 ?: Const.VISION_VERTICAL_LINE_THRESHOLD
+        }
+
+    /**
+     * visionColorScale
+     */
+    val visionColorScale: ColorScale
+        get() {
+            val p = getPropertyValue(propertyName = "visionColorScale") ?: return Const.VISION_COLOR_SCALE
+            return ColorScale.valueOf(p)
+        }
+
+    /**
+     * visionExpertMode
+     */
+    val visionExpertMode: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionExpertMode")
+                ?: return Const.VISION_EXPERT_MODE
+            return value == "true"
         }
 
     // Custom --------------------------------------------------

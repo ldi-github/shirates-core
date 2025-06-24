@@ -1,8 +1,8 @@
 package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.Bounds
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
 import shirates.core.testcode.CodeExecutionContext
@@ -21,7 +21,7 @@ class Segment(
     var container: SegmentContainer? = null,
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
-    var croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    var croppingMargin: Int = testContext.segmentCroppingMargin,
 ) : IRect, RectangleInterface {
     var recognizeTextObservation: RecognizeTextObservation? = null
 
@@ -194,7 +194,9 @@ class Segment(
     /**
      * captureAndSave
      */
-    fun captureAndSave(outputDirectory: String? = TestLog.directoryForLog.toString()) {
+    fun captureAndSave(
+        outputDirectory: String? = TestLog.directoryForLog.toString()
+    ): String {
 
         captureImageWithMargin()
 
@@ -204,7 +206,9 @@ class Segment(
             UtilImageIO.saveImage(segmentImage, segmentImageFile)
         } catch (t: Throwable) {
             printWarn(t.toString())
+            return ""
         }
+        return segmentImageFile!!
     }
 
     /**

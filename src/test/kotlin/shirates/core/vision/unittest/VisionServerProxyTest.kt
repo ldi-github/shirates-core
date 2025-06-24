@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.testContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
+import shirates.core.utility.image.ColorScale
+import shirates.core.utility.image.convertColorScale
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionServerProxy
@@ -413,19 +415,82 @@ class VisionServerProxyTest : UnitTest() {
     @Test
     fun splittingComplexText() {
 
+        // Arrange
         PropertiesManager.setup()
 
-        val inputFile = "unitTestData/vision/files/[○あり○なし]/img.png"
-        val image = BufferedImageUtility.getBufferedImage(inputFile)
-        CodeExecutionContext.lastScreenshotName = "${TestLog.currentLineNo}.png"
-        CodeExecutionContext.lastScreenshotImage = image
-        image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
+        run {
+            // Arrange
+            val inputFile = "unitTestData/vision/files/[○男性 ○女性]/img.png"
+            val image = BufferedImageUtility.getBufferedImage(inputFile)
+            CodeExecutionContext.lastScreenshotName = "${TestLog.currentLineNo}.png"
+            CodeExecutionContext.lastScreenshotImage = image
+            image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
 
-        val context = VisionContext(screenshotFile = inputFile)
-        context.recognizeText(language = "ja")
+            val grayImage = image.convertColorScale(ColorScale.GRAY_16)
+            CodeExecutionContext.lastScreenshotGrayName = "${TestLog.currentLineNo}_gray_image.png"
+            grayImage.saveImage(file = CodeExecutionContext.lastScreenshotGrayFile!!)
+            CodeExecutionContext.lastScreenshotGrayImage = grayImage
 
-        val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = true)
+            val context = VisionContext(screenshotFile = inputFile)
+            context.recognizeText(language = "ja")
+            run {
+                // Act
+                val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = true)
+                // Assert
+                assertThat(v.text).contains("男性")    // "• 男性"
+                TestLog.info("v.text=${v.text}")
+            }
+            run {
+                // Act
+                val v = context.detect(selector = Selector("男性"), language = "ja", last = false, looseMatch = false)
+                // Assert
+                assertThat(v.text).isEqualTo("男性")   // "男性"
+                TestLog.info("v.text=${v.text}")
+            }
+            run {
+                // Arrange
+                assertThat(testContext.visionLooseMatch).isFalse()
+                // Act
+                val v = context.detect(selector = Selector("男性"), language = "ja", last = false)
+                // Assert
+                assertThat(v.text).contains("男性")    // "男性"
+                TestLog.info("v.text=${v.text}")
+            }
+        }
+        run {
+            // Arrange
+            val inputFile = "unitTestData/vision/files/[Ariplane mode]/img.png"
+            val image = BufferedImageUtility.getBufferedImage(inputFile)
+            CodeExecutionContext.lastScreenshotName = "${TestLog.currentLineNo}.png"
+            CodeExecutionContext.lastScreenshotImage = image
+            image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
 
-        v.text.printInfo()
+            val grayImage = image.convertColorScale(ColorScale.GRAY_16)
+            CodeExecutionContext.lastScreenshotGrayName = "${TestLog.currentLineNo}_gray_image.png"
+            grayImage.saveImage(file = CodeExecutionContext.lastScreenshotGrayFile!!)
+            CodeExecutionContext.lastScreenshotGrayImage = grayImage
+
+            val context = VisionContext(screenshotFile = inputFile)
+            context.recognizeText(language = "")
+            run {
+                // Act
+                val v =
+                    context.detect(selector = Selector("Airplane mode"), language = "", last = false, looseMatch = true)
+                // Assert
+                assertThat(v.text).contains("Airplane mode")    // # Airplane mode
+                TestLog.info("v.text=${v.text}")
+            }
+            run {
+                // Act
+                val v = context.detect(
+                    selector = Selector("Airplane mode"), language = "", last = false,
+                    looseMatch = false
+                )
+                // Assert
+                assertThat(v.text).isEqualTo("Airplane mode")
+                TestLog.info("v.text=${v.text}")
+            }
+        }
+
     }
 }

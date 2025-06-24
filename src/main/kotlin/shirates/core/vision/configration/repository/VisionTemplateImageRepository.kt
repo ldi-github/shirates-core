@@ -1,6 +1,6 @@
 package shirates.core.vision.configration.repository
 
-import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.testContext
 import shirates.core.utility.file.exists
 import shirates.core.utility.image.SegmentContainer
 import java.awt.image.BufferedImage
@@ -17,8 +17,8 @@ object VisionTemplateImageRepository {
         segmentMarginHorizontal: Int,
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
-        binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-        aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+        binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+        aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     ): BufferedImage? {
 
         if (imageFile.exists().not()) {

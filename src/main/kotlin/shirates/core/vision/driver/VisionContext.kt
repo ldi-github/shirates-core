@@ -5,13 +5,16 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.file.exists
 import shirates.core.utility.file.toFile
 import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
@@ -33,6 +36,9 @@ class VisionContext(
 
     override var screenshotFile: String? = null,
     override var screenshotImage: BufferedImage? = null,
+
+    override var screenshotGrayFile: String? = null,
+    override var screenshotGrayImage: BufferedImage? = null,
 
     override var localRegionFile: String? = null,
     override var localRegionImage: BufferedImage? = null,
@@ -98,10 +104,25 @@ class VisionContext(
     /**
      * constructor
      */
-    constructor(screenshotFile: String) : this(capture = false) {
+    constructor(
+        screenshotFile: String,
+        screenshotBinaryFile: String? = null
+    ) : this(capture = false) {
 
         this.screenshotFile = screenshotFile
         this.screenshotImage = BufferedImageUtility.getBufferedImage(filePath = screenshotFile)
+
+        this.screenshotGrayFile = screenshotBinaryFile
+        if (screenshotBinaryFile == null) {
+            val name = "${TestLog.currentLineNo}_" + screenshotFile.toFile().name.removeSuffix(".png") + "_binary.png"
+            this.screenshotGrayFile = TestLog.directoryForLog.resolve(name).toString()
+        }
+        if (this.screenshotGrayFile!!.exists()) {
+            this.screenshotGrayImage = BufferedImageUtility.getBufferedImage(filePath = this.screenshotGrayFile!!)
+        } else {
+            this.screenshotGrayImage = BinarizationUtility.getBinaryAsBufferedImage(this.screenshotImage!!)
+            this.screenshotImage!!.saveImage(this.screenshotGrayFile!!)
+        }
 
         this.localRegionFile = this.screenshotFile
         this.localRegionImage = this.screenshotImage
@@ -123,6 +144,8 @@ class VisionContext(
             this.rootElement = vision.rootElement
             this.screenshotFile = CodeExecutionContext.lastScreenshotFile
             this.screenshotImage = CodeExecutionContext.lastScreenshotImage
+            this.screenshotGrayFile = CodeExecutionContext.lastScreenshotGrayFile
+            this.screenshotGrayImage = CodeExecutionContext.lastScreenshotGrayImage
 
             this.localRegionFile = this.screenshotFile
             this.localRegionImage = this.screenshotImage
@@ -161,6 +184,28 @@ class VisionContext(
             c.localRegionImage = c.screenshotImage
             c.rectOnLocalRegion = c.screenshotImage?.rect
             return c
+        }
+
+        internal fun getObservation(
+            text: String,
+            r: RecognizeTextResult,
+            rect: Rectangle,
+            screenshotFile: String? = null,
+            screenshotImage: BufferedImage? = null,
+        ): RecognizeTextObservation {
+            return RecognizeTextObservation(
+                text = text,
+                confidence = 1.0f,
+                jsonString = r.jsonString,
+                language = r.language,
+                screenshotFile = screenshotFile,
+                screenshotImage = screenshotImage,
+                localRegionFile = null,
+                localRegionImage = null,
+                localRegionX = 0,
+                localRegionY = 0,
+                rectOnLocalRegion = rect
+            )
         }
     }
 
@@ -259,6 +304,7 @@ class VisionContext(
      * recognizeText
      */
     fun recognizeText(
+        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String = this.language,
     ): VisionContext {
 
@@ -266,31 +312,28 @@ class VisionContext(
             return this
         }
 
+        if (inputFile == null) {
+            return this
+        }
+        if (inputFile.exists().not()) {
+            return this
+        }
+        if (inputFile.toFile().isFile.not()) {
+            return this
+        }
+
         if (rootElement == null) {
             rootElement = vision.rootElement
         }
 
-        if (rootElement!!.visionContext.screenshotFile == null) {
-            return this
-        }
         val rootVisionContext = rootElement!!.visionContext
-        val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
-        if (recognizedFile.exists() && recognizedFile.isFile.not()) {
-            /**
-             * Check screenshotFile exists
-             */
-            return this
-        }
-        if (rootVisionContext.recognizeTextObservations.isEmpty()) {
-            /**
-             * Recognize screenshotFile
-             */
-            recognizeTextAndSaveRectangleImage(
-                inputFile = rootVisionContext.screenshotFile!!,
-                language = language,
-            )
-            CodeExecutionContext.lastRecognizedFileName = recognizedFile.name
-        }
+        /**
+         * Recognize screenshotFile
+         */
+        recognizeTextAndSaveRectangleImage(
+            inputFile = inputFile,
+            language = language,
+        )
         this.language = language
 
         if (this.recognizeTextObservations.isEmpty()) {
@@ -329,7 +372,6 @@ class VisionContext(
             inputFile = imageFile!!,
             language = language,
         )
-        CodeExecutionContext.lastRecognizedFileName = imageFile!!.toFile().name
         this.language = language
 
         return this
@@ -338,26 +380,41 @@ class VisionContext(
     private fun recognizeTextAndSaveRectangleImage(
         inputFile: String,
         language: String,
+        colorScale: ColorScale? = null,
+        useCache: Boolean = true
     ): RecognizeTextResult {
+
+        this.language = language
+
         val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
             language = language,
+            colorScale = colorScale,
+            useCache = useCache,
         )
+
+        this.recognizeTextObservations.clear()
+
         loadTextRecognizerResult(
             inputFile = inputFile,
             recognizeTextResult = recognizeTextResult,
         )
-        this.language = language
-        val name = inputFile.toFile().name
-        if (name != CodeExecutionContext.lastRecognizedFileName) {
-            /**
-             * Save screenshotImageWithTextRegion
-             */
-            val fileName = "${TestLog.currentLineNo}_[$name]_recognizeText_rectangles.png"
-            this.screenshotWithTextRectangle?.saveImage(
-                TestLog.directoryForLog.resolve(fileName).toString()
-            )
+
+        if (recognizeTextResult.fromCache) {
+            return recognizeTextResult
         }
+
+        /**
+         * Save screenshotImageWithBoundingBox
+         */
+        val name = CodeExecutionContext.lastScreenshotFile!!.toFile().name
+        val boundingBoxFileName = "${TestLog.currentLineNo}_[$name]_recognizeText_bounding_box.png"
+        this.screenshotWithTextRectangle?.saveImage(
+            TestLog.directoryForLog.resolve(boundingBoxFileName).toString()
+        )
+        CodeExecutionContext.lastRecognizedFile = inputFile
+        CodeExecutionContext.lastRecognizeLanguage = language
+        CodeExecutionContext.lastRecognizeTextResult = recognizeTextResult
         return recognizeTextResult
     }
 
@@ -405,6 +462,7 @@ class VisionContext(
     }
 
     internal fun detectCore(
+        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         selector: Selector,
         language: String = this.language,
         last: Boolean,
@@ -418,9 +476,10 @@ class VisionContext(
         }
 
         val candidates = detectElements(
+            inputFile = inputFile,
             selector = selector,
             language = language,
-            looseMatch = looseMatch,
+            looseMatch = true,
             mergeBoundingBox = mergeBoundingBox,
             lineSpacingRatio = lineSpacingRatio,
         )
@@ -429,13 +488,34 @@ class VisionContext(
             (if (last) candidates.lastOrNull()
             else candidates.firstOrNull())
                 ?: VisionElement.emptyElement
-        return v
+        if (v.isEmpty) {
+            return v
+        }
+        if (selector.evaluateText(element = v, looseMatch = looseMatch)) {
+            return v
+        }
+        if (testContext.visionExpertMode) {
+            return v
+        }
+
+        /**
+         * Re-recognize text
+         */
+        val sw = StopWatch("re-recognize text")
+        val lastScreenshot = CodeExecutionContext.lastScreenshotGrayImage!!
+        val lineHeight = (v.rect.height * 1.1).toInt()
+        val workRect = Rectangle(0, v.rect.centerY - lineHeight / 2, lastScreenshot.width, lineHeight)
+        val workElement = workRect.toVisionElement()
+        val shapedText = workElement.shapeText(selector = selector, language = language)
+        sw.stop()
+        return shapedText
     }
 
     /**
      * detectElements
      */
     fun detectElements(
+        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         selector: Selector,
         language: String = this.language,
         looseMatch: Boolean,
@@ -447,22 +527,20 @@ class VisionContext(
         CodeExecutionContext.lastMergeBoundingBox = mergeBoundingBox
         CodeExecutionContext.lastLineSpacingRatio = lineSpacingRatio
 
-        recognizeText(language = language)
+        recognizeText(
+            inputFile = inputFile,
+            language = language
+        )
 
         val selectors = mutableListOf(selector)
         selectors.addAll(selector.orSelectors)
 
-        val candidates = mutableListOf<VisionElement>()
-        for (sel in selectors) {
-            val list =
-                detectCandidates(
-                    selector = sel,
-                    looseMatch = looseMatch,
-                    mergeBoundingBox = mergeBoundingBox,
-                    lineSpacingRatio = lineSpacingRatio,
-                )
-            candidates.addAll(list)
-        }
+        val candidates = detectCandidates(
+            selector = selector,
+            looseMatch = looseMatch,
+            mergeBoundingBox = mergeBoundingBox,
+            lineSpacingRatio = lineSpacingRatio,
+        )
         return candidates
     }
 
@@ -470,11 +548,12 @@ class VisionContext(
      * detect
      */
     fun detect(
+        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         selector: Selector,
         language: String = this.language,
-        looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-        mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-        lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+        looseMatch: Boolean = testContext.visionLooseMatch,
+        mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+        lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
         last: Boolean,
     ): VisionElement {
 
@@ -489,6 +568,7 @@ class VisionContext(
         }
 
         val v = detectCore(
+            inputFile = inputFile,
             selector = selector,
             language = language,
             last = last,
@@ -536,8 +616,7 @@ class VisionContext(
         /**
          * Search in single line
          */
-        var elements = listOf<VisionElement>()
-        elements = list.filter { selector.evaluateText(it, looseMatch = false) }
+        var elements = list.filter { selector.evaluateText(it, looseMatch = false) }
         if (elements.isEmpty() && looseMatch) {
             elements = list.filter { selector.evaluateText(it, looseMatch = true) }
         }
@@ -565,25 +644,6 @@ class VisionContext(
         }
 
         return elements
-    }
-
-    private fun List<VisionElement>.merge(): VisionElement {
-
-        if (this.isEmpty()) {
-            return VisionElement.emptyElement
-        }
-        if (this.count() == 1) {
-            return this[0]
-        }
-        var rect = this[0].rect
-        for (i in 1 until this.size) {
-            val target = this[i]
-            rect = rect.mergeWith(target.rect)
-        }
-        val v = rect.toVisionElement()
-        v.mergedElements.clear()
-        v.mergedElements.addAll(this)
-        return v
     }
 
     private fun detectMultilineElements(

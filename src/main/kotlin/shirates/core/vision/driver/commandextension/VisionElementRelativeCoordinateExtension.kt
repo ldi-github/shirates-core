@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
@@ -12,7 +11,8 @@ import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.commandextension.helper.HorizontalBand
+import shirates.core.vision.VisionServerProxy
+import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.helper.VerticalBand
 import shirates.core.vision.driver.lastElement
 import java.awt.Color
@@ -24,14 +24,11 @@ fun VisionElement.rightItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
+    textToLineHeightRatio: Double = testContext.visionTextToLineHeightRatio,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
-    centerBase: Boolean = false,
     filterMargin: Int = 5,
-    textToLineHeightRatio: Double = PropertiesManager.visionTextToLineHeightRatio,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): VisionElement {
 
     return rightLeftCore(
@@ -39,14 +36,11 @@ fun VisionElement.rightItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
-        segmentMinimumHeight = segmentMinimumHeight,
         mergeIncluded = include,
-        binaryThreshold = binaryThreshold,
-        aspectRatioTolerance = aspectRatioTolerance,
-        centerBase = centerBase,
-        filterMargin = filterMargin,
         textToLineHeightRatio = textToLineHeightRatio,
-        numberOfColors = numberOfColors,
+        binaryThreshold = binaryThreshold,
+        filterMargin = filterMargin,
+        colorScale = colorScale,
     )
 }
 
@@ -57,14 +51,11 @@ fun VisionElement.leftItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
-    segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
+    textToLineHeightRatio: Double = testContext.visionTextToLineHeightRatio,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
-    centerBase: Boolean = true,
     filterMargin: Int = 5,
-    textToLineHeightRatio: Double = PropertiesManager.visionTextToLineHeightRatio,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
 ): VisionElement {
 
     return rightLeftCore(
@@ -72,14 +63,11 @@ fun VisionElement.leftItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
-        segmentMinimumHeight = segmentMinimumHeight,
         mergeIncluded = include,
-        binaryThreshold = binaryThreshold,
-        aspectRatioTolerance = aspectRatioTolerance,
-        centerBase = centerBase,
-        filterMargin = filterMargin,
         textToLineHeightRatio = textToLineHeightRatio,
-        numberOfColors = numberOfColors,
+        binaryThreshold = binaryThreshold,
+        filterMargin = filterMargin,
+        colorScale = colorScale,
     )
 }
 
@@ -88,14 +76,11 @@ internal fun VisionElement.rightLeftCore(
     pos: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
-    segmentMinimumHeight: Int,
+    textToLineHeightRatio: Double,
     mergeIncluded: Boolean,
     binaryThreshold: Int,
-    aspectRatioTolerance: Double,
-    centerBase: Boolean,
     filterMargin: Int,
-    textToLineHeightRatio: Double,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale,
 ): VisionElement {
 
     val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
@@ -109,51 +94,16 @@ internal fun VisionElement.rightLeftCore(
     val sw = StopWatch("rightLeftCore")
 
     var baseElement = this
-    if (centerBase) {
-        /**
-         * get baseElement
-         */
-        val name = selector?.toString()?.escapeFileName() ?: CodeExecutionContext.lastScreenshotFile!!.toFile().name
-        val outputDir = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${name}_baseElement").toString()
-        val thisSegmentContainer = SegmentContainer(
-            mergeIncluded = mergeIncluded,
-            containerImage = this.image,
-            containerX = this.rect.left,
-            containerY = this.rect.top,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            binaryThreshold = binaryThreshold,
-            aspectRatioTolerance = aspectRatioTolerance,
-            outputDirectory = outputDir,
-        ).split()
-            .saveImages()
-
-        sw.lap("get baseElement")
-
-        val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
-            .sortedBy { it.rect.left }
-        val largestWidth = visionElements.maxOfOrNull { it.rect.width }
-        baseElement = if (largestWidth == null) {
-            if (relative.isLeft) visionElements.firstOrNull() ?: this
-            else visionElements.lastOrNull() ?: this
-        } else {
-            visionElements.first { it.rect.width == largestWidth }
-        }
+    if (selector?.expression != null && this.strictMatched.not() && selector.relativeSelectors.isEmpty()     // relativeSelectors not supported
+    ) {
+        baseElement = detect(selector.expression!!, looseMatch = false)
     }
-
-    /**
-     * masking image
-     */
     val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
-    val grayImage = lastScreenshot.convertColorModel(numColors = numberOfColors)
-    val lineHeight = (this.rect.height * textToLineHeightRatio).toInt()
-    val bandRect = Rectangle(0, this.rect.centerY - lineHeight / 2, lastScreenshot.width, lineHeight)
+    val grayImage = lastScreenshot.convertColorScale(colorScale = colorScale)
+    val lineHeight = (textToLineHeightRatio * baseElement.rect.height).toInt()
+    val rect = Rectangle(0, baseElement.rect.centerY - lineHeight / 2, grayImage.width, lineHeight)
     val binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = grayImage, threshold = binaryThreshold)
-        .toBufferedImage()!!
-    val g2d = binaryImage.createGraphics()
-    g2d.color = Color.BLACK
-    g2d.fillRect(0, 0, bandRect.width, bandRect.top)
-    g2d.fillRect(0, bandRect.bottom, bandRect.width, grayImage.height - bandRect.bottom)
+        .toBufferedImage()!!.maskAboveBelow(rect)
 
     /**
      * split to vision elements
@@ -169,7 +119,7 @@ internal fun VisionElement.rightLeftCore(
         binaryThreshold = binaryThreshold,
         outputDirectory = outputDir,
     ).split()
-        .saveImages()
+    segmentContainer.saveImages()
     val count = segmentContainer.visionElements.count()
     sw.lap("split screenshot into segments. visionElements:$count")
 
@@ -181,6 +131,9 @@ internal fun VisionElement.rightLeftCore(
     }
     if (mergeIncluded.not()) {
         elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
+    }
+    if (elms.isEmpty()) {
+        return VisionElement.emptyElement
     }
 
     /**
@@ -200,11 +153,11 @@ internal fun VisionElement.rightLeftCore(
 
     val sortedElements =
         if (relative.isRight) {
-            val minLeft = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.right
+            val minLeft = baseElement.rect.right
             mergedElements.filter { it.isSameRect(baseElement).not() && minLeft < it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         } else {
-            val maxRight = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.left
+            val maxRight = baseElement.rect.left
             mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right < maxRight }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         }
@@ -239,10 +192,10 @@ fun VisionElement.aboveItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
-    removeVerticalLine: Boolean = false,
+    removeVerticalLine: Boolean = true,
     verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
@@ -254,7 +207,7 @@ fun VisionElement.aboveItem(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
-        numberOfColors = numberOfColors,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -272,10 +225,10 @@ fun VisionElement.belowItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = false,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
-    removeVerticalLine: Boolean = false,
+    removeVerticalLine: Boolean = true,
     verticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold,
 ): VisionElement {
 
@@ -287,7 +240,7 @@ fun VisionElement.belowItem(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
-        numberOfColors = numberOfColors,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -302,7 +255,7 @@ internal fun VisionElement.aboveBelowCore(
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
     binaryThreshold: Int,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale,
     removeHorizontalLine: Boolean,
     horizontalLineThreshold: Double,
     removeVerticalLine: Boolean,
@@ -322,45 +275,49 @@ internal fun VisionElement.aboveBelowCore(
     val baseElement = this
 
     /**
-     * split screenshot into segments
+     * masking image
      */
-    val image = CodeExecutionContext.lastScreenshotImage!!.convertColorModel(numColors = numberOfColors)
-    val binaryImage = BinarizationUtility.getBinaryAsGrayU8(
-        image = image,
-        invert = false,
-//        skinThickness = skinThickness,
-        threshold = binaryThreshold
-    ).toBufferedImage()!!
-    var containerImage = binaryImage
+    val lastScreenshot = CodeExecutionContext.lastScreenshotImage!!
+    val grayImage = lastScreenshot.convertColorScale(colorScale = colorScale)
+    var binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = grayImage, threshold = binaryThreshold)
+        .toBufferedImage()!!
     if (removeHorizontalLine) {
-        containerImage = containerImage.horizontalLineRemoved(horizontalLineThreshold = horizontalLineThreshold)
+        binaryImage = binaryImage.horizontalLineRemoved(horizontalLineThreshold = horizontalLineThreshold)
     }
     if (removeVerticalLine) {
-        containerImage = containerImage.verticalLineRemoved(verticalLineThreshold = verticalLineThreshold)
+        binaryImage = binaryImage.verticalLineRemoved(verticalLineThreshold = verticalLineThreshold)
     }
+    val g2d = binaryImage.createGraphics()
+    g2d.color = Color.BLACK
+    val maskRect = if (relative.isAbove) {
+        Rectangle(0, this.rect.bottom + 1, lastScreenshot.width, lastScreenshot.bottom - this.rect.bottom)
+    } else {
+        Rectangle(0, 0, lastScreenshot.width, this.rect.top)
+    }
+    g2d.fillRect(maskRect.left, maskRect.top, maskRect.width, maskRect.height)
 
+    /**
+     * split to vision elements
+     */
     val name = selector?.toString()?.escapeFileName() ?: CodeExecutionContext.lastScreenshotFile!!.toFile().name
     val outputDir = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_$name").toString()
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = containerImage,
+        containerImage = binaryImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        skinThickness = 1,
         binaryThreshold = binaryThreshold,
         outputDirectory = outputDir,
     ).split()
-        .saveImages()
+    segmentContainer.saveImages()
     val count = segmentContainer.visionElements.count()
     sw.lap("split screenshot into segments. visionElements:$count")
 
     /**
      * filter items
      */
-    var elms = if (relative.isAbove) segmentContainer.visionElements.filter {
-        it.rect.top <= baseElement.rect.bottom
-    } else segmentContainer.visionElements.filter {
-        baseElement.rect.top <= it.rect.bottom
-    }
+    var elms = segmentContainer.visionElements
     elms = elms.filter { it.rect.left <= baseElement.rect.right && baseElement.rect.left <= it.rect.right }
     if (mergeIncluded.not()) {
         elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
@@ -379,6 +336,10 @@ internal fun VisionElement.aboveBelowCore(
     for (e in elms) {
         mergeContainer.addSegment(rect = e.rect)
     }
+    for (t in rootElement.visionTextElements) {
+        mergeContainer.addSegment(rect = t.rect)
+    }
+
     val mergedElements = mergeContainer.visionElements
 
     val sortedElements =
@@ -411,7 +372,7 @@ fun VisionElement.aboveLineItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = true,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -425,7 +386,7 @@ fun VisionElement.aboveLineItem(
         include = include,
         binaryThreshold = binaryThreshold,
         swipeToSafePosition = swipeToSafePosition,
-        numberOfColors = numberOfColors,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -444,7 +405,7 @@ fun VisionElement.belowLineItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: CodeExecutionContext.swipeToSafePosition,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
+    colorScale: ColorScale = testContext.visionColorScale,
     removeHorizontalLine: Boolean = true,
     horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
     removeVerticalLine: Boolean = true,
@@ -458,7 +419,7 @@ fun VisionElement.belowLineItem(
         include = include,
         binaryThreshold = binaryThreshold,
         swipeToSafePosition = swipeToSafePosition,
-        numberOfColors = numberOfColors,
+        colorScale = colorScale,
         removeHorizontalLine = removeHorizontalLine,
         horizontalLineThreshold = horizontalLineThreshold,
         removeVerticalLine = removeVerticalLine,
@@ -467,36 +428,62 @@ fun VisionElement.belowLineItem(
     return belowItem.lineRegionElement()
 }
 
+internal fun VisionElement.rightTexts(): List<VisionElement> {
+
+    val rightRegionElement = this.rightRegionElement(lineHeight = this.rect.height)
+    val textElements = rightRegionElement.splitTextElements()
+        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
+        .sortedBy { it.rect.left }.toMutableList()
+    textElements.add(rightRegionElement)
+    return textElements
+}
+
+internal fun VisionElement.leftTexts(): List<VisionElement> {
+
+    val leftRegionElement = this.leftRegionElement(lineHeight = this.rect.height)
+    val textElements = leftRegionElement.splitTextElements()
+        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
+        .sortedBy { it.rect.left }.toMutableList()
+    textElements.add(leftRegionElement)
+    return textElements
+}
+
 /**
  * rightText
  */
 fun VisionElement.rightText(
-    pos: Int = 1,
+    pos: Int? = null,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":rightText($pos)")
-    var v = VisionElement.emptyElement
-    v.selector = selector
-    if (TestMode.isNoLoadRun) {
-        return v
+    fun getRightText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return this
+        }
+        if (pos != null && pos < 0) {
+            val v = this.leftText(pos = -pos)
+            return v
+        }
+        val textElements = this.rightTexts()
+        if (pos == null) {
+            val v = textElements.last()
+            return v
+        }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    if (pos == 0) return this
-    else if (pos < 0) {
-        v = this.leftText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
-        return v
+    var v = getRightText()
+    if (v.text == "") {
+        v = VisionElement.emptyElement
     }
-    val elements = getHorizontalElements()
-        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.left }
-    v = if (elements.isEmpty() || elements.count() < pos)
-        VisionElement(capture = false)
-    else elements[pos - 1]
-
-    v.selector = selector
+    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -504,25 +491,29 @@ fun VisionElement.rightText(
  * rightText
  */
 fun VisionElement.rightText(
-    expression: String,
+    containedText: String,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":rightText($expression)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    val selector = this.selector?.getChainedSelector(":rightText($containedText)")
+
+    fun getRightText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            val v = VisionElement.emptyElement
+            return v
+        }
+
+        val textElements = this.rightTexts()
+        for (v in textElements) {
+            if (v.textForComparison.contains(containedText.forVisionComparison())) {
+                return v
+            }
+        }
+        return VisionElement.emptyElement
     }
 
-    val elements = getHorizontalElements()
-        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.left }
-    val v = elements.firstOrNull() ?: VisionElement(capture = false)
-
+    val v = getRightText()
     v.selector = selector
     lastElement = v
-
     return v
 }
 
@@ -530,33 +521,38 @@ fun VisionElement.rightText(
  * leftText
  */
 fun VisionElement.leftText(
-    pos: Int = 1,
+    pos: Int? = null,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":leftText($pos)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    fun getLeftText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return this
+        }
+        if (pos != null && pos < 0) {
+            val v = this.rightText(pos = -pos)
+            return v
+        }
+        val textElements = this.leftTexts()
+        if (pos == null) {
+            val v = textElements.last()
+            return v
+        }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[textElements.count() - pos]
     }
 
-    val v: VisionElement
-    if (pos == 0) return this
-    else if (pos < 0) {
-        v = this.rightText(pos = -pos)
-        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
-        return v
+    var v = getLeftText()
+    if (v.text == "") {
+        v = VisionElement.emptyElement
     }
-    val elements = getHorizontalElements()
-        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.left }
-    v = if (elements.isEmpty() || elements.count() < pos)
-        VisionElement(capture = false)
-    else elements[elements.count() - pos]
-
-    v.selector = selector
+    v.selector = this.selector?.getChainedSelector(":leftText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -564,38 +560,55 @@ fun VisionElement.leftText(
  * leftText
  */
 fun VisionElement.leftText(
-    expression: String,
+    containedText: String,
 ): VisionElement {
 
-    val selector = this.selector?.getChainedSelector(":leftText($expression)")
+    val selector = this.selector?.getChainedSelector(":leftText(${containedText})")!!
     if (TestMode.isNoLoadRun) {
         val v = VisionElement.emptyElement
         v.selector = selector
+        lastElement = v
         return v
     }
 
-    val elements = getHorizontalElements()
-        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.left }
-    val v = elements.lastOrNull() ?: VisionElement(capture = false)
+    val textElements = this.leftTexts()
+    for (v in textElements) {
+        if (v.textForComparison.contains(containedText.forVisionComparison())) {
+            v.selector = selector
+            lastElement = v
+            return v
+        }
+    }
 
+    val v = VisionElement.emptyElement
     v.selector = selector
     lastElement = v
-
     return v
 }
 
-private fun VisionElement.getHorizontalElements(): List<VisionElement> {
-    rootElement.visionContext.recognizeText()
+private fun VisionElement.splitTextElements(): List<VisionElement> {
 
-    val horizontalBand = HorizontalBand(baseElement = this)
-    for (v in rootElement.visionTextElements) {
-        horizontalBand.merge(element = v, margin = 0)
-    }
-    val elms = horizontalBand.getElements().map { it as VisionElement }
-    val sortedElements = elms.sortedByDescending { it.rect.left }
-    return sortedElements
+    val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_split_text.png").toString()
+    val subImage = this.image!!.convertColorScale(colorScale = testContext.visionColorScale)
+    subImage.saveImage(file = file)
+
+    val r = VisionServerProxy.recognizeText(inputFile = file, language = visionContext.language)
+    val textElements =
+        r.candidates.map {
+            val rect = it.rect.offsetRect(offsetX = this.rect.left, offsetY = this.rect.top)
+            val v = rect.toVisionElement()
+            v.visionContext.recognizeTextObservations = mutableListOf(
+                VisionContext.getObservation(
+                    text = it.text,
+                    r = r,
+                    rect = rect,
+                    screenshotFile = this.screenshotFile,
+                    screenshotImage = this.screenshotImage,
+                )
+            )
+            v
+        }
+    return textElements
 }
 
 private fun VisionElement.getVerticalElements(): List<VisionElement> {
@@ -620,29 +633,31 @@ fun VisionElement.aboveText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":rightText($pos)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    fun getAboveText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return thisElement
+        }
+        if (pos < 0) {
+            val v = thisElement.belowText(pos = -pos)
+            return v
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .sortedByDescending { it.rect.top }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    val v: VisionElement
-    if (pos == 0) return thisElement
-    else if (pos < 0) {
-        v = thisElement.belowText(pos = -pos)
-        v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
-        return v
-    }
-    val elements = getVerticalElements()
-        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedByDescending { it.rect.top }
-    v = if (elements.isEmpty() || elements.count() < pos)
-        VisionElement(capture = false)
-    else elements[pos - 1]
-    v.selector = selector
+    val v = getAboveText()
+    v.selector = thisElement.selector?.getChainedSelector(":aboveText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -656,22 +671,22 @@ fun VisionElement.aboveText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":aboveText($expression)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
+    fun getAboveText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
+            .sortedBy { it.rect.top }
+        val v = textElements.lastOrNull() ?: VisionElement.emptyElement
         return v
     }
 
-    val elements = thisElement.getVerticalElements()
-        .filter { it.rect.bottom < thisElement.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.top }
-    val v = elements.lastOrNull() ?: VisionElement(capture = false)
-
-    v.selector = selector
+    val v = getAboveText()
+    v.selector = thisElement.selector?.getChainedSelector(":aboveText($expression)")
     lastElement = v
-
     return v
 }
 
@@ -685,30 +700,31 @@ fun VisionElement.belowText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
-        return v
+    fun getBelowText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        if (pos == 0) {
+            return thisElement
+        }
+        if (pos < 0) {
+            val v = thisElement.aboveText(pos = -pos)
+            return v
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .sortedBy { it.rect.top }
+        if (textElements.count() < pos) {
+            return VisionElement.emptyElement
+        }
+        return textElements[pos - 1]
     }
 
-    val v: VisionElement
-    if (pos == 0) return thisElement
-    else if (pos < 0) {
-        v = thisElement.aboveText(pos = -pos)
-        v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
-        return v
-    }
-
-    val elements = thisElement.getVerticalElements()
-        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .sortedBy { it.rect.top }
-    v = if (elements.isEmpty() || elements.count() < pos)
-        VisionElement(capture = false)
-    else elements[pos - 1]
+    val v = getBelowText()
     v.selector = thisElement.selector?.getChainedSelector(":belowText($pos)")
     lastElement = v
-
     return v
 }
 
@@ -722,22 +738,22 @@ fun VisionElement.belowText(
 
     val thisElement = getSafeElement(swipeToSafePosition = swipeToSafePosition)
 
-    val selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
-    if (TestMode.isNoLoadRun) {
-        val v = VisionElement.emptyElement
-        v.selector = selector
+    fun getBelowText(): VisionElement {
+        if (TestMode.isNoLoadRun) {
+            return VisionElement.emptyElement
+        }
+
+        val textElements = this.getVerticalElements()
+            .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
+            .filter { it.text.forVisionComparison().contains(expression.trim('*').forVisionComparison()) }
+            .sortedBy { it.rect.top }
+        val v = textElements.firstOrNull() ?: VisionElement.emptyElement
         return v
     }
 
-    val elements = thisElement.getVerticalElements()
-        .filter { thisElement.rect.bottom < it.rect.top && thisElement.bounds.isCenterIncludedIn(it.bounds).not() }
-        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedBy { it.rect.top }
-    val v = elements.firstOrNull() ?: VisionElement(capture = false)
-
+    val v = getBelowText()
     v.selector = thisElement.selector?.getChainedSelector(":belowText($expression)")
     lastElement = v
-
     return v
 }
 
@@ -974,8 +990,8 @@ fun VisionElement.aboveRow(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    colorScale: ColorScale = testContext.visionColorScale,
+    horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ): VisionElement {
 
     val rs = RowSplitter(
@@ -996,7 +1012,7 @@ fun VisionElement.aboveRow(
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             binaryThreshold = binaryThreshold,
-            numberOfColors = numberOfColors,
+            colorScale = colorScale,
             horizontalLineThreshold = horizontalLineThreshold,
         )
     }
@@ -1017,8 +1033,8 @@ fun VisionElement.belowRow(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
-    numberOfColors: Int = Const.VISION_NUMBER_OF_COLORS_16,
-    horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    colorScale: ColorScale = testContext.visionColorScale,
+    horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ): VisionElement {
 
     val rs = RowSplitter(
@@ -1039,7 +1055,7 @@ fun VisionElement.belowRow(
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             binaryThreshold = binaryThreshold,
-            numberOfColors = numberOfColors,
+            colorScale = colorScale,
             horizontalLineThreshold = horizontalLineThreshold,
         )
     }

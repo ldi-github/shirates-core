@@ -9,6 +9,7 @@ import shirates.core.driver.TestDriver.androidDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
+import shirates.core.utility.time.StopWatch
 
 /**
  * isKeyboardShown
@@ -19,13 +20,18 @@ val TestDrive.isKeyboardShown: Boolean
             return true
         }
 
-        if (isAndroid) {
-            return TestDriver.androidDriver.isKeyboardShown
-        } else {
-            if (canSelectWithoutScroll(".XCUIElementTypeKeyboard")) {
-                return true
+        val sw = StopWatch("isKeyboardShown")
+        try {
+            if (isAndroid) {
+                return TestDriver.androidDriver.isKeyboardShown
+            } else {
+                if (canSelectWithoutScroll(".XCUIElementTypeKeyboard||#UIKeyboardLayoutStar Preview")) {
+                    return true
+                }
+                return TestDriver.iosDriver.isKeyboardShown
             }
-            return TestDriver.iosDriver.isKeyboardShown
+        } finally {
+            sw.stop()
         }
     }
 

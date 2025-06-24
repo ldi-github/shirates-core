@@ -2137,6 +2137,16 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = ""
             CodeExecutionContext.lastScreenshotImage = screenshotImage
+            /**
+             * Gray image
+             */
+            val screenshotGrayName = screenshotFileName.removeSuffix(".png") + "_gray.png"
+            val screenshotGrayFile = TestLog.directoryForLog.resolve(screenshotGrayName).toString()
+            val screenshotGrayImage = screenshotImage.copy().convertColorScale(ColorScale.GRAY_16)
+            screenshotGrayImage.saveImage(file = screenshotGrayFile)
+            CodeExecutionContext.lastScreenshotGrayName = screenshotGrayName
+            CodeExecutionContext.lastScreenshotGrayImage = screenshotGrayImage
+
             val vc = VisionContext(capture = true)
             visionRootElement = VisionElement(visionContext = vc)
             CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
@@ -2638,40 +2648,47 @@ object TestDriver {
         return this
     }
 
-    internal fun getFocusedElementCore(
+    internal fun getFocusedWebElement(
         waitSeconds: Double = shirates.core.driver.testContext.waitSecondsOnIsScreen,
-        throwsException: Boolean = false
-    ): TestElement {
+        throwsException: Boolean = true,
+    ): WebElement? {
 
-        var e = TestElement.emptyElement
+        var we: WebElement? = null
+        var error: Throwable? = null
         if (isAndroid) {
             val xpath = "//*[@focused='true']"
-            val sel = Selector(xpath)
 
             WaitUtility.doUntilTrue(
                 waitSeconds = waitSeconds,
                 throwOnFinally = false
             ) {
-                e = try {
-                    val focused = TestDriver.appiumDriver.findElement(By.xpath(xpath))
-                    focused.toTestElement(sel)
+                we = try {
+                    TestDriver.appiumDriver.findElement(By.xpath(xpath))
                 } catch (t: Throwable) {
-                    TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
-                    if (throwsException) throw t
-                    TestElement.emptyElement
+                    error = t
+                    null
                 }
-                e.isFound
+                we != null
             }
         } else {
-            e = try {
-                (TestDriver.appiumDriver.switchTo().activeElement() as WebElement).toTestElement()
-            } catch (t: Throwable) {
-                TestLog.info("Could not get focused element at VisionDrive.getFocusedElement. $t")
-                if (throwsException) throw t
-                TestElement.emptyElement
+            WaitUtility.doUntilTrue(
+                waitSeconds = waitSeconds,
+                throwOnFinally = false
+            ) {
+                we = try {
+                    TestDriver.appiumDriver.switchTo().activeElement() as WebElement
+                } catch (t: Throwable) {
+                    error = t
+                    null
+                }
+                we != null
             }
         }
-        return e
+        if (we == null) {
+            TestLog.info("Could not get focused WebElement. $error")
+            if (throwsException && error != null) throw error!!
+        }
+        return we
     }
 
     /**
@@ -2688,15 +2705,18 @@ object TestDriver {
 
         refreshCache()
 
-        val element = getFocusedElementCore(
-            waitSeconds = waitSeconds,
-            throwsException = false
-        )
-
-        if (element.isEmpty && throwsException) {
-            throw TestDriverException(message(id = "focusedElementNotFound"))
+        val we = try {
+            getFocusedWebElement(
+                waitSeconds = waitSeconds,
+                throwsException = true,
+            )
+        } catch (t: Throwable) {
+            if (throwsException) {
+                throw TestDriverException(message(id = "focusedElementNotFound"), cause = t)
+            }
+            null
         }
-
+        val element = we.toTestElement()
         return element
     }
 

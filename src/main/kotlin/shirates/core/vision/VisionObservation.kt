@@ -15,6 +15,9 @@ open class VisionObservation(
     open var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
     open var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
 
+    open var screenshotGrayFile: String? = null,
+    open var screenshotGrayImage: BufferedImage? = null,
+
     open var localRegionFile: String? = null,
     open var localRegionImage: BufferedImage? = null,
 
@@ -94,6 +97,8 @@ open class VisionObservation(
         val c = VisionContext(capture = false)
         c.screenshotFile = this.screenshotFile
         c.screenshotImage = this.screenshotImage
+        c.screenshotGrayFile = this.screenshotGrayFile
+        c.screenshotGrayImage = this.screenshotGrayImage
         c.localRegionFile = this.localRegionFile
         c.localRegionImage = this.localRegionImage
         c.localRegionX = this.localRegionX

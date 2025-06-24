@@ -6,6 +6,7 @@ import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.thisStartsWith
 import shirates.core.testcode.Want
+import shirates.core.utility.image.ColorScale
 import shirates.core.vision.driver.classify
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
@@ -15,6 +16,75 @@ import shirates.core.vision.testcode.VisionTest
 class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
 
     @Test
+    fun relative0() {
+
+        scenario {
+            case(1, "rightText, rightTextIs") {
+                condition {
+                    it.macro("[Language & Region Screen]")
+                }.expectation {
+                    it.detect("Region").rightText()
+                    it.textIs("world*")
+
+                    it.detect("Region")
+                    it.rightTextIs("world*")
+
+                    it.detect("Preferred Languages").rightText()
+                    it.textIs("")
+
+                    it.detect("Preferred Languages")
+                    it.rightTextIs("")
+                }
+            }
+            case(2, "leftText, leftTextIs") {
+                expectation {
+                    it.detect("world").leftText()
+                    it.textIs("Region")
+
+                    it.detect("world")
+                    it.leftTextIs("Region")
+
+                    it.detect("Region").leftText()
+                    it.textIs("")
+
+                    it.detect("Region")
+                    it.leftTextIs("")
+                }
+            }
+            case(3, "belowText, belowTextIs") {
+                expectation {
+                    it.detect("English").belowText()
+                    it.textIs("iPhone Language")
+
+                    it.detect("English")
+                    it.belowTextIs("iPhone Language")
+
+                    it.detect("Select text in *").belowText()
+                    it.textIs("")
+
+                    it.detect("Select text in *")
+                    it.belowTextIs("")
+                }
+            }
+            case(4, "aboveText, aboveTextIs") {
+                expectation {
+                    it.detect("iPhone Language").aboveText()
+                    it.textIs("English")
+
+                    it.detect("iPhone Language")
+                    it.aboveTextIs("English")
+
+                    it.detect("Language & Region").aboveText()
+                    it.textIs("")
+
+                    it.detect("Language & Region")
+                    it.aboveTextIs("")
+                }
+            }
+        }
+    }
+
+    @Test
     fun relative1() {
 
         scenario {
@@ -22,7 +92,7 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                 condition {
                     it.screenIs("[iOS Settings Top Screen]")
                     v1 = it.detect("General").leftItem()
-                    v2 = it.detect("StandBy").leftItem()
+                    v2 = it.detect("StandBy").leftItem(colorScale = ColorScale.GRAY_16)
                 }.expectation {
                     v1.classify().thisIs("[General Icon]")
                     v2.classify().thisIs("[StandBy Icon]")
@@ -149,6 +219,45 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                 }.expectation {
                     v1.joinedText.thisIs("Name iPhone")
                     v2.joinedText.thisStartsWith("Model Name iPhone ")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun relative3() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Language & Region Screen]")
+                }.expectation {
+                    v1 = it.detect("Metric").aboveText()
+                    v1.textIs("°C")
+
+                    v2 = it.detect("Metric").aboveText(2)
+                    v2.textIs("Gregorian")
+
+                    v3 = it.detect("Metric").aboveText("world")
+                    v3.leftTextIs("Region")
+
+                    v4 = it.detect("Metric").aboveText("*orl*")
+                    v4.leftTextIs("Region")
+                }
+            }
+            case(2) {
+                expectation {
+                    v1 = it.detect("Metric").belowText()
+                    v1.textIs("Monday")
+
+                    v2 = it.detect("Metric").belowText(3)
+                    v2.textIs("1234567.89")
+
+                    v3 = it.detect("Metric").belowText("Monday")
+                    v3.leftTextIs("First Day of Week")
+
+                    v4 = it.detect("Metric").belowText("*onda*")
+                    v4.leftTextIs("First Day of Week")
                 }
             }
         }

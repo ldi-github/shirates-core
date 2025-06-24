@@ -11,11 +11,6 @@ class Rectangle(
     override var height: Int = 0,
 ) : RectangleInterface {
 
-    val isEmpty: Boolean
-        get() {
-            return area == 0
-        }
-
     constructor(leftTopRightBottom: String) : this() {
 
         try {
@@ -35,6 +30,23 @@ class Rectangle(
             val width = right - left + 1
             val height = bottom - top + 1
             return Rectangle(left = left, top = top, width = width, height = height)
+        }
+
+        fun merge(
+            rectangles: List<Rectangle>
+        ): Rectangle? {
+            if (rectangles.isEmpty()) {
+                return null
+            }
+            var r = rectangles[0]
+            if (rectangles.count() == 1) {
+                return r
+            }
+            for (i in 1 until rectangles.count()) {
+                val r2 = rectangles[i]
+                r = r.mergeWith(r2)
+            }
+            return r
         }
     }
 

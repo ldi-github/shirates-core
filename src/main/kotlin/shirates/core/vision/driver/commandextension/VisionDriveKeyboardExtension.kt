@@ -12,6 +12,8 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -26,29 +28,32 @@ val VisionDrive.isKeyboardShown: Boolean
             return true
         }
 
-        if (isAndroid) {
-            return androidDriver.isKeyboardShown
-        } else {
-            return TestDriver.iosDriver.isKeyboardShown
+        val sw = StopWatch("isKeyboardShown")
+        try {
+            return testDrive.isKeyboardShown
+        } finally {
+            sw.stop()
         }
     }
 
 /**
  * hideKeyboard
  */
-fun VisionDrive.hideKeyboard(
-    waitSeconds: Double = testContext.shortWaitSeconds
-): VisionElement {
+fun VisionDrive.hideKeyboard(): VisionElement {
+
+    val sw = StopWatch("hideKeyboard")
 
     val command = "hideKeyboard"
     val message = message(id = command)
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
+
         if (isiOS) {
-            // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
-            val selector = Selector(".XCUIElementTypeKeyboard")
+            val selector = Selector(".XCUIElementTypeKeyboard||#UIKeyboardLayoutStar Preview")
             val e = TestDriver.selectDirectByIosClassChain(selector, frame = null)
             if (e.isFound) {
+                // Workaround
+                // appiumDriver.hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
                 swipePointToPoint(
                     startX = 10,
                     startY = viewBounds.centerY,
@@ -56,13 +61,18 @@ fun VisionDrive.hideKeyboard(
                     endY = viewBounds.centerY - 10,
                     durationSeconds = 1.0
                 )
+                invalidateScreen()
+                screenshot()
             }
         } else {
-            TestDriver.appiumDriver.hideKeyboard()
+            if (isKeyboardShown) {
+                TestDriver.appiumDriver.hideKeyboard()
+                invalidateScreen()
+                screenshot()
+            }
         }
-        invalidateScreen()
-        wait(waitSeconds = waitSeconds)
     }
+    sw.stop()
     return lastElement
 }
 
@@ -98,6 +108,18 @@ fun VisionDrive.pressBack(
                 }
             } else {
                 fun pressBackIos() {
+
+                    if (testProfile.appIconName != null) {
+                        val appName =
+                            it.detect("*${testProfile.appIconName}", throwsException = false, waitSeconds = 0.0)
+                        if (appName.isFound) {
+                            val topRegion = getTopRegion(topRate = 0.07)
+                            if (appName.rect.isIncludedIn(topRegion.rect)) {
+                                appName.tap()
+                                return
+                            }
+                        }
+                    }
 
                     val backButton = classic.select("#BackButton", throwsException = false, waitSeconds = 0.0)
                     if (backButton.isFound) {
@@ -288,12 +310,16 @@ fun VisionDrive.sendKeys(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val testElement = TestDriver.getFocusedElement()
-        if (testElement.isEmpty) {
-            throw TestDriverException("Focused element not found.")
+
+        var we = TestDriver.getFocusedWebElement(throwsException = true)
+        try {
+            we!!.sendKeys(keysToSend)
+        } catch (t: Throwable) {
+            TestLog.warn("Retrying sendKeys($keysToSend). cause=$t")
+            // Retry once
+            we = TestDriver.getFocusedWebElement(throwsException = true)
+            we!!.sendKeys(keysToSend)
         }
-        val we = testElement.webElement ?: testElement.getWebElement()
-        we.sendKeys(keysToSend)
 
         invalidateScreen()
         lastElement = getFocusedElement()

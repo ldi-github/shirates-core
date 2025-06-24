@@ -12,6 +12,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.file.PropertiesUtility
+import shirates.core.utility.image.ColorScale
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.toPath
 import java.io.FileNotFoundException
@@ -1844,20 +1845,20 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun visionEnableLearningOnStartup() {
+    fun visionForceLearningOnStartup() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(Const.VISION_ENABLE_LEARNING_ON_STARTUP)
+            assertThat(PropertiesManager.visionForceLearningOnStartup).isEqualTo(Const.VISION_FORCE_LEARNING_ON_STARTUP)
         }
         run {
             // Arrange
-            val value = Const.VISION_ENABLE_LEARNING_ON_STARTUP.not()
-            PropertiesManager.setPropertyValue("visionEnableLearningOnStartup", value.toString())
+            val value = Const.VISION_FORCE_LEARNING_ON_STARTUP.not()
+            PropertiesManager.setPropertyValue("visionForceLearningOnStartup", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(value)
+            assertThat(PropertiesManager.visionForceLearningOnStartup).isEqualTo(value)
         }
     }
 
@@ -1876,6 +1877,42 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("visionServerUrl", value)
             // Act, Assert
             assertThat(PropertiesManager.visionServerUrl).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun textMarginHorizontal() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginHorizontal).isEqualTo(Const.VISION_TEXT_MARGIN_HORIZONTAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("textMarginHorizontal", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginHorizontal).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun textMarginVertical() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginVertical).isEqualTo(Const.VISION_TEXT_MARGIN_VERTICAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("textMarginVertical", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginVertical).isEqualTo(value)
         }
     }
 
@@ -2218,6 +2255,42 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("visionVerticalLineThreshold", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionVerticalLineThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionColorScale() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionColorScale).isEqualTo(Const.VISION_COLOR_SCALE)
+        }
+        run {
+            // Arrange
+            val value = ColorScale.GRAY_256
+            PropertiesManager.setPropertyValue("visionColorScale", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionColorScale).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionUnsafeMode() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionExpertMode).isEqualTo(Const.VISION_EXPERT_MODE)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_EXPERT_MODE.not()
+            PropertiesManager.setPropertyValue("visionExpertMode", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionExpertMode).isEqualTo(value)
         }
     }
 

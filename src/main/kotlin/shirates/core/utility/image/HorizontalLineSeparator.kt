@@ -1,14 +1,14 @@
 package shirates.core.utility.image
 
 import boofcv.struct.image.GrayU8
-import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.testContext
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.image.BufferedImage
 
 class HorizontalLineSeparator(
     val containerImage: BufferedImage,
-    val horizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold,
+    val horizontalLineThreshold: Double = testContext.visionHorizontalLineThreshold,
 ) {
     val horizontalLines = mutableListOf<HorizontalLine>()
 
@@ -65,8 +65,8 @@ class HorizontalLineSeparator(
 
         val segmentContainer = SegmentContainer(
             containerImage = containerImage,
-            segmentMarginHorizontal = PropertiesManager.segmentMarginHorizontal,
-            segmentMarginVertical = PropertiesManager.segmentMarginVertical,
+            segmentMarginHorizontal = testContext.segmentMarginHorizontal,
+            segmentMarginVertical = testContext.segmentMarginVertical,
         ).split(splitUnit = 1, segmentationPng = false)
 
         segmentContainer.drawOriginalSegments()

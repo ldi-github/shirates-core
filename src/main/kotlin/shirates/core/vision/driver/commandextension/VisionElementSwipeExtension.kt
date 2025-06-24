@@ -18,10 +18,10 @@ import kotlin.math.abs
  */
 fun VisionElement.swipeTo(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     last: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
@@ -70,10 +70,10 @@ fun VisionElement.swipeTo(
  */
 fun VisionElement.swipeToAdjust(
     expression: String,
-    language: String = PropertiesManager.visionOCRLanguage,
-    looseMatch: Boolean = PropertiesManager.visionLooseMatch,
-    mergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox,
-    lineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio,
+    language: String = testContext.visionOCRLanguage,
+    looseMatch: Boolean = testContext.visionLooseMatch,
+    mergeBoundingBox: Boolean = testContext.visionMergeBoundingBox,
+    lineSpacingRatio: Double = testContext.visionLineSpacingRatio,
     autoImageFilter: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
@@ -576,16 +576,10 @@ fun VisionElement.isSafePosition(
         return true
     }
 
-    val scrollVisionElement = CodeExecutionContext.scrollVisionElement ?: vision.rootElement
-    val scrollBounds = scrollVisionElement.bounds
-
     if (direction.isVertical) {
-        if (this.bounds.top < scrollBounds.height * PropertiesManager.visionSafeAreaTopRatio) {
-            return false
-        }
-        if (scrollBounds.height * PropertiesManager.visionSafeAreaBottomRatio < this.bounds.bottom) {
-            return false
-        }
+        val safeArea = getSafeArea()
+        val isInSafeArea = this.rect.isIncludedIn(safeArea.rect)
+        return isInSafeArea
     }
     return true
 }
@@ -594,6 +588,7 @@ fun VisionElement.isSafePosition(
  * swipeToSafePosition
  */
 fun VisionElement.swipeToSafePosition(
+    durationSeconds: Double = testContext.swipeDurationSeconds / 2,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     action: (() -> Unit)? = null
 ): VisionElement {
@@ -605,8 +600,28 @@ fun VisionElement.swipeToSafePosition(
         return this
     }
 
+    val safeArea = getSafeArea()
+
     silent {
-        this.swipeVerticalTo((screenBounds.height * PropertiesManager.visionSafePositionVertical).toInt())
+        if (direction.isVertical) {
+            val verticalMovement = safeArea.bounds.centerY - this.bounds.centerY
+            swipePointToPoint(
+                startX = screenBounds.centerX,
+                startY = screenBounds.centerY,
+                endX = screenBounds.centerX,
+                endY = screenBounds.centerY + verticalMovement,
+                durationSeconds = durationSeconds,
+            )
+        } else {
+            val horizontalMovement = safeArea.bounds.centerX - this.bounds.centerX
+            swipePointToPoint(
+                startX = screenBounds.centerX,
+                startY = screenBounds.centerY,
+                endX = screenBounds.centerX + horizontalMovement,
+                endY = screenBounds.centerY,
+                durationSeconds = durationSeconds,
+            )
+        }
     }
 
     if (action != null) {
@@ -614,7 +629,7 @@ fun VisionElement.swipeToSafePosition(
         return lastElement
     }
     if (this.selector?.expression != null) {
-        val v = detect(this.selector!!.expression!!)
+        val v = detect(expression = this.selector!!.expression!!)
         return v
     }
 

@@ -8,6 +8,7 @@ import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.testcode.UITestCallbackExtension
+import shirates.core.utility.image.ColorScale
 import shirates.core.utility.misc.UrlUtility
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import kotlin.reflect.KMutableProperty
@@ -279,6 +280,12 @@ class TestContext(
     var visionOCRLanguage: String = PropertiesManager.visionOCRLanguage
 
     @SaveTarget
+    var textMarginHorizontal: Int = PropertiesManager.textMarginHorizontal
+
+    @SaveTarget
+    var textMarginVertical: Int = PropertiesManager.textMarginVertical
+
+    @SaveTarget
     var segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal
 
     @SaveTarget
@@ -295,6 +302,31 @@ class TestContext(
 
     @SaveTarget
     var visionFindImageAspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance
+
+    @SaveTarget
+    var visionLooseMatch: Boolean = PropertiesManager.visionLooseMatch
+
+    @SaveTarget
+    var visionMergeBoundingBox: Boolean = PropertiesManager.visionMergeBoundingBox
+
+    @SaveTarget
+    var visionLineSpacingRatio: Double = PropertiesManager.visionLineSpacingRatio
+
+    @SaveTarget
+    var visionTextToLineHeightRatio: Double = PropertiesManager.visionTextToLineHeightRatio
+
+    @SaveTarget
+    var visionColorScale: ColorScale = PropertiesManager.visionColorScale
+
+    @SaveTarget
+    var visionHorizontalLineThreshold: Double = PropertiesManager.visionHorizontalLineThreshold
+
+    @SaveTarget
+    var visionVerticalLineThreshold: Double = PropertiesManager.visionVerticalLineThreshold
+
+    @SaveTarget
+    var visionExpertMode: Boolean = PropertiesManager.visionExpertMode
+
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {

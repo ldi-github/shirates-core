@@ -1,5 +1,7 @@
 package shirates.core
 
+import shirates.core.utility.image.ColorScale
+
 /**
  * Const
  */
@@ -130,13 +132,12 @@ object Const {
     const val RETRY_TIMEOUT_SECONDS: Double = 15.0
     const val RETRY_INTERVAL_SECONDS: Double = 2.0
     const val SHORT_WAIT_SECONDS = 1.5
-    const val WAIT_SECONDS_FOR_EXIST = 0.5
     const val WAIT_SECONDS_FOR_LAUNCH_APP_COMPLETE = 15.0
     const val WAIT_SECONDS_FOR_ANIMATION_COMPLETE = 0.5
     const val WAIT_SECONDS_ON_ISSCREEN = 15.0
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
-    const val SWIPE_DURATION_SECONDS = 3.0
-    const val FLICK_DURATION_SECONDS = 0.3
+    const val SWIPE_DURATION_SECONDS = 1.5
+    const val FLICK_DURATION_SECONDS = 0.25
     const val SWIPE_INTERVAL_SECONDS = 0.1
     const val FLICK_INTERVAL_SECONDS = 0.3
     const val SWIPE_MARGIN_RATIO = 0.0
@@ -161,9 +162,11 @@ object Const {
     const val VISION_OCR_CUSTOM_WORDS_FILE = ""
     const val VISION_DIRECTORY = "vision"
     const val VISION_BUILD_DIRECTORY = "build"
-    const val VISION_ENABLE_LEARNING_ON_STARTUP = true
+    const val VISION_FORCE_LEARNING_ON_STARTUP = false
     const val VISION_SERVER_URL = "http://127.0.0.1:8081"
-    const val VISION_SEGMENT_MARGIN_HORIZONTAL = 20
+    const val VISION_TEXT_MARGIN_HORIZONTAL = 20
+    const val VISION_TEXT_MARGIN_VERTICAL = 5
+    const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_CROPPING_MARGIN = 5
     const val VISION_FIND_IMAGE_THRESHOLD = 0.15
@@ -172,18 +175,18 @@ object Const {
     const val VISION_SYNC_IMAGE_MATCH_RATE = 0.995
     const val VISION_TEXT_INDEX_TRIM_CHARS_FOR_JA = " '・■▪️◾️◎、,-」"
     const val VISION_CLASSIFIER_SHARD_NODE_COUNT = "DefaultClassifier=1:ScreenClassifier=1"
-    const val VISION_LOOSE_MATCH = true
+    const val VISION_LOOSE_MATCH = false
     const val VISION_REMOVE_VOICING_MARKS = true
     const val VISION_MERGE_BOUNDING_BOX = true
     const val VISION_LINE_SPACING_RATIO = 2.5
-    const val VISION_TEXT_TO_LINE_HEIGHT_RATIO = 3.0
+    const val VISION_TEXT_TO_LINE_HEIGHT_RATIO = 2.0
     const val VISION_SAFE_AREA_TOP_RATIO = 0.2
     const val VISION_SAFE_AREA_BOTTOM_RATIO = 0.6
     const val VISION_SAFE_POSITION_VERTICAL = 0.4
     const val VISION_HORIZONTAL_LINE_THRESHOLD = 0.7
     const val VISION_VERTICAL_LINE_THRESHOLD = 0.5
-    const val VISION_NUMBER_OF_COLORS_12 = 12   // cell disappears on iOS Settings App
-    const val VISION_NUMBER_OF_COLORS_16 = 16   // cell appears on iOS Settings App
+    val VISION_COLOR_SCALE = ColorScale.GRAY_32
+    const val VISION_EXPERT_MODE = false
 
     /**
      * internal

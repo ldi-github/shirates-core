@@ -3,6 +3,7 @@ package shirates.core.utility.image
 import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.exists
@@ -36,12 +37,12 @@ class SegmentContainer(
     var segmentMarginVertical: Int,
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
-    var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    var aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    var binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    var aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     var minimumWidth: Int = 5,
     var minimumHeight: Int = 5,
     var outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    var croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    var croppingMargin: Int = testContext.segmentCroppingMargin,
 
     var drawnImage: BufferedImage? = null,
 ) {
@@ -81,11 +82,11 @@ class SegmentContainer(
          */
         fun getNormalizedImage(
             imageFile: String,
-            segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-            segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+            segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+            segmentMarginVertical: Int = testContext.segmentMarginVertical,
             skinThickness: Int = 2,
-            binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-            aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+            binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+            aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
         ): BufferedImage? {
 
             val segmentContainer = SegmentContainer(
@@ -343,7 +344,7 @@ class SegmentContainer(
     /**
      * saveImages
      */
-    fun saveImages(): SegmentContainer {
+    fun saveImages(): List<String> {
 
         if (containerImage == null) {
             throw IllegalArgumentException("image is null")
@@ -353,10 +354,13 @@ class SegmentContainer(
             file = outputDirectory.resolve("binary"),
             log = false
         )
+
+        val files = mutableListOf<String>()
         for (segment in segments) {
-            segment.captureAndSave(outputDirectory)
+            val file = segment.captureAndSave(outputDirectory)
+            files.add(file)
         }
-        return this
+        return files
     }
 
     /**

@@ -91,6 +91,14 @@ interface RectangleInterface {
         }
 
     /**
+     * isEmpty
+     */
+    val isEmpty: Boolean
+        get() {
+            return area == 0
+        }
+
+    /**
      * isCenterXIncludedIn
      */
     fun isCenterXIncludedIn(other: RectangleInterface): Boolean {
@@ -207,4 +215,30 @@ interface RectangleInterface {
         return isSeparatedFrom(other).not()
     }
 
+    /**
+     * getOverlappingRectangle
+     */
+    fun getOverlappingRectangle(other: RectangleInterface): Rectangle {
+
+        if (isOverlapping(other).not()) {
+            return Rectangle()
+        }
+
+        var list = listOf(this, other).sortedBy { it.left }
+        val leftRect = list[0]
+        val rightRect = list[1]
+        val left = rightRect.left
+        val right = leftRect.right
+
+        list = list.sortedBy { it.top }
+        val aboveRect = list[0]
+        val belowRect = list[1]
+        val top = belowRect.top
+        val bottom = aboveRect.bottom
+
+        val width = right - left
+        val height = bottom - top
+
+        return Rectangle(left, top, width, height)
+    }
 }

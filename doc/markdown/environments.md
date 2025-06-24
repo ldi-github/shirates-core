@@ -1,5 +1,20 @@
 # Tested Environments
 
+2025/6/24 **Shirates/Vision** (8.6.0)
+
+- macOS Sequoia 15.5
+- node v23.7.0
+- Appium 2.19.0
+- java-client v9.1.0
+- uiautomator2@4.2.3
+- xcuitest@9.4.0
+- Android Studio Meerkat Feature Drop | 2024.3.2 Patch 1
+- Android Emulator Pixel 8(Android 14)
+- Xcode 26.0 beta
+- iOS Simulator iPhone 16(iOS 18.5/iOS 26.0)
+
+<br>
+
 2025/6/15 **Shirates/Vision** (8.5.4)
 
 - macOS Sequoia 15.5

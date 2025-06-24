@@ -100,6 +100,7 @@
 - 画像/テキストを相対的に取得する
     - [相対テキスト (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text_ja.md)
     - [相対イメージ (leftItem, rightItem, belowItem, aboveItem, belowLineItem, aboveLineItem, belowRow, aboveRow)](vision/basic/function_property/getting_image/relative_image_ja.md)
+    - [相対的な画像検出に関する考慮事項](vision/basic/function_property/getting_image/considerations_for_relative_image_detection_ja.md)
 - テキストを検証する
     - [テキストの検証 (textIs)](vision/basic/function_property/asserting_text/text_assertion_ja.md)
 - 画像を検証する

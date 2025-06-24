@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.SegmentContainer
@@ -20,12 +19,12 @@ fun VisionDrive.descendants(
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = 0.0,
     minimumWidth: Int = 5,
     minimumHeight: Int = 5,
     outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
+    croppingMargin: Int = testContext.segmentCroppingMargin,
 ): List<VisionElement> {
 
     val sc = SegmentContainer(
