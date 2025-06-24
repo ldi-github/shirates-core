@@ -42,7 +42,7 @@ fun VisionElement.textIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
 
-        val result = v.textForComparison.contains(expected.forVisionComparison())
+        val result = v.textForComparison.contains(expected.forVisionComparison().trim('*'))
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
