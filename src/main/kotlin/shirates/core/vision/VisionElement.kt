@@ -471,8 +471,8 @@ open class VisionElement(
         val sc = SegmentContainer(
             mergeIncluded = true,
             containerImage = subImage,
-            segmentMarginHorizontal = testContext.segmentMarginHorizontal,
-            segmentMarginVertical = testContext.segmentMarginVertical,
+            segmentMarginHorizontal = testContext.textMarginHorizontal,
+            segmentMarginVertical = testContext.textMarginVertical,
         ).split()
         sc.saveImages()
 

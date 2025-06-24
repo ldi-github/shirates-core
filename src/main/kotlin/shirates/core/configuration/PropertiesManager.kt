@@ -1061,6 +1061,24 @@ object PropertiesManager {
         }
 
     /**
+     * textMarginHorizontal
+     */
+    val textMarginHorizontal: Int
+        get() {
+            return getPropertyValue(propertyName = "textMarginHorizontal")?.toIntOrNull()
+                ?: Const.VISION_TEXT_MARGIN_HORIZONTAL
+        }
+
+    /**
+     * textMarginVertical
+     */
+    val textMarginVertical: Int
+        get() {
+            return getPropertyValue(propertyName = "textMarginVertical")?.toIntOrNull()
+                ?: Const.VISION_TEXT_MARGIN_VERTICAL
+        }
+
+    /**
      * segmentMarginHorizontal
      */
     val segmentMarginHorizontal: Int

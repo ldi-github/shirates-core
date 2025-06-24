@@ -1881,6 +1881,42 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun textMarginHorizontal() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginHorizontal).isEqualTo(Const.VISION_TEXT_MARGIN_HORIZONTAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("textMarginHorizontal", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginHorizontal).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun textMarginVertical() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginVertical).isEqualTo(Const.VISION_TEXT_MARGIN_VERTICAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("textMarginVertical", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.textMarginVertical).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun segmentMarginHorizontal() {
 
         run {

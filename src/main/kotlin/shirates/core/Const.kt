@@ -164,6 +164,8 @@ object Const {
     const val VISION_BUILD_DIRECTORY = "build"
     const val VISION_FORCE_LEARNING_ON_STARTUP = false
     const val VISION_SERVER_URL = "http://127.0.0.1:8081"
+    const val VISION_TEXT_MARGIN_HORIZONTAL = 20
+    const val VISION_TEXT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_CROPPING_MARGIN = 5

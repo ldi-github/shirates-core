@@ -280,6 +280,12 @@ class TestContext(
     var visionOCRLanguage: String = PropertiesManager.visionOCRLanguage
 
     @SaveTarget
+    var textMarginHorizontal: Int = PropertiesManager.textMarginHorizontal
+
+    @SaveTarget
+    var textMarginVertical: Int = PropertiesManager.textMarginVertical
+
+    @SaveTarget
     var segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal
 
     @SaveTarget
