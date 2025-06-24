@@ -102,6 +102,7 @@
 - Getting image/text relatively
     - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
     - [Relative image (leftItem, rightItem, belowItem, aboveItem, belowLineItem, aboveLineItem, belowRow, aboveRow)](vision/basic/function_property/getting_image/relative_image.md)
+    - [Considerations for relative image detection](vision/basic/function_property/getting_image/considerations_for_relative_image_detection.md)
 - Asserting text
     - [Text assertion (textIs)](vision/basic/function_property/asserting_text/text_assertion.md)
 - Asserting image

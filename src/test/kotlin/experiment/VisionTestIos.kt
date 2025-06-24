@@ -2,6 +2,8 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.testContext
+import shirates.core.logging.printInfo
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
@@ -48,4 +50,44 @@ class VisionTestIos : VisionTest() {
             }
         }
     }
+
+    @Test
+    fun colorScale_GRAY_32() {
+
+        // default colorScale is GRAY_32
+        printInfo("${testContext.visionColorScale}")
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }.action {
+                    v1 = detect("StandBy").leftItem()
+                }.expectation {
+                    v1.imageIs("[StandBy Icon]")    // NG (on iOS 26 Liquid Glass), OK (on iOS 18 or older)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun colorScale_GRAY_16() {
+
+        // change colorScale to GRAY_16
+        colorScaleGray16()
+        printInfo("${testContext.visionColorScale}")
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }.action {
+                    v1 = detect("StandBy").leftItem()
+                }.expectation {
+                    v1.imageIs("[StandBy Icon]")    // OK
+                }
+            }
+        }
+    }
+
 }

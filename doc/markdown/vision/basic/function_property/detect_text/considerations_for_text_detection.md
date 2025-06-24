@@ -31,36 +31,28 @@ See [Text Recognition by AI-OCR](../../text_and_image_recognition/text_recogniti
 
 ### Solution
 
-**Loose matching** works by default when detecting text in the following functions.
+In shirates 8.6.0 and later, the text shaping feature automatically readjusts the text bounding box to obtain the
+intended text and bounding box.
 
-- detect
-- exist
-- canDetect
-- tap
+![](_images/text_shaping.png)
+
+If you cannot get the intended text even with text shaping, consider using **loose matching**.
 
 Loose matching attempts to match strings by trimming both ends of the string to a maximum of 3 characters to the left
 and 2 characters to the right.
-Loose matching allows you to specify the string you originally want to detect as follows
 
 ```kotlin
-it.exist("Settings")   // OK
-it.exist("Search settings")  // OK
+it.detect("the text that you want to get", looseMatch = true)
 ```
 
-If you do not want to use loose matching, you can disable it by specifying `looseMatch = false` as an argument.
-
-```kotlin
-it.exist("Settings", looseMatch = false)  // OK
-it.exist("Search settings", looseMatch = false)  // NG
-```
+Loose matching parameter (visionLooseMatch) is false by default. (shirates 8.6.0+)
 
 ## 2. Bounding boxes of the text are not detected
 
 If the contrast of the text color is low in relation to the background color, the text bounding box may not be
 detected. <br>
-This may be improved by applying an **image filter**.
 
-The image filter can be activated by specifying `autoImageFilter = true` as an argument.
+This may be improved by applying an **auto image filter**.
 
 ```kotlin
 it.exist("The text of low contrast", autoImageFilter = true)
