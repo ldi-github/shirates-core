@@ -455,8 +455,29 @@ open class VisionElement(
      * shapeText
      */
     fun shapeText(
+        expression: String,
+        language: String = this.visionContext.language,
+        segmentMarginHorizontal: Int = testContext.textMarginHorizontal,
+        segmentMarginVertical: Int = testContext.textMarginVertical,
+    ): VisionElement {
+
+        val selector = Selector(expression = expression)
+        return shapeText(
+            selector = selector,
+            language = language,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+        )
+    }
+
+    /**
+     * shapeText
+     */
+    fun shapeText(
         selector: Selector = this.selector ?: throw IllegalArgumentException("selector"),
         language: String = this.visionContext.language,
+        segmentMarginHorizontal: Int = testContext.textMarginHorizontal,
+        segmentMarginVertical: Int = testContext.textMarginVertical,
     ): VisionElement {
 
         val lastScreenshot = visionContext.screenshotImage
@@ -471,15 +492,10 @@ open class VisionElement(
         val sc = SegmentContainer(
             mergeIncluded = true,
             containerImage = subImage,
-            segmentMarginHorizontal = testContext.textMarginHorizontal,
-            segmentMarginVertical = testContext.textMarginVertical,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         ).split()
         sc.saveImages()
-
-        if (sc.segments.count() == 1 && sc.segments[0].toRect().toString() == subImage.rect.toString()) {
-            // Clipped highlights
-            return this
-        }
 
         /**
          * recognize texts in segments

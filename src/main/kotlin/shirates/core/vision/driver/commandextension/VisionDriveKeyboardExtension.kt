@@ -109,6 +109,18 @@ fun VisionDrive.pressBack(
             } else {
                 fun pressBackIos() {
 
+                    if (testProfile.appIconName != null) {
+                        val appName =
+                            it.detect("*${testProfile.appIconName}", throwsException = false, waitSeconds = 0.0)
+                        if (appName.isFound) {
+                            val topRegion = getTopRegion(topRate = 0.07)
+                            if (appName.rect.isIncludedIn(topRegion.rect)) {
+                                appName.tap()
+                                return
+                            }
+                        }
+                    }
+
                     val backButton = classic.select("#BackButton", throwsException = false, waitSeconds = 0.0)
                     if (backButton.isFound) {
                         backButton.tap()
