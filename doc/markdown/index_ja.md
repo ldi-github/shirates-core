@@ -13,7 +13,7 @@
 
 ## 動画
 
-- [Shiratesチャンネル(YouTube)](https://github.com/ldi-github/shirates-core)
+- [Shiratesチャンネル(YouTube)](https://youtube.com/@shirateschannel6350?si=r-sKigmvZ4DugieE)
 
 ## 概要
 
