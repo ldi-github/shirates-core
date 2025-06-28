@@ -11,6 +11,10 @@
 
 - [shirates-core](https://github.com/ldi-github/shirates-core)
 
+## 動画
+
+- [Shiratesチャンネル(YouTube)](https://github.com/ldi-github/shirates-core)
+
 ## 概要
 
 - [Shirates/Visionとは](vision/about_ja.md)
