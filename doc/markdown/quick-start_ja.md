@@ -1,5 +1,9 @@
 # クイックスタート (Shirates/Vision) for macOS
 
+## 動画
+
+[Shirates Vision for macOS クイックスタート](https://youtu.be/ezaFPY5FS1E)
+
 ## Environment
 
 インストールの前に [Tested Environments](environments.md) を確認してください。
@@ -229,7 +233,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 ### iOSSettingsVisionDemo を実行する
 
-1. `shirates-core-vision-samples_en`プロジェクトを`IntelliJ IDEA`で開き、 <br>
+1. `shirates-core-vision-samples_ja`プロジェクトを`IntelliJ IDEA`で開き、 <br>
    `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo`を右クリックして <br>
    **Debug 'iOSSettingsVisionDemo'** を選択します。
 2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_ios.png)

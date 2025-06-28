@@ -25,8 +25,8 @@
 | expression      | [セレクター式](../../selector_and_nickname/selector_expression_ja.md)          |
 | language        | [AI-OCRの言語](../../switching_environment/switching_ai_ocr_language_ja.md) |
 | last            | true: 最後の要素を取得します<br>false: 最初の要素を取得します(デフォルト)                           |
-| looseMatch      | true: テキスト検出にルースマッチングを適用します(デフォルト)<br>false: ルースマッチングを適用しません             |
-| autoImageFilter | true: 画像フィルターを自動適用してAI-OCRの認識精度を向上させます<br>false: 画像フィルターを適用しません(デフォルト)   |
+| looseMatch      | true: テキスト検出にルースマッチングを適用します<br>false: ルースマッチングを適用しません(デフォルト)             |
+| autoImageFilter | true: 画像フィルターを自動適用してAI-OCRの認識精度を向上させます<br>false: 画像フィルターを適用しません          |
 
 ## サンプルコード
 
