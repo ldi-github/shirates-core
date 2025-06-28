@@ -2,7 +2,7 @@
 
 ## 動画
 
-[Shirates Vision for macOS クイックスタート](https://youtu.be/ezaFPY5FS1E)
+[Shirates Vision for macOS クイックスタート](https://youtu.be/uS_F2kgPFBg)
 
 ## Environment
 

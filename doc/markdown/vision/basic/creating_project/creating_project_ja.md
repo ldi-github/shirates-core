@@ -27,7 +27,7 @@ plugins {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val shiratesCoreVersion = "8.0.10"
+val shiratesCoreVersion = "8.6.0"
 val appiumClientVersion = "9.4.0"
 
 repositories {
