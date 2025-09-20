@@ -50,7 +50,7 @@ scroll, swipe, flickなどのような関数を呼び出す場合はスクロー
     }
 ```
 
-`onLine()` 関数は"Restaurants"を含む水平ラインに作業領域を作成します。
+`onLine()` 関数は"レストラン"を含む水平ラインに作業領域を作成します。
 
 ![](_images/scrollable_area_ja.png)
 
