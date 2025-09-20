@@ -1,13 +1,11 @@
 plugins {
-    val kotlin_version = "1.8.21"
+    val kotlin_version = "1.9.20"
     kotlin("jvm") version kotlin_version
-//    kotlin("plugin.serialization") version kotlin_version
     id("idea")
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.34.0"
     id("signing")
     id("java")
-//    id("java-library")
-    id("org.jetbrains.dokka") version "1.6.21"
+//    id("org.jetbrains.dokka") version "1.6.21"
     id("com.github.gmazzo.buildconfig") version "2.0.2"
     jacoco
 }
@@ -17,12 +15,8 @@ version = "8.6.1-SNAPSHOT"
 
 val appiumClientVersion = "9.4.0"
 
-val userHome = System.getProperty("user.home")
-
 repositories {
     mavenCentral()
-//    maven(url = "file:/$userHome/github/ldi-github/md2html/build/repository")
-    maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -88,9 +82,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // Dokka
-    // https://github.com/Kotlin/dokka
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.20")
+//    // Dokka
+//    // https://github.com/Kotlin/dokka
+//    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.20")
 
     // BoofCV(core)
     implementation("org.boofcv:boofcv-core:1.1.7")
@@ -158,122 +152,44 @@ buildConfig {
     buildConfigField("String", "appiumClientVersion", "\"${appiumClientVersion}\"")
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
+//java {
+//    withJavadocJar()
+//    withSourcesJar()
+//}
 
-/**
- * publishing
- */
-publishing {
-    repositories {
-        maven {
-            name = "local"
-            url = uri("build/repository")
-        }
-        maven {
-            name = "ossrh"
-            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
-            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().contains("-")) snapshotsRepoUrl else releasesRepoUrl
-            credentials {
-                username = System.getenv("SHIRATES_CORE_OSSRH_USERNAME")
-                password = System.getenv("SHIRATES_CORE_OSSRH_PASSWORD")
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates(group.toString(), "shirates-core", version.toString())
+
+    pom {
+        name = "shirates-core"
+        description =
+            "Shirates is an integration testing framework that makes it easy and fun to write test code for mobile apps. shirates-core is core library."
+        inceptionYear = "2022"
+        url = "https://github.com/ldi-github/shirates-core"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ldi-github/shirates-core")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("SHIRATES_CORE_GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("SHIRATES_CORE_GITHUB_TOKEN")
+        developers {
+            developer {
+                id = "ldi-github"
+                name = "ldi-github"
+                url = "https://github.com/ldi-github"
             }
         }
-    }
-    publications {
-        create<MavenPublication>("binaryAndSources") {
-            from(components["kotlin"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
-            groupId = "${project.group}"
-            artifactId = project.name
-            version = "${project.version}"
-            pom {
-                name.set("shirates-core")
-                description.set("Shirates is an integration testing framework that makes it easy and fun to write test code for mobile apps. shirates-core is core library.")
-                url.set("https://github.com/ldi-github/shirates-core")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("wave1008")
-                        name.set("Nobuhiro Senba")
-                    }
-                }
-                scm {
-                    connection.set("https://github.com/ldi-github/shirates-core.git")
-                    developerConnection.set("git@github.com:shirates-core.git")
-                    url.set("https://github.com/ldi-github/shirates-core")
-                }
-            }
-        }
-
-        register<MavenPublication>("gpr") {
-            from(components["kotlin"])
-            artifact(tasks["sourcesJar"])
-            groupId = "${project.group}"
-            artifactId = project.name
-            version = "${project.version}"
+        scm {
+            url = "https://github.com/ldi-github/shirates-core"
+            connection = "scm:git:git://github.com/ldi-github/shirates-core.git"
+            developerConnection = "scm:git:ssh://git@github.com/ldi-github/shirates-core.git"
         }
     }
-}
-
-signing {
-    sign(publishing.publications["binaryAndSources"])
-}
-
-tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
-}
-
-tasks.withType<PublishToMavenRepository>().configureEach {
-    onlyIf {
-        val r =
-            (repository == publishing.repositories["local"] && publication == publishing.publications["binaryAndSources"]) ||
-                    (repository == publishing.repositories["ossrh"] && publication == publishing.publications["binaryAndSources"]) ||
-                    (repository == publishing.repositories["GitHubPackages"] && publication == publishing.publications["gpr"])
-        r
-    }
-}
-tasks.withType<PublishToMavenLocal>().configureEach {
-    onlyIf {
-        val r = publication == publishing.publications["binaryAndSources"]
-        r
-    }
-}
-
-tasks.register("publishToLocalRepository") {
-    group = "publishing"
-    description = "Publishes to local"
-    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-        it.repository == publishing.repositories["local"]
-    })
-}
-
-tasks.register("publishToExternalRepository") {
-    group = "publishing"
-    description = "Publishes to external repository"
-    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-//        it.repository == publishing.repositories["GitHubPackages"]
-        it.repository == publishing.repositories["ossrh"]
-    })
 }
 
 /**
