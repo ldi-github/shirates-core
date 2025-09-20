@@ -164,18 +164,18 @@ Also, by setting a work area, you can verify whether the text/image exists withi
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.expectation {
                     it.detect("8:30AM")
                         .cell()
                         .onThisElementRegion {
-                            it.exist("Mon, Tue, Wed, Thu, Fri")
+                            it.exist("Mon-Fri")
                             it.dontExist("Sun, Sat")
                         }
                     it.detect("9:00AM")
                         .cell()
                         .onThisElementRegion {
-                            it.dontExist("Mon, Tue, Wed, Thu, Fri")
+                            it.dontExist("Mon-Fri")
                             it.exist("Sun, Sat")
                         }
                 }
@@ -183,11 +183,11 @@ Also, by setting a work area, you can verify whether the text/image exists withi
             case(2) {
                 expectation {
                     it.onCellOf("8:30AM") {
-                        it.exist("Mon, Tue, Wed, Thu, Fri")
+                        it.exist("Mon-Fri")
                         it.dontExist("Sun, Sat")
                     }
                     it.onCellOf("9:00AM") {
-                        it.dontExist("Mon, Tue, Wed, Thu, Fri")
+                        it.dontExist("Mon-Fri")
                         it.exist("Sun, Sat")
                     }
                 }

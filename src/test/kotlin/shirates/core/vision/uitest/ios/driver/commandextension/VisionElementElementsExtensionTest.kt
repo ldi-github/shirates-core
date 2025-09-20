@@ -26,8 +26,12 @@ class VisionElementElementsExtensionTest : VisionTest() {
                 }.expectation {
                     val a1 = v1.cell(index = 0)
                     a1.textForComparison.thisContains(
-                        "General Accessibility".forVisionComparison(),
-                        "<General>.cell(index = 0).text contains 'General Accessibility'"
+                        "General".forVisionComparison(),
+                        "<General>.cell(index = 0).text contains 'General'"
+                    )
+                    a1.textForComparison.thisContains(
+                        "Accessibility".forVisionComparison(),
+                        "<General>.cell(index = 0).text contains 'Accessibility'"
                     )
                 }
             }

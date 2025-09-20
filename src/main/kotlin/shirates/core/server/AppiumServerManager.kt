@@ -203,11 +203,12 @@ object AppiumServerManager {
                 if (PropertiesManager.enableShellExecLog) {
                     TestLog.info(versionLine)
                 }
-                TestLog.info(message(id = "appiumServerStarted", arg1 = pid.toString(), arg2 = "$port"))
-                if (versionLine.contains("v2.").not()) {
-                    val msg = message(id = "unsupportedAppiumServerVersion", subject = versionLine)
-                    throw TestEnvironmentException(msg, cause = Exception(outputStream.toString()))
+                val index = versionLine.indexOf("Welcome")
+                val message = if (index != -1) versionLine.substring(index) else ""
+                if (message.isNotBlank()) {
+                    TestLog.info(message)
                 }
+                TestLog.info(message(id = "appiumServerStarted", arg1 = pid.toString(), arg2 = "$port"))
                 Thread.sleep(1000)
                 break
             } else {

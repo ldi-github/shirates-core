@@ -23,7 +23,7 @@ class ManualAnnotationOnFunctionTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.action {
                     describe("Write 'clipboard' to clipboard ")
                     Clipboard.write("clipboard1")
@@ -57,7 +57,7 @@ class ManualAnnotationOnFunctionTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.expectation {
                     assertThat(app("[app1].key")).isEqualTo("[app1].key")
                     assertThat(app("[app1]", "key")).isEqualTo("[app1].key")
@@ -106,7 +106,7 @@ class ManualAnnotationOnFunctionTest : UITest() {
 //        scenario {
 //            case(1) {
 //                condition {
-//                    it.macro("[Alarm Screen]")
+//                    it.macro("[Alarms Screen]")
 //                }.expectation {
 //                    assertSelector()
 //                }
@@ -122,7 +122,7 @@ class ManualAnnotationOnFunctionTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.expectation {
                     assertSelector()
                 }

@@ -306,6 +306,8 @@ class VisionContext(
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String = this.language,
+        colorScale: ColorScale? = null,
+        useCache: Boolean = true,
     ): VisionContext {
 
         if (TestMode.isNoLoadRun) {
@@ -333,6 +335,8 @@ class VisionContext(
         recognizeTextAndSaveRectangleImage(
             inputFile = inputFile,
             language = language,
+            colorScale = colorScale,
+            useCache = useCache,
         )
         this.language = language
 
@@ -362,6 +366,8 @@ class VisionContext(
      */
     fun recognizeTextLocal(
         language: String = this.language,
+        colorScale: ColorScale? = null,
+        useCache: Boolean = true,
     ): VisionContext {
 
         if (imageFile == null) {
@@ -371,6 +377,8 @@ class VisionContext(
         recognizeTextAndSaveRectangleImage(
             inputFile = imageFile!!,
             language = language,
+            colorScale = colorScale,
+            useCache = useCache,
         )
         this.language = language
 
@@ -380,8 +388,8 @@ class VisionContext(
     private fun recognizeTextAndSaveRectangleImage(
         inputFile: String,
         language: String,
-        colorScale: ColorScale? = null,
-        useCache: Boolean = true
+        colorScale: ColorScale?,
+        useCache: Boolean
     ): RecognizeTextResult {
 
         this.language = language

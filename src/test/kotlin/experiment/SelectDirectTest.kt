@@ -14,7 +14,7 @@ class SelectDirectTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.right().textIs("2")
@@ -82,7 +82,7 @@ class SelectDirectTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.flow().textIs("2")
@@ -148,7 +148,7 @@ class SelectDirectTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.expectation {
                     val e1 = it.select("#navigation_bar")
                     e1.innerWidget().classIs("android.widget.ImageView")
@@ -216,7 +216,7 @@ class SelectDirectTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.parent().classIs("android.view.ViewGroup")
@@ -323,7 +323,7 @@ class SelectDirectTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.expectation {
                     it.select("[Title]").textIs("Timer")
                         .rightImage().accessIs("More options")

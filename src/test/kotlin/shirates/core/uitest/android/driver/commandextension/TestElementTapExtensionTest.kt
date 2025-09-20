@@ -17,7 +17,7 @@ class TestElementTapExtensionTest : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Timer Screen]")
+                    it.macro("[Timers Screen]")
                 }.action {
                     it.select("1")
                         .tapOffset(offsetX = 200)
