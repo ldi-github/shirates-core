@@ -18,7 +18,7 @@
 | withScrollUp      | 上方向にスクロールしながら要素を選択します |
 | withScrollRight   | 右方向にスクロールしながら要素を選択します |
 | withScrollLeft    | 左方向にスクロールしながら要素を選択します |
-| withoutScroll     | スクロールしないで要素を選択肢ます     |
+| withoutScroll     | スクロールしないで要素を選択します     |
 
 ## サンプルコード
 
