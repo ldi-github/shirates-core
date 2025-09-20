@@ -6,8 +6,8 @@
 
 ## News
 
+- [2025/9/21] Appium 3 supported.
 - [2025/2/25] **Shirates/Vision(8.1.0)** released. Beta test finished.
-- [2025/2/2] **Shirates/Vision[Beta]** released. **AI-Vision feature** is unleashed.
 
 ## Document
 
