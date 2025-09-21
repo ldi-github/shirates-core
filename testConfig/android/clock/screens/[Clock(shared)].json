@@ -2,18 +2,18 @@
   "key": "[Clock(shared)]",
 
   "selectors": {
-    "[Alarm]": "Alarm&&!#action_bar_title",
-    "[Alarm Tab]": "@Alarm",
+    "[Alarms]": "Alarms&&!#action_bar_title",
+    "[Alarms Tab]": "@Alarms",
     "[Alarm Image]": "Alarm.png",
     "[Alarm Image(selected)]": "Alarm(selected).png",
 
-    "[Clock]": "Clock&&!#action_bar_title",
-    "[Clock Tab]": "@Clock",
+    "[World Clock]": "World Clock&&!#action_bar_title",
+    "[World Clock Tab]": "@World Clock",
     "[Clock Image]": "Clock.png",
     "[Clock Image(selected)]": "Clock(selected).png",
 
-    "[Timer]": "Timer&&!#action_bar_title",
-    "[Timer Tab]": "@Timer",
+    "[Timers]": "Timers&&!#action_bar_title",
+    "[Timers Tab]": "@Timers",
     "[Timer Image]": "Timer.png",
     "[Timer Image(selected)]": "Timer(selected).png",
 

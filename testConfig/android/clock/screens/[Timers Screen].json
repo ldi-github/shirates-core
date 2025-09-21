@@ -1,5 +1,5 @@
 {
-  "key": "[Timer Screen]",
+  "key": "[Timers Screen]",
 
   "include": [
     "[Clock(shared)]",
@@ -9,7 +9,7 @@
   "identity": "[Title]",
 
   "selectors": {
-    "[Title]": "Timer&&#action_bar_title",
+    "[Title]": "Timers&&#action_bar_title",
     "[More options]": "@More options",
 
     "[Timer setup time]": "#timer_setup_time",

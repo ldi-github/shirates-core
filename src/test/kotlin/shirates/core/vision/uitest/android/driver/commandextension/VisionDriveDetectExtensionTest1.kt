@@ -103,17 +103,17 @@ class VisionDriveDetectExtensionTest1 : VisionTest() {
             }
             case(3) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.expectation {
                     val s1 = "Alarm"
                     v1 = detect(s1)
                     v1.isFound.thisIsTrue(s1)
 
-                    val s2 = "Alarm Clock"
+                    val s2 = "Alarms World Clock"
                     v1 = detect(s2)
                     v1.isFound.thisIsTrue(s2)
 
-                    val s3 = "Alarm Clock Timer"
+                    val s3 = "Alarms World Clock Timers"
                     v1 = detect(s3)
                     v1.isFound.thisIsTrue(s3)
                 }

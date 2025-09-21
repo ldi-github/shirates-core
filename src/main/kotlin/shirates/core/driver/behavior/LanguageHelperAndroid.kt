@@ -190,7 +190,7 @@ object LanguageHelperAndroid : TestDrive {
         it.select("<$languageAndRegion>:right(#dragHandle)")
             .swipeVerticalTo(endY = 0)
 
-        if (it.canSelect("#android:id/button1")) {
+        if (it.canSelect("#android:id/button1||#button_ok")) {
             it.tap()
         }
 

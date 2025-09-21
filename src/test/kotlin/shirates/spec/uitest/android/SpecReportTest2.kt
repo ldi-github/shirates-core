@@ -51,7 +51,7 @@ class SpecReportTest2 : UITest() {
                     if (TestMode.isNoLoadRun.not() && platformMajorVersion < 14) {
                         NOTIMPL("This test requires Android 14 or later.")
                     }
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Alarms Screen]")
                 }.expectation {
                     it.cell("[Cell of 8:30 AM]") {
                         exist("[8:30 AM]")
@@ -68,7 +68,7 @@ class SpecReportTest2 : UITest() {
                     it.cellOf("8:30 AM") {
                         exist("8:30 AM")
                         exist("#arrow")
-                        exist("Mon, Tue, Wed, Thu, Fri")
+                        exist("Mon-Fri")
                         exist("#onoff")
                     }
                     it.cellOf("9:00 AM") {
@@ -102,7 +102,7 @@ class SpecReportTest2 : UITest() {
                     it.cellOf("[8:30 AM]") {
                         innerWidget(1).textIs("8:30 AM")
                         innerWidget(2).idIs("arrow")
-                        innerWidget(3).textIs("Mon, Tue, Wed, Thu, Fri")
+                        innerWidget(3).textIs("Mon-Fri")
                         innerWidget(4).idIs("onoff")
                     }
                     it.cellOf("[9:00 AM]") {
@@ -200,7 +200,7 @@ class SpecReportTest2 : UITest() {
                 target = "Cell of <8:30 AM>",
                 expectation = "- <8:30 AM>\n" +
                         "- <#arrow>\n" +
-                        "- <Mon, Tue, Wed, Thu, Fri>\n" +
+                        "- <Mon-Fri>\n" +
                         "- <#onoff>",
                 auto = "M",
                 result = "N/A",
@@ -262,7 +262,7 @@ class SpecReportTest2 : UITest() {
                 target = "Cell of [8:30 AM]",
                 expectation = "- innerWidget is \"8:30 AM\"\n" +
                         "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
+                        "- innerWidget(3) is \"Mon-Fri\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
                 result = "N/A",
@@ -321,7 +321,7 @@ class SpecReportTest2 : UITest() {
                 target = "Cell of <8:30 AM>",
                 expectation = "- <8:30 AM>\n" +
                         "- <#arrow>\n" +
-                        "- <Mon, Tue, Wed, Thu, Fri>\n" +
+                        "- <Mon-Fri>\n" +
                         "- <#onoff>",
                 auto = "A",
                 result = "OK",
@@ -395,7 +395,7 @@ class SpecReportTest2 : UITest() {
                 target = "Cell of [8:30 AM]",
                 expectation = "- innerWidget is \"8:30 AM\"\n" +
                         "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
+                        "- innerWidget(3) is \"Mon-Fri\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "A",
                 result = "OK",

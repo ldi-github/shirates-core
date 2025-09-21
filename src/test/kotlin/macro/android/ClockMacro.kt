@@ -22,50 +22,50 @@ object ClockMacro : TestDrive {
             .launchApp("com.google.android.deskclock")
     }
 
-    @Macro("[Alarm Screen]")
-    fun alarmScreen() {
+    @Macro("[Alarms Screen]")
+    fun alarmsScreen() {
 
         if (TestMode.isClassicTest) {
             if (isApp("[Clock]").not()) {
                 restartClock()
             }
-            if (isScreen("[Alarm Screen]").not()) {
-                it.tap("[Alarm Tab]")
+            if (isScreen("[Alarms Screen]").not()) {
+                it.tap("[Alarms Tab]")
             }
-            it.screenIs("[Alarm Screen]")
+            it.screenIs("[Alarms Screen]")
         } else {
             visionScope {
                 if (it.isApp("[Clock]").not()) {
                     restartClock()
                 }
-                if (it.isScreen("[Alarm Screen]").not()) {
+                if (it.isScreen("[Alarms Screen]").not()) {
                     it.tapLast("Alarm")
                 }
-                it.screenIs("[Alarm Screen]")
+                it.screenIs("[Alarms Screen]")
             }
         }
     }
 
-    @Macro("[Timer Screen]")
-    fun timerScreen() {
+    @Macro("[Timers Screen]")
+    fun timersScreen() {
 
         if (TestMode.isClassicTest) {
             if (it.isApp("[Clock]").not()) {
                 restartClock()
             }
-            if (it.isScreen("[Timer Screen]").not()) {
-                it.tap("[Timer Tab]")
+            if (it.isScreen("[Timers Screen]").not()) {
+                it.tap("[Timers]")
             }
-            it.screenIs("[Timer Screen]")
+            it.screenIs("[Timers Screen]")
         } else {
             visionScope {
                 if (it.isApp("[Clock]").not()) {
                     restartClock()
                 }
-                if (it.isScreen("[Timer Screen]").not()) {
-                    it.tap("[Timer Tab]")
+                if (it.isScreen("[Timers Screen]").not()) {
+                    it.tap("Timers")
                 }
-                it.screenIs("[Timer Screen]")
+                it.screenIs("[Timers Screen]")
             }
         }
     }
