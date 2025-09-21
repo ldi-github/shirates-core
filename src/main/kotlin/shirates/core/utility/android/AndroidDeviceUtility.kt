@@ -171,7 +171,7 @@ object AndroidDeviceUtility {
         val avdList = getAvdList()
         val a1 = emulatorProfile.avdName.escapeAvdName()
         val a2 = a1.trimEnd('_')
-        emulatorProfile.avdName = avdList.firstOrNull() { it == a1 || it == a2 } ?: return null
+        emulatorProfile.avdName = avdList.firstOrNull() { it.trimEnd('_') == a2 } ?: return null
 
         // Start avd to get device
         val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
