@@ -1,10 +1,7 @@
 package shirates.core.driver.behavior
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestMode
-import shirates.core.driver.classic
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
@@ -53,8 +50,21 @@ object LanguageHelperAndroid : TestDrive {
             gotoLocaleSettings()
         }
 
-        if (it.canSelect("#label")) {
-            return it.contentDesc
+        val language = getLanguageInLocaleSettingsScreen()
+        return language
+    }
+
+    private fun getLanguageInLocaleSettingsScreen(): String {
+
+        if (platformMajorVersion >= 16) {
+            if (it.canSelect("#number")) {
+                val rightText = it.right("#android:id/title").text
+                return rightText
+            }
+        } else {
+            if (it.canSelect("#label")) {
+                return it.contentDesc
+            }
         }
         return ""
     }
@@ -80,11 +90,18 @@ object LanguageHelperAndroid : TestDrive {
             return
         }
 
-        tap("#add_language")
-        tap("#android:id/locale_search_menu")
-        sendKeys(language)
-        hideKeyboard()
-        if (canSelect("#android:id/locale&&$language")) {
+        if (platformMajorVersion >= 16) {
+            tap("#settingslib_button")
+            tap("#locale_search_menu")
+            sendKeys(language)
+            hideKeyboard()
+        } else {
+            tap("#add_language")
+            tap("#android:id/locale_search_menu")
+            sendKeys(language)
+            hideKeyboard()
+        }
+        if (canSelect(languageAndRegion)) {
             it.tap()
         } else {
             throw TestDriverException("Language not found. ($language)")
@@ -179,7 +196,7 @@ object LanguageHelperAndroid : TestDrive {
             return languageAndRegion
         }
 
-        if (it.canSelect("#com.android.settings:id/label&&$languageAndRegion").not()) {
+        if (it.canSelect(languageAndRegion).not()) {
             addLanguage(language = language, region = region)
         }
 
@@ -187,19 +204,18 @@ object LanguageHelperAndroid : TestDrive {
             return languageAndRegion
         }
 
-        it.select("<$languageAndRegion>:right(#dragHandle)")
-            .swipeVerticalTo(endY = 0)
-
-        if (it.canSelect("#android:id/button1||#button_ok")) {
-            it.tap()
+        if (platformMajorVersion >= 16) {
+            it.select(languageAndRegion).right("#settingslib_menu_button")
+                .tap()
+                .tap("Move to top")
+                .tap("#android:id/button1")
+        } else {
+            it.select("<$languageAndRegion>:right(#dragHandle)")
+                .swipeVerticalTo(endY = 0)
+                .tap("#android:id/button1")
         }
-
-        val currentLanguageAndRegion = it.select("#com.android.settings:id/label&&[1]").text
-        if (currentLanguageAndRegion != languageAndRegion) {
-            throw TestDriverException("Failed to set to $languageAndRegion")
-        }
-
-        return currentLanguageAndRegion
+        val currentLanguage = getLanguageInLocaleSettingsScreen()
+        return currentLanguage
     }
 
 }
