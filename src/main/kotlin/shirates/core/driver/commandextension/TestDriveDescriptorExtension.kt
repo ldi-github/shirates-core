@@ -334,7 +334,7 @@ fun TestElement.getCell(): TestElement {
     }
 
     val cellHost = getCellHost()
-    val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+    val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: this.parentElement
     cell.selector = this.getChainedSelector(":cell")
     return cell
 }
