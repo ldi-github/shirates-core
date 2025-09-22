@@ -172,9 +172,9 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 2. メニューから`Tools > Device Manager`を選択します。
 3. `[+]`をクリックして`Create Virtual Device`を選択します。<br>
    ![](classic/_images/create_avd_1.png)
-4. `Pixcel 8`を選択し`Next`をクリックします。<br>
+4. `Medium Phone`を選択し`Next`をクリックします。<br>
    ![](classic/_images/create_avd_2.png)
-5. 項目を設定します。<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>
+5. 項目を設定します。<br>**Name** `Medium(Android 16)`<br>**API** `API 36.1 "Baklava", Android 16.0`<br>
    **Services** `Google Play Store`<br>**System Image** (アイテムを選択します)<br>
    ![](classic/_images/create_avd_3.png)
 6. `Additional settings`をクリックします。 <br>**Device skin** を`[None]`に設定します。 <br>`Finish`をクリックします。<br>

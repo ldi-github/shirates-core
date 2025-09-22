@@ -160,13 +160,6 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 **Note:** Execute log out/log in to take effect above settings.
 
-#### Example
-
-```
-export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk
-export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
-```
-
 ## Setting up AVD (Android Virtual Device)
 
 ### Create AVD for demo
@@ -175,9 +168,9 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 2. Select menu `Tools > Device Manager`.
 3. Click `[+]` and select `Create Virtual Device`. <br>
    ![](classic/_images/create_avd_1.png)
-4. Select `Pixcel 8` and click `Next`.<br>
+4. Select `Medium Phone` and click `Next`.<br>
    ![](classic/_images/create_avd_2.png)
-5. Set fields.<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>**Services**
+5. Set fields.<br>**Name** `Medium(Android 16)`<br>**API** `API 36.1 "Baklava", Android 16.0`<br>**Services**
    `Google Play Store`<br>**System Image** (Select the item)<br>
    ![](classic/_images/create_avd_3.png)
 6. Click `Additional settings`. <br>Set **Device skin** `[None]`. <br>Click `Finish`.<br>

@@ -82,20 +82,20 @@ class ManualAnnotationOnClassTest : UITest() {
             it.select("<8:30 AM>").right(expression = "#arrow&&@Expand alarm").selector.toString()
         ).isEqualTo("<8:30 AM>:right(#arrow&&@Expand alarm)")
         assertThat(it.select("<8:30 AM>:below").below(2).selector.toString()).isEqualTo("<8:30 AM>:below(3)")
-        assertThat(it.select("[8:30 AM]").selector.toString()).isEqualTo("[8:30 AM]")
-        assertThat(it.select("[8:30 AM]:flow").selector.toString()).isEqualTo("[8:30 AM]:flow")
-        assertThat(it.select("[8:30 AM]:flow").flow(1).selector.toString()).isEqualTo("[8:30 AM]:flow(2)")
+        assertThat(it.select("[8:30AM]").selector.toString()).isEqualTo("[8:30AM]")
+        assertThat(it.select("[8:30AM]:flow").selector.toString()).isEqualTo("[8:30AM]:flow")
+        assertThat(it.select("[8:30AM]:flow").flow(1).selector.toString()).isEqualTo("[8:30AM]:flow(2)")
         assertThat(
-            it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
-        ).isEqualTo("[8:30 AM]:below(2)")
+            it.select("[8:30AM]").below(1).select(":below(1)").selector.toString()
+        ).isEqualTo("[8:30AM]:below(2)")
         assertThat(
-            it.select("[8:30 AM]")
+            it.select("[8:30AM]")
                 .select("[:Expand alarm]").selector.toString()
-        ).isEqualTo("[8:30 AM][:Expand alarm]")
+        ).isEqualTo("[8:30AM][:Expand alarm]")
 
         run {
-            val sel = it.select("[8:30 AM][:Expand alarm]").selector
-            assertThat(sel.toString()).isEqualTo("[8:30 AM][:Expand alarm]")
+            val sel = it.select("[8:30AM][:Expand alarm]").selector
+            assertThat(sel.toString()).isEqualTo("[8:30AM][:Expand alarm]")
         }
     }
 

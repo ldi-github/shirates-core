@@ -100,7 +100,8 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
             }
             case(2) {
                 condition {
-                    v1 = it.detectWithScrollDown("Developer").leftImage("[Developer Icon]")
+                    it.flickAndGoDown()
+                    v1 = it.detect("Developer").leftImage("[Developer Icon]")
                 }.expectation {
                     v1.isFound.thisIsTrue()
                 }

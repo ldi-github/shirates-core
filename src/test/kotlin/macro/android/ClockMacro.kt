@@ -39,7 +39,7 @@ object ClockMacro : TestDrive {
                     restartClock()
                 }
                 if (it.isScreen("[Alarms Screen]").not()) {
-                    it.tapLast("Alarm")
+                    it.tapLast("Alarms")
                 }
                 it.screenIs("[Alarms Screen]")
             }

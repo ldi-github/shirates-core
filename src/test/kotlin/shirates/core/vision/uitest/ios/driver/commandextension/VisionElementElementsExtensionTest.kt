@@ -116,12 +116,12 @@ class VisionElementElementsExtensionTest : VisionTest() {
             }
             case(2) {
                 condition {
-                    v1 = it.detectWithScrollDown("Screen Time")
-                    v2 = it.detect("StandBy")
+                    v1 = it.detect("Apple Account")
+                    v2 = it.detect("General")
                 }.expectation {
                     val list1 = v1.ancestorsContains(v2)
                     val count = list1.count()
-                    count.thisIs(0, "<Screen Time>.ancestorsContains(<StandBy>).count is 0")
+                    count.thisIs(0, "<Apple Account>.ancestorsContains(<General>).count is 0")
                 }
             }
         }

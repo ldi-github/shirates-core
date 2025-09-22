@@ -1,5 +1,20 @@
 # Tested Environments
 
+2025/9/22 **Shirates/Vision** (8.6.3)
+
+- macOS Tahoe 26.0
+- node v24.4.1
+- Appium 3.0.2
+- java-client v9.4.0
+- uiautomator2@5.0.3
+- xcuitest@10.1.2
+- Android Studio Narwhal 3 Feature Drop | 2025.1.3
+- Android Emulator Pixel 8(Android 14)
+- Xcode 26.0
+- iOS Simulator iPhone 17(iOS 26.0)
+
+<br>
+
 2025/9/21 **Shirates/Vision** (8.6.1)
 
 - macOS Sequoia 15.6.1

@@ -95,26 +95,37 @@ object LanguageHelperAndroid : TestDrive {
             tap("#locale_search_menu")
             sendKeys(language)
             hideKeyboard()
+            if (canSelect("#android:id/title&&${languageAndRegion}")) {
+                it.tap()
+                return
+            }
+            if (canSelect("#android:id/title&&*${language}*")) {
+                it.tap()
+                return
+            }
+            if (canSelect("#android:id/title&&*${region}*")) {
+                it.tap()
+            } else {
+                throw TestDriverException("Region not found. ($region)")
+            }
         } else {
             tap("#add_language")
             tap("#android:id/locale_search_menu")
             sendKeys(language)
             hideKeyboard()
-        }
-        if (canSelect(languageAndRegion)) {
-            it.tap()
-        } else {
-            throw TestDriverException("Language not found. ($language)")
-        }
-
-        if (canSelect(languageAndRegion)) {
-            return
-        }
-
-        if (canSelect(region)) {
-            it.tap()
-        } else {
-            throw TestDriverException("Region not found. ($region)")
+            if (canSelect("#android:id/locale&&${languageAndRegion}")) {
+                it.tap()
+                return
+            }
+            if (canSelect("#android:id/locale&&*${language}*")) {
+                it.tap()
+                return
+            }
+            if (canSelect("#android:id/locale&&*${region}*")) {
+                it.tap()
+            } else {
+                throw TestDriverException("Region not found. ($region)")
+            }
         }
     }
 
