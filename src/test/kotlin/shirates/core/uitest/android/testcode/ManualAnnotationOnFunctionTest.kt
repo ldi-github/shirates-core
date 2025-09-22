@@ -82,7 +82,7 @@ class ManualAnnotationOnFunctionTest : UITest() {
             it.select("<8:30 AM>").right(expression = "#arrow&&@Expand alarm").selector.toString()
         ).isEqualTo("<8:30 AM>:right(#arrow&&@Expand alarm)")
         assertThat(it.select("<8:30 AM>:below").below(2).selector.toString()).isEqualTo("<8:30 AM>:below(3)")
-        assertThat(it.select("[8:30 AM]").selector.toString()).isEqualTo("[8:30 AM]")
+        assertThat(it.select("[8:30AM]").selector.toString()).isEqualTo("[8:30AM]")
         assertThat(it.select("[8:30 AM]:flow").selector.toString()).isEqualTo("[8:30 AM]:flow")
         assertThat(it.select("[8:30 AM]:flow").flow(1).selector.toString()).isEqualTo("[8:30 AM]:flow(2)")
         assertThat(

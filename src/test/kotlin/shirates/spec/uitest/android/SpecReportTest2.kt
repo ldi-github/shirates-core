@@ -29,7 +29,7 @@ class SpecReportTest2 : UITest() {
     @Manual
     @Test
     @Order(10)
-    @DisplayName("Alarm Screen")
+    @DisplayName("Alarms Screen")
     fun s10() {
 
         scenarioCore()
@@ -37,7 +37,7 @@ class SpecReportTest2 : UITest() {
 
     @Test
     @Order(20)
-    @DisplayName("Alarm Screen")
+    @DisplayName("Alarms Screen")
     fun s20() {
 
         scenarioCore()
@@ -55,26 +55,18 @@ class SpecReportTest2 : UITest() {
                 }.expectation {
                     it.cell("[Cell of 8:30 AM]") {
                         exist("[8:30 AM]")
-                        exist("[8:30 AM Expand alarm]")
-                        exist("[8:30 AM Days of week]")
                         exist("[8:30 AM ON/OFF]")
                     }
                     it.select("<9:00 AM>:parent").cell {
                         exist("9:00 AM")
-                        exist("#arrow")
-                        exist("Sun, Sat")
                         exist("#onoff")
                     }
                     it.cellOf("8:30 AM") {
                         exist("8:30 AM")
-                        exist("#arrow")
-                        exist("Mon-Fri")
                         exist("#onoff")
                     }
                     it.cellOf("9:00 AM") {
                         exist("9:00 AM")
-                        exist("#arrow")
-                        exist("Sun, Sat")
                         exist("#onoff")
                     }
                     it.cell("#tab_menu_alarm") {
@@ -88,28 +80,20 @@ class SpecReportTest2 : UITest() {
                 }.expectation {
                     it.cellOf("[8:30 AM]") {
                         exist("[8:30 AM]")
-                        exist("[8:30 AM Expand alarm]")
-                        exist("[8:30 AM Days of week]")
                         exist("[8:30 AM ON/OFF]")
                     }
                     it.cellOf("[9:00 AM]") {
                         exist("[9:00 AM]")
-                        exist("[9:00 AM Expand alarm]")
-                        exist("[9:00 AM Days of week]")
                         exist("[9:00 AM ON/OFF]")
                     }
                 }.expectation {
                     it.cellOf("[8:30 AM]") {
                         innerWidget(1).textIs("8:30 AM")
-                        innerWidget(2).idIs("arrow")
-                        innerWidget(3).textIs("Mon-Fri")
-                        innerWidget(4).idIs("onoff")
+                        innerWidget(2).idIs("onoff")
                     }
                     it.cellOf("[9:00 AM]") {
                         innerWidget(1).textIs("9:00 AM")
-                        innerWidget(2).idIs("arrow")
-                        innerWidget(3).textIs("Sun, Sat")
-                        innerWidget(4).idIs("onoff")
+                        innerWidget(2).idIs("onoff")
                     }
                 }
             }
@@ -166,19 +150,17 @@ class SpecReportTest2 : UITest() {
                 rowNum = 10,
                 id = 1,
                 step = "s10",
-                condition = "Alarm Screen",
+                condition = "Alarms Screen",
                 result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
                 id = 2,
                 step = "1",
-                condition = "- [Alarm Screen]",
+                condition = "- [Alarms Screen]",
                 action = "",
                 target = "Cell [Cell of 8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
-                        "- [8:30 AM Expand alarm]\n" +
-                        "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
                 result = "N/A",
@@ -188,8 +170,6 @@ class SpecReportTest2 : UITest() {
                 id = 3,
                 target = "Cell <9:00 AM>:parent",
                 expectation = "- <9:00 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
                 result = "N/A",
@@ -199,8 +179,6 @@ class SpecReportTest2 : UITest() {
                 id = 4,
                 target = "Cell of <8:30 AM>",
                 expectation = "- <8:30 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Mon-Fri>\n" +
                         "- <#onoff>",
                 auto = "M",
                 result = "N/A",
@@ -210,8 +188,6 @@ class SpecReportTest2 : UITest() {
                 id = 5,
                 target = "Cell of <9:00 AM>",
                 expectation = "- <9:00 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
                 result = "N/A",
@@ -239,8 +215,6 @@ class SpecReportTest2 : UITest() {
                 id = 8,
                 target = "Cell of [8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
-                        "- [8:30 AM Expand alarm]\n" +
-                        "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
                 result = "N/A",
@@ -250,8 +224,6 @@ class SpecReportTest2 : UITest() {
                 id = 9,
                 target = "Cell of [9:00 AM]",
                 expectation = "- [9:00 AM]\n" +
-                        "- [9:00 AM Expand alarm]\n" +
-                        "- [9:00 AM Days of week]\n" +
                         "- [9:00 AM ON/OFF]",
                 auto = "M",
                 result = "N/A",
@@ -261,9 +233,7 @@ class SpecReportTest2 : UITest() {
                 id = 10,
                 target = "Cell of [8:30 AM]",
                 expectation = "- innerWidget is \"8:30 AM\"\n" +
-                        "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Mon-Fri\"\n" +
-                        "- innerWidget(4).idOrName is \"onoff\"",
+                        "- innerWidget(2).idOrName is \"onoff\"",
                 auto = "M",
                 result = "N/A",
             )
@@ -272,9 +242,7 @@ class SpecReportTest2 : UITest() {
                 id = 11,
                 target = "Cell of [9:00 AM]",
                 expectation = "- innerWidget is \"9:00 AM\"\n" +
-                        "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Sun, Sat\"\n" +
-                        "- innerWidget(4).idOrName is \"onoff\"",
+                        "- innerWidget(2).idOrName is \"onoff\"",
                 auto = "M",
                 result = "N/A",
             )
@@ -284,18 +252,16 @@ class SpecReportTest2 : UITest() {
                 rowNum = 21,
                 id = 12,
                 step = "s20",
-                condition = "Alarm Screen",
+                condition = "Alarms Screen",
             )
             assertRow(
                 rowNum = 22,
                 id = 13,
                 step = "1",
-                condition = "- [Alarm Screen]",
+                condition = "- [Alarms Screen]",
                 action = "",
                 target = "Cell [Cell of 8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
-                        "- [8:30 AM Expand alarm]\n" +
-                        "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "A",
                 result = "OK",
@@ -307,8 +273,6 @@ class SpecReportTest2 : UITest() {
                 id = 14,
                 target = "Cell <9:00 AM>:parent",
                 expectation = "- <9:00 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "A",
                 result = "OK",
@@ -320,8 +284,6 @@ class SpecReportTest2 : UITest() {
                 id = 15,
                 target = "Cell of <8:30 AM>",
                 expectation = "- <8:30 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Mon-Fri>\n" +
                         "- <#onoff>",
                 auto = "A",
                 result = "OK",
@@ -333,8 +295,6 @@ class SpecReportTest2 : UITest() {
                 id = 16,
                 target = "Cell of <9:00 AM>",
                 expectation = "- <9:00 AM>\n" +
-                        "- <#arrow>\n" +
-                        "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "A",
                 result = "OK",
@@ -368,8 +328,6 @@ class SpecReportTest2 : UITest() {
                 id = 19,
                 target = "Cell of [8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
-                        "- [8:30 AM Expand alarm]\n" +
-                        "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "A",
                 result = "OK",
@@ -381,8 +339,6 @@ class SpecReportTest2 : UITest() {
                 id = 20,
                 target = "Cell of [9:00 AM]",
                 expectation = "- [9:00 AM]\n" +
-                        "- [9:00 AM Expand alarm]\n" +
-                        "- [9:00 AM Days of week]\n" +
                         "- [9:00 AM ON/OFF]",
                 auto = "A",
                 result = "OK",
@@ -394,9 +350,7 @@ class SpecReportTest2 : UITest() {
                 id = 21,
                 target = "Cell of [8:30 AM]",
                 expectation = "- innerWidget is \"8:30 AM\"\n" +
-                        "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Mon-Fri\"\n" +
-                        "- innerWidget(4).idOrName is \"onoff\"",
+                        "- innerWidget(2).idOrName is \"onoff\"",
                 auto = "A",
                 result = "OK",
                 testDate = date,
@@ -407,15 +361,12 @@ class SpecReportTest2 : UITest() {
                 id = 22,
                 target = "Cell of [9:00 AM]",
                 expectation = "- innerWidget is \"9:00 AM\"\n" +
-                        "- innerWidget(2).idOrName is \"arrow\"\n" +
-                        "- innerWidget(3) is \"Sun, Sat\"\n" +
-                        "- innerWidget(4).idOrName is \"onoff\"",
+                        "- innerWidget(2).idOrName is \"onoff\"",
                 auto = "A",
                 result = "OK",
                 testDate = date,
                 tester = "auto"
             )
-
 
         }
     }

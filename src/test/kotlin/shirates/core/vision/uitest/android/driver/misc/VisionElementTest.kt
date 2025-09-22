@@ -23,7 +23,7 @@ class VisionElementTest : VisionTest() {
                     v3 = v1.shapeText("Airplane")
                     v4 = v1.shapeText("mode")
                 }.expectation {
-                    v1.textIs("# Airplane mode")
+                    v1.textIs("* Airplane mode")
                     v2.textIs("Airplane mode")
                     v3.textIs("Airplane")
                     v4.textIs("mode")
@@ -36,7 +36,7 @@ class VisionElementTest : VisionTest() {
                     v3 = v1.shapeText("Airplane")
                     v4 = v1.shapeText("mode")
                 }.expectation {
-                    v1.textIs("Airplane mode")
+                    v1.textIs("* Airplane mode")
                     v2.textIs("Airplane mode")
                     v3.textIs("Airplane")
                     v4.textIs("mode")

@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisContains
 import shirates.core.driver.commandextension.thisIs
-import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.commandextension.dontExist
+import shirates.core.vision.driver.commandextension.exist
+import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
@@ -19,35 +22,29 @@ class VisionDriveDetectExtensionTest9 : VisionTest() {
                     it.tap("StandBy")
                         .screenIs("[StandBy Screen]")
                 }.expectation {
-                    it.exist("Night Mode")
-                    it.exist("night mode")
-                    it.exist("Night*")
-                    it.exist("*t Mode")
-                    it.exist("*ight Mod*")
-                    it.exist("Night*&&*Mode")
-                    it.dontExist("Night*&&*Node")
-                    it.dontExist("Might*&&*Mode")
-                    it.dontExist("Night Mode Day Mode")
-                    it.dontExist("Day Mode Night Mode")
+                    it.exist("Show Notifications")
+                    it.exist("show notifications")
+                    it.exist("Show*")
+                    it.exist("*w Notifications")
+                    it.exist("*how Notif*")
+                    it.exist("Show*&&*Notifications")
+                    it.dontExist("Show*&&*Motivation")
+                    it.dontExist("Low*&&*Motivation")
+                    it.dontExist("Show Notification Every Hour")
                 }
             }
             case(2) {
                 expectation {
-                    it.exist("Night Mode", mergeBoundingBox = false)
-                    it.exist("night mode", mergeBoundingBox = false)
-                    it.exist("Night*", mergeBoundingBox = false)
-                    it.exist("*t Mode", mergeBoundingBox = false)
-                    it.exist("*ight Mod*", mergeBoundingBox = false)
-                    it.exist("Night*&&*Mode", mergeBoundingBox = false)
-                    it.dontExist("Night*&&*Node", mergeBoundingBox = false)
-                    it.dontExist("Might*&&*Mode", mergeBoundingBox = false)
-                    it.dontExist("Night Mode Day Mode", mergeBoundingBox = false)
-                    it.dontExist("Day Mode Night Mode", mergeBoundingBox = false)
+                    it.exist("Show Notifications", mergeBoundingBox = false)
+                    it.exist("show notifications", mergeBoundingBox = false)
+                    it.exist("Show*", mergeBoundingBox = false)
+                    it.exist("*w Notifications", mergeBoundingBox = false)
+                    it.exist("*how Notif*", mergeBoundingBox = false)
+                    it.exist("Show*&&*Notifications", mergeBoundingBox = false)
+                    it.dontExist("Show*&&*Motivation", mergeBoundingBox = false)
+                    it.dontExist("Low*&&*Motivation", mergeBoundingBox = false)
+                    it.dontExist("Show Notification Every Hour", mergeBoundingBox = false)
                 }
-            }
-            case(3) {
-                it.exist("DISPLAY||Night Mode")
-                it.textIs("DISPLAY")
             }
         }
     }
