@@ -204,7 +204,7 @@ object AppiumServerManager {
                     TestLog.info(versionLine)
                 }
                 val index = versionLine.indexOf("Welcome")
-                val message = if (index != -1) versionLine.substring(index) else ""
+                val message = if (index != -1) versionLine.substring(index).trim() else ""
                 if (message.isNotBlank()) {
                     TestLog.info(message)
                 }
