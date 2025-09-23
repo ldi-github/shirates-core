@@ -1,6 +1,7 @@
 package shirates.core.driver.behavior
 
 import shirates.core.driver.*
+import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
@@ -223,7 +224,9 @@ object LanguageHelperAndroid : TestDrive {
         } else {
             it.select("<$languageAndRegion>:right(#dragHandle)")
                 .swipeVerticalTo(endY = 0)
-                .tap("#android:id/button1")
+                .ifCanSelect("#android:id/button1") {
+                    it.tap()    // Android 14.15
+                }
         }
         val currentLanguage = getLanguageInLocaleSettingsScreen()
         return currentLanguage
